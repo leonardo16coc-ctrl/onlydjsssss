@@ -8,6 +8,7 @@ import { createMembershipCheckoutSession, createPortalSession } from "./stripe";
 import { TRPCError } from "@trpc/server";
 import { analyzeAudioFile } from "./musicAnalysis";
 import { musicAnalysisRouter } from "./routers/musicAnalysis.router";
+import { profileRouter } from "./routers/profile.router";
 
 // Middleware to check if user has active membership
 const memberProcedure = protectedProcedure.use(({ ctx, next }) => {
@@ -310,6 +311,9 @@ export const appRouter = router({
       };
     }),
   }),
+
+  // Profile router
+  profile: profileRouter,
 });
 
 export type AppRouter = typeof appRouter;

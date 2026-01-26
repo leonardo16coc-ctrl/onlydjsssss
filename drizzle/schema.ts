@@ -16,10 +16,14 @@ export const users = mysqlTable("users", {
   stripeCustomerId: varchar("stripeCustomerId", { length: 255 }),
   stripeSubscriptionId: varchar("stripeSubscriptionId", { length: 255 }),
   // DJ profile fields
+  username: varchar("username", { length: 50 }).unique(),
   djName: text("djName"),
   bio: text("bio"),
+  profileImageUrl: text("profileImageUrl"),
+  profileImageKey: text("profileImageKey"),
   avatarUrl: text("avatarUrl"),
   country: varchar("country", { length: 100 }),
+  socialLinks: text("socialLinks"), // JSON string for Instagram, Twitter, etc.
   // Verification
   isVerified: boolean("isVerified").default(false).notNull(),
   verifiedAt: timestamp("verifiedAt"),

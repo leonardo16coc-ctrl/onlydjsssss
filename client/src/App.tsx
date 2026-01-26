@@ -11,6 +11,8 @@ import Rankings from "./pages/Rankings";
 import Dashboard from "./pages/Dashboard";
 import Upload from "./pages/Upload";
 import Membership from "./pages/Membership";
+import DJProfile from "./pages/DJProfile";
+import ProfileEdit from "./pages/ProfileEdit";
 
 function Router() {
   return (
@@ -22,6 +24,8 @@ function Router() {
       <Route path={"/dashboard"} component={Dashboard} />
       <Route path={"/upload"} component={Upload} />
       <Route path={"/membership"} component={Membership} />
+      <Route path={"/dj/:username"} component={DJProfile} />
+      <Route path={"/profile/edit"} component={ProfileEdit} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>

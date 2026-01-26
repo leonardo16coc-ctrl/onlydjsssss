@@ -2,7 +2,16 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
-import { Music, Sparkles, Trophy, LayoutDashboard, Upload, CreditCard } from "lucide-react";
+import { Music, Sparkles, Trophy, LayoutDashboard, Upload, CreditCard, User, Settings, LogOut } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { trpc } from "@/lib/trpc";
 
 export default function Navbar() {
   const { user, isAuthenticated } = useAuth();
@@ -72,15 +81,44 @@ export default function Navbar() {
                     </Button>
                   </Link>
                 )}
-                <div className="flex items-center space-x-2">
-                  <div className="text-sm">
-                    <p className="font-semibold text-foreground">{user?.name || "DJ"}</p>
-                    <p className="text-xs text-muted-foreground capitalize">
-                      {user?.membershipStatus === "member" ? "Miembro" : 
-                       user?.membershipStatus === "verified" ? "Verificado" : "Free"}
-                    </p>
-                  </div>
-                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="flex items-center space-x-2">
+                      <User className="h-5 w-5" />
+                      <div className="text-sm text-left">
+                        <p className="font-semibold text-foreground">{user?.name || "DJ"}</p>
+                        <p className="text-xs text-muted-foreground capitalize">
+                          {user?.membershipStatus === "member" ? "Miembro" : 
+                           user?.membershipStatus === "verified" ? "Verificado" : "Free"}
+                        </p>
+                      </div>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <Link href="/profile/edit">
+                      <DropdownMenuItem>
+                        <Settings className="mr-2 h-4 w-4" />
+                        <span>Editar Perfil</span>
+                      </DropdownMenuItem>
+                    </Link>
+                    <Link href="/dashboard">
+                      <DropdownMenuItem>
+                        <LayoutDashboard className="mr-2 h-4 w-4" />
+                        <span>Dashboard</span>
+                      </DropdownMenuItem>
+                    </Link>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => {
+                      trpc.auth.logout.useMutation().mutate();
+                      window.location.href = "/";
+                    }}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Cerrar Sesión</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </>
             ) : (
               <a href={getLoginUrl()}>

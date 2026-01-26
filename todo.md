@@ -153,3 +153,18 @@
 - [x] Agregar botón "Upload Your Files" extendido en hero de Home
 - [x] Posicionar al lado del botón de suscribirse
 - [x] Diseño consistente con tema neon
+
+
+## 20. Sistema de Perfiles Públicos para DJs (NUEVO)
+- [x] Extender tabla users con campos de perfil (bio, profileImage, username único)
+- [x] Crear router tRPC para obtener perfil público por username
+- [x] Crear router tRPC para editar perfil propio
+- [x] Implementar subida de foto de perfil a S3
+- [x] Página de perfil público /dj/[username]
+- [x] Mostrar biografía, foto de perfil, estadísticas
+- [x] Galería de tracks subidos por el DJ
+- [x] Estadísticas: total descargas, ganancias, ranking
+- [x] Géneros principales del DJ
+- [x] Página de edición de perfil /profile/edit
+- [x] Integrar enlaces a perfiles en Navbar con dropdown menu
+- [x] Crear tests de perfiles públicos
