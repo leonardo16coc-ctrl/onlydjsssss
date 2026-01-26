@@ -1,28 +1,275 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, decimal, boolean, bigint, index } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
- * Extend this file with additional tables as your product grows.
- * Columns use camelCase to match both database fields and generated types.
  */
 export const users = mysqlTable("users", {
-  /**
-   * Surrogate primary key. Auto-incremented numeric value managed by the database.
-   * Use this for relations between tables.
-   */
   id: int("id").autoincrement().primaryKey(),
-  /** Manus OAuth identifier (openId) returned from the OAuth callback. Unique per user. */
   openId: varchar("openId", { length: 64 }).notNull().unique(),
   name: text("name"),
   email: varchar("email", { length: 320 }),
   loginMethod: varchar("loginMethod", { length: 64 }),
   role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
+  // Membership fields
+  membershipStatus: mysqlEnum("membershipStatus", ["free", "member", "verified"]).default("free").notNull(),
+  membershipExpiresAt: timestamp("membershipExpiresAt"),
+  stripeCustomerId: varchar("stripeCustomerId", { length: 255 }),
+  stripeSubscriptionId: varchar("stripeSubscriptionId", { length: 255 }),
+  // DJ profile fields
+  djName: text("djName"),
+  bio: text("bio"),
+  avatarUrl: text("avatarUrl"),
+  country: varchar("country", { length: 100 }),
+  // Verification
+  isVerified: boolean("isVerified").default(false).notNull(),
+  verifiedAt: timestamp("verifiedAt"),
+  // Stats
+  totalDownloads: int("totalDownloads").default(0).notNull(),
+  totalUploads: int("totalUploads").default(0).notNull(),
+  // Timestamps
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
-});
+}, (table) => ({
+  membershipStatusIdx: index("membership_status_idx").on(table.membershipStatus),
+  totalDownloadsIdx: index("total_downloads_idx").on(table.totalDownloads),
+}));
 
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+/**
+ * Tracks table - stores all music tracks
+ */
+export const tracks = mysqlTable("tracks", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  // Basic info
+  title: varchar("title", { length: 255 }).notNull(),
+  artist: varchar("artist", { length: 255 }).notNull(),
+  // Audio files
+  audioFileKey: text("audioFileKey").notNull(), // S3 key for original file
+  audioFileUrl: text("audioFileUrl").notNull(), // S3 URL
+  previewFileKey: text("previewFileKey"), // S3 key for 90s preview
+  previewFileUrl: text("previewFileUrl"), // S3 URL for preview
+  waveformData: text("waveformData"), // JSON waveform data
+  coverImageKey: text("coverImageKey"),
+  coverImageUrl: text("coverImageUrl"),
+  // Metadata
+  bpm: int("bpm"),
+  musicalKey: varchar("musicalKey", { length: 10 }), // e.g., "Am", "C#m"
+  genre: mysqlEnum("genre", [
+    "Tech House",
+    "Bass House", 
+    "Afro House",
+    "Techno",
+    "Melodic Techno",
+    "Big Room",
+    "EDM",
+    "Hard Techno",
+    "Latin",
+    "Reggaeton",
+    "Hip-Hop",
+    "Open Format"
+  ]).notNull(),
+  subgenre: varchar("subgenre", { length: 100 }),
+  trackType: mysqlEnum("trackType", ["Extended Mix", "Edit", "Mashup", "Remix", "Rework"]).notNull(),
+  energy: int("energy"), // 1-10 scale
+  mood: varchar("mood", { length: 100 }),
+  tags: text("tags"), // JSON array of tags
+  // File info
+  fileFormat: varchar("fileFormat", { length: 20 }), // MP3, WAV
+  fileSizeBytes: bigint("fileSizeBytes", { mode: "number" }),
+  durationSeconds: int("durationSeconds"),
+  // AI Analysis
+  hasDrops: boolean("hasDrops").default(false),
+  dropsTimestamps: text("dropsTimestamps"), // JSON array
+  buildsTimestamps: text("buildsTimestamps"), // JSON array
+  // Mainstage classification
+  isMainstage: boolean("isMainstage").default(false).notNull(),
+  mainstageCategory: mysqlEnum("mainstageCategory", [
+    "Tech House Mainstage",
+    "Bass House Mainstage",
+    "Techno Mainstage",
+    "Melodic Techno Mainstage",
+    "Big Room",
+    "EDM Festival",
+    "Hard Techno",
+    "Latin Mainstage",
+    "Reggaeton Mainstage",
+    "Hip-Hop Mainstage"
+  ]),
+  mainstageTags: text("mainstageTags"), // JSON: Festival Weapon, Peak Time, etc.
+  // Stats
+  downloadCount: int("downloadCount").default(0).notNull(),
+  playCount: int("playCount").default(0).notNull(),
+  likeCount: int("likeCount").default(0).notNull(),
+  // Status
+  status: mysqlEnum("status", ["pending", "approved", "rejected"]).default("approved").notNull(),
+  // Timestamps
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("user_id_idx").on(table.userId),
+  genreIdx: index("genre_idx").on(table.genre),
+  bpmIdx: index("bpm_idx").on(table.bpm),
+  musicalKeyIdx: index("musical_key_idx").on(table.musicalKey),
+  isMainstageIdx: index("is_mainstage_idx").on(table.isMainstage),
+  downloadCountIdx: index("download_count_idx").on(table.downloadCount),
+  createdAtIdx: index("created_at_idx").on(table.createdAt),
+}));
+
+export type Track = typeof tracks.$inferSelect;
+export type InsertTrack = typeof tracks.$inferInsert;
+
+/**
+ * Downloads table - tracks every download for monetization
+ */
+export const downloads = mysqlTable("downloads", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(), // Who downloaded
+  trackId: int("trackId").notNull(), // What track
+  artistId: int("artistId").notNull(), // Track owner (for revenue)
+  // Analytics
+  ipAddress: varchar("ipAddress", { length: 45 }),
+  country: varchar("country", { length: 100 }),
+  device: varchar("device", { length: 100 }),
+  userAgent: text("userAgent"),
+  // Fraud detection
+  isSuspicious: boolean("isSuspicious").default(false),
+  // Timestamp
+  downloadedAt: timestamp("downloadedAt").defaultNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("download_user_id_idx").on(table.userId),
+  trackIdIdx: index("download_track_id_idx").on(table.trackId),
+  artistIdIdx: index("download_artist_id_idx").on(table.artistId),
+  downloadedAtIdx: index("downloaded_at_idx").on(table.downloadedAt),
+}));
+
+export type Download = typeof downloads.$inferSelect;
+export type InsertDownload = typeof downloads.$inferInsert;
+
+/**
+ * DJ Wallets - stores earnings and balance
+ */
+export const wallets = mysqlTable("wallets", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  // Balance
+  availableBalance: decimal("availableBalance", { precision: 10, scale: 2 }).default("0.00").notNull(),
+  pendingBalance: decimal("pendingBalance", { precision: 10, scale: 2 }).default("0.00").notNull(),
+  totalEarnings: decimal("totalEarnings", { precision: 10, scale: 2 }).default("0.00").notNull(),
+  totalWithdrawn: decimal("totalWithdrawn", { precision: 10, scale: 2 }).default("0.00").notNull(),
+  // Payout methods
+  paypalEmail: varchar("paypalEmail", { length: 320 }),
+  stripeAccountId: varchar("stripeAccountId", { length: 255 }),
+  // Timestamps
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("wallet_user_id_idx").on(table.userId),
+}));
+
+export type Wallet = typeof wallets.$inferSelect;
+export type InsertWallet = typeof wallets.$inferInsert;
+
+/**
+ * Earnings history - monthly revenue distribution
+ */
+export const earnings = mysqlTable("earnings", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  month: varchar("month", { length: 7 }).notNull(), // YYYY-MM format
+  // Revenue calculation
+  totalDownloads: int("totalDownloads").default(0).notNull(),
+  platformDownloads: int("platformDownloads").default(0).notNull(), // Total downloads on platform
+  revenuePool: decimal("revenuePool", { precision: 10, scale: 2 }).default("0.00").notNull(),
+  djShare: decimal("djShare", { precision: 10, scale: 2 }).default("0.00").notNull(), // 60% of pool
+  userEarnings: decimal("userEarnings", { precision: 10, scale: 2 }).default("0.00").notNull(),
+  // Status
+  status: mysqlEnum("status", ["pending", "paid", "cancelled"]).default("pending").notNull(),
+  paidAt: timestamp("paidAt"),
+  // Timestamps
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("earnings_user_id_idx").on(table.userId),
+  monthIdx: index("earnings_month_idx").on(table.month),
+}));
+
+export type Earning = typeof earnings.$inferSelect;
+export type InsertEarning = typeof earnings.$inferInsert;
+
+/**
+ * Playlists
+ */
+export const playlists = mysqlTable("playlists", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  description: text("description"),
+  coverImageUrl: text("coverImageUrl"),
+  isPublic: boolean("isPublic").default(false).notNull(),
+  trackCount: int("trackCount").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("playlist_user_id_idx").on(table.userId),
+}));
+
+export type Playlist = typeof playlists.$inferSelect;
+export type InsertPlaylist = typeof playlists.$inferInsert;
+
+/**
+ * Playlist tracks - many-to-many relationship
+ */
+export const playlistTracks = mysqlTable("playlist_tracks", {
+  id: int("id").autoincrement().primaryKey(),
+  playlistId: int("playlistId").notNull(),
+  trackId: int("trackId").notNull(),
+  position: int("position").notNull(),
+  addedAt: timestamp("addedAt").defaultNow().notNull(),
+}, (table) => ({
+  playlistIdIdx: index("playlist_tracks_playlist_id_idx").on(table.playlistId),
+  trackIdIdx: index("playlist_tracks_track_id_idx").on(table.trackId),
+}));
+
+export type PlaylistTrack = typeof playlistTracks.$inferSelect;
+export type InsertPlaylistTrack = typeof playlistTracks.$inferInsert;
+
+/**
+ * Likes/Favorites
+ */
+export const likes = mysqlTable("likes", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  trackId: int("trackId").notNull(),
+  likedAt: timestamp("likedAt").defaultNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("likes_user_id_idx").on(table.userId),
+  trackIdIdx: index("likes_track_id_idx").on(table.trackId),
+}));
+
+export type Like = typeof likes.$inferSelect;
+export type InsertLike = typeof likes.$inferInsert;
+
+/**
+ * Fraud detection logs
+ */
+export const fraudLogs = mysqlTable("fraud_logs", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId"),
+  ipAddress: varchar("ipAddress", { length: 45 }),
+  action: varchar("action", { length: 100 }).notNull(), // download, upload, etc.
+  reason: text("reason"),
+  severity: mysqlEnum("severity", ["low", "medium", "high", "critical"]).notNull(),
+  isBlocked: boolean("isBlocked").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("fraud_user_id_idx").on(table.userId),
+  ipAddressIdx: index("fraud_ip_idx").on(table.ipAddress),
+  createdAtIdx: index("fraud_created_at_idx").on(table.createdAt),
+}));
+
+export type FraudLog = typeof fraudLogs.$inferSelect;
+export type InsertFraudLog = typeof fraudLogs.$inferInsert;
