@@ -243,3 +243,12 @@
 - [x] Agregar sonido de notificación al alcanzar el límite
 - [x] Incluir botón de suscripción en el toast
 - [x] Prevenir múltiples notificaciones en la misma sesión de reproducción
+
+
+## 28. Mejora de Precisión de Análisis Musical con IA (NUEVO)
+- [x] Mejorar prompts de IA para máxima precisión en BPM y Key
+- [x] Agregar validación de rangos de BPM (60-200)
+- [ ] Agregar soporte para formato FLAC de alta calidad
+- [ ] Actualizar validación de archivos en frontend y backend
+- [ ] Optimizar análisis para archivos WAV sin pérdida
+- [ ] Crear tests de precisión de análisis
