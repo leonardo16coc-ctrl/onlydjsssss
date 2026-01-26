@@ -1175,3 +1175,14 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - ✅ URLs firmadas para seguridad
 - ✅ UI clara mostrando límites al usuario
 - ✅ Tests completos garantizando calidad
+
+
+## 41. Reorganizar UI de Upload - Límites como Info Secundaria ✅
+
+- [x] Mover UploadLimitsCard al final de la página Upload (después de formularios)
+- [x] Cambiar diseño del card para que sea informativo, no prominente
+- [x] Reducir tamaño y opacidad del card (modo compact)
+- [x] Cambiar título a "Información de Límites y Formatos"
+- [x] Eliminar botón de Upgrade prominente del card en modo compact
+- [x] Mantener solo información de referencia (formatos, tamaños, duración)
+- [x] Verificar que flujo de upload sigue requiriendo membresía obligatoria

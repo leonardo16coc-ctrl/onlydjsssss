@@ -9,7 +9,11 @@ import { useLocation } from "wouter";
 /**
  * UploadLimitsCard - Shows upload limits and usage for current user
  */
-export default function UploadLimitsCard() {
+interface UploadLimitsCardProps {
+  compact?: boolean;
+}
+
+export default function UploadLimitsCard({ compact = false }: UploadLimitsCardProps) {
   const { user } = useAuth();
   const [, setLocation] = useLocation();
   const { data: limits, isLoading } = trpc.uploads.getUploadLimits.useQuery();
@@ -49,26 +53,16 @@ export default function UploadLimitsCard() {
   };
 
   return (
-    <Card className="p-6 border-border/50 bg-card/50 backdrop-blur">
-      <div className="flex items-start justify-between mb-4">
-        <div>
-          <h3 className="font-bold text-lg mb-1">Límites de Upload</h3>
-          <div className="flex items-center gap-2">
-            <Crown className={`h-4 w-4 ${getMembershipColor(membershipStatus)}`} />
-            <span className={`text-sm font-medium ${getMembershipColor(membershipStatus)}`}>
-              Plan {getMembershipLabel(membershipStatus)}
-            </span>
-          </div>
+    <Card className={compact ? "p-4 border-border/30 bg-card/30 backdrop-blur-sm" : "p-6 border-border/50 bg-card/50 backdrop-blur"}>
+      <div className={compact ? "mb-3" : "mb-4"}>
+        <div className="flex items-center gap-2 mb-1">
+          <Crown className={`h-4 w-4 ${getMembershipColor(membershipStatus)}`} />
+          <span className={`text-sm font-medium ${getMembershipColor(membershipStatus)}`}>
+            Plan {getMembershipLabel(membershipStatus)}
+          </span>
         </div>
-        {membershipStatus === "free" && (
-          <Button
-            size="sm"
-            onClick={() => setLocation("/membership")}
-            className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-          >
-            <Sparkles className="h-3 w-3 mr-1" />
-            Upgrade
-          </Button>
+        {!compact && (
+          <h3 className="font-bold text-lg">Límites de Upload</h3>
         )}
       </div>
 
@@ -117,8 +111,8 @@ export default function UploadLimitsCard() {
           </div>
         </div>
 
-        {/* Upgrade CTA for free users */}
-        {membershipStatus === "free" && (
+        {/* Upgrade CTA for free users - only in non-compact mode */}
+        {!compact && membershipStatus === "free" && (
           <div className="pt-4 border-t border-border/50">
             <p className="text-xs text-muted-foreground mb-3">
               Actualiza a <span className="text-purple-500 font-medium">Pro</span> para subir hasta 50 tracks/mes

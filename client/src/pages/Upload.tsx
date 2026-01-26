@@ -294,13 +294,6 @@ export default function Upload() {
             </p>
           </div>
 
-          {/* Upload Limits Card */}
-          {isAuthenticated && (
-            <div className="mb-6">
-              <UploadLimitsCard />
-            </div>
-          )}
-
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Left Column - File Uploads */}
             <div className="space-y-6">
@@ -624,6 +617,18 @@ export default function Upload() {
               )}
             </div>
           </div>
+
+          {/* Upload Limits Info - Informativo al final */}
+          {isAuthenticated && (
+            <div className="mt-12 pt-8 border-t border-border/30">
+              <div className="max-w-2xl mx-auto">
+                <h3 className="text-sm font-medium text-muted-foreground mb-4 text-center">
+                  📋 Información de Límites y Formatos
+                </h3>
+                <UploadLimitsCard compact={true} />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
