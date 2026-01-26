@@ -16,9 +16,15 @@ export default function Home() {
             <h1 className="text-5xl md:text-7xl font-bold mb-6 text-glow-cyan">
               La Plataforma #1 para DJs
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground mb-8">
+            <p className="text-xl md:text-2xl text-muted-foreground mb-4">
               Descarga, sube y monetiza música profesional. Extended Mixes, Edits, Mashups y más.
             </p>
+            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 border border-cyan-500/30 rounded-lg px-6 py-3 mb-8">
+              <Sparkles className="w-6 h-6 text-cyan-400 animate-pulse" />
+              <p className="text-lg font-semibold text-white">
+                IA + Música + Sets + Inteligencia = DJ MODE
+              </p>
+            </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/explore">
                 <Button size="lg" className="btn-neon bg-primary hover:bg-primary/90 glow-cyan text-lg px-8">

@@ -13,7 +13,7 @@ import { toast } from "sonner";
 import { MusicAnalysisDisplay } from "@/components/MusicAnalysisDisplay";
 import AudioPlayer from "@/components/AudioPlayer";
 import WaveformPlayer from "@/components/WaveformPlayer";
-import ChunkedUploaderEnhanced from "@/components/ChunkedUploaderEnhanced";
+import UploadLimitsCard from "@/components/UploadLimitsCard";
 import { useLocation } from "wouter";
 
 export default function Upload() {
@@ -297,31 +297,68 @@ export default function Upload() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Left Column - File Uploads */}
             <div className="space-y-6">
-              {/* Audio File Upload with Chunked Upload */}
+              {/* Audio File Upload */}
               <Card className="p-6">
                 <h3 className="font-bold text-lg mb-4">Archivo de Audio</h3>
                 
                 <div className="space-y-4">
-                  <Label>Archivo MP3 320kbps o WAV (máx 100MB)</Label>
-                  
-                  {!audioUploaded && (
-                    <ChunkedUploaderEnhanced
-                      userId={user?.id || 1}
-                      onUploadComplete={(result) => {
-                        setUploadedAudio({
-                          fileKey: result.fileKey,
-                          fileUrl: result.fileUrl,
-                        });
-                        setAudioUploaded(true);
-                        // Auto-analyze after upload
-                        handleAnalyzeAudio(result.fileUrl);
-                      }}
-                      onUploadError={(error) => {
-                        console.error("Upload error:", error);
-                      }}
-                      maxSize={100 * 1024 * 1024}
-                      acceptedTypes={["audio/mpeg", "audio/mp3", "audio/wav", "audio/wave", "audio/x-wav"]}
+                  <div>
+                    <Label htmlFor="audio-file">
+                      Archivo MP3 320kbps o WAV (máx 100MB)
+                    </Label>
+                    <Input
+                      id="audio-file"
+                      type="file"
+                      accept="audio/mpeg,audio/mp3,audio/wav"
+                      onChange={handleAudioFileChange}
+                      className="mt-2"
                     />
+                  </div>
+
+                  {audioFile && !audioUploaded && (
+                    <div className="space-y-3">
+                      <div className="p-4 bg-muted rounded-lg">
+                        <p className="text-sm font-medium mb-1">{audioFile.name}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {(audioFile.size / (1024 * 1024)).toFixed(2)} MB
+                        </p>
+                      </div>
+
+                      {/* Audio Preview */}
+                      {audioPreviewUrl && (
+                        <div>
+                          <Label className="mb-2 block">Pre-escucha</Label>
+                          <AudioPlayer
+                            audioUrl={audioPreviewUrl}
+                            trackId={0}
+                            trackTitle={audioFile.name}
+                            compact={false}
+                          />
+                        </div>
+                      )}
+
+                        <Button
+                          onClick={handleUploadAudio}
+                          disabled={isUploadingAudio}
+                          className="w-full"
+                        >
+                        {isUploadingAudio ? (
+                          <>
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                            Subiendo...
+                          </>
+                        ) : (
+                          <>
+                            <UploadIcon className="h-4 w-4 mr-2" />
+                            Subir Audio
+                          </>
+                        )}
+                      </Button>
+
+                      {isUploadingAudio && (
+                        <Progress value={uploadProgress} className="w-full" />
+                      )}
+                    </div>
                   )}
 
                   {audioUploaded && uploadedAudio && (
@@ -580,6 +617,18 @@ export default function Upload() {
               )}
             </div>
           </div>
+
+          {/* Upload Limits Info - Informativo al final */}
+          {isAuthenticated && (
+            <div className="mt-12 pt-8 border-t border-border/30">
+              <div className="max-w-2xl mx-auto">
+                <h3 className="text-sm font-medium text-muted-foreground mb-4 text-center">
+                  📋 Información de Límites y Formatos
+                </h3>
+                <UploadLimitsCard compact={true} />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

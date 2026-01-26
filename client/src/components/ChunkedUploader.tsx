@@ -1,13 +1,13 @@
 /**
- * Enhanced ChunkedUploader Component
- * Handles resumable file uploads with real-time progress, speed, and time remaining
+ * ChunkedUploader Component
+ * Handles resumable file uploads using tus protocol
  */
 
 import { useState, useRef } from "react";
 import * as tus from "tus-js-client";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Upload as UploadIcon, X, CheckCircle2, AlertCircle, Zap, Clock } from "lucide-react";
+import { Upload as UploadIcon, X, CheckCircle2, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 
 interface ChunkedUploaderProps {
@@ -26,7 +26,7 @@ interface UploadResult {
   mimeType: string;
 }
 
-export default function ChunkedUploaderEnhanced({
+export default function ChunkedUploader({
   userId,
   onUploadComplete,
   onUploadError,
@@ -38,11 +38,8 @@ export default function ChunkedUploaderEnhanced({
   const [isUploading, setIsUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState<"idle" | "uploading" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
-  const [uploadSpeed, setUploadSpeed] = useState(0); // bytes per second
-  const [timeRemaining, setTimeRemaining] = useState(0); // seconds
   const uploadRef = useRef<tus.Upload | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const lastProgressRef = useRef({ bytes: 0, timestamp: Date.now() });
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
@@ -64,8 +61,6 @@ export default function ChunkedUploaderEnhanced({
     setFile(selectedFile);
     setUploadStatus("idle");
     setUploadProgress(0);
-    setUploadSpeed(0);
-    setTimeRemaining(0);
     setErrorMessage("");
   };
 
@@ -75,20 +70,17 @@ export default function ChunkedUploaderEnhanced({
     setIsUploading(true);
     setUploadStatus("uploading");
     setUploadProgress(0);
-    setUploadSpeed(0);
-    setTimeRemaining(0);
-    lastProgressRef.current = { bytes: 0, timestamp: Date.now() };
 
     const upload = new tus.Upload(file, {
       endpoint: "/api/upload/chunked",
-      retryDelays: [0, 1000, 3000, 5000, 10000],
+      retryDelays: [0, 1000, 3000, 5000, 10000], // Retry with exponential backoff
       chunkSize: 5 * 1024 * 1024, // 5MB chunks
       metadata: {
         filename: file.name,
         filetype: file.type,
         userId: userId.toString(),
       },
-      onError: (error: Error) => {
+      onError: (error) => {
         console.error("[ChunkedUploader] Upload failed:", error);
         setIsUploading(false);
         setUploadStatus("error");
@@ -96,26 +88,9 @@ export default function ChunkedUploaderEnhanced({
         toast.error("Error al subir el archivo. Intenta de nuevo.");
         onUploadError?.(error.message || "Upload failed");
       },
-      onProgress: (bytesUploaded: number, bytesTotal: number) => {
+      onProgress: (bytesUploaded, bytesTotal) => {
         const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
         setUploadProgress(parseFloat(percentage));
-        
-        // Calculate upload speed and time remaining
-        const now = Date.now();
-        const timeDiff = (now - lastProgressRef.current.timestamp) / 1000; // seconds
-        const bytesDiff = bytesUploaded - lastProgressRef.current.bytes;
-        
-        if (timeDiff > 0.5) { // Update every 500ms
-          const speed = bytesDiff / timeDiff; // bytes per second
-          setUploadSpeed(speed);
-          
-          const bytesRemaining = bytesTotal - bytesUploaded;
-          const timeRem = speed > 0 ? bytesRemaining / speed : 0;
-          setTimeRemaining(timeRem);
-          
-          lastProgressRef.current = { bytes: bytesUploaded, timestamp: now };
-        }
-        
         console.log(`[ChunkedUploader] Progress: ${percentage}%`);
       },
       onSuccess: () => {
@@ -124,16 +99,31 @@ export default function ChunkedUploaderEnhanced({
         setUploadStatus("success");
         setUploadProgress(100);
 
-        const result: UploadResult = {
-          fileKey: `tracks/${userId}/${Date.now()}.${file.name.split('.').pop()}`,
-          fileUrl: upload.url || "",
-          fileSize: file.size,
-          fileName: file.name,
-          mimeType: file.type,
-        };
+        // Extract result from upload metadata
+        const metadata = upload.url ? extractMetadataFromUrl(upload.url) : null;
+        
+        if (metadata) {
+          const result: UploadResult = {
+            fileKey: metadata.fileKey || `tracks/${userId}/${Date.now()}.${file.name.split('.').pop()}`,
+            fileUrl: metadata.fileUrl || upload.url || "",
+            fileSize: file.size,
+            fileName: file.name,
+            mimeType: file.type,
+          };
 
-        toast.success("¡Archivo subido exitosamente!");
-        onUploadComplete(result);
+          toast.success("¡Archivo subido exitosamente!");
+          onUploadComplete(result);
+        } else {
+          // Fallback if metadata extraction fails
+          toast.success("¡Archivo subido exitosamente!");
+          onUploadComplete({
+            fileKey: `tracks/${userId}/${Date.now()}.${file.name.split('.').pop()}`,
+            fileUrl: upload.url || "",
+            fileSize: file.size,
+            fileName: file.name,
+            mimeType: file.type,
+          });
+        }
       },
     });
 
@@ -147,8 +137,6 @@ export default function ChunkedUploaderEnhanced({
       setIsUploading(false);
       setUploadStatus("idle");
       setUploadProgress(0);
-      setUploadSpeed(0);
-      setTimeRemaining(0);
       toast.info("Subida cancelada");
     }
   };
@@ -157,11 +145,20 @@ export default function ChunkedUploaderEnhanced({
     setFile(null);
     setUploadStatus("idle");
     setUploadProgress(0);
-    setUploadSpeed(0);
-    setTimeRemaining(0);
     setErrorMessage("");
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
+    }
+  };
+
+  // Extract metadata from TUS upload URL (if server sends it)
+  const extractMetadataFromUrl = (url: string): { fileKey?: string; fileUrl?: string } | null => {
+    try {
+      // TUS server might include metadata in response headers
+      // For now, return null and rely on fallback
+      return null;
+    } catch {
+      return null;
     }
   };
 
@@ -169,19 +166,6 @@ export default function ChunkedUploaderEnhanced({
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-  };
-
-  const formatSpeed = (bytesPerSecond: number): string => {
-    if (bytesPerSecond < 1024) return `${bytesPerSecond.toFixed(0)} B/s`;
-    if (bytesPerSecond < 1024 * 1024) return `${(bytesPerSecond / 1024).toFixed(1)} KB/s`;
-    return `${(bytesPerSecond / (1024 * 1024)).toFixed(2)} MB/s`;
-  };
-
-  const formatTime = (seconds: number): string => {
-    if (seconds < 60) return `${Math.ceil(seconds)}s`;
-    const minutes = Math.floor(seconds / 60);
-    const secs = Math.ceil(seconds % 60);
-    return `${minutes}m ${secs}s`;
   };
 
   return (
@@ -195,10 +179,10 @@ export default function ChunkedUploaderEnhanced({
             accept={acceptedTypes.join(",")}
             onChange={handleFileSelect}
             className="hidden"
-            id="chunked-file-input-enhanced"
+            id="chunked-file-input"
           />
           <label
-            htmlFor="chunked-file-input-enhanced"
+            htmlFor="chunked-file-input"
             className="cursor-pointer flex flex-col items-center gap-2"
           >
             <UploadIcon className="h-12 w-12 text-muted-foreground" />
@@ -214,7 +198,7 @@ export default function ChunkedUploaderEnhanced({
 
       {/* File Selected */}
       {file && (
-        <div className="border border-border rounded-lg p-4 space-y-4 bg-card">
+        <div className="border border-border rounded-lg p-4 space-y-4">
           {/* File Info */}
           <div className="flex items-start justify-between">
             <div className="flex-1">
@@ -240,28 +224,16 @@ export default function ChunkedUploaderEnhanced({
             <div className="space-y-2">
               <Progress value={uploadProgress} className="h-2" />
               <div className="flex items-center justify-between text-xs">
-                <span className="text-muted-foreground font-medium">
+                <span className="text-muted-foreground">
                   {uploadProgress.toFixed(1)}%
                 </span>
-                {uploadStatus === "uploading" && uploadSpeed > 0 && (
-                  <div className="flex items-center gap-3 text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <Zap className="h-3 w-3 text-cyan-500" />
-                      {formatSpeed(uploadSpeed)}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="h-3 w-3 text-purple-500" />
-                      {formatTime(timeRemaining)}
-                    </span>
-                  </div>
-                )}
-                {uploadStatus === "uploading" && uploadSpeed === 0 && (
-                  <span className="text-muted-foreground animate-pulse">
-                    Iniciando...
+                {uploadStatus === "uploading" && (
+                  <span className="text-muted-foreground">
+                    Subiendo... (chunked)
                   </span>
                 )}
                 {uploadStatus === "success" && (
-                  <span className="text-green-500 flex items-center gap-1 font-medium">
+                  <span className="text-green-500 flex items-center gap-1">
                     <CheckCircle2 className="h-3 w-3" />
                     Completado
                   </span>
@@ -272,8 +244,8 @@ export default function ChunkedUploaderEnhanced({
 
           {/* Error Message */}
           {uploadStatus === "error" && (
-            <div className="flex items-center gap-2 text-sm text-red-500 bg-red-500/10 p-3 rounded-md">
-              <AlertCircle className="h-4 w-4 flex-shrink-0" />
+            <div className="flex items-center gap-2 text-sm text-red-500">
+              <AlertCircle className="h-4 w-4" />
               <span>{errorMessage}</span>
             </div>
           )}
@@ -292,7 +264,7 @@ export default function ChunkedUploaderEnhanced({
                 variant="destructive"
                 className="flex-1"
               >
-                Cancelar Subida
+                Cancelar
               </Button>
             )}
             {(uploadStatus === "success" || uploadStatus === "error") && (

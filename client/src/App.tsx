@@ -13,13 +13,17 @@ import Upload from "./pages/Upload";
 import Membership from "./pages/Membership";
 import DJProfile from "./pages/DJProfile";
 import ProfileEdit from "./pages/ProfileEdit";
+import DJMode from "./pages/DJMode";
+import MainstageMode from "./pages/MainstageMode";
 
 function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/explore"} component={Explore} />
+      <Route path={"/dj-mode"} component={DJMode} />
       <Route path={"/mainstage"} component={Mainstage} />
+      <Route path={"/mainstage-mode"} component={MainstageMode} />
       <Route path={"/rankings"} component={Rankings} />
       <Route path={"/dashboard"} component={Dashboard} />
       <Route path={"/upload"} component={Upload} />

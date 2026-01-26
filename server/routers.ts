@@ -10,6 +10,14 @@ import { analyzeAudioFile } from "./musicAnalysis";
 import { musicAnalysisRouter } from "./routers/musicAnalysis.router";
 import { profileRouter } from "./routers/profile.router";
 import { searchRouter } from "./routers/search.router";
+import { djModeRouter } from "./routers/djMode.router";
+import { weeklyChallengesRouter } from "./routers/weeklyChallenges.router";
+import { setFeedbackRouter } from "./routers/setFeedback.router";
+import { dnaAnalyticsRouter } from "./routers/dnaAnalytics.router";
+import { festivalIntelligenceRouter } from "./routers/festivalIntelligence.router";
+import { festivalRankingsRouter } from "./routers/festivalRankings.router";
+import { uploadsRouter } from "./routers/uploads.router";
+import { downloadsRouter } from "./routers/downloads.router";
 import { getDb } from "./db";
 import { tracks, downloads } from "../drizzle/schema";
 import { eq, and, gte, sql } from "drizzle-orm";
@@ -27,6 +35,13 @@ const memberProcedure = protectedProcedure.use(({ ctx, next }) => {
 
 export const appRouter = router({
   system: systemRouter,
+  weeklyChallenges: weeklyChallengesRouter,
+  setFeedback: setFeedbackRouter,
+  dnaAnalytics: dnaAnalyticsRouter,
+  festivalIntelligence: festivalIntelligenceRouter,
+  festivalRankings: festivalRankingsRouter,
+  uploads: uploadsRouter,
+  downloads: downloadsRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
@@ -203,115 +218,7 @@ export const appRouter = router({
     }),
   }),
 
-  downloads: router({
-    download: memberProcedure
-      .input(z.object({
-        trackId: z.number().int(),
-        format: z.enum(["mp3", "wav"]),
-      }))
-      .mutation(async ({ ctx, input }) => {
-        const db = await getDb();
-        if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
 
-        // Get track info
-        const trackResult = await db.select().from(tracks).where(eq(tracks.id, input.trackId)).limit(1);
-        if (trackResult.length === 0) {
-          throw new TRPCError({ code: "NOT_FOUND", message: "Track no encontrado" });
-        }
-        const track = trackResult[0];
-
-        // Check fraud
-        const ipAddress = ctx.req.headers["x-forwarded-for"] as string || ctx.req.socket.remoteAddress || "";
-        const recentDownloads = await db.select({ count: sql<number>`count(*)` })
-          .from(downloads)
-          .where(and(
-            eq(downloads.ipAddress, ipAddress),
-            gte(downloads.downloadedAt, sql`DATE_SUB(NOW(), INTERVAL 24 HOUR)`)
-          ));
-        
-        const downloadCount = recentDownloads[0]?.count || 0;
-        if (downloadCount > 100) {
-          throw new TRPCError({
-            code: "TOO_MANY_REQUESTS",
-            message: "Límite de descargas excedido",
-          });
-        }
-
-        // Record download
-        await db.insert(downloads).values({
-          userId: ctx.user.id,
-          trackId: input.trackId,
-          artistId: track.userId,
-          ipAddress,
-          country: ctx.req.headers["cf-ipcountry"] as string || null,
-          device: ctx.req.headers["user-agent"] || null,
-          userAgent: ctx.req.headers["user-agent"] || null,
-        });
-
-        // Return download URL (currently only MP3 available, WAV support coming soon)
-        const downloadUrl = track.audioFileUrl;
-
-        if (!downloadUrl) {
-          throw new TRPCError({ code: "NOT_FOUND", message: "Archivo de audio no disponible" });
-        }
-
-        return { 
-          success: true,
-          downloadUrl,
-          filename: `${track.artist} - ${track.title}.${input.format}`,
-          format: input.format,
-        };
-      }),
-
-    record: memberProcedure
-      .input(z.object({
-        trackId: z.number().int(),
-        artistId: z.number().int(),
-      }))
-      .mutation(async ({ ctx, input }) => {
-        const ipAddress = ctx.req.headers["x-forwarded-for"] as string || ctx.req.socket.remoteAddress || "";
-        
-        const recentDownloads = await db.checkIPDownloadLimit(ipAddress, 24);
-        if (recentDownloads > 100) {
-          await db.logFraudAttempt({
-            userId: ctx.user.id,
-            ipAddress,
-            action: "download",
-            reason: "Exceso de descargas desde misma IP",
-            severity: "high",
-            isBlocked: true,
-          });
-          throw new TRPCError({
-            code: "TOO_MANY_REQUESTS",
-            message: "Límite de descargas excedido",
-          });
-        }
-
-        await db.recordDownload({
-          userId: ctx.user.id,
-          trackId: input.trackId,
-          artistId: input.artistId,
-          ipAddress,
-          country: ctx.req.headers["cf-ipcountry"] as string || null,
-          device: ctx.req.headers["user-agent"] || null,
-          userAgent: ctx.req.headers["user-agent"] || null,
-        });
-
-        return { success: true };
-      }),
-
-    myDownloads: protectedProcedure
-      .input(z.object({ limit: z.number().int().min(1).max(100).optional() }))
-      .query(async ({ ctx, input }) => {
-        return await db.getDownloadsByUser(ctx.user.id, input.limit);
-      }),
-
-    myArtistDownloads: protectedProcedure
-      .input(z.object({ limit: z.number().int().min(1).max(100).optional() }))
-      .query(async ({ ctx, input }) => {
-        return await db.getDownloadsByArtist(ctx.user.id, input.limit);
-      }),
-  }),
 
   wallet: router({
     get: protectedProcedure.query(async ({ ctx }) => {
@@ -380,6 +287,9 @@ export const appRouter = router({
 
   // Search router
   search: searchRouter,
+
+  // DJ MODE router
+  djMode: djModeRouter,
 });
 
 export type AppRouter = typeof appRouter;
