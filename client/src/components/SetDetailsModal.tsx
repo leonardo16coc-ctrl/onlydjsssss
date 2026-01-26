@@ -2,7 +2,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import EnergyFlowChart from "./EnergyFlowChart";
-import { Music, Zap, ArrowRight } from "lucide-react";
+import { Music, Zap, ArrowRight, MessageSquare } from "lucide-react";
+import SetFeedbackForm from "./SetFeedbackForm";
+import { trpc } from "@/lib/trpc";
+import { useState } from "react";
 
 interface Track {
   id: number;
@@ -26,6 +29,7 @@ interface SetDetailsModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   setData: {
+    id: number;
     name: string;
     description: string | null;
     setType: string;
@@ -54,6 +58,13 @@ const compatibilityColors: Record<string, string> = {
 };
 
 export default function SetDetailsModal({ open, onOpenChange, setData }: SetDetailsModalProps) {
+  const [showFeedback, setShowFeedback] = useState(false);
+
+  const { data: existingFeedback } = trpc.setFeedback.getSetFeedback.useQuery(
+    { setId: setData?.id || 0 },
+    { enabled: !!setData?.id }
+  );
+
   if (!setData) return null;
 
   const { tracks, transitions } = setData;
@@ -162,6 +173,36 @@ export default function SetDetailsModal({ open, onOpenChange, setData }: SetDeta
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Feedback Section */}
+          <div className="bg-slate-800/30 rounded-lg p-6 border border-purple-500/20">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-purple-400 flex items-center gap-2">
+                <MessageSquare className="w-5 h-5" />
+                Feedback del Set
+              </h3>
+              {existingFeedback && (
+                <Badge variant="outline" className="text-yellow-400 border-yellow-500">
+                  ⭐ {existingFeedback.rating}/5
+                </Badge>
+              )}
+            </div>
+            {!showFeedback && !existingFeedback && (
+              <button
+                onClick={() => setShowFeedback(true)}
+                className="w-full py-3 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 border border-purple-500/30 rounded-lg text-white hover:from-purple-500/30 hover:to-cyan-500/30 transition-all"
+              >
+                📝 Calificar este set
+              </button>
+            )}
+            {(showFeedback || existingFeedback) && (
+              <SetFeedbackForm
+                setId={setData.id}
+                existingFeedback={existingFeedback}
+                onSuccess={() => setShowFeedback(false)}
+              />
+            )}
           </div>
 
           {/* Transitions Summary */}

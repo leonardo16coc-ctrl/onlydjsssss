@@ -1,4 +1,4 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, decimal, boolean, bigint, index } from "drizzle-orm/mysql-core";
+import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, decimal, boolean, bigint, index, json } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
@@ -432,3 +432,28 @@ export const weeklyChallenges = mysqlTable("weekly_challenges", {
 
 export type WeeklyChallenge = typeof weeklyChallenges.$inferSelect;
 export type InsertWeeklyChallenge = typeof weeklyChallenges.$inferInsert;
+
+
+/**
+ * Set Feedback - Sistema de calificación y comentarios de sets generados
+ */
+export const setFeedback = mysqlTable("set_feedback", {
+  id: int("id").autoincrement().primaryKey(),
+  setId: int("setId").notNull(), // FK a auto_sets
+  userId: int("userId").notNull(), // FK a users
+  rating: int("rating").notNull(), // 1-5 estrellas
+  comment: text("comment"), // Comentario libre
+  workedWell: json("workedWell").$type<string[]>(), // Tags: ["transiciones", "energía", "compatibilidad", "flow"]
+  needsImprovement: json("needsImprovement").$type<string[]>(), // Tags: ["BPM", "key", "orden", "duración"]
+  usedInLive: boolean("usedInLive").default(false).notNull(), // ¿Lo usaste en vivo?
+  venueType: mysqlEnum("venueType", ["club", "festival", "bar", "radio", "stream", "other"]), // Tipo de venue
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  setIdIdx: index("set_feedback_set_id_idx").on(table.setId),
+  userIdIdx: index("set_feedback_user_id_idx").on(table.userId),
+  userSetUnique: index("set_feedback_user_set_unique").on(table.userId, table.setId),
+}));
+
+export type SetFeedback = typeof setFeedback.$inferSelect;
+export type InsertSetFeedback = typeof setFeedback.$inferInsert;

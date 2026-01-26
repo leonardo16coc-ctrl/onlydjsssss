@@ -566,3 +566,66 @@
 - [ ] Tests de visualización de energy curve
 - [ ] Tests de generación de imagen de DNA
 - [ ] Tests de integración completa
+
+
+## 35. Sistema de Feedback de Sets Generados (MEJORA CONTINUA DE IA) ✅
+
+### Base de Datos
+- [x] Crear tabla `set_feedback` con campos:
+  - [x] id (autoincremental)
+  - [x] setId (FK a auto_sets)
+  - [x] userId (FK a users)
+  - [x] rating (1-5 estrellas)
+  - [x] comment (texto libre)
+  - [x] workedWell (tags JSON array)
+  - [x] needsImprovement (tags JSON array)
+  - [x] usedInLive (boolean)
+  - [x] venueType (enum: club, festival, bar, radio, stream, other)
+  - [x] createdAt, updatedAt
+
+### Router tRPC
+- [x] Endpoint `submitSetFeedback` (protegido)
+  - [x] Validar que el set pertenezca al usuario
+  - [x] Guardar rating y comentario
+  - [x] Actualizar o crear feedback
+- [x] Endpoint `getSetFeedback` (protegido)
+  - [x] Obtener feedback de un set específico
+- [x] Endpoint `getMyFeedbackHistory` (protegido)
+  - [x] Listar todos los feedbacks del usuario con nombre de set
+  - [x] Ordenar por fecha descendente
+- [x] Endpoint `getMyFeedbackStats` (protegido)
+  - [x] Total de feedbacks, rating promedio, sets usados en vivo
+
+### Componentes UI
+- [x] Crear `SetFeedbackForm` con:
+  - [x] Rating con estrellas (1-5) interactivo con hover
+  - [x] Campo de comentario (textarea)
+  - [x] Checkboxes "¿Qué funcionó bien?" (5 opciones)
+  - [x] Checkboxes "¿Qué mejorar?" (5 opciones)
+  - [x] Toggle "¿Lo usaste en vivo?"
+  - [x] Radio buttons tipo de venue (6 opciones)
+  - [x] Botón "Enviar Feedback" con loading state
+  - [x] Soporte para actualizar feedback existente
+- [x] Agregar sección de feedback en `SetDetailsModal`
+  - [x] Botón "Calificar este set" si no hay feedback
+  - [x] Badge de rating si ya existe feedback
+  - [x] Formulario integrado en modal
+- [ ] Agregar indicador de rating en lista de "Mis Sets"
+
+### Integración
+- [x] Mostrar formulario de feedback en SetDetailsModal
+- [x] Notificación de agradecimiento al enviar feedback (toast)
+- [x] Invalidar queries al enviar feedback
+- [ ] Mostrar rating promedio en cards de sets
+- [ ] Badge "Feedback enviado" en sets calificados
+
+### Analytics (Futuro)
+- [ ] Dashboard de feedback para análisis de IA
+- [ ] Identificar patrones en sets mejor calificados
+- [ ] Ajustar algoritmo basado en feedback
+
+### Testing
+- [ ] Tests de endpoint submitSetFeedback
+- [ ] Tests de endpoint getSetFeedback
+- [ ] Tests de validación de ratings
+- [ ] Tests de integración completa

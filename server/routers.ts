@@ -12,6 +12,7 @@ import { profileRouter } from "./routers/profile.router";
 import { searchRouter } from "./routers/search.router";
 import { djModeRouter } from "./routers/djMode.router";
 import { weeklyChallengesRouter } from "./routers/weeklyChallenges.router";
+import { setFeedbackRouter } from "./routers/setFeedback.router";
 import { getDb } from "./db";
 import { tracks, downloads } from "../drizzle/schema";
 import { eq, and, gte, sql } from "drizzle-orm";
@@ -30,6 +31,7 @@ const memberProcedure = protectedProcedure.use(({ ctx, next }) => {
 export const appRouter = router({
   system: systemRouter,
   weeklyChallenges: weeklyChallengesRouter,
+  setFeedback: setFeedbackRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
