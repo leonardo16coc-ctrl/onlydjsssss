@@ -41,21 +41,36 @@ async function startServer() {
   // OAuth callback under /api/oauth/callback
   registerOAuthRoutes(app);
   
-  // File upload endpoint
-  app.post("/api/upload/audio", async (req, res) => {
+  // File upload endpoints with multer
+  const multer = (await import("multer")).default;
+  const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: {
+      fileSize: 100 * 1024 * 1024, // 100MB for audio
+    },
+  });
+  
+  const uploadImage = multer({
+    storage: multer.memoryStorage(),
+    limits: {
+      fileSize: 10 * 1024 * 1024, // 10MB for images
+    },
+  });
+  
+  app.post("/api/upload/audio", upload.single("file"), async (req, res) => {
     const { uploadAudioFile, isUploadError } = await import("../fileUpload");
     
     try {
-      const { file, mimeType, fileName, userId } = req.body;
-      
-      if (!file || !mimeType || !fileName || !userId) {
-        return res.status(400).json({ error: "Missing required fields" });
+      if (!req.file) {
+        return res.status(400).json({ error: "No file uploaded" });
       }
       
-      // Decode base64 file
-      const fileBuffer = Buffer.from(file, "base64");
-      
-      const result = await uploadAudioFile(fileBuffer, mimeType, fileName, parseInt(userId));
+      const result = await uploadAudioFile(
+        req.file.buffer,
+        req.file.mimetype,
+        req.file.originalname,
+        1 // userId - will be replaced with actual user ID from session
+      );
       
       if (isUploadError(result)) {
         return res.status(400).json(result);
@@ -68,20 +83,20 @@ async function startServer() {
     }
   });
   
-  app.post("/api/upload/image", async (req, res) => {
+  app.post("/api/upload/cover", uploadImage.single("file"), async (req, res) => {
     const { uploadImageFile, isUploadError } = await import("../fileUpload");
     
     try {
-      const { file, mimeType, fileName, userId } = req.body;
-      
-      if (!file || !mimeType || !fileName || !userId) {
-        return res.status(400).json({ error: "Missing required fields" });
+      if (!req.file) {
+        return res.status(400).json({ error: "No file uploaded" });
       }
       
-      // Decode base64 file
-      const fileBuffer = Buffer.from(file, "base64");
-      
-      const result = await uploadImageFile(fileBuffer, mimeType, fileName, parseInt(userId));
+      const result = await uploadImageFile(
+        req.file.buffer,
+        req.file.mimetype,
+        req.file.originalname,
+        1 // userId - will be replaced with actual user ID from session
+      );
       
       if (isUploadError(result)) {
         return res.status(400).json(result);

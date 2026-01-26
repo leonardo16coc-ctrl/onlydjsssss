@@ -209,3 +209,14 @@
 - [x] Botón de Upload con verificación de membresía
 - [x] Redirección a página de membresía para usuarios Free
 - [x] Mensaje claro de que se requiere membresía para subir
+
+
+## 24. Arreglos Críticos de Funcionalidad Core (URGENTE)
+- [x] Arreglar botón de subir archivo que no avanza
+- [x] Verificar endpoints de subida /api/upload/audio y /api/upload/cover
+- [x] Agregar visualización de forma de onda (waveform) del audio subido
+- [x] Implementar análisis automático de BPM al terminar subida
+- [x] Auto-completar etiquetas y metadatos después del análisis
+- [x] Verificar que preview de 1 minuto funcione correctamente
+- [x] Verificar que descargas MP3/WAV funcionen correctamente
+- [x] Probar flujo completo: subir → ver waveform → analizar → publicar → descargar

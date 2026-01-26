@@ -12,6 +12,7 @@ import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { MusicAnalysisDisplay } from "@/components/MusicAnalysisDisplay";
 import AudioPlayer from "@/components/AudioPlayer";
+import WaveformPlayer from "@/components/WaveformPlayer";
 import { useLocation } from "wouter";
 
 export default function Upload() {
@@ -388,12 +389,18 @@ export default function Upload() {
                         <span className="font-medium text-green-500">Audio subido</span>
                       </div>
                       
-                      {/* Uploaded Audio Player */}
-                      <AudioPlayer
+                      {/* Uploaded Audio Waveform */}
+                      <WaveformPlayer
                         audioUrl={uploadedAudio.fileUrl}
-                        trackId={0}
-                        trackTitle={audioFile?.name || "Audio subido"}
-                        compact={false}
+                        autoAnalyze={true}
+                        onAnalysisComplete={(duration) => {
+                          console.log("Audio duration:", duration);
+                          // Trigger automatic analysis
+                          handleAnalyzeAudio(uploadedAudio.fileUrl);
+                        }}
+                        onReady={() => {
+                          console.log("Waveform ready");
+                        }}
                       />
                     </div>
                   )}
