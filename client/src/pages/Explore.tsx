@@ -8,6 +8,8 @@ import { useState, useEffect } from "react";
 import AdvancedFilters, { SearchFilters } from "@/components/AdvancedFilters";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import AudioPlayer from "@/components/AudioPlayer";
+import DownloadButton from "@/components/DownloadButton";
 
 export default function Explore() {
   const [filters, setFilters] = useState<SearchFilters>({});
@@ -156,22 +158,25 @@ export default function Explore() {
                     </span>
                   </div>
 
-                  {/* Actions */}
-                  <div className="flex gap-2">
-                    <Button 
-                      className="flex-1 btn-neon bg-primary hover:bg-primary/90 glow-cyan"
-                      onClick={() => toast.info("Reproductor en desarrollo")}
-                    >
-                      <Play className="h-4 w-4 mr-2" />
-                      Preview
-                    </Button>
-                    <Button 
-                      variant="outline"
-                      onClick={() => toast.info("Descarga disponible para miembros")}
-                    >
-                      <Download className="h-4 w-4" />
-                    </Button>
-                  </div>
+                  {/* Audio Player */}
+                  {track.audioFileUrl && (
+                    <div className="mb-4">
+                      <AudioPlayer
+                        audioUrl={track.audioFileUrl}
+                        trackId={track.id}
+                        trackTitle={`${track.artist} - ${track.title}`}
+                        compact
+                      />
+                    </div>
+                  )}
+
+                  {/* Download Button */}
+                  <DownloadButton
+                    trackId={track.id}
+                    trackTitle={track.title}
+                    artist={track.artist}
+                    compact={false}
+                  />
                 </Card>
               ))}
             </div>

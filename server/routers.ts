@@ -10,6 +10,9 @@ import { analyzeAudioFile } from "./musicAnalysis";
 import { musicAnalysisRouter } from "./routers/musicAnalysis.router";
 import { profileRouter } from "./routers/profile.router";
 import { searchRouter } from "./routers/search.router";
+import { getDb } from "./db";
+import { tracks, downloads } from "../drizzle/schema";
+import { eq, and, gte, sql } from "drizzle-orm";
 
 // Middleware to check if user has active membership
 const memberProcedure = protectedProcedure.use(({ ctx, next }) => {
@@ -201,6 +204,65 @@ export const appRouter = router({
   }),
 
   downloads: router({
+    download: memberProcedure
+      .input(z.object({
+        trackId: z.number().int(),
+        format: z.enum(["mp3", "wav"]),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const db = await getDb();
+        if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+
+        // Get track info
+        const trackResult = await db.select().from(tracks).where(eq(tracks.id, input.trackId)).limit(1);
+        if (trackResult.length === 0) {
+          throw new TRPCError({ code: "NOT_FOUND", message: "Track no encontrado" });
+        }
+        const track = trackResult[0];
+
+        // Check fraud
+        const ipAddress = ctx.req.headers["x-forwarded-for"] as string || ctx.req.socket.remoteAddress || "";
+        const recentDownloads = await db.select({ count: sql<number>`count(*)` })
+          .from(downloads)
+          .where(and(
+            eq(downloads.ipAddress, ipAddress),
+            gte(downloads.downloadedAt, sql`DATE_SUB(NOW(), INTERVAL 24 HOUR)`)
+          ));
+        
+        const downloadCount = recentDownloads[0]?.count || 0;
+        if (downloadCount > 100) {
+          throw new TRPCError({
+            code: "TOO_MANY_REQUESTS",
+            message: "Límite de descargas excedido",
+          });
+        }
+
+        // Record download
+        await db.insert(downloads).values({
+          userId: ctx.user.id,
+          trackId: input.trackId,
+          artistId: track.userId,
+          ipAddress,
+          country: ctx.req.headers["cf-ipcountry"] as string || null,
+          device: ctx.req.headers["user-agent"] || null,
+          userAgent: ctx.req.headers["user-agent"] || null,
+        });
+
+        // Return download URL (currently only MP3 available, WAV support coming soon)
+        const downloadUrl = track.audioFileUrl;
+
+        if (!downloadUrl) {
+          throw new TRPCError({ code: "NOT_FOUND", message: "Archivo de audio no disponible" });
+        }
+
+        return { 
+          success: true,
+          downloadUrl,
+          filename: `${track.artist} - ${track.title}.${input.format}`,
+          format: input.format,
+        };
+      }),
+
     record: memberProcedure
       .input(z.object({
         trackId: z.number().int(),

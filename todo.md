@@ -182,3 +182,21 @@
 - [x] Integrar filtros en página Explore
 - [ ] Persistencia de filtros en URL query params
 - [x] Crear tests de búsqueda avanzada
+
+
+## 22. Sistema de Preview de Audio y Descargas (NUEVO)
+- [x] Crear router tRPC para descargas con verificación de membresía
+- [x] Implementar descarga en formato MP3 320kbps
+- [x] Implementar descarga en formato WAV
+- [x] Registrar descargas en base de datos para monetización
+- [x] Componente AudioPlayer para preview de 1 minuto
+- [x] Controles de reproducción (play/pause/seek/volumen)
+- [x] Límite de 1 minuto para usuarios Free
+- [x] Acceso completo para miembros
+- [x] Componente DownloadButton con selector de formato
+- [x] Dropdown con opciones MP3/WAV
+- [x] Verificación de membresía antes de descargar
+- [x] Mensaje de upgrade para usuarios Free
+- [x] Integrar player en tarjetas de tracks
+- [x] Integrar botón de descarga en todas las páginas
+- [x] Crear tests de preview y descargas
