@@ -108,6 +108,12 @@ async function startServer() {
       return res.status(500).json({ error: "Internal server error" });
     }
   });
+  
+  // TUS chunked upload endpoints
+  const { tusServer } = await import("../tusServer");
+  app.all("/api/upload/chunked", tusServer.handle.bind(tusServer));
+  app.all("/api/upload/chunked/*", tusServer.handle.bind(tusServer));
+  
   // tRPC API
   app.use(
     "/api/trpc",

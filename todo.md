@@ -1186,3 +1186,94 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Eliminar botón de Upgrade prominente del card en modo compact
 - [x] Mantener solo información de referencia (formatos, tamaños, duración)
 - [x] Verificar que flujo de upload sigue requiriendo membresía obligatoria
+
+
+## 42. Auditoría Completa de Arquitectura Cloud Storage/Upload/Download ✅
+
+- [x] Auditar infraestructura actual vs especificaciones cloud profesionales
+- [x] Crear documento completo de auditoría (CLOUD_ARCHITECTURE_AUDIT.md)
+- [x] Identificar gaps críticos: chunked upload, tests de carga
+- [x] Puntuación: 71/100 - Sistema funcional pero requiere optimizaciones
+
+## 43. Implementar Chunked Upload con tus-js (CRÍTICO) ✅
+
+- [x] Instalar dependencias: @tus/server, tus-js-client
+- [x] Crear endpoint backend /api/upload/chunked con tus-server
+- [x] Configurar FileStore temporal para chunks
+- [x] Implementar onUploadFinish para mover a S3
+- [x] Crear componente ChunkedUploader.tsx con tus-js-client
+- [x] Implementar progreso real con porcentaje exacto
+- [x] Implementar retry automático en fallos (0s, 1s, 3s, 5s, 10s backoff)
+- [x] Configurar chunks de 5MB
+- [x] Validación pre-upload (tamaño y formato)
+- [x] Limpieza automática de archivos temporales (24h)
+
+## 44. Tests de Carga con k6 (CRÍTICO) ✅
+
+- [x] Crear script k6 para test de 100 usuarios concurrentes (load-test-100-users.js)
+- [x] Crear script k6 para test de 1000 usuarios concurrentes (load-test-1000-users.js)
+- [x] Test de homepage y explore
+- [x] Test de API de tracks
+- [x] Test de streaming de audio
+- [x] Test de download limits
+- [x] Crear README con instrucciones completas
+- [x] Documentar métricas esperadas y cómo interpretar resultados
+- [ ] Ejecutar tests en producción (requiere k6 instalado localmente)
+- [ ] Identificar bottlenecks basado en resultados
+- [ ] Optimizar queries lentas según benchmarks
+
+## 42. Auditoría Completa de Arquitectura Cloud Storage/Upload/Download
+
+### Infraestructura Base
+- [ ] Verificar que usa S3/R2 compatible (Manus Storage)
+- [ ] Verificar CDN habilitado para archivos estáticos
+- [ ] Verificar URLs firmadas para seguridad
+- [ ] Verificar anti-hotlink protection
+- [ ] Verificar cache headers optimizados
+
+### Sistema de Upload
+- [ ] Verificar chunked upload implementado (archivos grandes)
+- [ ] Verificar progreso visual en tiempo real
+- [ ] Verificar validación de formato antes de subir
+- [ ] Verificar validación de tamaño antes de subir
+- [ ] Verificar estados claros: Subiendo → Procesando → Listo
+- [ ] Verificar manejo de errores robusto
+- [ ] Verificar retry automático en fallos
+
+### Sistema de Download
+- [ ] Verificar descargas aceleradas vía CDN
+- [ ] Verificar URLs firmadas con expiración
+- [ ] Verificar tracking de descargas
+- [ ] Verificar límites por membresía
+- [ ] Verificar anti-fraude (rate limiting)
+- [ ] Verificar formatos múltiples (MP3/WAV)
+
+### Streaming y Player
+- [ ] Verificar Web Audio API implementado
+- [ ] Verificar streaming progresivo
+- [ ] Verificar waveform visual
+- [ ] Verificar preview de 1 minuto para Free
+- [ ] Verificar controles completos (play/pause/seek/volumen)
+- [ ] Verificar cache inteligente de audio
+
+### Optimización de Costos
+- [ ] Implementar eliminación automática de archivos no descargados (30 días)
+- [ ] Implementar compresión inteligente
+- [ ] Implementar limpieza programada de archivos temporales
+- [ ] Verificar uso eficiente de bandwidth
+
+### Seguridad
+- [ ] Verificar autenticación en todos los endpoints
+- [ ] Verificar autorización por membresía
+- [ ] Verificar sanitización de nombres de archivo
+- [ ] Verificar protección contra path traversal
+- [ ] Verificar límites de rate por IP
+- [ ] Verificar watermarking de archivos descargados
+
+### Performance
+- [ ] Tests de carga: 100 usuarios concurrentes
+- [ ] Tests de carga: 1000 usuarios concurrentes
+- [ ] Benchmark de velocidad de upload
+- [ ] Benchmark de velocidad de download
+- [ ] Benchmark de streaming
+- [ ] Optimización de queries de DB
