@@ -27,6 +27,8 @@ import DJDNABadge from "@/components/DJDNABadge";
 import BadgeCard from "@/components/BadgeCard";
 import SetDetailsModal from "@/components/SetDetailsModal";
 import DJDNARadarChart from "@/components/DJDNARadarChart";
+import BadgeUnlockedNotification from "@/components/BadgeUnlockedNotification";
+import { useNewBadges } from "@/hooks/useNewBadges";
 
 export default function DJMode() {
   const { user, loading: authLoading, isAuthenticated } = useAuth();
@@ -56,6 +58,9 @@ export default function DJMode() {
     { setId: selectedSetId! },
     { enabled: selectedSetId !== null }
   );
+
+  // Badge notifications
+  const { newBadge, clearNewBadge } = useNewBadges(badges);
 
   // Mutations
   const updateProfileMutation = trpc.djMode.updateProfile.useMutation({
@@ -634,6 +639,12 @@ export default function DJMode() {
         open={showSetDetails}
         onOpenChange={setShowSetDetails}
         setData={setDetails || null}
+      />
+
+      {/* Badge Unlocked Notification */}
+      <BadgeUnlockedNotification
+        badge={newBadge}
+        onClose={clearNewBadge}
       />
     </div>
   );
