@@ -477,3 +477,33 @@ export const dnaShareAnalytics = mysqlTable("dna_share_analytics", {
 
 export type DNAShareAnalytics = typeof dnaShareAnalytics.$inferSelect;
 export type InsertDNAShareAnalytics = typeof dnaShareAnalytics.$inferInsert;
+
+
+/**
+ * Track Festival Scores - Sistema de scores inteligentes para MAINSTAGE MODE
+ */
+export const trackFestivalScores = mysqlTable("track_festival_scores", {
+  id: int("id").autoincrement().primaryKey(),
+  trackId: int("trackId").notNull(), // FK a tracks
+  festivalScore: int("festivalScore").notNull().default(0), // 0-100
+  peakTimeScore: int("peakTimeScore").notNull().default(0), // 0-100
+  dropImpactScore: int("dropImpactScore").notNull().default(0), // 0-100
+  crowdEnergyScore: int("crowdEnergyScore").notNull().default(0), // 0-100
+  mainstageCompatibilityScore: int("mainstageCompatibilityScore").notNull().default(0), // 0-100
+  // Crowd Impact Prediction metrics
+  crowdImpactScore: int("crowdImpactScore").notNull().default(0), // 0-100
+  dropExplosionProbability: int("dropExplosionProbability").notNull().default(0), // 0-100 (%)
+  handsUpProbability: int("handsUpProbability").notNull().default(0), // 0-100 (%)
+  energyRetention: int("energyRetention").notNull().default(0), // 0-100 (%)
+  calculatedAt: timestamp("calculatedAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  trackIdIdx: index("track_festival_scores_track_id_idx").on(table.trackId),
+  festivalScoreIdx: index("track_festival_scores_festival_score_idx").on(table.festivalScore),
+  peakTimeScoreIdx: index("track_festival_scores_peak_time_score_idx").on(table.peakTimeScore),
+  dropImpactScoreIdx: index("track_festival_scores_drop_impact_score_idx").on(table.dropImpactScore),
+  mainstageCompatibilityScoreIdx: index("track_festival_scores_mainstage_compatibility_score_idx").on(table.mainstageCompatibilityScore),
+}));
+
+export type TrackFestivalScores = typeof trackFestivalScores.$inferSelect;
+export type InsertTrackFestivalScores = typeof trackFestivalScores.$inferInsert;

@@ -14,6 +14,8 @@ import { djModeRouter } from "./routers/djMode.router";
 import { weeklyChallengesRouter } from "./routers/weeklyChallenges.router";
 import { setFeedbackRouter } from "./routers/setFeedback.router";
 import { dnaAnalyticsRouter } from "./routers/dnaAnalytics.router";
+import { festivalIntelligenceRouter } from "./routers/festivalIntelligence.router";
+import { festivalRankingsRouter } from "./routers/festivalRankings.router";
 import { getDb } from "./db";
 import { tracks, downloads } from "../drizzle/schema";
 import { eq, and, gte, sql } from "drizzle-orm";
@@ -34,6 +36,8 @@ export const appRouter = router({
   weeklyChallenges: weeklyChallengesRouter,
   setFeedback: setFeedbackRouter,
   dnaAnalytics: dnaAnalyticsRouter,
+  festivalIntelligence: festivalIntelligenceRouter,
+  festivalRankings: festivalRankingsRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

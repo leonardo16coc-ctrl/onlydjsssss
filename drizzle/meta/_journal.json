@@ -57,6 +57,13 @@
       "when": 1769441854551,
       "tag": "0007_conscious_gorilla_man",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1769444586747,
+      "tag": "0008_misty_prowler",
+      "breakpoints": true
     }
   ]
 }

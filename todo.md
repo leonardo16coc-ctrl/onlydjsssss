@@ -772,3 +772,196 @@
 - [ ] Tests de cálculo de ranking
 - [ ] Tests de filtros por período
 - [ ] Tests de integración completa
+
+
+## 39. MAINSTAGE MODE - AI Festival Engine 🎆 (REVOLUCIONARIO)
+
+### Visión
+Crear la primera inteligencia artificial del mundo diseñada exclusivamente para festivales y escenarios masivos, que ayude a cualquier DJ a tocar como si estuviera en Tomorrowland, Ultra o EDC.
+
+MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Tendencias globales + 🎆 Sets automáticos PRO
+
+### Módulo 1: Festival Intelligence Engine (Cerebro IA)
+- [ ] Crear sistema de análisis de tracks con scores inteligentes
+- [ ] Analizar datos de ONLYDJS:
+  - [ ] Descargas, reproducciones, favoritos
+  - [ ] Rankings internos
+  - [ ] Actividad de DJs
+  - [ ] BPM, Key, Energía
+  - [ ] Tipo de drop
+  - [ ] Estructura del track
+  - [ ] Género y subgénero
+  - [ ] Metadata musical
+- [ ] Generar 5 scores por track:
+  - [ ] Festival Score (0-100)
+  - [ ] Peak Time Score (0-100)
+  - [ ] Drop Impact Score (0-100)
+  - [ ] Crowd Energy Score (0-100)
+  - [ ] Mainstage Compatibility Score (0-100)
+- [ ] Almacenar scores en base de datos (tabla track_festival_scores)
+- [ ] Endpoint tRPC para calcular/actualizar scores
+- [ ] Endpoint tRPC para obtener scores de un track
+
+### Módulo 2: Global Festival Rankings (Billboard del DJ moderno)
+- [ ] Crear 7 rankings dinámicos en tiempo real:
+  - [ ] 🔥 Festival Weapons (top tracks por Festival Score)
+  - [ ] 🚀 Peak Time Anthems (top tracks por Peak Time Score)
+  - [ ] 🎆 Mainstage Bombs (top tracks por Mainstage Compatibility)
+  - [ ] 🌍 Global Trending (tracks con mayor crecimiento)
+  - [ ] 🏆 Top Festival DJs (DJs con más tracks en rankings)
+  - [ ] 🎵 Top Mainstage Genres (géneros dominantes)
+  - [ ] ⚡ Top Energy Drops (tracks con mayor Drop Impact)
+- [ ] Cada track muestra:
+  - [ ] BPM, Key (Camelot), Energía
+  - [ ] Tipo de drop
+  - [ ] Festival Score
+  - [ ] Crowd Impact %
+  - [ ] Tendencia ↑ ↓
+  - [ ] Recomendación IA
+- [ ] Componente RankingCard con visualización premium
+- [ ] Actualización automática de rankings cada hora
+
+### Módulo 3: Auto Festival Set Builder PRO (Joya de la corona)
+- [ ] Expandir Auto Set Builder con opciones de festival:
+  - [ ] Selector de tipo de escenario:
+    - [ ] Club
+    - [ ] Festival
+    - [ ] Mainstage
+    - [ ] Ultra Style
+    - [ ] Tomorrowland Style
+  - [ ] Selector de estilo musical:
+    - [ ] EDM
+    - [ ] Big Room
+    - [ ] Tech House
+    - [ ] Melodic
+    - [ ] Bass House
+    - [ ] Hard Techno
+  - [ ] Selector de duración:
+    - [ ] 30 min
+    - [ ] 60 min
+    - [ ] 90 min
+  - [ ] Selector de intensidad:
+    - [ ] Progressive
+    - [ ] Explosive
+    - [ ] Emotional
+- [ ] Algoritmo de IA genera:
+  - [ ] Orden matemático perfecto
+  - [ ] Flujo energético profesional
+  - [ ] Curva de energía visual
+  - [ ] Ubicación perfecta de drops
+  - [ ] Clímax central
+  - [ ] Final épico
+- [ ] Salida del set incluye:
+  - [ ] Playlist final ordenada
+  - [ ] Curva visual del set (EnergyFlowChart)
+  - [ ] BPM Flow Map
+  - [ ] Key Harmony Map
+  - [ ] Botón "Export Playlist" (M3U/CSV)
+  - [ ] Botón "Descargar Tracklist" (PDF)
+
+### Módulo 4: Crowd Impact Prediction System (Arma secreta)
+- [ ] Sistema de predicción de reacción del público
+- [ ] Calcular 4 métricas por track/set:
+  - [ ] 🔥 Crowd Impact Score (0-100)
+  - [ ] 💣 Drop Explosion Probability (%)
+  - [ ] 🙌 Hands Up Probability (%)
+  - [ ] 🎉 Energy Retention (%)
+- [ ] Visualización con barras de fuego (🔥🔥🔥🔥🔥)
+- [ ] Mostrar predicciones en cards de tracks
+- [ ] Mostrar predicciones en sets generados
+- [ ] Algoritmo basado en scores + historial de descargas/reproducciones
+
+### Módulo 5: Festival Trends Radar (Cerebro estratégico)
+- [ ] Dashboard de tendencias globales
+- [ ] Gráficas de Recharts mostrando:
+  - [ ] BPM trending global (line chart)
+  - [ ] Keys más usadas (bar chart)
+  - [ ] Géneros dominantes (pie chart)
+  - [ ] Subgéneros emergentes (radar chart)
+  - [ ] Tipos de drops más efectivos (bar chart)
+  - [ ] Estructuras con mayor impacto (heatmap)
+  - [ ] Horarios con mayor explosividad (timeline)
+- [ ] Filtros por período (semana/mes/año)
+- [ ] Exportar reportes de tendencias (PDF)
+
+### UI y Navegación
+- [ ] Renombrar página Mainstage a "MAINSTAGE MODE"
+- [ ] Diseño con 5 tabs principales:
+  - [ ] Festival Intelligence
+  - [ ] Global Rankings
+  - [ ] Set Builder PRO
+  - [ ] Crowd Prediction
+  - [ ] Trends Radar
+- [ ] Header con título "AI FESTIVAL ENGINE"
+- [ ] Animaciones y efectos premium (gradientes, glow, particles)
+- [ ] Responsive design para móviles
+
+### Modelo Premium y Bloqueo
+- [ ] Plan FREE:
+  - [ ] Vista demo rankings (top 3)
+  - [ ] Preview tendencias (gráficas bloqueadas)
+  - [ ] 3 tracks recomendados
+  - [ ] Sets bloqueados con modal de upgrade
+- [ ] Plan PRO ($4.99/mes):
+  - [ ] DJ MODE completo
+  - [ ] MAINSTAGE MODE completo
+  - [ ] Rankings en tiempo real ilimitados
+  - [ ] Auto Festival Set Builder ilimitado
+  - [ ] Crowd Impact Prediction
+  - [ ] Export playlists
+  - [ ] IA activa 24/7
+
+### Testing
+- [ ] Tests de Festival Intelligence Engine
+- [ ] Tests de cálculo de scores
+- [ ] Tests de rankings dinámicos
+- [ ] Tests de Auto Festival Set Builder PRO
+- [ ] Tests de Crowd Impact Prediction
+- [ ] Tests de integración completa
+
+
+## 40. MAINSTAGE MODE - Implementación Base Completada ✅
+
+### Festival Intelligence Engine
+- [x] Tabla `track_festival_scores` creada con 5 scores + 4 predicciones
+- [x] Router festivalIntelligenceRouter con 3 endpoints
+- [x] Sistema de cálculo automático de scores:
+  - [x] Festival Score (0-100)
+  - [x] Peak Time Score (0-100)
+  - [x] Drop Impact Score (0-100)
+  - [x] Crowd Energy Score (0-100)
+  - [x] Mainstage Compatibility Score (0-100)
+- [x] Métricas de predicción:
+  - [x] Crowd Impact Prediction (1-10)
+  - [x] Drop Explosion Probability (%)
+  - [x] Hands Up Probability (%)
+  - [x] Energy Retention (%)
+
+### Global Festival Rankings
+- [x] Router festivalRankingsRouter con 7 categorías
+- [x] Rankings implementados:
+  - [x] 🔥 Festival Weapons (Festival Score)
+  - [x] 🚀 Peak Time Anthems (Peak Time Score)
+  - [x] 🎆 Mainstage Bombs (Mainstage Compatibility)
+  - [x] 🌍 Global Trending (Downloads 7d)
+  - [x] 🏆 Top Festival DJs (Track count)
+  - [x] 🎵 Top Mainstage Genres (Genre count)
+  - [x] ⚡ Top Energy Drops (Drop Impact)
+- [x] Endpoint getAllRankings para obtener todos a la vez
+
+### UI de MAINSTAGE MODE
+- [x] Reemplazado contenido de /mainstage con nuevo sistema
+- [x] Header "AI FESTIVAL ENGINE" con badge
+- [x] 7 tabs con iconos y nombres responsivos
+- [x] Cards de rankings con gradientes por categoría
+- [x] Medallas 🥇🥈🥉 para top 3
+- [x] Loading state con Sparkles animado
+- [x] Responsive design completo
+
+### Próximas Expansiones (Pendientes)
+- [ ] Auto Festival Set Builder PRO con selectores avanzados
+- [ ] Crowd Impact Prediction System visual
+- [ ] Festival Trends Radar dashboard
+- [ ] Exportación de playlists (M3U/CSV/PDF)
+- [ ] Cache de rankings para performance
+- [ ] Actualización automática cada hora
