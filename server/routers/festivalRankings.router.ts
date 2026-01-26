@@ -14,6 +14,8 @@ export const festivalRankingsRouter = router({
   getFestivalWeapons: publicProcedure
     .input(z.object({
       limit: z.number().int().min(5).max(100).default(20),
+      country: z.string().optional(),
+      month: z.string().regex(/^\d{4}-\d{2}$/).optional(), // YYYY-MM format
     }))
     .query(async ({ input }) => {
       const db = await getDb();
@@ -273,6 +275,8 @@ export const festivalRankingsRouter = router({
   getAllRankings: publicProcedure
     .input(z.object({
       limit: z.number().int().min(3).max(20).default(10),
+      country: z.string().optional(),
+      month: z.string().regex(/^\d{4}-\d{2}$/).optional(), // YYYY-MM format
     }))
     .query(async ({ input }) => {
       const db = await getDb();
@@ -329,7 +333,13 @@ export const festivalRankingsRouter = router({
         })
         .from(downloads)
         .leftJoin(tracks, eq(downloads.trackId, tracks.id))
-        .where(gte(downloads.downloadedAt, sql`DATE_SUB(NOW(), INTERVAL 7 DAY)`))
+        .where(and(
+          gte(downloads.downloadedAt, input.month 
+            ? sql`DATE_FORMAT(${downloads.downloadedAt}, '%Y-%m') = ${input.month}`
+            : sql`DATE_SUB(NOW(), INTERVAL 7 DAY)`
+          ),
+          input.country ? eq(downloads.country, input.country) : sql`1=1`
+        ))
         .groupBy(downloads.trackId)
         .orderBy(desc(sql`COUNT(*)`))
         .limit(input.limit),
@@ -342,7 +352,10 @@ export const festivalRankingsRouter = router({
         .from(trackFestivalScores)
         .leftJoin(tracks, eq(trackFestivalScores.trackId, tracks.id))
         .leftJoin(users, eq(tracks.userId, users.id))
-        .where(gte(trackFestivalScores.festivalScore, 70))
+        .where(and(
+          gte(trackFestivalScores.festivalScore, 70),
+          input.country ? eq(users.country, input.country) : sql`1=1`
+        ))
         .groupBy(tracks.userId)
         .orderBy(desc(sql`COUNT(*)`))
         .limit(input.limit),

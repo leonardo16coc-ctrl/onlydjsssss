@@ -965,3 +965,38 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [ ] Exportación de playlists (M3U/CSV/PDF)
 - [ ] Cache de rankings para performance
 - [ ] Actualización automática cada hora
+
+
+## 41. Filtros de País y Mes en Global Festival Rankings (NUEVO) ✅
+
+### Extensión de Schema
+- [x] Campo `country` ya existe en tabla downloads
+- [x] Campo `country` ya existe en tabla users
+- [x] No se requiere migración de schema
+
+### Actualización de Endpoints
+- [x] Extender festivalRankingsRouter con parámetros de filtro:
+  - [x] `country` (opcional): filtrar por país ISO code
+  - [x] `month` (opcional): filtrar por mes (YYYY-MM)
+- [x] Actualizar query de Global Trending para filtrar por país y mes
+- [x] Actualizar query de Top Festival DJs para filtrar por país
+- [x] Mantener compatibilidad con queries sin filtros (global)
+
+### Componente de Filtros
+- [x] Crear componente RankingFilters
+- [x] Select de país con 12 países populares
+- [x] Select de mes con últimos 12 meses generados dinámicamente
+- [x] Botón "Limpiar filtros" para volver a vista global
+- [x] Indicador visual de filtros activos con nombres legibles
+
+### Integración en UI
+- [x] Agregar RankingFilters en header de MAINSTAGE MODE
+- [x] Pasar filtros a query de getAllRankings
+- [x] Estado de filtros con useState
+- [ ] Mostrar mensaje cuando no hay resultados con filtros
+- [ ] Persistir filtros en URL query params
+
+### Testing
+- [ ] Tests de endpoints con filtros
+- [ ] Tests de componente RankingFilters
+- [ ] Tests de integración completa

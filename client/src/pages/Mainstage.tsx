@@ -1,12 +1,19 @@
+import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import { trpc } from "@/lib/trpc";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { RankingFilters } from "@/components/RankingFilters";
 import { Flame, Zap, Trophy, TrendingUp, Users, Music, Sparkles } from "lucide-react";
 
 export default function Mainstage() {
+  const [country, setCountry] = useState<string | undefined>();
+  const [month, setMonth] = useState<string | undefined>();
+
   const { data: allRankings, isLoading } = trpc.festivalRankings.getAllRankings.useQuery({
     limit: 10,
+    country,
+    month,
   });
 
   return (
@@ -39,6 +46,18 @@ export default function Mainstage() {
               El Billboard del DJ moderno. Rankings globales actualizados en tiempo real con inteligencia artificial.
             </p>
           </div>
+
+          {/* Filtros */}
+          <RankingFilters
+            country={country}
+            month={month}
+            onCountryChange={setCountry}
+            onMonthChange={setMonth}
+            onClearFilters={() => {
+              setCountry(undefined);
+              setMonth(undefined);
+            }}
+          />
 
           {/* Rankings Tabs */}
           <Tabs defaultValue="weapons" className="w-full">
