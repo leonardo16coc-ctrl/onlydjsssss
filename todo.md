@@ -327,3 +327,78 @@
 - [x] Tests de Smart Suggestions
 - [x] Tests de Auto Set Builder
 - [x] Tests de integración completa
+
+
+## 31. Mejoras Premium de DJ MODE (GAME CHANGERS) 🚀
+
+### 1. Visualización de Curva Energética (ULTRA PRO)
+- [ ] Instalar Recharts para gráficas interactivas
+- [ ] Crear componente EnergyFlowChart
+- [ ] Mostrar curva energética en sets generados
+- [ ] Puntos por track con tooltips informativos
+- [ ] Visualización de fases: Warmup → Build → Peak → Sustain → Closing
+- [ ] Colores neon consistentes con tema (cyan/purple/pink)
+- [ ] Animaciones suaves al cargar gráfica
+
+### 2. Sugerencias de Transiciones DJ (DIFERENCIADOR TOTAL)
+- [ ] Extender schema de auto_sets con campo transitions
+- [ ] Generar sugerencias de transición con IA por cada par de tracks
+- [ ] Tipos de transiciones: Loop 8 beats, Echo out, Backspin, Reverb tail, Filter sweep, Drop mix
+- [ ] Mostrar transiciones en UI de sets generados
+- [ ] Iconos visuales para cada tipo de transición
+- [ ] Tooltips explicativos para cada técnica
+
+### 3. DJ DNA Profile (IDENTIDAD MUSICAL)
+- [ ] Crear componente DJDNABadge
+- [ ] Calcular DNA basado en perfil: BPM dominante, género principal, key favorita, momento preferido, nivel energético
+- [ ] Formato: "Tu ADN DJ: 128 BPM · Tech House · Am · Peak Time · Festival Energy"
+- [ ] Mostrar en header de DJ MODE
+- [ ] Mostrar en perfiles públicos de DJs
+- [ ] Animación de "descubriendo tu ADN" al actualizar perfil
+- [ ] Compartir DNA en redes sociales
+
+### 4. Sistema de Badges y Gamificación (VIRALIZACIÓN)
+- [ ] Crear tabla dj_badges en base de datos
+- [ ] Definir 10+ badges con criterios de desbloqueo:
+  - [ ] 🎧 Club Killer (100+ descargas)
+  - [ ] 🚀 Festival Weapon (track en Top 10 Mainstage)
+  - [ ] 🔥 Peak Time Master (50+ tracks peak time)
+  - [ ] 🧠 AI Power DJ (10+ sets generados)
+  - [ ] 💎 Verified DJ (membresía verificada)
+  - [ ] 🎯 Precision Master (profile score 90+)
+  - [ ] 🌟 Rising Star (100+ seguidores)
+  - [ ] 🏆 Top 10 DJ (ranking global)
+  - [ ] 🎨 Sound Designer (20+ tracks subidos)
+  - [ ] 🔊 Bass Lord (especialista en Bass House)
+- [ ] Sistema de notificaciones al desbloquear badge
+- [ ] Mostrar badges en perfil DJ
+- [ ] Progreso hacia próximo badge
+- [ ] Badges compartibles en redes sociales
+
+### 5. Bloqueo Inteligente para Upsell (MONETIZACIÓN)
+- [ ] Definir 3 planes: Free, Pro ($4.99/mes), Studio ($9.99/mes)
+- [ ] Plan Free: Vista demo de DJ MODE (solo estadísticas básicas)
+- [ ] Plan Pro: Recomendaciones completas + 5 sets/mes
+- [ ] Plan Studio: Todo ilimitado + batch processing + exportación
+- [ ] Crear tabla user_plan_limits para tracking de uso
+- [ ] Implementar verificación de límites en routers
+- [ ] Modals de upgrade estratégicos
+- [ ] Mensajes de "Desbloquea con Pro/Studio"
+- [ ] Comparación visual de planes en DJ MODE
+
+### 6. Texto de Posicionamiento Estratégico (BRANDING)
+- [ ] Actualizar hero de Home con nuevo copy
+- [ ] Headline principal: "ONLYDJS no es un pool. Es el cerebro del DJ moderno."
+- [ ] Subheadline: "IA + Música + Sets + Inteligencia = DJ MODE"
+- [ ] Sección de features destacando DJ MODE
+- [ ] Video/GIF demo de curva energética
+- [ ] Testimonios de DJs usando DJ MODE
+- [ ] CTA específico para DJ MODE
+
+### Testing y Optimización
+- [ ] Tests de componente EnergyFlowChart
+- [ ] Tests de sistema de badges
+- [ ] Tests de límites de planes
+- [ ] Tests de cálculo de DJ DNA
+- [ ] Optimización de queries de badges
+- [ ] Tests de integración completa

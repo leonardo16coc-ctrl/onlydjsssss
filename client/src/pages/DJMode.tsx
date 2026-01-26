@@ -23,6 +23,8 @@ import {
   Heart
 } from "lucide-react";
 import { Link } from "wouter";
+import DJDNABadge from "@/components/DJDNABadge";
+import BadgeCard from "@/components/BadgeCard";
 
 export default function DJMode() {
   const { user, loading: authLoading, isAuthenticated } = useAuth();
@@ -39,6 +41,10 @@ export default function DJMode() {
   });
 
   const { data: mySets } = trpc.djMode.getMySets.useQuery(undefined, {
+    enabled: isAuthenticated,
+  });
+
+  const { data: badges } = trpc.djMode.getMyBadges.useQuery(undefined, {
     enabled: isAuthenticated,
   });
 
@@ -116,6 +122,13 @@ export default function DJMode() {
           </div>
         </div>
       </div>
+
+      {/* DJ DNA Badge */}
+      {profile && (
+        <div className="container mx-auto px-4 py-6">
+          <DJDNABadge profile={profile} size="lg" />
+        </div>
+      )}
 
       <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="profile" className="space-y-6">
@@ -251,6 +264,34 @@ export default function DJMode() {
                 </CardContent>
               </Card>
             )}
+
+            {/* Badges */}
+            <Card className="bg-slate-900/50 border-yellow-500/30">
+              <CardHeader>
+                <CardTitle className="text-yellow-400 flex items-center gap-2">
+                  <Target className="w-5 h-5" />
+                  🏆 Tus Badges
+                </CardTitle>
+                <CardDescription>Desbloquea badges completando desafíos</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {badges && badges.length > 0 ? (
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    {badges.map((badge) => (
+                      <BadgeCard
+                        key={badge.badgeType}
+                        badgeType={badge.badgeType}
+                        unlocked={badge.unlocked}
+                        unlockedAt={badge.unlockedAt}
+                        progress={badge.progress}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-400">Completa actividades para desbloquear badges</p>
+                )}
+              </CardContent>
+            </Card>
 
             <Button 
               onClick={() => updateProfileMutation.mutate()}

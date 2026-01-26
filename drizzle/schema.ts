@@ -368,3 +368,32 @@ export const autoSets = mysqlTable("auto_sets", {
 
 export type AutoSet = typeof autoSets.$inferSelect;
 export type InsertAutoSet = typeof autoSets.$inferInsert;
+
+/**
+ * DJ Badges - Sistema de gamificación
+ */
+export const djBadges = mysqlTable("dj_badges", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  badgeType: mysqlEnum("badgeType", [
+    "club_killer",
+    "festival_weapon",
+    "peak_time_master",
+    "ai_power_dj",
+    "verified_dj",
+    "precision_master",
+    "rising_star",
+    "top_10_dj",
+    "sound_designer",
+    "bass_lord",
+  ]).notNull(),
+  unlockedAt: timestamp("unlockedAt").defaultNow().notNull(),
+  progress: int("progress").default(0).notNull(), // Progreso hacia el badge (0-100)
+}, (table) => ({
+  userIdIdx: index("dj_badges_user_id_idx").on(table.userId),
+  badgeTypeIdx: index("dj_badges_type_idx").on(table.badgeType),
+  userBadgeUnique: index("dj_badges_user_badge_unique").on(table.userId, table.badgeType),
+}));
+
+export type DjBadge = typeof djBadges.$inferSelect;
+export type InsertDjBadge = typeof djBadges.$inferInsert;

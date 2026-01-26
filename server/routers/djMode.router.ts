@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { router, protectedProcedure, publicProcedure } from "../_core/trpc";
 import { getDb } from "../db";
-import { djProfiles, djActivity, tracks, downloads, likes, playlistTracks, autoSets } from "../../drizzle/schema";
+import { djProfiles, djActivity, tracks, downloads, likes, playlistTracks, autoSets, djBadges } from "../../drizzle/schema";
 import { eq, desc, and, gte, sql } from "drizzle-orm";
 import { invokeLLM } from "../_core/llm";
 
@@ -390,7 +390,19 @@ Tipo de set: ${input.setType}
 - warmup: Energía ascendente gradual (40 → 70)
 - peak_time: Energía alta sostenida (80 → 95)
 - closing: Energía descendente emocional (70 → 50)
-- festival: Energía explosiva con peaks (85 → 100)`,
+- festival: Energía explosiva con peaks (85 → 100)
+
+Para cada transición entre tracks, sugiere UNA técnica DJ profesional específica:
+- "Loop 8 beats" - Para transiciones suaves con BPM similar
+- "Echo out" - Para transiciones con cambio de energía
+- "Backspin" - Para rewinds dramáticos en peak time
+- "Reverb tail" - Para transiciones atmosféricas
+- "Filter sweep" - Para cambios de género o mood
+- "Drop mix" - Para transiciones explosivas en festival
+- "EQ blend" - Para mezclas largas y progresivas
+- "Quick cut" - Para cambios rápidos de energía
+
+Analiza la compatibilidad de cada transición (Perfecta/Buena/Moderada) basándote en BPM y Key.`,
           },
           {
             role: "user",
@@ -494,5 +506,81 @@ Tipo de set: ${input.setType}
       .orderBy(desc(autoSets.createdAt));
 
     return sets;
+  }),
+
+  /**
+   * Obtener badges del usuario
+   */
+  getMyBadges: protectedProcedure.query(async ({ ctx }) => {
+    const db = await getDb();
+    if (!db) throw new Error("Database not available");
+
+    // Obtener badges desbloqueados
+    const unlockedBadges = await db
+      .select()
+      .from(djBadges)
+      .where(eq(djBadges.userId, ctx.user.id));
+
+    // Definir todos los badges posibles
+    const allBadgeTypes = [
+      "club_killer",
+      "festival_weapon",
+      "peak_time_master",
+      "ai_power_dj",
+      "verified_dj",
+      "precision_master",
+      "rising_star",
+      "top_10_dj",
+      "sound_designer",
+      "bass_lord",
+    ];
+
+    // Calcular progreso para badges no desbloqueados
+    const profile = await db
+      .select()
+      .from(djProfiles)
+      .where(eq(djProfiles.userId, ctx.user.id))
+      .limit(1)
+      .then(rows => rows[0]);
+
+    const totalDownloads = profile?.totalTracksDownloaded || 0;
+    const totalSets = await db
+      .select()
+      .from(autoSets)
+      .where(eq(autoSets.userId, ctx.user.id))
+      .then(rows => rows.length);
+
+    // Mapear badges con estado y progreso
+    return allBadgeTypes.map(badgeType => {
+      const unlocked = unlockedBadges.find(b => b.badgeType === badgeType);
+      
+      let progress = 0;
+      if (!unlocked) {
+        // Calcular progreso basado en criterios
+        switch (badgeType) {
+          case "club_killer":
+            progress = Math.min(100, (totalDownloads / 100) * 100);
+            break;
+          case "ai_power_dj":
+            progress = Math.min(100, (totalSets / 10) * 100);
+            break;
+          case "precision_master":
+            progress = profile?.profileScore || 0;
+            break;
+          case "verified_dj":
+            progress = ctx.user.membershipStatus === "member" ? 100 : 0;
+            break;
+          default:
+            progress = 0;
+        }
+      }
+
+      return {
+        badgeType,
+        unlocked: !!unlocked,
+        unlockedAt: unlocked?.unlockedAt || null,
+        progress: unlocked ? 100 : Math.round(progress),
+      };
+    });
   }),
 });
