@@ -1000,3 +1000,178 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [ ] Tests de endpoints con filtros
 - [ ] Tests de componente RankingFilters
 - [ ] Tests de integración completa
+
+
+## 32. Sistema de Upload y Storage Profesional con S3 (ARQUITECTURA CLOUD) 🚀
+
+### Infraestructura de Almacenamiento
+- [ ] Diseñar estructura de carpetas en S3:
+  - [ ] /users/{userId}/uploads (archivos originales subidos)
+  - [ ] /users/{userId}/processed (archivos procesados)
+  - [ ] /tracks/published (tracks publicados)
+  - [ ] /covers (imágenes de portada)
+  - [ ] /previews (archivos de preview de 1 min)
+  - [ ] /temp (archivos temporales, auto-eliminación 24h)
+- [ ] Implementar generación de nombres únicos con sufijos aleatorios
+- [ ] Sistema de URLs firmadas temporales para descargas seguras
+- [ ] Implementar limpieza automática de archivos temporales
+
+### Sistema de Upload Mejorado
+- [ ] Validación de formatos soportados:
+  - [ ] MP3 (320kbps mínimo)
+  - [ ] WAV (sin pérdida)
+  - [ ] AIFF (sin pérdida)
+  - [ ] FLAC (sin pérdida)
+- [ ] Validación de tamaño máximo: 100 MB
+- [ ] Validación de duración máxima: 15 minutos
+- [ ] Progress bar con porcentaje exacto
+- [ ] Sistema de reintentos automáticos en caso de fallo
+- [ ] Cancelación de uploads en progreso
+- [ ] Drag & drop mejorado con preview visual
+- [ ] Upload múltiple (batch upload)
+- [ ] Compresión inteligente de archivos grandes
+
+### Análisis IA Post-Upload Automático
+- [ ] Trigger automático de análisis al completar upload
+- [ ] Análisis completo con LLM:
+  - [ ] BPM preciso (rango 60-200)
+  - [ ] Key musical (Camelot Wheel)
+  - [ ] Energía (0-100)
+  - [ ] Estructura (intro, build, drop, breakdown, outro)
+  - [ ] Mood y género
+- [ ] Auto-completar campos del formulario con resultados
+- [ ] Notificación al usuario cuando análisis esté listo
+- [ ] Opción de re-analizar si resultados no son correctos
+- [ ] Almacenar resultados en tabla track_analysis
+
+### Sistema de Preview Player Profesional
+- [ ] Componente WaveformPlayer con Web Audio API
+- [ ] Generación de waveform visual con canvas
+- [ ] Controles profesionales:
+  - [ ] Play/Pause
+  - [ ] Seek bar interactivo
+  - [ ] Control de volumen
+  - [ ] Loop de sección
+  - [ ] Pitch control (±8%)
+  - [ ] Speed control (0.5x - 2x)
+- [ ] Visualización de BPM y Key en tiempo real
+- [ ] Marcadores de estructura (drops, builds)
+- [ ] Límite de 1 minuto para usuarios Free
+- [ ] Preview completo para miembros
+- [ ] Sincronización con waveform visual
+
+### Sistema de Descargas Avanzado
+- [ ] Endpoint de descarga con verificación de membresía
+- [ ] Límites por plan:
+  - [ ] Free: 5 descargas/mes
+  - [ ] Pro: 50 descargas/mes
+  - [ ] Studio: Ilimitado
+- [ ] Tracking completo de descargas:
+  - [ ] IP, país, dispositivo
+  - [ ] Timestamp
+  - [ ] Formato descargado (MP3/WAV)
+  - [ ] Referrer
+- [ ] Generación de URLs firmadas con expiración (1 hora)
+- [ ] Watermark inaudible en archivos descargados (opcional)
+- [ ] Descarga acelerada vía CDN
+- [ ] Compresión ZIP para descargas múltiples
+- [ ] Historial de descargas por usuario
+- [ ] Notificación al uploader cuando su track es descargado
+
+### Página de Exploración Mejorada
+- [ ] Grid de tracks con cards optimizadas
+- [ ] Filtros avanzados:
+  - [ ] Género (multi-select)
+  - [ ] BPM (rango con slider)
+  - [ ] Key (Camelot Wheel)
+  - [ ] Energía (rango)
+  - [ ] Tipo (Extended Mix, Edit, Mashup, etc)
+  - [ ] Fecha de subida
+  - [ ] Popularidad (descargas)
+- [ ] Búsqueda por texto (título, artista, label)
+- [ ] Ordenamiento:
+  - [ ] Más recientes
+  - [ ] Más descargados
+  - [ ] Mejor calificados
+  - [ ] Trending (últimas 24h/7d/30d)
+- [ ] Infinite scroll con paginación
+- [ ] Preview rápido al hover
+- [ ] Botones de acción rápida (download, like, add to playlist)
+
+### Seguridad y Optimización
+- [ ] Implementar rate limiting en uploads (5/hora para Free, ilimitado para miembros)
+- [ ] Validación de tipo MIME real (no solo extensión)
+- [ ] Escaneo de archivos maliciosos
+- [ ] Encriptación de archivos sensibles
+- [ ] Cache inteligente de archivos populares
+- [ ] Compresión automática de imágenes cover
+- [ ] Lazy loading de waveforms
+- [ ] Optimización de queries de base de datos
+
+### Métricas y Analytics
+- [ ] Dashboard de storage usage por usuario
+- [ ] Gráficos de uploads/descargas por día
+- [ ] Top tracks más descargados
+- [ ] Estadísticas de formatos más usados
+- [ ] Análisis de costos de storage
+- [ ] Alertas de uso excesivo
+- [ ] Reportes mensuales para administradores
+
+### Testing
+- [ ] Tests de upload de archivos (todos los formatos)
+- [ ] Tests de validación de tamaño y formato
+- [ ] Tests de análisis IA automático
+- [ ] Tests de generación de waveform
+- [ ] Tests de sistema de descargas
+- [ ] Tests de límites por membresía
+- [ ] Tests de URLs firmadas
+- [ ] Tests de limpieza automática de archivos temporales
+- [ ] Tests de stress (uploads concurrentes)
+- [ ] Tests de recuperación ante fallos
+
+
+## 40. Sistema de Storage y Descargas Profesional ✅ (COMPLETADO)
+
+### Upload System
+- [x] Crear router `uploadsRouter` con validación de formatos (MP3, WAV)
+- [x] Implementar límites por membresía (Free: 5/mes, Pro: 50/mes, Studio: ilimitado)
+- [x] Validación de tamaño de archivo (100MB audio, 10MB imágenes)
+- [x] Validación de duración máxima (15 minutos)
+- [x] Sistema de almacenamiento S3 con carpetas organizadas por usuario
+- [x] Crear componente `UploadLimitsCard` para mostrar límites
+- [x] Integrar UploadLimitsCard en página Upload
+
+### Download System
+- [x] Crear router `downloadsRouter` con tracking completo
+- [x] Implementar límites de descarga por membresía (Free: 5/mes, Pro: 50/mes, Studio: ilimitado)
+- [x] Sistema de URLs firmadas para descargas seguras
+- [x] Tracking de descargas con IP, país, dispositivo, user agent
+- [x] Anti-fraude: rate limiting por IP (100 descargas/24h)
+- [x] Historial de descargas del usuario (`getMyDownloadHistory`)
+- [x] Estadísticas de descargas (total, mensual, géneros top)
+- [x] Crear componente `DownloadLimitsCard` para mostrar límites
+- [x] Integrar DownloadLimitsCard en página Explore
+- [x] Actualizar `DownloadButton` para usar nuevo router
+
+### Testing
+- [x] Crear tests unitarios para `uploadsRouter` (13 tests pasando)
+- [x] Actualizar tests unitarios para `downloadsRouter` (10 tests pasando)
+- [x] Ejecutar todos los tests y verificar que pasen
+- [x] Verificar funcionalidad en browser
+
+### Archivos Creados
+- `/server/routers/uploads.router.ts` - Router completo de uploads con validación
+- `/server/routers/downloads.router.ts` - Router completo de downloads con tracking
+- `/server/uploads.test.ts` - Tests de uploads (13 tests)
+- `/server/downloads.test.ts` - Tests de downloads actualizados (10 tests)
+- `/client/src/components/UploadLimitsCard.tsx` - Card de límites de upload
+- `/client/src/components/DownloadLimitsCard.tsx` - Card de límites de descarga
+
+### Beneficios
+- ✅ Sistema de storage cloud profesional
+- ✅ Límites claros por membresía para monetización
+- ✅ Tracking completo para analytics
+- ✅ Anti-fraude con rate limiting
+- ✅ URLs firmadas para seguridad
+- ✅ UI clara mostrando límites al usuario
+- ✅ Tests completos garantizando calidad

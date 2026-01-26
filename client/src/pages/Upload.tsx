@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { MusicAnalysisDisplay } from "@/components/MusicAnalysisDisplay";
 import AudioPlayer from "@/components/AudioPlayer";
 import WaveformPlayer from "@/components/WaveformPlayer";
+import UploadLimitsCard from "@/components/UploadLimitsCard";
 import { useLocation } from "wouter";
 
 export default function Upload() {
@@ -292,6 +293,13 @@ export default function Upload() {
               Comparte tu música con la comunidad de DJs
             </p>
           </div>
+
+          {/* Upload Limits Card */}
+          {isAuthenticated && (
+            <div className="mb-6">
+              <UploadLimitsCard />
+            </div>
+          )}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Left Column - File Uploads */}
