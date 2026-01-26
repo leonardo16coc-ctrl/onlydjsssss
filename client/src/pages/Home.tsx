@@ -14,11 +14,8 @@ export default function Home() {
         <div className="container relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl md:text-7xl font-bold mb-6 text-glow-cyan">
-              ONLYDJS no es un pool.
+              La Plataforma #1 para DJs
             </h1>
-            <h2 className="text-3xl md:text-5xl font-bold mb-6 text-glow-purple">
-              Es el cerebro del DJ moderno.
-            </h2>
             <p className="text-xl md:text-2xl text-muted-foreground mb-4">
               Descarga, sube y monetiza música profesional. Extended Mixes, Edits, Mashups y más.
             </p>
