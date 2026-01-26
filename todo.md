@@ -220,3 +220,13 @@
 - [x] Verificar que preview de 1 minuto funcione correctamente
 - [x] Verificar que descargas MP3/WAV funcionen correctamente
 - [x] Probar flujo completo: subir → ver waveform → analizar → publicar → descargar
+
+
+## 25. Mejora de Conversión en Upload (NUEVO)
+- [x] Permitir subida de archivos a todos los usuarios (Free y miembros)
+- [x] Permitir ver forma de onda a todos
+- [x] Permitir reproducir y revisar audio a todos
+- [x] Permitir análisis con IA a todos
+- [x] Mover verificación de membresía solo al botón final "Publicar Track"
+- [x] Mostrar mensaje de upgrade solo al intentar publicar
+- [x] Eliminar restricciones en campos del formulario para usuarios Free

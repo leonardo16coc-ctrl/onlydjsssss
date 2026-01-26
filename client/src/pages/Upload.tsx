@@ -215,10 +215,11 @@ export default function Upload() {
   const handleSubmit = async () => {
     // Check membership
     if (isFreeUser) {
-      toast.error("Necesitas una membresía activa para subir tracks", {
-        description: "Suscríbete por $4.99/mes para subir música ilimitada",
+      toast.error("¡Último paso! Necesitas membresía para publicar", {
+        description: "Has completado todo el proceso. Suscríbete por $4.99/mes para publicar tu track y empezar a ganar dinero.",
+        duration: 8000,
         action: {
-          label: "Suscribirse",
+          label: "💎 Suscribirse Ahora",
           onClick: () => setLocation("/membership"),
         },
       });
@@ -292,28 +293,6 @@ export default function Upload() {
             </p>
           </div>
 
-          {/* Membership Warning for Free Users */}
-          {isFreeUser && (
-            <Card className="p-6 mb-6 border-primary bg-primary/5">
-              <div className="flex items-start gap-4">
-                <Lock className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
-                <div className="flex-1">
-                  <h3 className="font-bold text-lg mb-2">Membresía Requerida</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Necesitas una membresía activa para subir tracks. Suscríbete por solo $4.99/mes y obtén acceso ilimitado para subir y descargar música.
-                  </p>
-                  <Button
-                    onClick={() => setLocation("/membership")}
-                    className="btn-neon glow-pink"
-                  >
-                    <CreditCard className="h-4 w-4 mr-2" />
-                    Suscribirse Ahora
-                  </Button>
-                </div>
-              </div>
-            </Card>
-          )}
-
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Left Column - File Uploads */}
             <div className="space-y-6">
@@ -331,7 +310,6 @@ export default function Upload() {
                       type="file"
                       accept="audio/mpeg,audio/mp3,audio/wav"
                       onChange={handleAudioFileChange}
-                      disabled={isFreeUser}
                       className="mt-2"
                     />
                   </div>
@@ -358,11 +336,11 @@ export default function Upload() {
                         </div>
                       )}
 
-                      <Button
-                        onClick={handleUploadAudio}
-                        disabled={isUploadingAudio || isFreeUser}
-                        className="w-full"
-                      >
+                        <Button
+                          onClick={handleUploadAudio}
+                          disabled={isUploadingAudio}
+                          className="w-full"
+                        >
                         {isUploadingAudio ? (
                           <>
                             <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -421,7 +399,6 @@ export default function Upload() {
                       type="file"
                       accept="image/*"
                       onChange={handleCoverImageChange}
-                      disabled={isFreeUser}
                       className="mt-2"
                     />
                   </div>
@@ -439,7 +416,7 @@ export default function Upload() {
                       {!coverUploaded && (
                         <Button
                           onClick={handleUploadCover}
-                          disabled={isUploadingCover || isFreeUser}
+                          disabled={isUploadingCover}
                           className="w-full"
                           variant="outline"
                         >
@@ -476,7 +453,7 @@ export default function Upload() {
                   {!analysisResult ? (
                     <Button
                       onClick={() => handleAnalyzeAudio()}
-                      disabled={isAnalyzing || isFreeUser}
+                      disabled={isAnalyzing}
                       className="w-full btn-neon glow-cyan"
                     >
                       {isAnalyzing ? (
@@ -525,7 +502,6 @@ export default function Upload() {
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
                       placeholder="Nombre del track"
-                      disabled={isFreeUser}
                     />
                   </div>
 
@@ -536,13 +512,12 @@ export default function Upload() {
                       value={artist}
                       onChange={(e) => setArtist(e.target.value)}
                       placeholder="Nombre del artista"
-                      disabled={isFreeUser}
                     />
                   </div>
 
                   <div>
                     <Label htmlFor="genre">Género *</Label>
-                    <Select value={genre} onValueChange={setGenre} disabled={isFreeUser}>
+                    <Select value={genre} onValueChange={setGenre}>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecciona un género" />
                       </SelectTrigger>
@@ -565,7 +540,7 @@ export default function Upload() {
 
                   <div>
                     <Label htmlFor="trackType">Tipo de Track *</Label>
-                    <Select value={trackType} onValueChange={setTrackType} disabled={isFreeUser}>
+                    <Select value={trackType} onValueChange={setTrackType}>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecciona el tipo" />
                       </SelectTrigger>
@@ -582,25 +557,23 @@ export default function Upload() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="bpm">BPM</Label>
-                      <Input
-                        id="bpm"
-                        type="number"
-                        value={bpm}
-                        onChange={(e) => setBpm(e.target.value)}
-                        placeholder="128"
-                        disabled={isFreeUser}
-                      />
+                        <Input
+                          id="bpm"
+                          type="number"
+                          value={bpm}
+                          onChange={(e) => setBpm(e.target.value)}
+                          placeholder="128"
+                        />
                     </div>
 
                     <div>
                       <Label htmlFor="key">Clave Musical</Label>
-                      <Input
-                        id="key"
-                        value={musicalKey}
-                        onChange={(e) => setMusicalKey(e.target.value)}
-                        placeholder="Am"
-                        disabled={isFreeUser}
-                      />
+                        <Input
+                          id="key"
+                          value={musicalKey}
+                          onChange={(e) => setMusicalKey(e.target.value)}
+                          placeholder="Am"
+                        />
                     </div>
                   </div>
                 </div>
@@ -632,9 +605,14 @@ export default function Upload() {
               </Button>
 
               {isFreeUser && (
-                <p className="text-center text-sm text-muted-foreground">
-                  Necesitas una membresía activa para publicar tracks
-                </p>
+                <div className="text-center space-y-2">
+                  <p className="text-sm text-muted-foreground">
+                    🎉 ¡Casi listo! Solo falta un paso para publicar tu track
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    Suscríbete por $4.99/mes y empieza a ganar dinero con tu música
+                  </p>
+                </div>
               )}
             </div>
           </div>
