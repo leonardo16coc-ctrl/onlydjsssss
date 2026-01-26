@@ -230,3 +230,16 @@
 - [x] Mover verificación de membresía solo al botón final "Publicar Track"
 - [x] Mostrar mensaje de upgrade solo al intentar publicar
 - [x] Eliminar restricciones en campos del formulario para usuarios Free
+
+
+## 26. Modificar Preview en Upload (NUEVO)
+- [ ] Modificar WaveformPlayer para reproducir track completo sin límite
+- [ ] Eliminar restricción de 1 minuto en página Upload
+- [ ] Mantener límite de 1 minuto solo en AudioPlayer de Explore
+
+
+## 27. Notificación de Límite de Preview (NUEVO)
+- [x] Agregar toast visual cuando se alcance el límite de 1 minuto
+- [x] Agregar sonido de notificación al alcanzar el límite
+- [x] Incluir botón de suscripción en el toast
+- [x] Prevenir múltiples notificaciones en la misma sesión de reproducción
