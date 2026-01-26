@@ -200,3 +200,12 @@
 - [x] Integrar player en tarjetas de tracks
 - [x] Integrar botón de descarga en todas las páginas
 - [x] Crear tests de preview y descargas
+
+
+## 23. Mejoras de Página Upload (NUEVO)
+- [x] Implementar subida funcional de archivos de audio
+- [x] Pre-escucha de audios antes de subir
+- [x] Reproductor integrado para archivos cargados
+- [x] Botón de Upload con verificación de membresía
+- [x] Redirección a página de membresía para usuarios Free
+- [x] Mensaje claro de que se requiere membresía para subir
