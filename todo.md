@@ -147,3 +147,9 @@
 - [x] Mostrar progreso de subida
 - [x] Manejo de errores de subida
 - [ ] Crear tests de integración para subida de archivos
+
+
+## 19. Mejoras de UI Home (NUEVO)
+- [x] Agregar botón "Upload Your Files" extendido en hero de Home
+- [x] Posicionar al lado del botón de suscribirse
+- [x] Diseño consistente con tema neon

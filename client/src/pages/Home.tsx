@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
-import { Music2, TrendingUp, DollarSign, Sparkles, Shield, Zap } from "lucide-react";
+import { Music2, TrendingUp, DollarSign, Sparkles, Shield, Zap, Upload } from "lucide-react";
 
 export default function Home() {
   return (
@@ -24,6 +24,12 @@ export default function Home() {
                 <Button size="lg" className="btn-neon bg-primary hover:bg-primary/90 glow-cyan text-lg px-8">
                   <Music2 className="mr-2 h-5 w-5" />
                   Explorar Música
+                </Button>
+              </Link>
+              <Link href="/upload">
+                <Button size="lg" className="btn-neon bg-secondary hover:bg-secondary/90 glow-purple text-lg px-8">
+                  <Upload className="mr-2 h-5 w-5" />
+                  Upload Your Files
                 </Button>
               </Link>
               <Link href="/membership">
