@@ -720,3 +720,55 @@
 - [ ] Tests de endpoint getDNAShareStats
 - [ ] Tests de validación de formato/plataforma
 - [ ] Tests de integración completa
+
+
+## 38. Leaderboard de Top DJs Compartidores 🏆 (GAMIFICACIÓN SOCIAL) ✅
+
+### Endpoint tRPC
+- [x] Crear endpoint `getTopSharers` en dnaAnalyticsRouter
+  - [x] Parámetro: period (month, week, all-time) con default month
+  - [x] Parámetro: limit (5-50) con default 10
+  - [x] Calcular shares por usuario en el período
+  - [x] Incluir información del usuario (nombre, avatar, membershipStatus)
+  - [x] Calcular formato favorito de cada sharer
+  - [x] Ordenar por total de shares descendente
+  - [x] Incluir ranking position (1-based)
+
+### Componente UI
+- [x] Crear componente TopSharersLeaderboard
+  - [x] Lista con ranking visual en cards
+  - [x] Columnas: Posición, DJ, Total Shares, Formato Favorito
+  - [x] Badges especiales para top 3 (🥇🥈🥉)
+  - [x] Highlight del usuario actual si está en el ranking (border cyan, scale)
+  - [x] Tabs para filtrar por período (Semana, Mes, Todo el tiempo)
+  - [x] Animaciones de entrada (hover scale, transitions)
+  - [x] Responsive design
+  - [x] Badge PRO para miembros premium
+  - [x] Mensaje motivacional si usuario no está en top 10
+
+### Integración
+- [x] Agregar leaderboard en DJ MODE (nuevo tab "Leaderboard")
+  - [x] Grid de 4 columnas en tabs
+  - [x] Tab con icono TrendingUp y color yellow
+- [x] Mostrar mensaje motivacional si usuario no está en top 10
+- [ ] Agregar leaderboard en Dashboard
+- [ ] Actualización automática cada hora
+
+### Gamificación
+- [ ] Badge "Top Sharer" para #1 del mes
+- [ ] Badge "Viral DJ" para top 3
+- [ ] Notificación cuando entras al top 10
+- [ ] Comparación con mes anterior (↑↓)
+
+### Beneficios
+- ✅ Fomenta competencia social sana
+- ✅ Incentiva shares orgánicos
+- ✅ Aumenta engagement
+- ✅ Crea comunidad activa
+- ✅ Viralidad multiplicada
+
+### Testing
+- [ ] Tests de endpoint getTopSharers
+- [ ] Tests de cálculo de ranking
+- [ ] Tests de filtros por período
+- [ ] Tests de integración completa

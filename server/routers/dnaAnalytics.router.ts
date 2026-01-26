@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { router, protectedProcedure, publicProcedure } from "../_core/trpc";
 import { getDb } from "../db";
-import { dnaShareAnalytics } from "../../drizzle/schema";
-import { eq, sql, and, gte } from "drizzle-orm";
+import { dnaShareAnalytics, users } from "../../drizzle/schema";
+import { eq, sql, and, gte, desc } from "drizzle-orm";
 
 export const dnaAnalyticsRouter = router({
   /**
@@ -128,4 +128,85 @@ export const dnaAnalyticsRouter = router({
       },
     };
   }),
+
+  /**
+   * Get Top DJs Sharers leaderboard
+   */
+  getTopSharers: publicProcedure
+    .input(
+      z.object({
+        period: z.enum(["month", "week", "all-time"]).default("month"),
+        limit: z.number().min(5).max(50).default(10),
+      })
+    )
+    .query(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Calcular fecha de inicio según período
+      let startDate: Date | null = null;
+      if (input.period === "month") {
+        startDate = new Date();
+        startDate.setMonth(startDate.getMonth() - 1);
+      } else if (input.period === "week") {
+        startDate = new Date();
+        startDate.setDate(startDate.getDate() - 7);
+      }
+
+      // Query base
+      const whereClause = startDate ? gte(dnaShareAnalytics.createdAt, startDate) : undefined;
+
+      // Obtener top sharers con información del usuario
+      const topSharers = await db
+        .select({
+          userId: dnaShareAnalytics.userId,
+          totalShares: sql<number>`COUNT(*)`.as("totalShares"),
+          userName: users.name,
+          userAvatar: users.avatarUrl,
+          membershipStatus: users.membershipStatus,
+        })
+        .from(dnaShareAnalytics)
+        .innerJoin(users, eq(dnaShareAnalytics.userId, users.id))
+        .where(whereClause)
+        .groupBy(dnaShareAnalytics.userId, users.name, users.avatarUrl, users.membershipStatus)
+        .orderBy(desc(sql`COUNT(*)`), users.name)
+        .limit(input.limit);
+
+      // Obtener formato favorito de cada top sharer
+      const topSharersWithFavoriteFormat = await Promise.all(
+        topSharers.map(async (sharer) => {
+          const favoriteFormat = await db
+            .select({
+              format: dnaShareAnalytics.format,
+              count: sql<number>`COUNT(*)`.as("count"),
+            })
+            .from(dnaShareAnalytics)
+            .where(
+              whereClause
+                ? and(eq(dnaShareAnalytics.userId, sharer.userId), whereClause)
+                : eq(dnaShareAnalytics.userId, sharer.userId)
+            )
+            .groupBy(dnaShareAnalytics.format)
+            .orderBy(desc(sql`COUNT(*)`), dnaShareAnalytics.format)
+            .limit(1)
+            .then((rows) => rows[0]?.format || "square");
+
+          return {
+            ...sharer,
+            favoriteFormat,
+          };
+        })
+      );
+
+      // Agregar ranking position
+      const leaderboard = topSharersWithFavoriteFormat.map((sharer, index) => ({
+        position: index + 1,
+        ...sharer,
+      }));
+
+      return {
+        period: input.period,
+        leaderboard,
+      };
+    }),
 });

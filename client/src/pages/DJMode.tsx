@@ -31,6 +31,7 @@ import DJDNARadarChart from "@/components/DJDNARadarChart";
 import BadgeUnlockedNotification from "@/components/BadgeUnlockedNotification";
 import EnergyFlowChart from "@/components/EnergyFlowChart";
 import ShareDJDNA from "@/components/ShareDJDNA";
+import TopSharersLeaderboard from "@/components/TopSharersLeaderboard";
 import { useNewBadges } from "@/hooks/useNewBadges";
 
 export default function DJMode() {
@@ -162,7 +163,7 @@ export default function DJMode() {
 
       <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 bg-slate-900/50">
+          <TabsList className="grid w-full grid-cols-4 bg-slate-900/50">
             <TabsTrigger value="profile" className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400">
               <Activity className="w-4 h-4 mr-2" />
               DJ Profile
@@ -174,6 +175,10 @@ export default function DJMode() {
             <TabsTrigger value="setbuilder" className="data-[state=active]:bg-pink-500/20 data-[state=active]:text-pink-400">
               <Layers className="w-4 h-4 mr-2" />
               Auto Set Builder
+            </TabsTrigger>
+            <TabsTrigger value="leaderboard" className="data-[state=active]:bg-yellow-500/20 data-[state=active]:text-yellow-400">
+              <TrendingUp className="w-4 h-4 mr-2" />
+              Leaderboard
             </TabsTrigger>
           </TabsList>
 
@@ -748,6 +753,11 @@ export default function DJMode() {
                 )}
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* MÓDULO 4: LEADERBOARD */}
+          <TabsContent value="leaderboard" className="space-y-6">
+            <TopSharersLeaderboard />
           </TabsContent>
         </Tabs>
       </div>
