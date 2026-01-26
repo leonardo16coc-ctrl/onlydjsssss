@@ -5,6 +5,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import html2canvas from "html2canvas";
 import { toast } from "sonner";
+import { trpc } from "@/lib/trpc";
 
 interface ShareDJDNAProps {
   profile: {
@@ -29,6 +30,16 @@ export default function ShareDJDNA({ profile }: ShareDJDNAProps) {
   const [showShareMenu, setShowShareMenu] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState<ExportFormat>("square");
   const cardRef = useRef<HTMLDivElement>(null);
+
+  const trackShareMutation = trpc.dnaAnalytics.trackDNAShare.useMutation();
+
+  const trackShare = (platform: "download" | "twitter" | "facebook" | "whatsapp" | "copy") => {
+    // No bloquear UI si tracking falla
+    trackShareMutation.mutate(
+      { format: selectedFormat, platform },
+      { onError: () => {} } // Silenciar errores de tracking
+    );
+  };
 
   const getDNAString = () => {
     const bpm = profile.avgBpm ? `${Math.round(profile.avgBpm)} BPM` : "Variado";
@@ -121,12 +132,18 @@ export default function ShareDJDNA({ profile }: ShareDJDNAProps) {
     a.click();
     URL.revokeObjectURL(url);
     toast.success(`Imagen ${formatDimensions[selectedFormat].label} descargada`);
+    
+    // Track download
+    trackShare("download");
   };
 
   const handleCopyText = () => {
     const text = `Mi ADN DJ: ${getDNAString()} 🎧 onlydjs.com`;
     navigator.clipboard.writeText(text);
     toast.success("Texto copiado al portapapeles");
+    
+    // Track copy
+    trackShare("copy");
   };
 
   const handleShare = (platform: string) => {
@@ -143,6 +160,11 @@ export default function ShareDJDNA({ profile }: ShareDJDNAProps) {
 
     if (urls[platform]) {
       window.open(urls[platform], "_blank", "width=600,height=400");
+      
+      // Track share
+      if (platform === "twitter" || platform === "facebook" || platform === "whatsapp") {
+        trackShare(platform as "twitter" | "facebook" | "whatsapp");
+      }
     }
   };
 

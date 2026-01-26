@@ -13,6 +13,7 @@ import { searchRouter } from "./routers/search.router";
 import { djModeRouter } from "./routers/djMode.router";
 import { weeklyChallengesRouter } from "./routers/weeklyChallenges.router";
 import { setFeedbackRouter } from "./routers/setFeedback.router";
+import { dnaAnalyticsRouter } from "./routers/dnaAnalytics.router";
 import { getDb } from "./db";
 import { tracks, downloads } from "../drizzle/schema";
 import { eq, and, gte, sql } from "drizzle-orm";
@@ -32,6 +33,7 @@ export const appRouter = router({
   system: systemRouter,
   weeklyChallenges: weeklyChallengesRouter,
   setFeedback: setFeedbackRouter,
+  dnaAnalytics: dnaAnalyticsRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

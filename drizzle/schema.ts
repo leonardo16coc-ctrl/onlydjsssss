@@ -457,3 +457,23 @@ export const setFeedback = mysqlTable("set_feedback", {
 
 export type SetFeedback = typeof setFeedback.$inferSelect;
 export type InsertSetFeedback = typeof setFeedback.$inferInsert;
+
+
+/**
+ * DNA Share Analytics - Tracking de shares de DJ DNA por formato y plataforma
+ */
+export const dnaShareAnalytics = mysqlTable("dna_share_analytics", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(), // FK a users
+  format: mysqlEnum("format", ["story", "square", "banner"]).notNull(), // Formato de exportación
+  platform: mysqlEnum("platform", ["download", "twitter", "facebook", "whatsapp", "copy"]).notNull(), // Plataforma de share
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("dna_share_analytics_user_id_idx").on(table.userId),
+  formatIdx: index("dna_share_analytics_format_idx").on(table.format),
+  platformIdx: index("dna_share_analytics_platform_idx").on(table.platform),
+  createdAtIdx: index("dna_share_analytics_created_at_idx").on(table.createdAt),
+}));
+
+export type DNAShareAnalytics = typeof dnaShareAnalytics.$inferSelect;
+export type InsertDNAShareAnalytics = typeof dnaShareAnalytics.$inferInsert;

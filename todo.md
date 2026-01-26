@@ -666,3 +666,57 @@
 - [ ] Validación de dimensiones exactas
 - [ ] Verificación de watermark visible
 - [ ] Tests de calidad de imagen exportada
+
+
+## 37. Sistema de Analíticas de DNA Shares 📊 (OPTIMIZACIÓN DE VIRALIDAD) ✅
+
+### Base de Datos
+- [x] Crear tabla `dna_share_analytics` con campos:
+  - [x] id (autoincremental)
+  - [x] userId (FK a users)
+  - [x] format (enum: story, square, banner)
+  - [x] platform (enum: download, twitter, facebook, whatsapp, copy)
+  - [x] createdAt
+  - [x] Índices en userId, format, platform, createdAt
+
+### Router tRPC
+- [x] Endpoint `trackDNAShare` (protegido)
+  - [x] Registrar evento de share con formato y plataforma
+  - [x] Validar formato y plataforma con Zod
+  - [x] Timestamp automático
+- [x] Endpoint `getDNAShareStats` (público)
+  - [x] Total de shares por formato
+  - [x] Total de shares por plataforma
+  - [x] Shares por día (últimos 7 días)
+  - [x] Total de shares global
+- [x] Endpoint `getMyDNAShareHistory` (protegido)
+  - [x] Historial de shares del usuario (últimos 50)
+  - [x] Estadísticas personales (formato/plataforma)
+
+### Integración en ShareDJDNA
+- [x] Llamar trackDNAShare al descargar imagen
+- [x] Llamar trackDNAShare al compartir en redes sociales
+- [x] Llamar trackDNAShare al copiar texto
+- [x] No bloquear UI si tracking falla (onError silenciado)
+
+### Dashboard de Analíticas
+- [ ] Crear página `/analytics/dna-shares` (admin only)
+- [ ] Gráfica de shares por formato (pie chart)
+- [ ] Gráfica de shares por plataforma (bar chart)
+- [ ] Timeline de shares (line chart)
+- [ ] Tabla de top DJs compartidores
+- [ ] Filtros por fecha
+- [ ] Exportar datos como CSV
+
+### Beneficios
+- ✅ Identificar formato más viral
+- ✅ Optimizar diseño según datos reales
+- ✅ Entender qué plataformas generan más tráfico
+- ✅ Gamificar con leaderboard de compartidores
+- ✅ Tomar decisiones basadas en datos
+
+### Testing
+- [ ] Tests de endpoint trackDNAShare
+- [ ] Tests de endpoint getDNAShareStats
+- [ ] Tests de validación de formato/plataforma
+- [ ] Tests de integración completa
