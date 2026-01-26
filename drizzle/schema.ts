@@ -397,3 +397,38 @@ export const djBadges = mysqlTable("dj_badges", {
 
 export type DjBadge = typeof djBadges.$inferSelect;
 export type InsertDjBadge = typeof djBadges.$inferInsert;
+
+
+/**
+ * Weekly Challenges - Retos semanales gamificados
+ */
+export const weeklyChallenges = mysqlTable("weekly_challenges", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  weekStart: timestamp("weekStart").notNull(), // Lunes de la semana
+  challengeType: mysqlEnum("challengeType", [
+    "generate_sets", // Genera X sets
+    "download_tracks", // Descarga X tracks
+    "play_tracks", // Reproduce X tracks
+    "upload_tracks", // Sube X tracks
+    "reach_plays", // Alcanza X reproducciones en tus tracks
+    "complete_profile", // Completa tu perfil al 100%
+    "enter_rankings", // Entra al Top X de rankings
+    "gain_followers", // Consigue X nuevos seguidores
+    "use_dj_mode", // Usa DJ MODE X días seguidos
+    "genre_specialist", // Descarga X tracks de un solo género
+  ]).notNull(),
+  targetValue: int("targetValue").notNull(), // Valor objetivo (ej: 2 sets, 10 tracks)
+  currentValue: int("currentValue").default(0).notNull(), // Progreso actual
+  completed: boolean("completed").default(false).notNull(),
+  completedAt: timestamp("completedAt"),
+  badgeAwarded: varchar("badgeAwarded", { length: 50 }), // Badge exclusivo al completar
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("weekly_challenges_user_id_idx").on(table.userId),
+  weekStartIdx: index("weekly_challenges_week_idx").on(table.weekStart),
+  userWeekUnique: index("weekly_challenges_user_week_unique").on(table.userId, table.weekStart, table.challengeType),
+}));
+
+export type WeeklyChallenge = typeof weeklyChallenges.$inferSelect;
+export type InsertWeeklyChallenge = typeof weeklyChallenges.$inferInsert;

@@ -36,6 +36,13 @@
       "when": 1769435347373,
       "tag": "0004_elite_forgotten_one",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1769437820435,
+      "tag": "0005_huge_speed_demon",
+      "breakpoints": true
     }
   ]
 }

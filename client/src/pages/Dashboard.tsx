@@ -4,6 +4,7 @@ import { trpc } from "@/lib/trpc";
 import { DollarSign, Download, Music, TrendingUp } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Redirect } from "wouter";
+import WeeklyChallengesCard from "@/components/WeeklyChallengesCard";
 
 export default function Dashboard() {
   const { isAuthenticated } = useAuth();
@@ -84,6 +85,9 @@ export default function Dashboard() {
             <p className="text-muted-foreground">Próximamente: historial de descargas y ganancias</p>
           </Card>
         </div>
+
+        {/* Weekly Challenges */}
+        <WeeklyChallengesCard />
       </div>
     </div>
   );

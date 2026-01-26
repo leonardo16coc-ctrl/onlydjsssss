@@ -402,3 +402,75 @@
 - [ ] Tests de cálculo de DJ DNA
 - [ ] Optimización de queries de badges
 - [ ] Tests de integración completa
+
+
+## 32. Ajustes Finos de Top 1% (DIFERENCIACIÓN ABSOLUTA) 🎯 ✅
+
+### 1. Visualización de Curva en Auto Set Builder (MUY IMPORTANTE)
+- [x] Integrar EnergyFlowChart en vista de sets generados
+- [x] Mostrar curva energética cuando se abre un set desde "Mis Sets"
+- [x] Timeline visual con barras de energía por track (▂▃▅▆█▆▅▃)
+- [x] Hacer la IA tangible y visible
+- [x] Animación de carga de curva
+- [x] Tooltip con detalles por punto
+- [x] Modal SetDetailsModal con curva completa
+- [x] Endpoint getSetDetails para obtener tracks con energía
+
+### 2. Sugerencias de Mezcla Entre Tracks (ENTRENADOR DJ + IA)
+- [x] Parsear campo transitions de sets generados
+- [x] Mostrar transiciones entre cada par de tracks
+- [ ] Iconos visuales por técnica:
+  - [x] 🔁 Loop 8 beats
+  - [x] 🔊 Echo Out
+  - [x] ⏪ Backspin
+  - [x] 🌊 Reverb Tail
+  - [x] 🎚️ Filter Sweep
+  - [x] 💥 Drop Mix
+  - [x] 🎛️ EQ Blend
+  - [x] ⚡ Quick Cut
+- [x] Iconos visuales integrados en SetDetailsModal
+- [x] Badges de compatibilidad (Perfecta/Buena/Moderada)
+- [x] Sección "Guía de Mezcla" con resumen de técnicas
+
+### 3. DJ DNA Más Visual (FIRMA VISUAL DE ONLYDJS)
+- [x] Crear componente DJDNARadarChart con Recharts
+- [x] Radar chart con 5 dimensiones:
+  - [x] BPM Range (0-200)
+  - [x] Energy Level (0-100)
+  - [x] Genre Diversity (0-100)
+  - [x] Key Mastery (0-100)
+  - [x] Activity Score (0-100)
+- [x] Colores neon por dimensión (cyan/purple/pink/yellow/green)
+- [x] Animación de carga del radar
+- [x] Cards de dimensiones con detalles
+- [x] Mostrar en DJ Profile de DJ MODE
+- [ ] Comparación con promedio de plataforma
+- [ ] Exportar como imagen (DJ Fingerprint)
+- [ ] Wheel chart alternativo para móviles
+
+### 4. Sistema de Logros Semanales (GAMIFICACIÓN PRO)
+- [x] Crear tabla weekly_challenges en base de datos
+- [x] Definir 10 tipos de retos semanales:
+  - [x] 🎯 Genera X sets
+  - [x] ⬇️ Descarga X tracks
+  - [x] ▶️ Reproduce X tracks
+  - [x] ⬆️ Sube X tracks originales
+  - [x] 🧠 Usa DJ MODE X días seguidos
+  - [x] 🎵 Descarga X tracks del mismo género
+- [x] Router weeklyChallengesRouter con generación automática
+- [x] Sistema de progreso semanal con barra
+- [x] Badge exclusivo por reto completado
+- [x] Reset automático cada lunes (weekStart)
+- [x] Componente WeeklyChallengesCard en Dashboard
+- [x] Progreso visual con Progress bars
+- [x] Cálculo automático de progreso por tipo de reto
+- [ ] Notificación al completar reto
+- [ ] Leaderboard de retos completados
+- [ ] Animación de confetti al completar
+
+### Testing
+- [ ] Tests de EnergyFlowChart integrado
+- [ ] Tests de parseo de transitions
+- [ ] Tests de DJDNARadarChart
+- [ ] Tests de weekly_challenges
+- [ ] Tests de progreso de retos

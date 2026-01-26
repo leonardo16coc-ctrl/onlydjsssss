@@ -25,11 +25,15 @@ import {
 import { Link } from "wouter";
 import DJDNABadge from "@/components/DJDNABadge";
 import BadgeCard from "@/components/BadgeCard";
+import SetDetailsModal from "@/components/SetDetailsModal";
+import DJDNARadarChart from "@/components/DJDNARadarChart";
 
 export default function DJMode() {
   const { user, loading: authLoading, isAuthenticated } = useAuth();
   const [selectedTracks, setSelectedTracks] = useState<number[]>([]);
   const [setType, setSetType] = useState<"warmup" | "peak_time" | "closing" | "festival">("peak_time");
+  const [selectedSetId, setSelectedSetId] = useState<number | null>(null);
+  const [showSetDetails, setShowSetDetails] = useState(false);
 
   // Queries
   const { data: profile, refetch: refetchProfile } = trpc.djMode.getMyProfile.useQuery(undefined, {
@@ -47,6 +51,11 @@ export default function DJMode() {
   const { data: badges } = trpc.djMode.getMyBadges.useQuery(undefined, {
     enabled: isAuthenticated,
   });
+
+  const { data: setDetails } = trpc.djMode.getSetDetails.useQuery(
+    { setId: selectedSetId! },
+    { enabled: selectedSetId !== null }
+  );
 
   // Mutations
   const updateProfileMutation = trpc.djMode.updateProfile.useMutation({
@@ -261,6 +270,22 @@ export default function DJMode() {
                       </Badge>
                     ))}
                   </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* DJ DNA Radar Chart */}
+            {profile && (
+              <Card className="bg-slate-900/50 border-cyan-500/30">
+                <CardHeader>
+                  <CardTitle className="text-cyan-400 flex items-center gap-2">
+                    <BarChart3 className="w-5 h-5" />
+                    🧬 DJ DNA - Tu Huella Musical
+                  </CardTitle>
+                  <CardDescription>Visualización completa de tu identidad como DJ</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <DJDNARadarChart profile={profile} size="lg" />
                 </CardContent>
               </Card>
             )}
@@ -569,7 +594,14 @@ export default function DJMode() {
                 {mySets && mySets.length > 0 ? (
                   <div className="space-y-3">
                     {mySets.map((set) => (
-                      <div key={set.id} className="p-4 bg-slate-800/50 rounded-lg border border-purple-500/20">
+                      <div
+                        key={set.id}
+                        onClick={() => {
+                          setSelectedSetId(set.id);
+                          setShowSetDetails(true);
+                        }}
+                        className="p-4 bg-slate-800/50 rounded-lg border border-purple-500/20 hover:bg-slate-800 hover:border-purple-500/50 transition-all cursor-pointer"
+                      >
                         <div className="flex justify-between items-start mb-2">
                           <div>
                             <p className="font-semibold text-white">{set.name}</p>
@@ -584,6 +616,7 @@ export default function DJMode() {
                           <span>•</span>
                           <span>Compatibilidad: {set.keyCompatibility}%</span>
                         </div>
+                        <p className="text-xs text-cyan-400 mt-2">Click para ver detalles →</p>
                       </div>
                     ))}
                   </div>
@@ -595,6 +628,13 @@ export default function DJMode() {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Set Details Modal */}
+      <SetDetailsModal
+        open={showSetDetails}
+        onOpenChange={setShowSetDetails}
+        setData={setDetails || null}
+      />
     </div>
   );
 }

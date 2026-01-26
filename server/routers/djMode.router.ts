@@ -583,4 +583,65 @@ Analiza la compatibilidad de cada transición (Perfecta/Buena/Moderada) basándo
       };
     });
   }),
+
+  /**
+   * Obtener detalles completos de un set generado
+   */
+  getSetDetails: protectedProcedure
+    .input(z.object({ setId: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      // Obtener set
+      const set = await db
+        .select()
+        .from(autoSets)
+        .where(and(eq(autoSets.id, input.setId), eq(autoSets.userId, ctx.user.id)))
+        .limit(1)
+        .then(rows => rows[0]);
+
+      if (!set) {
+        throw new Error("Set not found");
+      }
+
+      // Parsear datos JSON
+      const trackIds = JSON.parse(set.trackIds) as number[];
+      const energyLevels = set.energyCurve ? JSON.parse(set.energyCurve) as number[] : [];
+      const transitionsData = set.transitions ? JSON.parse(set.transitions) : [];
+
+      // Obtener información de tracks
+      const tracksData = await db
+        .select({
+          id: tracks.id,
+          title: tracks.title,
+          artist: tracks.artist,
+          bpm: tracks.bpm,
+          musicalKey: tracks.musicalKey,
+        })
+        .from(tracks)
+        .where(sql`${tracks.id} IN (${sql.join(trackIds.map(id => sql`${id}`), sql`, `)})`)
+        .then(rows => {
+          // Ordenar según trackIds
+          const trackMap = new Map(rows.map(t => [t.id, t]));
+          return trackIds.map(id => trackMap.get(id)).filter((t): t is NonNullable<typeof t> => t !== undefined);
+        });
+
+      // Combinar tracks con energía
+      const tracksWithEnergy = tracksData.map((track, idx) => ({
+        id: track.id,
+        title: track.title,
+        artist: track.artist,
+        bpm: track.bpm,
+        musicalKey: track.musicalKey,
+        energy: energyLevels[idx] || 50,
+        position: idx + 1,
+      }));
+
+      return {
+        ...set,
+        tracks: tracksWithEnergy,
+        transitions: transitionsData,
+      };
+    }),
 });

@@ -11,6 +11,7 @@ import { musicAnalysisRouter } from "./routers/musicAnalysis.router";
 import { profileRouter } from "./routers/profile.router";
 import { searchRouter } from "./routers/search.router";
 import { djModeRouter } from "./routers/djMode.router";
+import { weeklyChallengesRouter } from "./routers/weeklyChallenges.router";
 import { getDb } from "./db";
 import { tracks, downloads } from "../drizzle/schema";
 import { eq, and, gte, sql } from "drizzle-orm";
@@ -28,6 +29,7 @@ const memberProcedure = protectedProcedure.use(({ ctx, next }) => {
 
 export const appRouter = router({
   system: systemRouter,
+  weeklyChallenges: weeklyChallengesRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
