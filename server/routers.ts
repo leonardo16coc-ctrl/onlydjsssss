@@ -10,6 +10,7 @@ import { analyzeAudioFile } from "./musicAnalysis";
 import { musicAnalysisRouter } from "./routers/musicAnalysis.router";
 import { profileRouter } from "./routers/profile.router";
 import { searchRouter } from "./routers/search.router";
+import { djModeRouter } from "./routers/djMode.router";
 import { getDb } from "./db";
 import { tracks, downloads } from "../drizzle/schema";
 import { eq, and, gte, sql } from "drizzle-orm";
@@ -380,6 +381,9 @@ export const appRouter = router({
 
   // Search router
   search: searchRouter,
+
+  // DJ MODE router
+  djMode: djModeRouter,
 });
 
 export type AppRouter = typeof appRouter;

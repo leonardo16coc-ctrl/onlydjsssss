@@ -277,3 +277,94 @@ export const fraudLogs = mysqlTable("fraud_logs", {
 
 export type FraudLog = typeof fraudLogs.$inferSelect;
 export type InsertFraudLog = typeof fraudLogs.$inferInsert;
+
+
+/**
+ * DJ Profiles - Perfil inteligente automático
+ */
+export const djProfiles = mysqlTable("dj_profiles", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  // Análisis automático
+  totalTracksDownloaded: int("totalTracksDownloaded").default(0).notNull(),
+  totalTracksPlayed: int("totalTracksPlayed").default(0).notNull(),
+  // Géneros favoritos (JSON array de {genre: string, count: number})
+  favoriteGenres: text("favoriteGenres"),
+  // BPM preferences
+  avgBpm: int("avgBpm"),
+  minBpm: int("minBpm"),
+  maxBpm: int("maxBpm"),
+  // Key preferences (JSON array de {key: string, count: number})
+  favoriteKeys: text("favoriteKeys"),
+  // Energía promedio (0-100)
+  avgEnergy: int("avgEnergy"),
+  // Mood preferences (JSON array)
+  favoriteMoods: text("favoriteMoods"),
+  // Actividad
+  lastActivityAt: timestamp("lastActivityAt"),
+  profileScore: int("profileScore").default(0).notNull(), // Score de completitud del perfil
+  // Timestamps
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("dj_profile_user_id_idx").on(table.userId),
+  profileScoreIdx: index("dj_profile_score_idx").on(table.profileScore),
+}));
+
+export type DjProfile = typeof djProfiles.$inferSelect;
+export type InsertDjProfile = typeof djProfiles.$inferInsert;
+
+/**
+ * DJ Activity - Tracking de comportamiento para análisis
+ */
+export const djActivity = mysqlTable("dj_activity", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  trackId: int("trackId").notNull(),
+  activityType: mysqlEnum("activityType", ["download", "play", "like", "add_to_playlist"]).notNull(),
+  // Metadatos del track en el momento de la actividad
+  trackBpm: int("trackBpm"),
+  trackKey: varchar("trackKey", { length: 10 }),
+  trackGenre: varchar("trackGenre", { length: 100 }),
+  trackEnergy: int("trackEnergy"),
+  trackMood: varchar("trackMood", { length: 100 }),
+  // Timestamps
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("dj_activity_user_id_idx").on(table.userId),
+  trackIdIdx: index("dj_activity_track_id_idx").on(table.trackId),
+  activityTypeIdx: index("dj_activity_type_idx").on(table.activityType),
+  createdAtIdx: index("dj_activity_created_at_idx").on(table.createdAt),
+}));
+
+export type DjActivity = typeof djActivity.$inferSelect;
+export type InsertDjActivity = typeof djActivity.$inferInsert;
+
+/**
+ * Auto Sets - Sets generados automáticamente
+ */
+export const autoSets = mysqlTable("auto_sets", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  description: text("description"),
+  setType: mysqlEnum("setType", ["warmup", "peak_time", "closing", "festival"]).notNull(),
+  // Análisis del set
+  avgBpm: int("avgBpm"),
+  keyCompatibility: int("keyCompatibility"), // Score 0-100
+  energyCurve: text("energyCurve"), // JSON array de energía por track
+  // Tracks del set (JSON array de track IDs con orden)
+  trackIds: text("trackIds").notNull(),
+  trackCount: int("trackCount").default(0).notNull(),
+  // Sugerencias de transiciones (JSON)
+  transitions: text("transitions"),
+  // Timestamps
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("auto_sets_user_id_idx").on(table.userId),
+  setTypeIdx: index("auto_sets_type_idx").on(table.setType),
+}));
+
+export type AutoSet = typeof autoSets.$inferSelect;
+export type InsertAutoSet = typeof autoSets.$inferInsert;
