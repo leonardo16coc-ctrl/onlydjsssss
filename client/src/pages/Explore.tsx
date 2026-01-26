@@ -3,7 +3,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { trpc } from "@/lib/trpc";
-import { Music, Play, Download, Heart } from "lucide-react";
+import { Music, Play, Heart } from "lucide-react";
+import { MusicAnalysisDisplay } from "@/components/MusicAnalysisDisplay";
 import { useState } from "react";
 
 export default function Explore() {
@@ -42,10 +43,14 @@ export default function Explore() {
                 </div>
                 <h3 className="font-bold text-lg mb-1">{track.title}</h3>
                 <p className="text-sm text-muted-foreground mb-2">{track.artist}</p>
-                <div className="flex items-center gap-2 text-xs text-muted-foreground mb-4">
-                  <span className="bg-primary/20 px-2 py-1 rounded">{track.bpm} BPM</span>
-                  <span className="bg-secondary/20 px-2 py-1 rounded">{track.musicalKey}</span>
-                  <span className="bg-accent/20 px-2 py-1 rounded">{track.genre}</span>
+                <div className="mb-4">
+                  <MusicAnalysisDisplay
+                    bpm={track.bpm || undefined}
+                    musicalKey={track.musicalKey || undefined}
+                    energy={track.energy ? track.energy * 10 : undefined}
+                    mood={track.mood || undefined}
+                    compact
+                  />
                 </div>
                 <div className="flex gap-2">
                   <Button size="sm" className="flex-1 btn-neon">

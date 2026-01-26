@@ -122,3 +122,15 @@
 - [ ] Tests de sistema de descargas
 - [ ] Optimización de rendimiento
 - [ ] Seguridad y validación de datos
+
+
+## 17. Sistema de Análisis Musical con IA (NUEVO)
+- [x] Investigar y seleccionar API de análisis musical (usando LLM con structured output)
+- [x] Implementar servicio backend para análisis de audio
+- [x] Detección automática de BPM
+- [x] Detección automática de clave musical (Key)
+- [x] Análisis de estructura de canción (intro, build, drop, breakdown, outro)
+- [x] Detección de energía y mood
+- [x] Integrar análisis en flujo de subida de tracks
+- [x] Actualizar UI para mostrar resultados del análisis
+- [ ] Crear tests de integración para análisis musical

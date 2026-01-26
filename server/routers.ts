@@ -6,6 +6,8 @@ import { z } from "zod";
 import * as db from "./db";
 import { createMembershipCheckoutSession, createPortalSession } from "./stripe";
 import { TRPCError } from "@trpc/server";
+import { analyzeAudioFile } from "./musicAnalysis";
+import { musicAnalysisRouter } from "./routers/musicAnalysis.router";
 
 // Middleware to check if user has active membership
 const memberProcedure = protectedProcedure.use(({ ctx, next }) => {
@@ -103,14 +105,43 @@ export const appRouter = router({
         mainstageTags: z.array(z.string()).optional(),
       }))
       .mutation(async ({ ctx, input }) => {
+        // Analyze audio file automatically if BPM or key not provided
+        let analysisData = null;
+        if (!input.bpm || !input.musicalKey) {
+          try {
+            analysisData = await analyzeAudioFile(
+              input.audioFileUrl,
+              input.genre,
+              input.trackType
+            );
+          } catch (error) {
+            console.error("[Tracks] Error analyzing audio:", error);
+            // Continue without analysis if it fails
+          }
+        }
+
         await db.createTrack({
           userId: ctx.user.id,
           ...input,
+          bpm: input.bpm || analysisData?.bpm,
+          musicalKey: input.musicalKey || analysisData?.musicalKey,
+          energy: input.energy || (analysisData ? Math.round(analysisData.energy / 10) : undefined),
+          mood: input.mood || analysisData?.mood,
           tags: input.tags ? JSON.stringify(input.tags) : null,
           mainstageTags: input.mainstageTags ? JSON.stringify(input.mainstageTags) : null,
         });
 
-        return { success: true };
+        return { 
+          success: true,
+          analysis: analysisData ? {
+            bpm: analysisData.bpm,
+            musicalKey: analysisData.musicalKey,
+            energy: analysisData.energy,
+            mood: analysisData.mood,
+            structure: analysisData.structure,
+            confidence: analysisData.confidence
+          } : null
+        };
       }),
 
     list: publicProcedure
@@ -252,6 +283,8 @@ export const appRouter = router({
         return await db.getMainstageTracks(input.limit || 50);
       }),
   }),
+
+  musicAnalysis: musicAnalysisRouter,
 
   dashboard: router({
     stats: protectedProcedure.query(async ({ ctx }) => {
