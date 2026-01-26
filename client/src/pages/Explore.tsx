@@ -10,11 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import AudioPlayer from "@/components/AudioPlayer";
 import DownloadButton from "@/components/DownloadButton";
-import DownloadLimitsCard from "@/components/DownloadLimitsCard";
-import { useAuth } from "@/_core/hooks/useAuth";
 
 export default function Explore() {
-  const { isAuthenticated } = useAuth();
   const [filters, setFilters] = useState<SearchFilters>({});
   const [offset, setOffset] = useState(0);
   const limit = 20;
@@ -53,22 +50,11 @@ export default function Explore() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
-          {/* Advanced Filters */}
-          <div className="lg:col-span-3">
-            <AdvancedFilters
-              onSearch={handleSearch}
-              filterOptions={filterOptions}
-            />
-          </div>
-          
-          {/* Download Limits Card */}
-          {isAuthenticated && (
-            <div className="lg:col-span-1">
-              <DownloadLimitsCard />
-            </div>
-          )}
-        </div>
+        {/* Advanced Filters */}
+        <AdvancedFilters
+          onSearch={handleSearch}
+          filterOptions={filterOptions}
+        />
 
         {/* Results */}
         {isLoading ? (

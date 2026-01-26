@@ -3,8 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { toast } from "sonner";
-import { useLocation } from "wouter";
 
 interface AudioPlayerProps {
   audioUrl: string;
@@ -20,9 +18,7 @@ export default function AudioPlayer({ audioUrl, trackId, trackTitle, compact = f
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
-  const [hasShownLimitNotification, setHasShownLimitNotification] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [, setLocation] = useLocation();
 
   // Preview limit: 1 minute (60 seconds) for free users
   const previewLimit = user?.membershipStatus === "member" ? Infinity : 60;
@@ -45,29 +41,6 @@ export default function AudioPlayer({ audioUrl, trackId, trackTitle, compact = f
         setIsPlaying(false);
         audio.currentTime = 0;
         setCurrentTime(0);
-        
-        // Show notification only once per play session
-        if (!hasShownLimitNotification) {
-          setHasShownLimitNotification(true);
-          
-          // Play notification sound
-          const notificationSound = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUKni8LZjHAU5k9nyz3osBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBQ==');
-          notificationSound.volume = 0.3;
-          notificationSound.play().catch(() => {});
-          
-          // Show toast notification
-          toast.info(
-            "Preview terminado - ¡Suscríbete para escuchar completo!",
-            {
-              description: `Has alcanzado el límite de 1 minuto de preview. Suscríbete por solo $4.99/mes para acceso ilimitado.`,
-              duration: 8000,
-              action: {
-                label: "Suscribirse",
-                onClick: () => setLocation("/membership"),
-              },
-            }
-          );
-        }
       }
     };
 
@@ -75,7 +48,6 @@ export default function AudioPlayer({ audioUrl, trackId, trackTitle, compact = f
       setIsPlaying(false);
       audio.currentTime = 0;
       setCurrentTime(0);
-      setHasShownLimitNotification(false);
     };
 
     audio.addEventListener("loadedmetadata", handleLoadedMetadata);
@@ -96,10 +68,6 @@ export default function AudioPlayer({ audioUrl, trackId, trackTitle, compact = f
     if (isPlaying) {
       audio.pause();
     } else {
-      // Reset notification flag when starting a new play session
-      if (audio.currentTime === 0) {
-        setHasShownLimitNotification(false);
-      }
       audio.play();
     }
     setIsPlaying(!isPlaying);

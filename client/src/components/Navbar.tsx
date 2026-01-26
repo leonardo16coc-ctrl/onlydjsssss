@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
-import { Music, Sparkles, Trophy, LayoutDashboard, Upload, CreditCard, User, Settings, LogOut, Radio } from "lucide-react";
+import { Music, Sparkles, Trophy, LayoutDashboard, Upload, CreditCard, User, Settings, LogOut } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,15 +34,6 @@ export default function Navbar() {
                 <span>Explorar</span>
               </a>
             </Link>
-            
-            {isAuthenticated && (
-              <Link href="/dj-mode">
-                <a className="flex items-center space-x-2 text-foreground hover:text-purple-400 transition-colors">
-                  <Radio className="h-4 w-4" />
-                  <span className="text-glow-purple">DJ MODE</span>
-                </a>
-              </Link>
-            )}
             
             <Link href="/mainstage">
               <a className="flex items-center space-x-2 text-foreground hover:text-accent transition-colors">

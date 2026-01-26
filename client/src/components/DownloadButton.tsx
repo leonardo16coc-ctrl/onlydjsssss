@@ -23,8 +23,8 @@ export default function DownloadButton({ trackId, trackTitle, artist, compact = 
   const { user, isAuthenticated } = useAuth();
   const [isDownloading, setIsDownloading] = useState(false);
   
-  const downloadMutation = trpc.downloads.downloadTrack.useMutation({
-    onSuccess: (data: { downloadUrl: string; filename: string; format: string; remaining: string }) => {
+  const downloadMutation = trpc.downloads.download.useMutation({
+    onSuccess: (data) => {
       // Trigger browser download
       const link = document.createElement("a");
       link.href = data.downloadUrl;
@@ -37,7 +37,7 @@ export default function DownloadButton({ trackId, trackTitle, artist, compact = 
       toast.success(`Descargando ${data.filename}`);
       setIsDownloading(false);
     },
-    onError: (error: any) => {
+    onError: (error) => {
       if (error.message.includes("membresía")) {
         toast.error("Necesitas una membresía activa para descargar", {
           action: {

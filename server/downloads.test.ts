@@ -88,13 +88,13 @@ function createFreeContext(): { ctx: TrpcContext } {
   return { ctx };
 }
 
-describe("downloads.downloadTrack", () => {
+describe("downloads.download", () => {
   it("should accept valid download request from member", async () => {
     const { ctx } = createMemberContext();
     const caller = appRouter.createCaller(ctx);
 
     try {
-      await caller.downloads.downloadTrack({
+      await caller.downloads.download({
         trackId: 1,
         format: "mp3",
       });
@@ -104,20 +104,19 @@ describe("downloads.downloadTrack", () => {
     }
   });
 
-  it("should reject download from free user when limit reached", async () => {
+  it("should reject download from free user", async () => {
     const { ctx } = createFreeContext();
     const caller = appRouter.createCaller(ctx);
 
     try {
-      await caller.downloads.downloadTrack({
+      await caller.downloads.download({
         trackId: 1,
         format: "mp3",
       });
-      // Will fail with NOT_FOUND because track doesn't exist
-      // In production, would fail with FORBIDDEN if limit reached
+      expect.fail("Should have thrown FORBIDDEN error");
     } catch (error: any) {
-      // Expected to fail with either NOT_FOUND (track doesn't exist) or FORBIDDEN (limit reached)
-      expect(["NOT_FOUND", "FORBIDDEN"]).toContain(error.code);
+      expect(error.code).toBe("FORBIDDEN");
+      expect(error.message).toContain("membresía");
     }
   });
 
@@ -126,7 +125,7 @@ describe("downloads.downloadTrack", () => {
     const caller = appRouter.createCaller(ctx);
 
     try {
-      await caller.downloads.downloadTrack({
+      await caller.downloads.download({
         trackId: 1,
         format: "mp3",
       });
@@ -141,7 +140,7 @@ describe("downloads.downloadTrack", () => {
     const caller = appRouter.createCaller(ctx);
 
     try {
-      await caller.downloads.downloadTrack({
+      await caller.downloads.download({
         trackId: 1,
         format: "wav",
       });
@@ -156,7 +155,7 @@ describe("downloads.downloadTrack", () => {
     const caller = appRouter.createCaller(ctx);
 
     try {
-      await caller.downloads.downloadTrack({
+      await caller.downloads.download({
         trackId: 1,
         format: "flac" as any, // Invalid format
       });
@@ -172,7 +171,7 @@ describe("downloads.downloadTrack", () => {
     const caller = appRouter.createCaller(ctx);
 
     try {
-      await caller.downloads.downloadTrack({
+      await caller.downloads.download({
         trackId: undefined as any,
         format: "mp3",
       });
@@ -184,17 +183,49 @@ describe("downloads.downloadTrack", () => {
   });
 });
 
-// Removed downloads.record - functionality is now integrated into downloadTrack
+describe("downloads.record", () => {
+  it("should accept valid download record from member", async () => {
+    const { ctx } = createMemberContext();
+    const caller = appRouter.createCaller(ctx);
 
-describe("downloads.getMyDownloadHistory", () => {
+    try {
+      await caller.downloads.record({
+        trackId: 1,
+        artistId: 2,
+      });
+    } catch (error: any) {
+      // Expected to fail with DB error, not FORBIDDEN
+      expect(error.code).toBe("INTERNAL_SERVER_ERROR");
+    }
+  });
+
+  it("should reject record from free user", async () => {
+    const { ctx } = createFreeContext();
+    const caller = appRouter.createCaller(ctx);
+
+    try {
+      await caller.downloads.record({
+        trackId: 1,
+        artistId: 2,
+      });
+      expect.fail("Should have thrown FORBIDDEN error");
+    } catch (error: any) {
+      expect(error.code).toBe("FORBIDDEN");
+    }
+  });
+});
+
+describe("downloads.myDownloads", () => {
   it("should accept request from authenticated user", async () => {
     const { ctx } = createMemberContext();
     const caller = appRouter.createCaller(ctx);
 
-    const result = await caller.downloads.getMyDownloadHistory({ limit: 10, offset: 0 });
-    expect(result).toHaveProperty("downloads");
-    expect(result).toHaveProperty("total");
-    expect(result).toHaveProperty("hasMore");
+    try {
+      await caller.downloads.myDownloads({ limit: 10 });
+    } catch (error: any) {
+      // Expected to fail with DB error, not auth error
+      expect(error.code).toBe("INTERNAL_SERVER_ERROR");
+    }
   });
 
   it("should enforce limit constraints", async () => {
@@ -202,33 +233,11 @@ describe("downloads.getMyDownloadHistory", () => {
     const caller = appRouter.createCaller(ctx);
 
     try {
-      await caller.downloads.getMyDownloadHistory({ limit: 150, offset: 0 });
+      await caller.downloads.myDownloads({ limit: 150 });
       expect.fail("Should have thrown validation error");
     } catch (error: any) {
       // Zod validation error
       expect(error.message).toContain("Too big");
     }
-  });
-});
-
-describe("downloads.getDownloadLimits", () => {
-  it("should return limits for member user", async () => {
-    const { ctx } = createMemberContext();
-    const caller = appRouter.createCaller(ctx);
-
-    const result = await caller.downloads.getDownloadLimits();
-    expect(result.membershipStatus).toBe("member");
-    expect(result.limit).toBe(50);
-    expect(result.unlimited).toBe(false);
-  });
-
-  it("should return limits for free user", async () => {
-    const { ctx } = createFreeContext();
-    const caller = appRouter.createCaller(ctx);
-
-    const result = await caller.downloads.getDownloadLimits();
-    expect(result.membershipStatus).toBe("free");
-    expect(result.limit).toBe(5);
-    expect(result.unlimited).toBe(false);
   });
 });
