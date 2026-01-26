@@ -252,3 +252,10 @@
 - [ ] Actualizar validación de archivos en frontend y backend
 - [ ] Optimizar análisis para archivos WAV sin pérdida
 - [ ] Crear tests de precisión de análisis
+
+
+## 29. Eliminar Restricción de Membresía en Análisis IA (NUEVO)
+- [x] Verificar router de análisis musical (musicAnalysis.analyze)
+- [x] Cambiar de protectedProcedure a publicProcedure si está restringido
+- [x] Asegurar que análisis funcione para todos los usuarios
+- [x] Mantener restricción solo en publicación de tracks

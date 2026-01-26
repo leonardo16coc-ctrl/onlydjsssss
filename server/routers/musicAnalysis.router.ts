@@ -1,4 +1,4 @@
-import { router, protectedProcedure } from "../_core/trpc";
+import { router, protectedProcedure, publicProcedure } from "../_core/trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { analyzeAudioFile, batchAnalyzeAudio } from "../musicAnalysis";
@@ -17,8 +17,9 @@ const memberProcedure = protectedProcedure.use(({ ctx, next }) => {
 export const musicAnalysisRouter = router({
   /**
    * Analyze a single audio file
+   * Available to all users (Free and members) to ensure proper metadata
    */
-  analyze: memberProcedure
+  analyze: publicProcedure
     .input(z.object({
       audioFileUrl: z.string().url(),
       genre: z.string().optional(),
@@ -36,8 +37,9 @@ export const musicAnalysisRouter = router({
 
   /**
    * Batch analyze multiple audio files
+   * Available to all users (Free and members)
    */
-  batchAnalyze: memberProcedure
+  batchAnalyze: publicProcedure
     .input(z.object({
       files: z.array(z.object({
         url: z.string().url(),
