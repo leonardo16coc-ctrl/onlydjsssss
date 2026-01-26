@@ -168,3 +168,17 @@
 - [x] Página de edición de perfil /profile/edit
 - [x] Integrar enlaces a perfiles en Navbar con dropdown menu
 - [x] Crear tests de perfiles públicos
+
+
+## 21. Sistema de Búsqueda Avanzada con Filtros (NUEVO)
+- [x] Crear router tRPC para búsqueda avanzada con filtros múltiples
+- [x] Implementar filtro de BPM con rango (min/max)
+- [x] Implementar filtro de clave musical (Key) con todas las opciones
+- [x] Implementar filtro de género (selección múltiple)
+- [x] Implementar filtro de tipo de pista (Extended Mix, Edit, Mashup, etc.)
+- [x] Implementar filtro de energía (rango 0-100)
+- [x] Búsqueda por texto (título, artista)
+- [x] Componente AdvancedFilters con sliders y selects
+- [x] Integrar filtros en página Explore
+- [ ] Persistencia de filtros en URL query params
+- [x] Crear tests de búsqueda avanzada

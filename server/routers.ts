@@ -9,6 +9,7 @@ import { TRPCError } from "@trpc/server";
 import { analyzeAudioFile } from "./musicAnalysis";
 import { musicAnalysisRouter } from "./routers/musicAnalysis.router";
 import { profileRouter } from "./routers/profile.router";
+import { searchRouter } from "./routers/search.router";
 
 // Middleware to check if user has active membership
 const memberProcedure = protectedProcedure.use(({ ctx, next }) => {
@@ -314,6 +315,9 @@ export const appRouter = router({
 
   // Profile router
   profile: profileRouter,
+
+  // Search router
+  search: searchRouter,
 });
 
 export type AppRouter = typeof appRouter;
