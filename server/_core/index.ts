@@ -40,6 +40,59 @@ async function startServer() {
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
   // OAuth callback under /api/oauth/callback
   registerOAuthRoutes(app);
+  
+  // File upload endpoint
+  app.post("/api/upload/audio", async (req, res) => {
+    const { uploadAudioFile, isUploadError } = await import("../fileUpload");
+    
+    try {
+      const { file, mimeType, fileName, userId } = req.body;
+      
+      if (!file || !mimeType || !fileName || !userId) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+      
+      // Decode base64 file
+      const fileBuffer = Buffer.from(file, "base64");
+      
+      const result = await uploadAudioFile(fileBuffer, mimeType, fileName, parseInt(userId));
+      
+      if (isUploadError(result)) {
+        return res.status(400).json(result);
+      }
+      
+      return res.json(result);
+    } catch (error) {
+      console.error("[Upload] Error:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  });
+  
+  app.post("/api/upload/image", async (req, res) => {
+    const { uploadImageFile, isUploadError } = await import("../fileUpload");
+    
+    try {
+      const { file, mimeType, fileName, userId } = req.body;
+      
+      if (!file || !mimeType || !fileName || !userId) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+      
+      // Decode base64 file
+      const fileBuffer = Buffer.from(file, "base64");
+      
+      const result = await uploadImageFile(fileBuffer, mimeType, fileName, parseInt(userId));
+      
+      if (isUploadError(result)) {
+        return res.status(400).json(result);
+      }
+      
+      return res.json(result);
+    } catch (error) {
+      console.error("[Upload] Error:", error);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  });
   // tRPC API
   app.use(
     "/api/trpc",

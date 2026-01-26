@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Redirect } from "wouter";
-import { Upload as UploadIcon, Sparkles, Loader2 } from "lucide-react";
+import { Upload as UploadIcon, Sparkles, Loader2, Image as ImageIcon, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
@@ -20,7 +21,30 @@ export default function Upload() {
   const [trackType, setTrackType] = useState<string>("");
   const [bpm, setBpm] = useState("");
   const [musicalKey, setMusicalKey] = useState("");
+  
+  // File states
   const [audioFile, setAudioFile] = useState<File | null>(null);
+  const [coverImage, setCoverImage] = useState<File | null>(null);
+  const [coverPreview, setCoverPreview] = useState<string | null>(null);
+  
+  // Upload states
+  const [isUploadingAudio, setIsUploadingAudio] = useState(false);
+  const [isUploadingCover, setIsUploadingCover] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [audioUploaded, setAudioUploaded] = useState(false);
+  const [coverUploaded, setCoverUploaded] = useState(false);
+  
+  // Uploaded file data
+  const [uploadedAudio, setUploadedAudio] = useState<{
+    fileKey: string;
+    fileUrl: string;
+  } | null>(null);
+  const [uploadedCover, setUploadedCover] = useState<{
+    fileKey: string;
+    fileUrl: string;
+  } | null>(null);
+  
+  // Analysis states
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<any>(null);
 
@@ -31,20 +55,189 @@ export default function Upload() {
     return <Redirect to="/membership" />;
   }
 
+  const handleAudioFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file type
+      const validTypes = ["audio/mpeg", "audio/mp3", "audio/wav", "audio/wave", "audio/x-wav"];
+      if (!validTypes.includes(file.type)) {
+        toast.error("Formato no válido. Solo se aceptan MP3 y WAV");
+        return;
+      }
+      
+      // Validate file size (100MB max)
+      if (file.size > 100 * 1024 * 1024) {
+        toast.error("El archivo es demasiado grande. Máximo 100MB");
+        return;
+      }
+      
+      setAudioFile(file);
+      setAudioUploaded(false);
+      setUploadedAudio(null);
+    }
+  };
+
+  const handleCoverImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file type
+      const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+      if (!validTypes.includes(file.type)) {
+        toast.error("Formato no válido. Solo se aceptan JPG, PNG y WebP");
+        return;
+      }
+      
+      // Validate file size (10MB max)
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error("La imagen es demasiado grande. Máximo 10MB");
+        return;
+      }
+      
+      setCoverImage(file);
+      setCoverUploaded(false);
+      setUploadedCover(null);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setCoverPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const uploadAudioToS3 = async () => {
+    if (!audioFile || !user) return;
+
+    setIsUploadingAudio(true);
+    setUploadProgress(0);
+
+    try {
+      // Read file as base64
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const base64 = reader.result?.toString().split(",")[1];
+        if (!base64) {
+          toast.error("Error al leer el archivo");
+          setIsUploadingAudio(false);
+          return;
+        }
+
+        // Upload to server
+        const response = await fetch("/api/upload/audio", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            file: base64,
+            mimeType: audioFile.type,
+            fileName: audioFile.name,
+            userId: user.id,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || result.error) {
+          toast.error(result.error || "Error al subir el archivo");
+          setIsUploadingAudio(false);
+          return;
+        }
+
+        setUploadedAudio({
+          fileKey: result.fileKey,
+          fileUrl: result.fileUrl,
+        });
+        setAudioUploaded(true);
+        setUploadProgress(100);
+        toast.success("¡Archivo de audio subido exitosamente!");
+      };
+
+      reader.onerror = () => {
+        toast.error("Error al leer el archivo");
+        setIsUploadingAudio(false);
+      };
+
+      reader.readAsDataURL(audioFile);
+    } catch (error) {
+      console.error("Upload error:", error);
+      toast.error("Error al subir el archivo");
+    } finally {
+      setIsUploadingAudio(false);
+    }
+  };
+
+  const uploadCoverToS3 = async () => {
+    if (!coverImage || !user) return;
+
+    setIsUploadingCover(true);
+
+    try {
+      // Read file as base64
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const base64 = reader.result?.toString().split(",")[1];
+        if (!base64) {
+          toast.error("Error al leer la imagen");
+          setIsUploadingCover(false);
+          return;
+        }
+
+        // Upload to server
+        const response = await fetch("/api/upload/image", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            file: base64,
+            mimeType: coverImage.type,
+            fileName: coverImage.name,
+            userId: user.id,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || result.error) {
+          toast.error(result.error || "Error al subir la imagen");
+          setIsUploadingCover(false);
+          return;
+        }
+
+        setUploadedCover({
+          fileKey: result.fileKey,
+          fileUrl: result.fileUrl,
+        });
+        setCoverUploaded(true);
+        toast.success("¡Imagen cover subida exitosamente!");
+      };
+
+      reader.onerror = () => {
+        toast.error("Error al leer la imagen");
+        setIsUploadingCover(false);
+      };
+
+      reader.readAsDataURL(coverImage);
+    } catch (error) {
+      console.error("Upload error:", error);
+      toast.error("Error al subir la imagen");
+    } finally {
+      setIsUploadingCover(false);
+    }
+  };
+
   const handleAnalyze = async () => {
-    if (!audioFile || !genre || !trackType) {
-      toast.error("Por favor selecciona un archivo, género y tipo de track");
+    if (!uploadedAudio || !genre || !trackType) {
+      toast.error("Por favor sube un archivo y selecciona género y tipo de track");
       return;
     }
 
     setIsAnalyzing(true);
     try {
-      // In production, you would upload the file to S3 first
-      // For now, we'll simulate with a dummy URL
-      const dummyUrl = "https://example.com/audio.mp3";
-      
       const result = await analyzeAudio.mutateAsync({
-        audioFileUrl: dummyUrl,
+        audioFileUrl: uploadedAudio.fileUrl,
         genre,
         trackType,
       });
@@ -67,21 +260,19 @@ export default function Upload() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!title || !artist || !genre || !trackType || !audioFile) {
-      toast.error("Por favor completa todos los campos requeridos");
+    if (!title || !artist || !genre || !trackType || !uploadedAudio) {
+      toast.error("Por favor completa todos los campos requeridos y sube el archivo de audio");
       return;
     }
 
     try {
-      // In production, upload file to S3 first
-      const dummyFileKey = `tracks/${Date.now()}-${audioFile.name}`;
-      const dummyFileUrl = "https://example.com/audio.mp3";
-
       await createTrack.mutateAsync({
         title,
         artist,
-        audioFileKey: dummyFileKey,
-        audioFileUrl: dummyFileUrl,
+        audioFileKey: uploadedAudio.fileKey,
+        audioFileUrl: uploadedAudio.fileUrl,
+        coverImageKey: uploadedCover?.fileKey,
+        coverImageUrl: uploadedCover?.fileUrl,
         genre: genre as any,
         trackType: trackType as any,
         bpm: bpm ? parseInt(bpm) : undefined,
@@ -98,9 +289,15 @@ export default function Upload() {
       setBpm("");
       setMusicalKey("");
       setAudioFile(null);
+      setCoverImage(null);
+      setCoverPreview(null);
+      setUploadedAudio(null);
+      setUploadedCover(null);
+      setAudioUploaded(false);
+      setCoverUploaded(false);
       setAnalysisResult(null);
     } catch (error) {
-      toast.error("Error al subir el track");
+      toast.error("Error al crear el track");
       console.error(error);
     }
   };
@@ -197,34 +394,128 @@ export default function Upload() {
               </div>
             </div>
 
+            {/* Audio File Upload */}
             <div>
-              <Label>Archivo de Audio *</Label>
-              <div className="border-2 border-dashed border-border rounded-lg p-12 text-center hover:border-primary transition-colors">
+              <Label>Archivo de Audio * (MP3 320kbps o WAV, máx 100MB)</Label>
+              <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary transition-colors">
                 <input
                   type="file"
-                  accept="audio/mp3,audio/wav"
-                  onChange={(e) => setAudioFile(e.target.files?.[0] || null)}
+                  accept="audio/mp3,audio/mpeg,audio/wav"
+                  onChange={handleAudioFileChange}
                   className="hidden"
                   id="audio-upload"
+                  disabled={isUploadingAudio}
                 />
                 <label htmlFor="audio-upload" className="cursor-pointer">
-                  <UploadIcon className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                  {audioFile ? (
-                    <p className="text-foreground font-semibold">{audioFile.name}</p>
+                  {audioUploaded ? (
+                    <div className="flex flex-col items-center">
+                      <CheckCircle2 className="h-12 w-12 mb-4 text-primary" />
+                      <p className="text-primary font-semibold">{audioFile?.name}</p>
+                      <p className="text-xs text-muted-foreground mt-2">Subido exitosamente</p>
+                    </div>
+                  ) : audioFile ? (
+                    <div className="flex flex-col items-center">
+                      <UploadIcon className="h-12 w-12 mb-4 text-foreground" />
+                      <p className="text-foreground font-semibold">{audioFile.name}</p>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        {(audioFile.size / 1024 / 1024).toFixed(2)} MB
+                      </p>
+                    </div>
                   ) : (
-                    <p className="text-muted-foreground">Arrastra tu archivo aquí o haz clic para seleccionar</p>
+                    <>
+                      <UploadIcon className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                      <p className="text-muted-foreground">Arrastra tu archivo aquí o haz clic para seleccionar</p>
+                      <p className="text-xs text-muted-foreground mt-2">MP3 320kbps o WAV (máx 100MB)</p>
+                    </>
                   )}
-                  <p className="text-xs text-muted-foreground mt-2">MP3 320kbps o WAV</p>
                 </label>
               </div>
+              
+              {audioFile && !audioUploaded && (
+                <Button
+                  type="button"
+                  onClick={uploadAudioToS3}
+                  disabled={isUploadingAudio}
+                  className="w-full mt-4 bg-primary hover:bg-primary/90"
+                >
+                  {isUploadingAudio ? (
+                    <>
+                      <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                      Subiendo a S3...
+                    </>
+                  ) : (
+                    <>
+                      <UploadIcon className="h-5 w-5 mr-2" />
+                      Subir Archivo de Audio
+                    </>
+                  )}
+                </Button>
+              )}
+              
+              {isUploadingAudio && (
+                <Progress value={uploadProgress} className="mt-4" />
+              )}
             </div>
 
-            {audioFile && genre && trackType && !analysisResult && (
+            {/* Cover Image Upload */}
+            <div>
+              <Label>Imagen Cover (opcional, JPG/PNG/WebP, máx 10MB)</Label>
+              <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-secondary transition-colors">
+                <input
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png,image/webp"
+                  onChange={handleCoverImageChange}
+                  className="hidden"
+                  id="cover-upload"
+                  disabled={isUploadingCover}
+                />
+                <label htmlFor="cover-upload" className="cursor-pointer">
+                  {coverPreview ? (
+                    <div className="flex flex-col items-center">
+                      <img src={coverPreview} alt="Cover preview" className="h-32 w-32 object-cover rounded-lg mb-4" />
+                      <p className="text-foreground font-semibold">{coverImage?.name}</p>
+                      {coverUploaded && (
+                        <p className="text-xs text-primary mt-2">Subido exitosamente</p>
+                      )}
+                    </div>
+                  ) : (
+                    <>
+                      <ImageIcon className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                      <p className="text-muted-foreground">Arrastra tu imagen aquí o haz clic para seleccionar</p>
+                      <p className="text-xs text-muted-foreground mt-2">JPG, PNG o WebP (máx 10MB)</p>
+                    </>
+                  )}
+                </label>
+              </div>
+              
+              {coverImage && !coverUploaded && (
+                <Button
+                  type="button"
+                  onClick={uploadCoverToS3}
+                  disabled={isUploadingCover}
+                  className="w-full mt-4 bg-secondary hover:bg-secondary/90"
+                >
+                  {isUploadingCover ? (
+                    <>
+                      <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                      Subiendo imagen...
+                    </>
+                  ) : (
+                    <>
+                      <ImageIcon className="h-5 w-5 mr-2" />
+                      Subir Imagen Cover
+                    </>
+                  )}
+                </Button>
+              )}
+            </div>
+
+            {audioUploaded && genre && trackType && !analysisResult && (
               <Button
                 type="button"
                 onClick={handleAnalyze}
                 disabled={isAnalyzing}
-                className="w-full bg-secondary hover:bg-secondary/90 glow-purple"
+                className="w-full bg-accent hover:bg-accent/90 glow-purple"
               >
                 {isAnalyzing ? (
                   <>
@@ -243,17 +534,17 @@ export default function Upload() {
             <Button 
               type="submit" 
               className="w-full btn-neon bg-primary hover:bg-primary/90 glow-cyan"
-              disabled={createTrack.isPending}
+              disabled={createTrack.isPending || !audioUploaded}
             >
               {createTrack.isPending ? (
                 <>
                   <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-                  Subiendo...
+                  Creando track...
                 </>
               ) : (
                 <>
-                  <UploadIcon className="h-5 w-5 mr-2" />
-                  Subir Track
+                  <CheckCircle2 className="h-5 w-5 mr-2" />
+                  Publicar Track
                 </>
               )}
             </Button>

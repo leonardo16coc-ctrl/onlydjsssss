@@ -134,3 +134,16 @@
 - [x] Integrar análisis en flujo de subida de tracks
 - [x] Actualizar UI para mostrar resultados del análisis
 - [ ] Crear tests de integración para análisis musical
+
+
+## 18. Sistema de Almacenamiento S3 para Archivos de Música (NUEVO)
+- [x] Implementar endpoint de subida de archivos de audio
+- [x] Validación de formato (MP3 320kbps, WAV)
+- [x] Validación de tamaño de archivo (máximo 100MB)
+- [x] Integrar storagePut para subida a S3
+- [x] Generar nombres únicos de archivo con sufijos aleatorios
+- [x] Implementar subida de imágenes cover
+- [x] Actualizar frontend Upload con subida real de archivos
+- [x] Mostrar progreso de subida
+- [x] Manejo de errores de subida
+- [ ] Crear tests de integración para subida de archivos
