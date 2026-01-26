@@ -20,7 +20,8 @@ import {
   BarChart3,
   Flame,
   Rocket,
-  Heart
+  Heart,
+  Share2
 } from "lucide-react";
 import { Link } from "wouter";
 import DJDNABadge from "@/components/DJDNABadge";
@@ -28,6 +29,8 @@ import BadgeCard from "@/components/BadgeCard";
 import SetDetailsModal from "@/components/SetDetailsModal";
 import DJDNARadarChart from "@/components/DJDNARadarChart";
 import BadgeUnlockedNotification from "@/components/BadgeUnlockedNotification";
+import EnergyFlowChart from "@/components/EnergyFlowChart";
+import ShareDJDNA from "@/components/ShareDJDNA";
 import { useNewBadges } from "@/hooks/useNewBadges";
 
 export default function DJMode() {
@@ -36,6 +39,9 @@ export default function DJMode() {
   const [setType, setSetType] = useState<"warmup" | "peak_time" | "closing" | "festival">("peak_time");
   const [selectedSetId, setSelectedSetId] = useState<number | null>(null);
   const [showSetDetails, setShowSetDetails] = useState(false);
+  const [lastGeneratedSetId, setLastGeneratedSetId] = useState<number | null>(null);
+  
+  const utils = trpc.useUtils();
 
   // Queries
   const { data: profile, refetch: refetchProfile } = trpc.djMode.getMyProfile.useQuery(undefined, {
@@ -59,6 +65,11 @@ export default function DJMode() {
     { enabled: selectedSetId !== null }
   );
 
+  const { data: lastGeneratedSetDetails } = trpc.djMode.getSetDetails.useQuery(
+    { setId: lastGeneratedSetId! },
+    { enabled: lastGeneratedSetId !== null }
+  );
+
   // Badge notifications
   const { newBadge, clearNewBadge } = useNewBadges(badges);
 
@@ -74,6 +85,11 @@ export default function DJMode() {
     onSuccess: (data) => {
       toast.success(`Set "${data.setName}" creado exitosamente`);
       setSelectedTracks([]);
+      // Mostrar el set generado inmediatamente
+      if (data && data.id) {
+        setLastGeneratedSetId(data.id);
+      }
+      utils.djMode.getMySets.invalidate();
     },
   });
 
@@ -291,6 +307,22 @@ export default function DJMode() {
                 </CardHeader>
                 <CardContent>
                   <DJDNARadarChart profile={profile} size="lg" />
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Share DJ DNA */}
+            {profile && (
+              <Card className="bg-gradient-to-br from-cyan-500/10 to-purple-500/10 border-2 border-cyan-500/30">
+                <CardHeader>
+                  <CardTitle className="text-cyan-400 flex items-center gap-2">
+                    <Share2 className="w-5 h-5" />
+                    📤 Compartir mi ADN DJ
+                  </CardTitle>
+                  <CardDescription>Comparte tu identidad musical en redes sociales</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ShareDJDNA profile={profile} />
                 </CardContent>
               </Card>
             )}
@@ -589,6 +621,92 @@ export default function DJMode() {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Set Generado - Resultado Inmediato */}
+            {lastGeneratedSetDetails && (
+              <Card className="bg-gradient-to-br from-cyan-500/10 to-purple-500/10 border-2 border-cyan-500/50 animate-in fade-in slide-in-from-bottom-4">
+                <CardHeader>
+                  <CardTitle className="text-cyan-400 flex items-center gap-2">
+                    <Sparkles className="w-6 h-6" />
+                    ✨ Set Generado: {lastGeneratedSetDetails.name}
+                  </CardTitle>
+                  <CardDescription>
+                    {lastGeneratedSetDetails.tracks.length} tracks • BPM promedio: {lastGeneratedSetDetails.avgBpm} • Compatibilidad: {lastGeneratedSetDetails.keyCompatibility}%
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {/* Energy Curve Timeline */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+                      📈 Energy Curve Timeline
+                    </h3>
+                    <EnergyFlowChart tracks={lastGeneratedSetDetails.tracks} setType={lastGeneratedSetDetails.setType} />
+                  </div>
+
+                  <Separator className="bg-cyan-500/30" />
+
+                  {/* Tracks con Transiciones */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+                      🎛 Mixing Guide
+                    </h3>
+                    <div className="space-y-4">
+                      {lastGeneratedSetDetails.tracks.map((track, index) => (
+                        <div key={track.id}>
+                          {/* Track Card */}
+                          <div className="p-4 bg-slate-800/50 rounded-lg border border-cyan-500/20">
+                            <div className="flex justify-between items-start mb-2">
+                              <div>
+                                <p className="font-semibold text-white">
+                                  {index + 1}. {track.title}
+                                </p>
+                                <p className="text-sm text-gray-400">{track.artist}</p>
+                              </div>
+                              <Badge variant="outline" className="border-cyan-500 text-cyan-400">
+                                Energía: {track.energy}/100
+                              </Badge>
+                            </div>
+                            <div className="flex gap-3 text-xs text-gray-400">
+                              <span>BPM: {track.bpm}</span>
+                              <span>•</span>
+                              <span>Key: {track.musicalKey}</span>
+                            </div>
+                          </div>
+
+                          {/* Transición */}
+                          {index < lastGeneratedSetDetails.tracks.length - 1 && lastGeneratedSetDetails.transitions && (
+                            <div className="my-3 ml-8 p-3 bg-purple-500/10 border-l-2 border-purple-500 rounded-r-lg">
+                              <p className="text-sm font-medium text-purple-400 mb-1 flex items-center gap-2">
+                                🎛 Mixing Tip:
+                              </p>
+                              <p className="text-sm text-gray-300">
+                                {lastGeneratedSetDetails.transitions[index]?.technique || "Transición suave"}
+                              </p>
+                              {lastGeneratedSetDetails.transitions[index]?.compatibility && (
+                                <Badge variant="outline" className="mt-2 border-purple-500 text-purple-400 text-xs">
+                                  {lastGeneratedSetDetails.transitions[index].compatibility}
+                                </Badge>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <Separator className="bg-cyan-500/30" />
+
+                  {/* Botón para cerrar */}
+                  <Button
+                    onClick={() => setLastGeneratedSetId(null)}
+                    variant="outline"
+                    className="w-full border-cyan-500 text-cyan-400 hover:bg-cyan-500/10"
+                  >
+                    Cerrar Vista
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Mis Sets */}
             <Card className="bg-slate-900/50 border-purple-500/30">
