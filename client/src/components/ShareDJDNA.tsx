@@ -1,6 +1,8 @@
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Share2, Download, Copy, Check } from "lucide-react";
+import { Share2, Download, Copy, Check, Image as ImageIcon } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 import html2canvas from "html2canvas";
 import { toast } from "sonner";
 
@@ -14,9 +16,18 @@ interface ShareDJDNAProps {
   };
 }
 
+type ExportFormat = "story" | "square" | "banner";
+
+const formatDimensions: Record<ExportFormat, { width: number; height: number; label: string; icon: string }> = {
+  story: { width: 1080, height: 1920, label: "Instagram Story", icon: "📸" },
+  square: { width: 1080, height: 1080, label: "Post Cuadrado", icon: "🟦" },
+  banner: { width: 1920, height: 1080, label: "Banner Horizontal", icon: "🖥" },
+};
+
 export default function ShareDJDNA({ profile }: ShareDJDNAProps) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [showShareMenu, setShowShareMenu] = useState(false);
+  const [selectedFormat, setSelectedFormat] = useState<ExportFormat>("square");
   const cardRef = useRef<HTMLDivElement>(null);
 
   const getDNAString = () => {
@@ -34,19 +45,58 @@ export default function ShareDJDNA({ profile }: ShareDJDNAProps) {
     return `${bpm} · ${genre} · ${key} · ${energy}`;
   };
 
-  const generateImage = async () => {
+  const generateImage = async (format: ExportFormat = selectedFormat) => {
     if (!cardRef.current) return null;
 
     setIsGenerating(true);
     try {
-      const canvas = await html2canvas(cardRef.current, {
-        backgroundColor: "#0f172a",
+      const dimensions = formatDimensions[format];
+      
+      // Crear canvas temporal con dimensiones específicas
+      const tempCanvas = document.createElement("canvas");
+      tempCanvas.width = dimensions.width;
+      tempCanvas.height = dimensions.height;
+      const ctx = tempCanvas.getContext("2d")!;
+
+      // Fondo degradado
+      const gradient = ctx.createLinearGradient(0, 0, 0, dimensions.height);
+      gradient.addColorStop(0, "#0f172a");
+      gradient.addColorStop(1, "#1e293b");
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, dimensions.width, dimensions.height);
+
+      // Renderizar contenido
+      const contentCanvas = await html2canvas(cardRef.current, {
+        backgroundColor: null,
         scale: 2,
         logging: false,
       });
 
+      // Calcular posición centrada
+      const scale = Math.min(
+        (dimensions.width * 0.8) / contentCanvas.width,
+        (dimensions.height * 0.7) / contentCanvas.height
+      );
+      const scaledWidth = contentCanvas.width * scale;
+      const scaledHeight = contentCanvas.height * scale;
+      const x = (dimensions.width - scaledWidth) / 2;
+      const y = (dimensions.height - scaledHeight) / 2;
+
+      ctx.drawImage(contentCanvas, x, y, scaledWidth, scaledHeight);
+
+      // Agregar watermark
+      ctx.font = `${dimensions.width * 0.02}px Inter, sans-serif`;
+      ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+      ctx.textAlign = "center";
+      const watermarkY = dimensions.height - (dimensions.height * 0.05);
+      ctx.fillText("onlydjs.com", dimensions.width / 2, watermarkY);
+      
+      ctx.font = `${dimensions.width * 0.015}px Inter, sans-serif`;
+      ctx.fillStyle = "rgba(139, 92, 246, 0.7)";
+      ctx.fillText("#MyDJDNA", dimensions.width / 2, watermarkY + (dimensions.height * 0.03));
+
       const blob = await new Promise<Blob>((resolve) => {
-        canvas.toBlob((blob) => resolve(blob!), "image/png");
+        tempCanvas.toBlob((blob) => resolve(blob!), "image/png", 0.95);
       });
 
       setIsGenerating(false);
@@ -65,11 +115,12 @@ export default function ShareDJDNA({ profile }: ShareDJDNAProps) {
 
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
+    const formatLabel = formatDimensions[selectedFormat].label.toLowerCase().replace(" ", "-");
     a.href = url;
-    a.download = "mi-adn-dj-onlydjs.png";
+    a.download = `mi-adn-dj-${formatLabel}-onlydjs.png`;
     a.click();
     URL.revokeObjectURL(url);
-    toast.success("Imagen descargada");
+    toast.success(`Imagen ${formatDimensions[selectedFormat].label} descargada`);
   };
 
   const handleCopyText = () => {
@@ -114,6 +165,39 @@ export default function ShareDJDNA({ profile }: ShareDJDNAProps) {
           </div>
         </div>
       </div>
+
+      {/* Selector de formato */}
+      {showShareMenu && (
+        <div className="bg-slate-800/50 rounded-lg p-4 border border-cyan-500/20 animate-in fade-in slide-in-from-top-2">
+          <Label className="text-white mb-3 block flex items-center gap-2">
+            <ImageIcon className="w-4 h-4 text-cyan-400" />
+            Formato de exportación
+          </Label>
+          <RadioGroup value={selectedFormat} onValueChange={(value) => setSelectedFormat(value as ExportFormat)}>
+            <div className="grid grid-cols-3 gap-2">
+              {Object.entries(formatDimensions).map(([key, format]) => (
+                <div key={key} className="flex items-center space-x-2">
+                  <RadioGroupItem
+                    value={key}
+                    id={`format-${key}`}
+                    className="border-cyan-500 text-cyan-500"
+                  />
+                  <label
+                    htmlFor={`format-${key}`}
+                    className="text-sm text-gray-300 cursor-pointer flex items-center gap-1"
+                  >
+                    <span>{format.icon}</span>
+                    <span className="hidden sm:inline">{format.label}</span>
+                  </label>
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-gray-400 mt-2">
+              {formatDimensions[selectedFormat].width}x{formatDimensions[selectedFormat].height}px
+            </p>
+          </RadioGroup>
+        </div>
+      )}
 
       {/* Botones de acción */}
       <div className="space-y-2">
