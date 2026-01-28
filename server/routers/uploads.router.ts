@@ -200,31 +200,28 @@ export const uploadsRouter = router({
     // Get user's membership status
     const membershipStatus = ctx.user.membershipStatus || "free";
 
-    // Define limits by membership level
+    // Define limits by membership level (FREE: 1/mes, PRO: ilimitado)
     const limits = {
       free: {
-        maxUploadsPerMonth: 5,
+        maxUploadsPerMonth: 1, // 1 upload per month for FREE users
         maxFileSizeMB: MAX_AUDIO_SIZE_MB,
         maxDurationMinutes: MAX_DURATION_SECONDS / 60,
         supportedFormats: ["MP3", "WAV"],
       },
       member: {
-        maxUploadsPerMonth: 50,
+        maxUploadsPerMonth: -1, // Unlimited for PRO users ($4.99/mes)
         maxFileSizeMB: MAX_AUDIO_SIZE_MB,
         maxDurationMinutes: MAX_DURATION_SECONDS / 60,
-        supportedFormats: ["MP3", "WAV", "AIFF", "FLAC"],
-      },
-      verified: {
-        maxUploadsPerMonth: -1, // Unlimited
-        maxFileSizeMB: MAX_AUDIO_SIZE_MB,
-        maxDurationMinutes: MAX_DURATION_SECONDS / 60,
-        supportedFormats: ["MP3", "WAV", "AIFF", "FLAC"],
+        supportedFormats: ["MP3", "WAV"],
       },
     };
 
+    // Fallback to free if membershipStatus is not recognized
+    const userLimits = limits[membershipStatus as keyof typeof limits] || limits.free;
+
     return {
       membershipStatus,
-      limits: limits[membershipStatus],
+      limits: userLimits,
     };
   }),
 

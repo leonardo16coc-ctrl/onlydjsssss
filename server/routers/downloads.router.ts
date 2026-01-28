@@ -20,9 +20,8 @@ import { storageGet } from "../storage";
 
 // Download limits by membership level
 const DOWNLOAD_LIMITS = {
-  free: 5,
-  member: 50,
-  verified: -1, // Unlimited
+  free: 1, // 1 download per month for FREE users
+  member: -1, // Unlimited for PRO users ($4.99/mes)
 };
 
 // Rate limiting: max downloads per 24h from same IP

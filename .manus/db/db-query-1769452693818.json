@@ -1,0 +1,19 @@
+{
+  "query": "\n-- Insertar track de prueba con status 'approved'\nINSERT INTO tracks (\n  userId,\n  title,\n  artist,\n  genre,\n  trackType,\n  bpm,\n  musicalKey,\n  audioFileUrl,\n  audioFileKey,\n  coverImageUrl,\n  coverImageKey,\n  durationSeconds,\n  fileSizeBytes,\n  fileFormat,\n  status\n) VALUES (\n  1,\n  'Summer Vibes (Extended Mix)',\n  'DJ Leo Zam',\n  'Tech House',\n  'Extended Mix',\n  128,\n  'Am',\n  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',\n  'tracks/1/summer-vibes.mp3',\n  'https://picsum.photos/800/800',\n  'covers/1/summer-vibes.jpg',\n  240,\n  8500000,\n  'MP3',\n  'approved'\n);\n\n-- Verificar que se insertó\nSELECT id, title, artist, genre, bpm, status, createdAt FROM tracks ORDER BY id DESC LIMIT 1;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute \n-- Insertar track de prueba con status 'approved'\nINSERT INTO tracks (\n  userId,\n  title,\n  artist,\n  genre,\n  trackType,\n  bpm,\n  musicalKey,\n  audioFileUrl,\n  audioFileKey,\n  coverImageUrl,\n  coverImageKey,\n  durationSeconds,\n  fileSizeBytes,\n  fileFormat,\n  status\n) VALUES (\n  1,\n  'Summer Vibes (Extended Mix)',\n  'DJ Leo Zam',\n  'Tech House',\n  'Extended Mix',\n  128,\n  'Am',\n  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',\n  'tracks/1/summer-vibes.mp3',\n  'https://picsum.photos/800/800',\n  'covers/1/summer-vibes.jpg',\n  240,\n  8500000,\n  'MP3',\n  'approved'\n);\n\n-- Verificar que se insertó\nSELECT id, title, artist, genre, bpm, status, createdAt FROM tracks ORDER BY id DESC LIMIT 1;\n",
+  "rows": [
+    {
+      "id": "1",
+      "title": "Summer Vibes (Extended Mix)",
+      "artist": "DJ Leo Zam",
+      "genre": "Tech House",
+      "bpm": "128",
+      "status": "approved",
+      "createdAt": "2026-01-26 18:38:13"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\ttitle\tartist\tgenre\tbpm\tstatus\tcreatedAt\n1\tSummer Vibes (Extended Mix)\tDJ Leo Zam\tTech House\t128\tapproved\t2026-01-26 18:38:13\n",
+  "stderr": "",
+  "execution_time_ms": 207
+}

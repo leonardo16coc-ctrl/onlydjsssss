@@ -1277,3 +1277,49 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [ ] Benchmark de velocidad de download
 - [ ] Benchmark de streaming
 - [ ] Optimización de queries de DB
+
+
+## 46. Reconfigurar Sistema de Membresías (FREE: 1/mes, PRO: $4.99 ilimitado)
+
+- [x] Actualizar límites en uploads.router.ts (FREE: 1 upload/mes, PRO: ilimitado)
+- [x] Actualizar límites en downloads.router.ts (FREE: 1 descarga/mes, PRO: ilimitado)
+- [x] Eliminar referencias a plan "Studio" en código
+- [x] Actualizar UploadLimitsCard con nuevos límites
+- [x] Actualizar DownloadLimitsCard con nuevos límites
+- [ ] Actualizar página de Membership con solo 2 planes
+
+## 47. Sistema de Monetización para Artistas PRO
+
+- [ ] Crear tabla `track_earnings` en schema para tracking de ingresos
+- [ ] Crear tabla `artist_payouts` para historial de pagos
+- [ ] Implementar cálculo de revenue por descarga
+- [ ] Crear router `earnings` con queries de ganancias
+- [ ] Tracking automático de descargas → revenue
+- [ ] Sistema de acumulación de ganancias por artista
+
+## 48. Dashboard Financiero para Artistas
+
+- [ ] Crear página `/earnings` o sección en Dashboard
+- [ ] Mostrar descargas totales por artista
+- [ ] Mostrar ganancias acumuladas
+- [ ] Mostrar ganancias por track individual
+- [ ] Crear tabla de historial de pagos
+- [ ] Gráficos de earnings por mes
+- [ ] Top tracks por revenue
+
+## 49. Bloqueos Premium en DJ MODE y MAINSTAGE MODE
+
+- [ ] Implementar vista DEMO de DJ MODE para usuarios FREE
+- [ ] Bloquear ADN DJ, Smart Suggestions, Auto Set Builder para FREE
+- [ ] Implementar vista DEMO de MAINSTAGE MODE para FREE
+- [ ] Bloquear AI Festival Engine, rankings completos para FREE
+- [ ] Crear overlays de upgrade en funciones bloqueadas
+- [ ] Agregar CTAs de "Upgrade to PRO" en vistas demo
+
+## 50. Sección de Monetización en Home
+
+- [ ] Crear sección "Reglas de Monetización para DJs" debajo de hero
+- [ ] Explicar sistema de revenue por descarga
+- [ ] Mostrar beneficios de plan PRO
+- [ ] Agregar ejemplos de earnings potenciales
+- [ ] CTA prominente de upgrade a PRO

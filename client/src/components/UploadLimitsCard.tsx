@@ -100,7 +100,7 @@ export default function UploadLimitsCard({ compact = false }: UploadLimitsCardPr
         <div>
           <span className="text-sm text-muted-foreground block mb-2">Formatos soportados</span>
           <div className="flex flex-wrap gap-2">
-            {userLimits.supportedFormats.map((format) => (
+            {userLimits.supportedFormats.map((format: string) => (
               <span
                 key={format}
                 className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium rounded"
@@ -115,7 +115,7 @@ export default function UploadLimitsCard({ compact = false }: UploadLimitsCardPr
         {!compact && membershipStatus === "free" && (
           <div className="pt-4 border-t border-border/50">
             <p className="text-xs text-muted-foreground mb-3">
-              Actualiza a <span className="text-purple-500 font-medium">Pro</span> para subir hasta 50 tracks/mes
+              Actualiza a <span className="text-purple-500 font-medium">Pro ($4.99/mes)</span> para uploads <span className="text-green-500 font-medium">ILIMITADOS</span>
             </p>
             <Button
               size="sm"

@@ -155,8 +155,7 @@ export default function DownloadLimitsCard() {
         {membershipStatus === "free" && remaining > 0 && (
           <div className="pt-4 border-t border-border/50">
             <p className="text-xs text-muted-foreground mb-3">
-              Actualiza a <span className="text-purple-500 font-medium">Pro</span> para 50 descargas/mes o{" "}
-              <span className="text-yellow-500 font-medium">Studio</span> para descargas ilimitadas
+              Actualiza a <span className="text-purple-500 font-medium">Pro ($4.99/mes)</span> para descargas <span className="text-green-500 font-medium">ILIMITADAS</span>
             </p>
             <Button
               size="sm"

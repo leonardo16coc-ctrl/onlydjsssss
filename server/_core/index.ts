@@ -109,10 +109,6 @@ async function startServer() {
     }
   });
   
-  // TUS chunked upload endpoints
-  const { tusServer } = await import("../tusServer");
-  app.all("/api/upload/chunked", tusServer.handle.bind(tusServer));
-  app.all("/api/upload/chunked/*", tusServer.handle.bind(tusServer));
   
   // tRPC API
   app.use(
