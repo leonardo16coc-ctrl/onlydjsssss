@@ -1335,3 +1335,14 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Iconos y animaciones atractivas (Lucide icons)
 - [x] CTA prominente "Empieza a Ganar con PRO"
 - [x] Integrar en Home debajo del hero section
+
+
+## 52. Actualizar Página de Membership (Solo FREE y PRO) ✅
+
+- [x] Rediseñar Membership.tsx con solo 2 planes
+- [x] Eliminar plan Studio completamente
+- [x] Crear tabla comparativa visual de características (5 categorías)
+- [x] Destacar diferencias clave: uploads, descargas, monetización, DJ MODE, MAINSTAGE
+- [x] Diseño con gradientes neon consistente
+- [x] CTA prominente para upgrade a PRO con gradiente
+- [x] Mostrar precio $4.99/mes claramente con badge POPULAR
