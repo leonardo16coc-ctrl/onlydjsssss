@@ -18,6 +18,7 @@ import { festivalIntelligenceRouter } from "./routers/festivalIntelligence.route
 import { festivalRankingsRouter } from "./routers/festivalRankings.router";
 import { uploadsRouter } from "./routers/uploads.router";
 import { downloadsRouter } from "./routers/downloads.router";
+import { earningsRouter } from "./routers/earnings.router";
 import { getDb } from "./db";
 import { tracks, downloads } from "../drizzle/schema";
 import { eq, and, gte, sql } from "drizzle-orm";
@@ -42,6 +43,7 @@ export const appRouter = router({
   festivalRankings: festivalRankingsRouter,
   uploads: uploadsRouter,
   downloads: downloadsRouter,
+  earnings: earningsRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

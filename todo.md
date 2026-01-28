@@ -1346,3 +1346,18 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Diseño con gradientes neon consistente
 - [x] CTA prominente para upgrade a PRO con gradiente
 - [x] Mostrar precio $4.99/mes claramente con badge POPULAR
+
+
+## 53. Sistema de Monetización Backend (Earnings + Payouts)
+
+- [ ] Crear tabla `trackEarnings` en schema (track_id, download_id, artist_id, amount, date)
+- [ ] Crear tabla `artistPayouts` en schema (artist_id, amount, status, date, stripe_transfer_id)
+- [ ] Definir revenue por descarga ($0.50 por descarga, 60% para artista = $0.30)
+- [ ] Implementar trigger automático en downloads.router.ts para crear earning
+- [ ] Crear router `earnings` con queries de stats
+- [ ] Query: getTotalEarnings (suma total del artista)
+- [ ] Query: getEarningsByTrack (revenue por track individual)
+- [ ] Query: getEarningsHistory (historial paginado)
+- [ ] Query: getMonthlyStats (earnings por mes)
+- [ ] Crear tests unitarios de earnings
+- [ ] Push schema a database con `pnpm db:push`

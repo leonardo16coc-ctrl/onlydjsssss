@@ -2,7 +2,7 @@ import { router, protectedProcedure } from "../_core/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { getDb } from "../db";
-import { tracks, downloads, users } from "../../drizzle/schema";
+import { tracks, downloads, users, trackEarnings } from "../../drizzle/schema";
 import { eq, and, gte, sql, desc } from "drizzle-orm";
 import { storageGet } from "../storage";
 
@@ -145,6 +145,38 @@ export const downloadsRouter = router({
         userAgent,
         isSuspicious: false,
       });
+
+      // Get the download ID we just created
+      const downloadRecords = await db
+        .select()
+        .from(downloads)
+        .where(
+          and(
+            eq(downloads.userId, ctx.user.id),
+            eq(downloads.trackId, input.trackId)
+          )
+        )
+        .orderBy(desc(downloads.downloadedAt))
+        .limit(1);
+      
+      const downloadId = downloadRecords[0]?.id || 0;
+
+      // Get artist info to check if PRO
+      const artistResult = await db.select().from(users).where(eq(users.id, track.userId)).limit(1);
+      const artist = artistResult[0];
+
+      // Create earning record if artist is PRO (member)
+      if (artist && artist.membershipStatus === "member") {
+        await db.insert(trackEarnings).values({
+          trackId: input.trackId,
+          artistId: track.userId,
+          downloadId,
+          downloaderId: ctx.user.id,
+          revenuePerDownload: "0.50", // $0.50 per download
+          artistShare: "0.30", // 60% = $0.30
+          platformShare: "0.20", // 40% = $0.20
+        });
+      }
 
       // Increment track download count
       await db

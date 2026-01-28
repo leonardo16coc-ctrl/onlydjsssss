@@ -205,6 +205,65 @@ export type Earning = typeof earnings.$inferSelect;
 export type InsertEarning = typeof earnings.$inferInsert;
 
 /**
+ * Track Earnings - Granular earnings per download
+ */
+export const trackEarnings = mysqlTable("track_earnings", {
+  id: int("id").autoincrement().primaryKey(),
+  trackId: int("trackId").notNull(), // FK a tracks
+  artistId: int("artistId").notNull(), // FK a users (owner del track)
+  downloadId: int("downloadId").notNull(), // FK a downloads
+  downloaderId: int("downloaderId").notNull(), // FK a users (quien descargó)
+  // Revenue calculation
+  revenuePerDownload: decimal("revenuePerDownload", { precision: 5, scale: 2 }).default("0.50").notNull(), // $0.50 per download
+  artistShare: decimal("artistShare", { precision: 5, scale: 2 }).default("0.30").notNull(), // 60% = $0.30
+  platformShare: decimal("platformShare", { precision: 5, scale: 2 }).default("0.20").notNull(), // 40% = $0.20
+  // Timestamps
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => ({
+  trackIdIdx: index("track_earnings_track_id_idx").on(table.trackId),
+  artistIdIdx: index("track_earnings_artist_id_idx").on(table.artistId),
+  downloadIdIdx: index("track_earnings_download_id_idx").on(table.downloadId),
+  createdAtIdx: index("track_earnings_created_at_idx").on(table.createdAt),
+}));
+
+export type TrackEarning = typeof trackEarnings.$inferSelect;
+export type InsertTrackEarning = typeof trackEarnings.$inferInsert;
+
+/**
+ * Artist Payouts - Payment history for artists
+ */
+export const artistPayouts = mysqlTable("artist_payouts", {
+  id: int("id").autoincrement().primaryKey(),
+  artistId: int("artistId").notNull(), // FK a users
+  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(), // Total payout amount
+  currency: varchar("currency", { length: 3 }).default("USD").notNull(),
+  status: mysqlEnum("status", ["pending", "processing", "completed", "failed", "cancelled"]).default("pending").notNull(),
+  // Payment method
+  paymentMethod: mysqlEnum("paymentMethod", ["stripe", "paypal", "bank_transfer"]).notNull(),
+  stripeTransferId: varchar("stripeTransferId", { length: 255 }), // Stripe transfer ID
+  paypalTransactionId: varchar("paypalTransactionId", { length: 255 }), // PayPal transaction ID
+  // Period covered
+  periodStart: timestamp("periodStart").notNull(),
+  periodEnd: timestamp("periodEnd").notNull(),
+  // Metadata
+  totalDownloads: int("totalDownloads").default(0).notNull(), // Downloads in this period
+  notes: text("notes"), // Admin notes
+  // Timestamps
+  requestedAt: timestamp("requestedAt").defaultNow().notNull(),
+  processedAt: timestamp("processedAt"),
+  completedAt: timestamp("completedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  artistIdIdx: index("artist_payouts_artist_id_idx").on(table.artistId),
+  statusIdx: index("artist_payouts_status_idx").on(table.status),
+  createdAtIdx: index("artist_payouts_created_at_idx").on(table.createdAt),
+}));
+
+export type ArtistPayout = typeof artistPayouts.$inferSelect;
+export type InsertArtistPayout = typeof artistPayouts.$inferInsert;
+
+/**
  * Playlists
  */
 export const playlists = mysqlTable("playlists", {
