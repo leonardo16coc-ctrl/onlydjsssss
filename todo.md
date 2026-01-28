@@ -1323,3 +1323,15 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [ ] Mostrar beneficios de plan PRO
 - [ ] Agregar ejemplos de earnings potenciales
 - [ ] CTA prominente de upgrade a PRO
+
+
+## 51. Sección de Monetización Visual en Home ✅
+
+- [x] Crear componente MonetizationSection
+- [x] Diseño con gradientes neon (purple/pink/cyan)
+- [x] Explicar sistema de revenue por descarga (3 pasos)
+- [x] Mostrar beneficios de plan PRO para monetización
+- [x] Agregar ejemplos de earnings potenciales ($50-200/track, $500+/mes top DJs)
+- [x] Iconos y animaciones atractivas (Lucide icons)
+- [x] CTA prominente "Empieza a Ganar con PRO"
+- [x] Integrar en Home debajo del hero section

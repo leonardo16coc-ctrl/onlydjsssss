@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Navbar from "@/components/Navbar";
 import { Music2, TrendingUp, DollarSign, Sparkles, Shield, Zap, Upload } from "lucide-react";
+import MonetizationSection from "@/components/MonetizationSection";
 
 export default function Home() {
   return (
@@ -48,6 +49,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Monetization Section */}
+      <MonetizationSection />
 
       <section className="py-20 bg-background/50">
         <div className="container">
