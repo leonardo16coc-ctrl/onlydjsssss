@@ -1528,3 +1528,14 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Modificar componentes de formularios para usar useTranslation
 - [x] Verificar funcionamiento en navegador
 - [x] Crear/actualizar tests de traducción (40/40 tests pasando)
+
+
+## 63. Implementar Detección Automática de Idioma del Navegador (NUEVO)
+- [x] Analizar configuración actual de i18n y detección de idioma
+- [x] Implementar detección mejorada de idioma del navegador (navigator.language)
+- [x] Crear sistema de fallback inteligente para idiomas no soportados
+- [x] Mapear variantes regionales a idiomas base (es-MX → es, pt-PT → pt-BR)
+- [x] Implementar prioridad: localStorage > navegador > default
+- [x] Agregar lógica para respetar selección manual del usuario
+- [x] Verificar funcionamiento en diferentes navegadores
+- [x] Crear/actualizar tests de detección de idioma (49/49 tests pasando)

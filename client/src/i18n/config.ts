@@ -1,6 +1,7 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import { customLanguageDetector, SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from './languageDetector';
 
 // Import translations
 import enCommon from './locales/en/common.json';
@@ -27,22 +28,24 @@ const resources = {
   },
 };
 
+// Configure language detector with custom detector
+const languageDetector = new LanguageDetector();
+languageDetector.addDetector(customLanguageDetector);
+
 i18n
-  .use(LanguageDetector) // Detect user language
+  .use(languageDetector) // Use custom language detector
   .use(initReactI18next) // Pass i18n instance to react-i18next
   .init({
     resources,
-    fallbackLng: 'en', // Fallback to English if translation not found
+    fallbackLng: DEFAULT_LANGUAGE,
+    supportedLngs: SUPPORTED_LANGUAGES as unknown as string[],
     defaultNS: 'common',
     ns: ['common'],
     
     detection: {
-      // Order of language detection
-      order: ['localStorage', 'navigator', 'htmlTag'],
-      // Keys to lookup language from
-      lookupLocalStorage: 'i18nextLng',
-      // Cache user language
-      caches: ['localStorage'],
+      // Order: custom detector (includes localStorage + browser detection)
+      order: ['customBrowserDetector'],
+      caches: [], // Caching handled by custom detector
     },
 
     interpolation: {
