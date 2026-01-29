@@ -38,14 +38,12 @@ export default function Navbar() {
               </a>
             </Link>
             
-            {isAuthenticated && (
-              <Link href="/dj-mode">
-                <a className="flex items-center space-x-2 text-foreground hover:text-purple-400 transition-colors">
-                  <Radio className="h-4 w-4" />
-                  <span className="text-glow-purple">{t('nav.djMode')}</span>
-                </a>
-              </Link>
-            )}
+            <Link href="/dj-mode">
+              <a className="flex items-center space-x-2 text-foreground hover:text-purple-400 transition-colors">
+                <Radio className="h-4 w-4" />
+                <span className="text-glow-purple">{t('nav.djMode')}</span>
+              </a>
+            </Link>
             
             <Link href="/mainstage">
               <a className="flex items-center space-x-2 text-foreground hover:text-accent transition-colors">
@@ -61,24 +59,20 @@ export default function Navbar() {
               </a>
             </Link>
 
-            {isAuthenticated && (
-              <>
-                <Link href="/dashboard">
-                  <a className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
-                    <LayoutDashboard className="h-4 w-4" />
-                    <span>{t('nav.dashboard')}</span>
-                  </a>
-                </Link>
-                
-                {user?.membershipStatus !== "free" && (
-                  <Link href="/upload">
-                    <a className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
-                      <Upload className="h-4 w-4" />
-                      <span>{t('nav.upload')}</span>
-                    </a>
-                  </Link>
-                )}
-              </>
+            <Link href="/dashboard">
+              <a className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
+                <LayoutDashboard className="h-4 w-4" />
+                <span>{t('nav.dashboard')}</span>
+              </a>
+            </Link>
+            
+            {isAuthenticated && user?.membershipStatus !== "free" && (
+              <Link href="/upload">
+                <a className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
+                  <Upload className="h-4 w-4" />
+                  <span>{t('nav.upload')}</span>
+                </a>
+              </Link>
             )}
           </div>
 

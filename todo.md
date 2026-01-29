@@ -1559,3 +1559,12 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar hover effect
 - [x] Verificar funcionamiento
 - [x] Guardar checkpoint
+
+
+## 69. Hacer Visibles Todas las Opciones de Navegación en Header (NUEVO)
+- [x] Leer código actual del Navbar.tsx
+- [x] Identificar por qué faltan DJ MODE y Dashboard en sitio publicado
+- [x] Corregir lógica de visibilidad de las opciones de navegación
+- [x] Asegurar que todas las pestañas sean visibles: Explore, DJ MODE, MAINSTAGE, Rankings, Dashboard
+- [x] Verificar funcionamiento en preview
+- [x] Guardar checkpoint
