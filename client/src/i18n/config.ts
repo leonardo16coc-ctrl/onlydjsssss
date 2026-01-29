@@ -37,9 +37,10 @@ i18n
     ns: ['common'],
     
     detection: {
-      // Order of language detection
-      order: ['localStorage', 'navigator', 'htmlTag'],
+      // Order of language detection (URL first for SEO)
+      order: ['path', 'localStorage', 'navigator', 'htmlTag'],
       // Keys to lookup language from
+      lookupFromPathIndex: 0, // Language is first segment in URL
       lookupLocalStorage: 'i18nextLng',
       // Cache user language
       caches: ['localStorage'],

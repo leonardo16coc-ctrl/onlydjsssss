@@ -1,9 +1,13 @@
 import { useTranslation } from "react-i18next";
+import { getLocalizedPath, getLanguageFromPath } from "@/lib/routes";
+import { useLocation } from "wouter";
 import { Link } from "wouter";
 import { Music, Github, Twitter, Instagram, Mail } from "lucide-react";
 
 export default function Footer() {
   const { t } = useTranslation();
+  const [location] = useLocation();
+  const currentLang = getLanguageFromPath(location) as any;
   const currentYear = new Date().getFullYear();
 
   const footerLinks = [

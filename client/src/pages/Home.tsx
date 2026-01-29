@@ -5,10 +5,14 @@ import Navbar from "@/components/Navbar";
 import { Music2, TrendingUp, DollarSign, Sparkles, Shield, Zap, Upload } from "lucide-react";
 import MonetizationSection from "@/components/MonetizationSection";
 import { useTranslation } from "react-i18next";
+import { getLocalizedPath, getLanguageFromPath } from "@/lib/routes";
+import { useLocation } from "wouter";
 import Footer from "@/components/Footer";
 
 export default function Home() {
   const { t } = useTranslation();
+  const [location] = useLocation();
+  const currentLang = getLanguageFromPath(location) as any;
 
   return (
     <div className="min-h-screen bg-gradient-club">
@@ -31,19 +35,19 @@ export default function Home() {
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/explore">
+              <Link href={getLocalizedPath("explore", currentLang)}>
                 <Button size="lg" className="btn-neon bg-primary hover:bg-primary/90 glow-cyan text-lg px-8">
                   <Music2 className="mr-2 h-5 w-5" />
                   {t('home.hero.exploreMusic')}
                 </Button>
               </Link>
-              <Link href="/upload">
+              <Link href={getLocalizedPath("upload", currentLang)}>
                 <Button size="lg" className="btn-neon bg-secondary hover:bg-secondary/90 glow-purple text-lg px-8">
                   <Upload className="mr-2 h-5 w-5" />
                   {t('home.hero.uploadFiles')}
                 </Button>
               </Link>
-              <Link href="/membership">
+              <Link href={getLocalizedPath("membership", currentLang)}>
                 <Button size="lg" variant="outline" className="border-accent text-accent hover:bg-accent hover:text-accent-foreground text-lg px-8">
                   <Sparkles className="mr-2 h-5 w-5" />
                   {t('home.hero.subscribe')}

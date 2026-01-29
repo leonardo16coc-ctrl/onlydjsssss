@@ -14,16 +14,20 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { trpc } from "@/lib/trpc";
 import { useTranslation } from "react-i18next";
+import { getLocalizedPath, getLanguageFromPath } from "@/lib/routes";
+import { useLocation } from "wouter";
 
 export default function Navbar() {
   const { user, isAuthenticated } = useAuth();
   const { t } = useTranslation();
+  const [location] = useLocation();
+  const currentLang = getLanguageFromPath(location) as any;
 
   return (
     <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <Link href="/">
+          <Link href={getLocalizedPath("home", currentLang)}>
             <a className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
               <img src="/logo.png" alt="ONLYDJS" className="h-10 w-auto" />
               <span className="text-2xl font-bold text-glow-cyan">ONLYDJS</span>
@@ -31,7 +35,7 @@ export default function Navbar() {
           </Link>
 
           <div className="hidden md:flex items-center space-x-6">
-            <Link href="/explore">
+            <Link href={getLocalizedPath("explore", currentLang)}>
               <a className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
                 <Music className="h-4 w-4" />
                 <span>{t('nav.explore')}</span>
@@ -39,7 +43,7 @@ export default function Navbar() {
             </Link>
             
             {isAuthenticated && (
-              <Link href="/dj-mode">
+              <Link href={getLocalizedPath("dj-mode", currentLang)}>
                 <a className="flex items-center space-x-2 text-foreground hover:text-purple-400 transition-colors">
                   <Radio className="h-4 w-4" />
                   <span className="text-glow-purple">{t('nav.djMode')}</span>
@@ -47,14 +51,14 @@ export default function Navbar() {
               </Link>
             )}
             
-            <Link href="/mainstage">
+            <Link href={`/${currentLang}/mainstage`}>
               <a className="flex items-center space-x-2 text-foreground hover:text-accent transition-colors">
                 <Sparkles className="h-4 w-4" />
                 <span className="text-glow-pink">{t('nav.mainstage')}</span>
               </a>
             </Link>
             
-            <Link href="/rankings">
+            <Link href={`/${currentLang}/rankings`}>
               <a className="flex items-center space-x-2 text-foreground hover:text-secondary transition-colors">
                 <Trophy className="h-4 w-4" />
                 <span>{t('nav.rankings')}</span>
@@ -63,7 +67,7 @@ export default function Navbar() {
 
             {isAuthenticated && (
               <>
-                <Link href="/dashboard">
+                <Link href={getLocalizedPath("dashboard", currentLang)}>
                   <a className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
                     <LayoutDashboard className="h-4 w-4" />
                     <span>{t('nav.dashboard')}</span>
@@ -71,7 +75,7 @@ export default function Navbar() {
                 </Link>
                 
                 {user?.membershipStatus !== "free" && (
-                  <Link href="/upload">
+                  <Link href={getLocalizedPath("upload", currentLang)}>
                     <a className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
                       <Upload className="h-4 w-4" />
                       <span>{t('nav.upload')}</span>
@@ -87,7 +91,7 @@ export default function Navbar() {
             {isAuthenticated ? (
               <>
                 {user?.membershipStatus === "free" && (
-                  <Link href="/membership">
+                  <Link href={getLocalizedPath("membership", currentLang)}>
                     <Button className="btn-neon bg-accent hover:bg-accent/90 glow-pink">
                       <CreditCard className="h-4 w-4 mr-2" />
                       {t('nav.membership')}
@@ -110,13 +114,13 @@ export default function Navbar() {
                   <DropdownMenuContent align="end" className="w-56">
                     <DropdownMenuLabel>{t('nav.myProfile')}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <Link href="/profile/edit">
+                    <Link href={getLocalizedPath("profile-edit", currentLang)}>
                       <DropdownMenuItem>
                         <Settings className="mr-2 h-4 w-4" />
                         <span>{t('nav.settings')}</span>
                       </DropdownMenuItem>
                     </Link>
-                    <Link href="/dashboard">
+                    <Link href={getLocalizedPath("dashboard", currentLang)}>
                       <DropdownMenuItem>
                         <LayoutDashboard className="mr-2 h-4 w-4" />
                         <span>{t('nav.dashboard')}</span>
