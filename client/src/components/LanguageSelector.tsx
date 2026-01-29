@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'wouter';
 import { Globe } from 'lucide-react';
-import { changeLanguage as getLocalizedUrl } from '@/lib/routes';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,18 +19,12 @@ const languages = [
 
 export function LanguageSelector() {
   const { i18n } = useTranslation();
-  const [location, setLocation] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
 
   const currentLanguage = languages.find((lang) => lang.code === i18n.language) || languages[0];
 
   const changeLanguage = (langCode: string) => {
-    // Get new localized URL for current route
-    const newPath = getLocalizedUrl(location, langCode as any);
-    
-    // Change language and navigate to new URL
     i18n.changeLanguage(langCode);
-    setLocation(newPath);
     setIsOpen(false);
   };
 
