@@ -1598,3 +1598,12 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar traducciones en 5 idiomas
 - [x] Verificar funcionamiento en preview
 - [x] Guardar checkpoint
+
+
+## 73. Corregir Funcionalidad de Cerrar Sesión (BUG)
+- [x] Revisar implementación de logout en Navbar.tsx
+- [x] Identificar problema: useMutation() llamado dentro de onClick (incorrecto)
+- [x] Corregir: mover useMutation() al nivel del componente
+- [x] Implementar handleLogout() correctamente
+- [x] Probar logout en preview
+- [x] Guardar checkpoint

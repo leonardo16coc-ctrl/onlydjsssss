@@ -18,6 +18,16 @@ import { useTranslation } from "react-i18next";
 export default function Navbar() {
   const { user, isAuthenticated } = useAuth();
   const { t } = useTranslation();
+  
+  const logoutMutation = trpc.auth.logout.useMutation({
+    onSuccess: () => {
+      window.location.href = "/";
+    },
+  });
+
+  const handleLogout = () => {
+    logoutMutation.mutate();
+  };
 
   return (
     <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
@@ -117,10 +127,7 @@ export default function Navbar() {
                       </DropdownMenuItem>
                     </Link>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => {
-                      trpc.auth.logout.useMutation().mutate();
-                      window.location.href = "/";
-                    }}>
+                    <DropdownMenuItem onClick={handleLogout}>
                       <LogOut className="mr-2 h-4 w-4" />
                       <span>{t('nav.logout')}</span>
                     </DropdownMenuItem>
