@@ -5,6 +5,7 @@ import { getDb } from "../db";
 import { tracks, downloads, users, trackEarnings } from "../../drizzle/schema";
 import { eq, and, gte, sql, desc } from "drizzle-orm";
 import { storageGet } from "../storage";
+import { checkDownloadProtection, generateDownloadToken, logSuspiciousActivity } from "../antiHotlink";
 
 /**
  * Downloads Router - Professional download system with tracking and limits
@@ -194,6 +195,13 @@ export const downloadsRouter = router({
       const fileKey = track.audioFileKey;
       const signedUrl = await storageGet(fileKey);
 
+      // Generate anti-leech token (expires in 5 minutes)
+      const downloadToken = generateDownloadToken({
+        userId: ctx.user.id,
+        trackId: input.trackId,
+        ipAddress,
+      });
+
       // Determine filename
       const extension = input.format;
       const filename = `${track.artist} - ${track.title}.${extension}`;
@@ -201,6 +209,7 @@ export const downloadsRouter = router({
       return {
         success: true,
         downloadUrl: signedUrl.url,
+        downloadToken, // Anti-leech token (expires in 5 min)
         filename,
         format: input.format.toUpperCase(),
         remaining: limitCheck.remaining === -1 ? "ilimitado" : limitCheck.remaining.toString(),

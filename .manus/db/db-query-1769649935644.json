@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS blocked_ips (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  ip_address VARCHAR(45) NOT NULL UNIQUE,\n  reason VARCHAR(255) NOT NULL COMMENT 'Razón del bloqueo',\n  blocked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  expires_at TIMESTAMP NULL COMMENT 'NULL = bloqueo permanente',\n  INDEX idx_ip_address (ip_address),\n  INDEX idx_expires_at (expires_at)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='IPs bloqueadas por actividad sospechosa';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute CREATE TABLE IF NOT EXISTS blocked_ips (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  ip_address VARCHAR(45) NOT NULL UNIQUE,\n  reason VARCHAR(255) NOT NULL COMMENT 'Razón del bloqueo',\n  blocked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  expires_at TIMESTAMP NULL COMMENT 'NULL = bloqueo permanente',\n  INDEX idx_ip_address (ip_address),\n  INDEX idx_expires_at (expires_at)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='IPs bloqueadas por actividad sospechosa';",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 357
+}

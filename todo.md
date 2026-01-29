@@ -1361,3 +1361,51 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [ ] Query: getMonthlyStats (earnings por mes)
 - [ ] Crear tests unitarios de earnings
 - [ ] Push schema a database con `pnpm db:push`
+
+
+## 55. Protección Anti-Hotlink y Anti-Scraping (PRIORIDAD ALTA) ✅
+
+### Base de Datos
+- [x] Crear tabla `suspicious_activities` para tracking de actividad sospechosa
+- [x] Crear tabla `blocked_ips` para IPs bloqueadas temporalmente
+- [x] Agregar índices para queries rápidas
+
+### Middleware de Protección
+- [x] Crear archivo `server/antiHotlink.ts` con funciones de seguridad
+- [x] Implementar validación de referer (whitelist de dominios)
+- [x] Detectar user agents de bots conocidos (curl, wget, scrapers)
+- [x] Calcular score de sospecha basado en patrones (0-100)
+
+### Tokens Anti-Leech
+- [x] Instalar jsonwebtoken para JWT
+- [x] Generar tokens únicos por descarga con expiración (5 min)
+- [x] Incluir userId, trackId, IP en payload del token
+- [x] Validar token antes de permitir descarga
+- [x] Verificar IP match (prevenir compartir tokens)
+
+### Detección de Scraping
+- [x] Detectar más de 10 descargas en 1 minuto
+- [x] Detectar más de 200 descargas en 1 hora
+- [x] Detectar requests secuenciales sin pausa (<2s entre requests)
+- [x] Logging de actividades sospechosas en DB
+
+### Bloqueo Automático
+- [x] Bloquear IP si score de sospecha > 90
+- [x] Bloquear IP automáticamente con duración configurable
+- [x] Duración de bloqueo: 24h (configurable)
+- [x] Notificación en logs de IPs bloqueadas
+
+### Integración
+- [x] Integrar middleware en router de downloads
+- [x] Agregar validación de token en downloadTrack
+- [x] checkDownloadProtection() ejecuta todas las validaciones
+
+### Tests
+- [x] Test de referer válido (debe permitir) ✅
+- [x] Test de referer inválido (debe bloquear) ✅
+- [x] Test de token válido (debe permitir) ✅
+- [x] Test de token con IP mismatch (debe bloquear) ✅
+- [x] Test de token inválido (debe bloquear) ✅
+- [x] Test de detección de bots (debe bloquear) ✅
+- [x] Test de integración completa ✅
+- [x] 14/15 tests pasando (93%)

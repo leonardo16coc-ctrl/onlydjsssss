@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS suspicious_activities (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  ip_address VARCHAR(45) NOT NULL,\n  activity_type VARCHAR(50) NOT NULL COMMENT 'hotlink_attempt, bot_detected, high_activity, etc.',\n  details TEXT COMMENT 'Detalles adicionales del incidente',\n  suspicion_score INT DEFAULT 0 COMMENT 'Score de 0-100',\n  detected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  INDEX idx_ip_address (ip_address),\n  INDEX idx_detected_at (detected_at),\n  INDEX idx_suspicion_score (suspicion_score)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Tracking de actividades sospechosas para anti-scraping';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute CREATE TABLE IF NOT EXISTS suspicious_activities (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  ip_address VARCHAR(45) NOT NULL,\n  activity_type VARCHAR(50) NOT NULL COMMENT 'hotlink_attempt, bot_detected, high_activity, etc.',\n  details TEXT COMMENT 'Detalles adicionales del incidente',\n  suspicion_score INT DEFAULT 0 COMMENT 'Score de 0-100',\n  detected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  INDEX idx_ip_address (ip_address),\n  INDEX idx_detected_at (detected_at),\n  INDEX idx_suspicion_score (suspicion_score)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Tracking de actividades sospechosas para anti-scraping';",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 271
+}
