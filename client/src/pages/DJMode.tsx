@@ -144,11 +144,6 @@ export default function DJMode() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <Link href="/">
-                <div className="text-2xl font-black mb-2 cursor-pointer hover:opacity-80 transition-opacity bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
-                  ONLYDJS
-                </div>
-              </Link>
               <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
                 {t("djMode.loginTitle")}
               </h1>
