@@ -338,7 +338,9 @@
     "mySets": "📝 My Generated Sets",
     "noSets": "You haven't generated any sets yet",
     "clickDetails": "Click to view details →",
-    "compatibility": "Compatibility"
+    "compatibility": "Compatibility",
+    "loginRequired": "Login Required",
+    "loginRequiredDesc": "Please sign in to use DJ Mode features"
   },
   "mainstage": {
     "loading": "Loading MAINSTAGE MODE...",

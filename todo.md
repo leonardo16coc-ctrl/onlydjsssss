@@ -1568,3 +1568,13 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Asegurar que todas las pestañas sean visibles: Explore, DJ MODE, MAINSTAGE, Rankings, Dashboard
 - [x] Verificar funcionamiento en preview
 - [x] Guardar checkpoint
+
+
+## 70. Proteger Interacciones en DJ Mode para Usuarios No Autenticados (NUEVO)
+- [x] Leer código actual de DJMode.tsx
+- [x] Identificar todos los botones y acciones interactivas
+- [x] Agregar lógica para verificar autenticación antes de ejecutar acciones
+- [x] Redirigir a login cuando usuario no autenticado intente interactuar
+- [x] Mostrar mensaje informativo antes de redirigir
+- [x] Verificar funcionamiento en preview
+- [x] Guardar checkpoint

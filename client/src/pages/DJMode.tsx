@@ -114,23 +114,20 @@ export default function DJMode() {
     );
   }
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
-        <Card className="max-w-md w-full bg-slate-900/50 border-cyan-500/30">
-          <CardHeader>
-            <CardTitle className="text-2xl text-cyan-400">{t("djMode.loginTitle")}</CardTitle>
-            <CardDescription>{t("djMode.loginDesc")}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button asChild className="w-full bg-gradient-to-r from-cyan-500 to-purple-500">
-              <a href={getLoginUrl()}>{t("djMode.loginButton")}</a>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+  // Helper function to handle protected actions
+  const handleProtectedAction = (action: () => void) => {
+    if (!isAuthenticated) {
+      toast.info(t("djMode.loginRequired"), {
+        description: t("djMode.loginRequiredDesc"),
+        action: {
+          label: t("djMode.loginButton"),
+          onClick: () => window.location.href = getLoginUrl(),
+        },
+      });
+      return;
+    }
+    action();
+  };
 
   // Parsear datos del perfil
   const favoriteGenres = profile?.favoriteGenres ? JSON.parse(profile.favoriteGenres) : [];
@@ -574,28 +571,28 @@ export default function DJMode() {
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                     <Button
                       variant={setType === "warmup" ? "default" : "outline"}
-                      onClick={() => setSetType("warmup")}
+                      onClick={() => handleProtectedAction(() => setSetType("warmup"))}
                       className={setType === "warmup" ? "bg-blue-500" : ""}
                     >
                       {t("djMode.warmup")}
                     </Button>
                     <Button
                       variant={setType === "peak_time" ? "default" : "outline"}
-                      onClick={() => setSetType("peak_time")}
+                      onClick={() => handleProtectedAction(() => setSetType("peak_time"))}
                       className={setType === "peak_time" ? "bg-red-500" : ""}
                     >
                       {t("djMode.peakTime")}
                     </Button>
                     <Button
                       variant={setType === "closing" ? "default" : "outline"}
-                      onClick={() => setSetType("closing")}
+                      onClick={() => handleProtectedAction(() => setSetType("closing"))}
                       className={setType === "closing" ? "bg-purple-500" : ""}
                     >
                       {t("djMode.closing")}
                     </Button>
                     <Button
                       variant={setType === "festival" ? "default" : "outline"}
-                      onClick={() => setSetType("festival")}
+                      onClick={() => handleProtectedAction(() => setSetType("festival"))}
                       className={setType === "festival" ? "bg-yellow-500" : ""}
                     >
                       {t("djMode.festival")}
@@ -614,7 +611,7 @@ export default function DJMode() {
                       <Link href="/explore">{t("djMode.goToExplore")}</Link>
                     </Button>
                     <Button
-                      onClick={() => {
+                      onClick={() => handleProtectedAction(() => {
                         if (selectedTracks.length < 2) {
                           toast.error(t("djMode.minTracksError"));
                           return;
@@ -623,7 +620,7 @@ export default function DJMode() {
                           trackIds: selectedTracks,
                           setType: setType,
                         });
-                      }}
+                      })}
                       disabled={selectedTracks.length < 2 || buildSetMutation.isPending}
                       className="flex-1 bg-gradient-to-r from-cyan-500 to-purple-500"
                     >
@@ -731,10 +728,10 @@ export default function DJMode() {
                     {mySets.map((set) => (
                       <div
                         key={set.id}
-                        onClick={() => {
+                        onClick={() => handleProtectedAction(() => {
                           setSelectedSetId(set.id);
                           setShowSetDetails(true);
-                        }}
+                        })}
                         className="p-4 bg-slate-800/50 rounded-lg border border-purple-500/20 hover:bg-slate-800 hover:border-purple-500/50 transition-all cursor-pointer"
                       >
                         <div className="flex justify-between items-start mb-2">
