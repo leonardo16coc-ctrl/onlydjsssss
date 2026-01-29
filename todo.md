@@ -1438,9 +1438,9 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 
 ### Traducción de Páginas Principales
 - [x] Traducir Home.tsx (hero, features, monetization, CTA)
-- [ ] Traducir Explore.tsx (filters, search, track cards)
-- [ ] Traducir Upload.tsx (forms, validation messages, limits)
-- [ ] Traducir Membership.tsx (plans, pricing, features)
+- [x] Traducir Explore.tsx (filters, search, track cards)
+- [x] Traducir Upload.tsx (forms, validation messages, limits)
+- [x] Traducir Membership.tsx (plans, pricing, features)
 - [ ] Traducir DJMode.tsx (ADN DJ, suggestions, auto sets)
 - [ ] Traducir MainstageMode.tsx (festival intelligence, rankings)
 - [ ] Traducir Dashboard.tsx (stats, navigation)
@@ -1466,3 +1466,17 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Test de detección automática de navegador
 - [x] Test de fallback a inglés
 - [x] Verificar que todas las traducciones están completas (13/13 tests pasando)
+
+
+## 57. Traducir Páginas Restantes al Sistema i18n (NUEVO)
+- [x] Leer y analizar página Explore.tsx para identificar textos
+- [x] Leer y analizar página Upload.tsx para identificar textos
+- [x] Leer y analizar página Membership.tsx para identificar textos
+- [x] Actualizar archivos JSON con traducciones de Explore (5 idiomas)
+- [x] Actualizar archivos JSON con traducciones de Upload (5 idiomas)
+- [x] Actualizar archivos JSON con traducciones de Membership (5 idiomas)
+- [x] Modificar Explore.tsx para usar useTranslation
+- [x] Modificar Upload.tsx para usar useTranslation
+- [x] Modificar Membership.tsx para usar useTranslation
+- [x] Verificar funcionamiento en navegador
+- [x] Crear/actualizar tests de traducción (19/19 tests pasando)

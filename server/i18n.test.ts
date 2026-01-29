@@ -127,4 +127,68 @@ describe('i18n Translation System', () => {
       expect(deCommon.home.footer.copyright).toContain('2026 ONLYDJS');
     });
   });
+
+  describe('Explore Page Keys', () => {
+    it('should have explore page keys in English', () => {
+      expect(enCommon.explore.title).toBe('Explore Music');
+      expect(enCommon.explore.subtitle).toBeDefined();
+      expect(enCommon.explore.searchingTracks).toBe('Searching tracks...');
+      expect(enCommon.explore.tracksFound).toBe('tracks found');
+      expect(enCommon.explore.noTracksFound).toBe('No tracks found');
+      expect(enCommon.explore.loadMore).toBe('Load More');
+    });
+
+    it('should have explore page keys in Spanish', () => {
+      expect(esCommon.explore.title).toBe('Explorar Música');
+      expect(esCommon.explore.subtitle).toBeDefined();
+      expect(esCommon.explore.searchingTracks).toBe('Buscando tracks...');
+      expect(esCommon.explore.tracksFound).toBe('tracks encontrados');
+      expect(esCommon.explore.noTracksFound).toBe('No se encontraron tracks');
+      expect(esCommon.explore.loadMore).toBe('Cargar más');
+    });
+  });
+
+  describe('Upload Page Keys', () => {
+    it('should have upload page keys in English', () => {
+      expect(enCommon.upload.title).toBe('Upload Track');
+      expect(enCommon.upload.subtitle).toBeDefined();
+      expect(enCommon.upload.audioFile).toBe('Audio File');
+      expect(enCommon.upload.coverImage).toBe('Cover Image');
+      expect(enCommon.upload.trackInfo).toBe('Track Information');
+      expect(enCommon.upload.analyzeWithAI).toBe('Analyze with AI');
+      expect(enCommon.upload.publish).toBe('Publish Track');
+    });
+
+    it('should have upload page keys in Spanish', () => {
+      expect(esCommon.upload.title).toBe('Subir Track');
+      expect(esCommon.upload.subtitle).toBeDefined();
+      expect(esCommon.upload.audioFile).toBe('Archivo de Audio');
+      expect(esCommon.upload.coverImage).toBe('Imagen de Portada');
+      expect(esCommon.upload.trackInfo).toBe('Información del Track');
+      expect(esCommon.upload.analyzeWithAI).toBe('Analizar con IA');
+      expect(esCommon.upload.publish).toBe('Publicar Track');
+    });
+  });
+
+  describe('Membership Page Keys', () => {
+    it('should have membership page keys in English', () => {
+      expect(enCommon.membership.title).toBe('Choose Your Plan');
+      expect(enCommon.membership.subtitle).toBeDefined();
+      expect(enCommon.membership.free).toBe('FREE');
+      expect(enCommon.membership.pro).toBe('PRO');
+      expect(enCommon.membership.popular).toBe('POPULAR');
+      expect(enCommon.membership.currentPlan).toBe('Current Plan');
+      expect(enCommon.membership.upgradeToPro).toBe('Upgrade to PRO');
+    });
+
+    it('should have membership page keys in Spanish', () => {
+      expect(esCommon.membership.title).toBe('Elige Tu Plan');
+      expect(esCommon.membership.subtitle).toBeDefined();
+      expect(esCommon.membership.free).toBe('GRATIS');
+      expect(esCommon.membership.pro).toBe('PRO');
+      expect(esCommon.membership.popular).toBe('POPULAR');
+      expect(esCommon.membership.currentPlan).toBe('Plan Actual');
+      expect(esCommon.membership.upgradeToPro).toBe('Actualizar a PRO');
+    });
+  });
 });

@@ -5,14 +5,16 @@ import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Check, X, Crown, Sparkles, Zap, TrendingUp, Music, Download, DollarSign } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 export default function Membership() {
   const { user, isAuthenticated } = useAuth();
+  const { t } = useTranslation();
   const createCheckout = trpc.membership.createCheckout.useMutation();
 
   const handleSubscribe = async () => {
     if (!isAuthenticated) {
-      toast.error("Debes iniciar sesión primero");
+      toast.error(t('membership.mustLoginFirst'));
       return;
     }
 
@@ -20,10 +22,10 @@ export default function Membership() {
       const { checkoutUrl } = await createCheckout.mutateAsync();
       if (checkoutUrl) {
         window.open(checkoutUrl, "_blank");
-        toast.info("Redirigiendo a Stripe...");
+        toast.info(t('membership.redirectingToStripe'));
       }
     } catch (error) {
-      toast.error("Error al crear sesión de pago");
+      toast.error(t('membership.paymentError'));
     }
   };
 
@@ -84,15 +86,15 @@ export default function Membership() {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/30 rounded-full mb-6">
             <Crown className="h-4 w-4 text-yellow-500" />
-            <span className="text-sm font-medium text-purple-300">2 Planes Simples</span>
+            <span className="text-sm font-medium text-purple-300">{t('membership.simplePlans')}</span>
           </div>
           
           <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
-            Elige Tu Plan
+            {t('membership.title')}
           </h1>
           
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Empieza gratis o desbloquea todo por solo <span className="text-green-500 font-bold">$4.99/mes</span>
+            {t('membership.subtitle')} <span className="text-green-500 font-bold">$4.99{t('membership.perMonth')}</span>
           </p>
         </div>
 
@@ -101,35 +103,35 @@ export default function Membership() {
           {/* FREE Plan */}
           <Card className="p-8 border-border/50 bg-card/50 backdrop-blur">
             <div className="text-center mb-6">
-              <h3 className="text-2xl font-bold mb-2">FREE</h3>
+              <h3 className="text-2xl font-bold mb-2">{t('membership.free')}</h3>
               <div className="text-4xl font-bold mb-2">$0</div>
-              <p className="text-sm text-muted-foreground">Gratis para siempre</p>
+              <p className="text-sm text-muted-foreground">{t('membership.freeForever')}</p>
             </div>
 
             <div className="space-y-3 mb-6">
               <div className="flex items-center gap-3">
                 <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
-                <span className="text-sm">1 upload por mes</span>
+                <span className="text-sm">{t('membership.features.oneTrack')}</span>
               </div>
               <div className="flex items-center gap-3">
                 <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
-                <span className="text-sm">1 descarga por mes</span>
+                <span className="text-sm">{t('membership.features.oneDownload')}</span>
               </div>
               <div className="flex items-center gap-3">
                 <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
-                <span className="text-sm">Preview de 1 minuto</span>
+                <span className="text-sm">{t('membership.features.preview')}: {t('membership.features.oneMinute')}</span>
               </div>
               <div className="flex items-center gap-3">
                 <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
-                <span className="text-sm">Explorar catálogo completo</span>
+                <span className="text-sm">{t('explore.title')}</span>
               </div>
               <div className="flex items-center gap-3">
                 <X className="h-5 w-5 text-red-500 flex-shrink-0" />
-                <span className="text-sm text-muted-foreground">Sin monetización</span>
+                <span className="text-sm text-muted-foreground">{t('membership.features.no')} {t('membership.features.monetization')}</span>
               </div>
               <div className="flex items-center gap-3">
                 <X className="h-5 w-5 text-red-500 flex-shrink-0" />
-                <span className="text-sm text-muted-foreground">DJ MODE limitado</span>
+                <span className="text-sm text-muted-foreground">{t('membership.features.djMode')} {t('membership.features.demoView')}</span>
               </div>
             </div>
 
@@ -139,7 +141,7 @@ export default function Membership() {
               className="w-full"
               disabled
             >
-              Plan Actual
+              {t('membership.currentPlan')}
             </Button>
           </Card>
 
@@ -148,33 +150,33 @@ export default function Membership() {
             {/* Popular Badge */}
             <div className="absolute top-4 right-4">
               <div className="px-3 py-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-bold rounded-full">
-                POPULAR
+                {t('membership.popular')}
               </div>
             </div>
 
             <div className="text-center mb-6">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <Crown className="h-6 w-6 text-yellow-500" />
-                <h3 className="text-2xl font-bold">PRO</h3>
+                <h3 className="text-2xl font-bold">{t('membership.pro')}</h3>
               </div>
               <div className="text-5xl font-bold mb-2 bg-gradient-to-r from-green-400 to-cyan-400 bg-clip-text text-transparent">
                 $4.99
               </div>
-              <p className="text-sm text-muted-foreground">USD por mes</p>
+              <p className="text-sm text-muted-foreground">USD{t('membership.perMonth')}</p>
             </div>
 
             <div className="space-y-3 mb-6">
               <div className="flex items-center gap-3">
                 <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
-                <span className="text-sm font-medium">Uploads ILIMITADOS</span>
+                <span className="text-sm font-medium">{t('membership.features.uploads')} {t('membership.features.unlimited')}</span>
               </div>
               <div className="flex items-center gap-3">
                 <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
-                <span className="text-sm font-medium">Descargas ILIMITADAS</span>
+                <span className="text-sm font-medium">{t('membership.features.downloads')} {t('membership.features.unlimited')}</span>
               </div>
               <div className="flex items-center gap-3">
                 <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
-                <span className="text-sm font-medium">Tracks completos (sin límite)</span>
+                <span className="text-sm font-medium">{t('membership.features.complete')}</span>
               </div>
               <div className="flex items-center gap-3">
                 <Check className="h-5 w-5 text-green-500 flex-shrink-0" />

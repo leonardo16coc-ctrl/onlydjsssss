@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Upload as UploadIcon, Sparkles, Loader2, Image as ImageIcon, CheckCircle2, Lock, CreditCard } from "lucide-react";
 import { useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import { MusicAnalysisDisplay } from "@/components/MusicAnalysisDisplay";
@@ -18,6 +19,7 @@ import { useLocation } from "wouter";
 
 export default function Upload() {
   const { user, isAuthenticated } = useAuth();
+  const { t } = useTranslation();
   const [, setLocation] = useLocation();
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");
@@ -64,13 +66,13 @@ export default function Upload() {
       // Validate file type
       const validTypes = ["audio/mpeg", "audio/mp3", "audio/wav", "audio/wave", "audio/x-wav"];
       if (!validTypes.includes(file.type)) {
-        toast.error("Formato no válido. Solo se aceptan MP3 y WAV");
+        toast.error(t('upload.invalidFormat'));
         return;
       }
       
       // Validate file size (100MB max)
       if (file.size > 100 * 1024 * 1024) {
-        toast.error("El archivo es demasiado grande. Máximo 100MB");
+        toast.error(t('upload.fileTooLarge'));
         return;
       }
       
@@ -89,13 +91,13 @@ export default function Upload() {
     if (file) {
       // Validate file type
       if (!file.type.startsWith("image/")) {
-        toast.error("Solo se aceptan archivos de imagen");
+        toast.error(t('upload.imageOnly'));
         return;
       }
       
       // Validate file size (10MB max)
       if (file.size > 10 * 1024 * 1024) {
-        toast.error("La imagen es demasiado grande. Máximo 10MB");
+        toast.error(t('upload.imageTooLarge'));
         return;
       }
       
@@ -114,7 +116,7 @@ export default function Upload() {
 
   const handleUploadAudio = async () => {
     if (!audioFile) {
-      toast.error("Selecciona un archivo de audio");
+      toast.error(t('upload.chooseFile'));
       return;
     }
 
@@ -142,7 +144,7 @@ export default function Upload() {
       });
       setAudioUploaded(true);
       setUploadProgress(100);
-      toast.success("Audio subido correctamente");
+      toast.success(t('upload.uploadSuccess'));
 
       // Auto-analyze after upload
       handleAnalyzeAudio(data.fileUrl);
@@ -155,7 +157,7 @@ export default function Upload() {
 
   const handleUploadCover = async () => {
     if (!coverImage) {
-      toast.error("Selecciona una imagen de portada");
+      toast.error(t('upload.chooseFile'));
       return;
     }
 
@@ -181,7 +183,7 @@ export default function Upload() {
         fileUrl: data.fileUrl,
       });
       setCoverUploaded(true);
-      toast.success("Portada subida correctamente");
+      toast.success(t('upload.uploadSuccess'));
     } catch (error: any) {
       toast.error(error.message || "Error al subir la portada");
     } finally {
@@ -192,7 +194,7 @@ export default function Upload() {
   const handleAnalyzeAudio = async (audioUrl?: string) => {
     const urlToAnalyze = audioUrl || uploadedAudio?.fileUrl;
     if (!urlToAnalyze) {
-      toast.error("Primero sube el archivo de audio");
+      toast.error(t('upload.uploadAudio'));
       return;
     }
 
@@ -205,7 +207,7 @@ export default function Upload() {
       if (result.bpm) setBpm(result.bpm.toString());
       if (result.musicalKey) setMusicalKey(result.musicalKey);
       
-      toast.success("Análisis completado");
+      toast.success(t('upload.analysisComplete'));
     } catch (error: any) {
       toast.error(error.message || "Error al analizar el audio");
     } finally {
@@ -216,7 +218,7 @@ export default function Upload() {
   const handleSubmit = async () => {
     // Check membership
     if (isFreeUser) {
-      toast.error("¡Último paso! Necesitas membresía para publicar", {
+      toast.error(t('upload.membershipRequired'), {
         description: "Has completado todo el proceso. Suscríbete por $4.99/mes para publicar tu track y empezar a ganar dinero.",
         duration: 8000,
         action: {
@@ -229,11 +231,11 @@ export default function Upload() {
 
     // Validate required fields
     if (!uploadedAudio) {
-      toast.error("Primero sube el archivo de audio");
+      toast.error(t('upload.uploadAudio'));
       return;
     }
     if (!title || !artist || !genre || !trackType) {
-      toast.error("Completa todos los campos requeridos");
+      toast.error(t('common.error'));
       return;
     }
 
@@ -253,7 +255,7 @@ export default function Upload() {
         mood: analysisResult?.mood,
       });
 
-      toast.success("Track publicado exitosamente");
+      toast.success(t('upload.publishSuccess'));
       
       // Reset form
       setTitle("");
@@ -287,10 +289,10 @@ export default function Upload() {
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
             <h1 className="text-4xl font-bold mb-2 text-gradient">
-              Subir Track
+              {t('upload.title')}
             </h1>
             <p className="text-muted-foreground">
-              Comparte tu música con la comunidad de DJs
+              {t('upload.subtitle')}
             </p>
           </div>
 
@@ -299,12 +301,12 @@ export default function Upload() {
             <div className="space-y-6">
               {/* Audio File Upload */}
               <Card className="p-6">
-                <h3 className="font-bold text-lg mb-4">Archivo de Audio</h3>
+                <h3 className="font-bold text-lg mb-4">{t('upload.audioFile')}</h3>
                 
                 <div className="space-y-4">
                   <div>
                     <Label htmlFor="audio-file">
-                      Archivo MP3 320kbps o WAV (máx 100MB)
+                      {t('upload.audioFileDesc')}
                     </Label>
                     <Input
                       id="audio-file"
@@ -388,7 +390,7 @@ export default function Upload() {
 
               {/* Cover Image Upload */}
               <Card className="p-6">
-                <h3 className="font-bold text-lg mb-4">Imagen de Portada</h3>
+                <h3 className="font-bold text-lg mb-4">{t('upload.coverImage')}</h3>
                 
                 <div className="space-y-4">
                   <div>
@@ -465,7 +467,7 @@ export default function Upload() {
                       ) : (
                         <>
                           <Sparkles className="h-4 w-4 mr-2" />
-                          Analizar con IA
+                          {t('upload.analyzeWithAI')}
                         </>
                       )}
                     </Button>
@@ -493,31 +495,30 @@ export default function Upload() {
             {/* Right Column - Track Info */}
             <div className="space-y-6">
               <Card className="p-6">
-                <h3 className="font-bold text-lg mb-4">Información del Track</h3>
+                <h3 className="font-bold text-lg mb-4">{t('upload.trackInfo')}</h3>
                 
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="title">Título *</Label>
+                    <Label htmlFor="title">{t('upload.titleLabel')} *</Label>
                     <Input
                       id="title"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      placeholder="Nombre del track"
+                      placeholder={t('upload.titlePlaceholder')}
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="artist">Artista *</Label>
+                    <Label htmlFor="artist">{t('upload.artistLabel')} *</Label>
                     <Input
                       id="artist"
                       value={artist}
                       onChange={(e) => setArtist(e.target.value)}
-                      placeholder="Nombre del artista"
-                    />
+                      placeholder={t('upload.artistPlaceholder')}                    />
                   </div>
 
                   <div>
-                    <Label htmlFor="genre">Género *</Label>
+                    <Label htmlFor="genre">{t('upload.genreLabel')} *</Label>
                     <Select value={genre} onValueChange={setGenre}>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecciona un género" />
@@ -540,7 +541,7 @@ export default function Upload() {
                   </div>
 
                   <div>
-                    <Label htmlFor="trackType">Tipo de Track *</Label>
+                    <Label htmlFor="trackType">{t('upload.typeLabel')} *</Label>
                     <Select value={trackType} onValueChange={setTrackType}>
                       <SelectTrigger>
                         <SelectValue placeholder="Selecciona el tipo" />
@@ -600,7 +601,7 @@ export default function Upload() {
                 ) : (
                   <>
                     <UploadIcon className="h-5 w-5 mr-2" />
-                    Publicar Track
+                    {isFreeUser ? t('upload.subscribeToPublish') : t('upload.publish')}
                   </>
                 )}
               </Button>

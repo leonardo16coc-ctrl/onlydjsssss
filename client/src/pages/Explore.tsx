@@ -5,6 +5,7 @@ import { trpc } from "@/lib/trpc";
 import { Music, Play, Download, Heart, TrendingUp } from "lucide-react";
 import { MusicAnalysisDisplay } from "@/components/MusicAnalysisDisplay";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import AdvancedFilters, { SearchFilters } from "@/components/AdvancedFilters";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
@@ -15,6 +16,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 
 export default function Explore() {
   const { isAuthenticated } = useAuth();
+  const { t } = useTranslation();
   const [filters, setFilters] = useState<SearchFilters>({});
   const [offset, setOffset] = useState(0);
   const limit = 20;
@@ -47,9 +49,9 @@ export default function Explore() {
       <Navbar />
       <div className="container py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 text-glow-cyan">Explorar Música</h1>
+          <h1 className="text-4xl font-bold mb-2 text-glow-cyan">{t('explore.title')}</h1>
           <p className="text-muted-foreground">
-            Descubre tracks profesionales para tus sets. Usa los filtros para encontrar música compatible.
+            {t('explore.subtitle')}
           </p>
         </div>
 
@@ -74,13 +76,13 @@ export default function Explore() {
         {isLoading ? (
           <div className="text-center py-20">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-            <p className="text-muted-foreground mt-4">Buscando tracks...</p>
+            <p className="text-muted-foreground mt-4">{t('explore.searchingTracks')}</p>
           </div>
         ) : searchResults && searchResults.tracks.length > 0 ? (
           <>
             {/* Results Count */}
             <div className="mb-4 text-sm text-muted-foreground">
-              {searchResults.total} tracks encontrados
+              {searchResults.total} {t('explore.tracksFound')}
             </div>
 
             {/* Tracks Grid */}
@@ -113,7 +115,7 @@ export default function Explore() {
                     {track.downloadCount && track.downloadCount > 100 && (
                       <Badge className="absolute top-2 right-2 bg-primary/90">
                         <TrendingUp className="h-3 w-3 mr-1" />
-                        Trending
+                        {t('explore.trending')}
                       </Badge>
                     )}
                   </div>
@@ -149,7 +151,7 @@ export default function Explore() {
                   {/* Artist Info */}
                   {track.artistInfo && (
                     <div className="flex items-center gap-2 mb-4 text-sm">
-                      <span className="text-muted-foreground">Por:</span>
+                      <span className="text-muted-foreground">{t('explore.by')}</span>
                       <a 
                         href={`/dj/${track.artistInfo.username}`}
                         className="text-primary hover:underline font-medium"
@@ -158,7 +160,7 @@ export default function Explore() {
                       </a>
                       {track.artistInfo.isVerified && (
                         <Badge variant="default" className="text-xs">
-                          Verificado
+                          {t('explore.verified')}
                         </Badge>
                       )}
                     </div>
@@ -168,7 +170,7 @@ export default function Explore() {
                   <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
                     <span className="flex items-center gap-1">
                       <Download className="h-4 w-4" />
-                      {track.downloadCount || 0} descargas
+                      {track.downloadCount || 0} {t('explore.downloads')}
                     </span>
                   </div>
 
@@ -204,7 +206,7 @@ export default function Explore() {
                   size="lg"
                   disabled={isLoading}
                 >
-                  {isLoading ? "Cargando..." : "Cargar más"}
+                  {isLoading ? t('explore.loading') : t('explore.loadMore')}
                 </Button>
               </div>
             )}
@@ -212,9 +214,9 @@ export default function Explore() {
         ) : (
           <div className="text-center py-20">
             <Music className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-            <p className="text-xl font-semibold mb-2">No se encontraron tracks</p>
+            <p className="text-xl font-semibold mb-2">{t('explore.noTracksFound')}</p>
             <p className="text-muted-foreground">
-              Intenta ajustar los filtros o buscar con otros términos
+              {t('explore.adjustFilters')}
             </p>
           </div>
         )}
