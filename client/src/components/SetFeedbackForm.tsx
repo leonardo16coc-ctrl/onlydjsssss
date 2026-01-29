@@ -7,6 +7,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Star, Send, CheckCircle2 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 interface SetFeedbackFormProps {
   setId: number;
@@ -21,32 +22,40 @@ interface SetFeedbackFormProps {
   onSuccess?: () => void;
 }
 
-const workedWellOptions = [
-  { value: "transiciones", label: "Transiciones suaves" },
-  { value: "energia", label: "Curva de energía" },
-  { value: "compatibilidad", label: "Compatibilidad armónica" },
-  { value: "flow", label: "Flow general" },
-  { value: "timing", label: "Timing perfecto" },
-];
+// workedWellOptions moved to component body to access t()
 
-const needsImprovementOptions = [
-  { value: "bpm", label: "Rango de BPM" },
-  { value: "key", label: "Compatibilidad de keys" },
-  { value: "orden", label: "Orden de tracks" },
-  { value: "duracion", label: "Duración del set" },
-  { value: "variedad", label: "Variedad de estilos" },
-];
+// needsImprovementOptions moved to component body to access t()
 
-const venueTypes = [
-  { value: "club", label: "🎧 Club" },
-  { value: "festival", label: "🎪 Festival" },
-  { value: "bar", label: "🍺 Bar/Lounge" },
-  { value: "radio", label: "📻 Radio Show" },
-  { value: "stream", label: "📡 Live Stream" },
-  { value: "other", label: "🎵 Otro" },
-];
+// venueTypes moved to component body to access t()
 
 export default function SetFeedbackForm({ setId, existingFeedback, onSuccess }: SetFeedbackFormProps) {
+  const { t } = useTranslation();
+  
+  const workedWellOptions = [
+    { value: "transiciones", label: t("feedbackForm.smoothTransitions") },
+    { value: "energia", label: t("feedbackForm.energyCurve") },
+    { value: "compatibilidad", label: t("feedbackForm.harmonicCompatibility") },
+    { value: "flow", label: t("feedbackForm.overallFlow") },
+    { value: "timing", label: t("feedbackForm.perfectTiming") },
+  ];
+
+  const needsImprovementOptions = [
+    { value: "bpm", label: t("feedbackForm.bpmRange") },
+    { value: "key", label: t("feedbackForm.keyCompatibility") },
+    { value: "orden", label: t("feedbackForm.trackOrder") },
+    { value: "duracion", label: t("feedbackForm.setDuration") },
+    { value: "variedad", label: t("feedbackForm.styleVariety") },
+  ];
+
+  const venueTypes = [
+    { value: "club", label: t("feedbackForm.club") },
+    { value: "festival", label: t("feedbackForm.festival") },
+    { value: "bar", label: t("feedbackForm.bar") },
+    { value: "radio", label: t("feedbackForm.radio") },
+    { value: "stream", label: t("feedbackForm.stream") },
+    { value: "other", label: t("feedbackForm.other") },
+  ];
+  
   const [rating, setRating] = useState(existingFeedback?.rating || 0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [comment, setComment] = useState(existingFeedback?.comment || "");
@@ -65,7 +74,7 @@ export default function SetFeedbackForm({ setId, existingFeedback, onSuccess }: 
       if (onSuccess) onSuccess();
     },
     onError: (error) => {
-      toast.error(error.message || "Error al enviar feedback");
+      toast.error(error.message || t("feedbackForm.errorSending"));
     },
   });
 
@@ -83,7 +92,7 @@ export default function SetFeedbackForm({ setId, existingFeedback, onSuccess }: 
 
   const handleSubmit = () => {
     if (rating === 0) {
-      toast.error("Por favor selecciona una calificación");
+      toast.error(t("feedbackForm.selectRating"));
       return;
     }
 
@@ -102,7 +111,7 @@ export default function SetFeedbackForm({ setId, existingFeedback, onSuccess }: 
     <div className="space-y-6">
       {/* Rating con estrellas */}
       <div>
-        <Label className="text-white mb-2 block">Calificación general</Label>
+        <Label className="text-white mb-2 block">{t("feedbackForm.overallRating")}</Label>
         <div className="flex gap-2">
           {[1, 2, 3, 4, 5].map((star) => (
             <button
@@ -125,11 +134,11 @@ export default function SetFeedbackForm({ setId, existingFeedback, onSuccess }: 
         </div>
         {rating > 0 && (
           <p className="text-sm text-gray-400 mt-1">
-            {rating === 5 && "¡Excelente! 🔥"}
-            {rating === 4 && "Muy bueno 👍"}
-            {rating === 3 && "Bueno 👌"}
-            {rating === 2 && "Regular 😐"}
-            {rating === 1 && "Necesita mejoras 🤔"}
+            {rating === 5 && t("feedbackForm.excellent")}
+            {rating === 4 && t("feedbackForm.veryGood")}
+            {rating === 3 && t("feedbackForm.good")}
+            {rating === 2 && t("feedbackForm.fair")}
+            {rating === 1 && t("feedbackForm.needsImprovement")}
           </p>
         )}
       </div>
@@ -143,14 +152,14 @@ export default function SetFeedbackForm({ setId, existingFeedback, onSuccess }: 
           id="comment"
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-          placeholder="Cuéntanos tu experiencia con este set..."
+          placeholder={t("feedbackForm.commentPlaceholder")}
           className="bg-slate-800 border-cyan-500/30 text-white min-h-[100px]"
         />
       </div>
 
       {/* ¿Qué funcionó bien? */}
       <div>
-        <Label className="text-white mb-2 block">¿Qué funcionó bien?</Label>
+        <Label className="text-white mb-2 block">{t("feedbackForm.whatWorkedWell")}</Label>
         <div className="grid grid-cols-2 gap-2">
           {workedWellOptions.map((option) => (
             <div key={option.value} className="flex items-center space-x-2">
@@ -173,7 +182,7 @@ export default function SetFeedbackForm({ setId, existingFeedback, onSuccess }: 
 
       {/* ¿Qué mejorar? */}
       <div>
-        <Label className="text-white mb-2 block">¿Qué se puede mejorar?</Label>
+        <Label className="text-white mb-2 block">{t("feedbackForm.whatToImprove")}</Label>
         <div className="grid grid-cols-2 gap-2">
           {needsImprovementOptions.map((option) => (
             <div key={option.value} className="flex items-center space-x-2">
@@ -211,7 +220,7 @@ export default function SetFeedbackForm({ setId, existingFeedback, onSuccess }: 
       {/* Tipo de venue */}
       {usedInLive && (
         <div>
-          <Label className="text-white mb-2 block">¿Dónde lo usaste?</Label>
+          <Label className="text-white mb-2 block">{t("feedbackForm.whereUsed")}</Label>
           <RadioGroup value={venueType} onValueChange={setVenueType}>
             <div className="grid grid-cols-2 gap-2">
               {venueTypes.map((venue) => (
@@ -241,7 +250,7 @@ export default function SetFeedbackForm({ setId, existingFeedback, onSuccess }: 
         className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600"
       >
         <Send className="w-4 h-4 mr-2" />
-        {submitFeedbackMutation.isPending ? "Enviando..." : existingFeedback ? "Actualizar Feedback" : "Enviar Feedback"}
+        {submitFeedbackMutation.isPending ? t("feedbackForm.sending") : existingFeedback ? t("feedbackForm.updateFeedback") : t("feedbackForm.sendFeedback")}
       </Button>
     </div>
   );

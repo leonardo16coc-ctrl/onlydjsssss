@@ -6,6 +6,7 @@ import { Music, Zap, ArrowRight, MessageSquare } from "lucide-react";
 import SetFeedbackForm from "./SetFeedbackForm";
 import { trpc } from "@/lib/trpc";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface Track {
   id: number;
@@ -58,6 +59,7 @@ const compatibilityColors: Record<string, string> = {
 };
 
 export default function SetDetailsModal({ open, onOpenChange, setData }: SetDetailsModalProps) {
+  const { t } = useTranslation();
   const [showFeedback, setShowFeedback] = useState(false);
 
   const { data: existingFeedback } = trpc.setFeedback.getSetFeedback.useQuery(
@@ -86,17 +88,17 @@ export default function SetDetailsModal({ open, onOpenChange, setData }: SetDeta
           {/* Stats */}
           <div className="grid grid-cols-3 gap-4">
             <div className="bg-slate-800/50 rounded-lg p-4 border border-cyan-500/20">
-              <p className="text-xs text-gray-400 mb-1">Tipo de Set</p>
+              <p className="text-xs text-gray-400 mb-1">{t("modal.setType")}</p>
               <p className="text-lg font-semibold text-white capitalize">
                 {setData.setType.replace('_', ' ')}
               </p>
             </div>
             <div className="bg-slate-800/50 rounded-lg p-4 border border-purple-500/20">
-              <p className="text-xs text-gray-400 mb-1">BPM Promedio</p>
+              <p className="text-xs text-gray-400 mb-1">{t("modal.avgBpm")}</p>
               <p className="text-lg font-semibold text-white">{setData.avgBpm || "N/A"}</p>
             </div>
             <div className="bg-slate-800/50 rounded-lg p-4 border border-pink-500/20">
-              <p className="text-xs text-gray-400 mb-1">Compatibilidad</p>
+              <p className="text-xs text-gray-400 mb-1">{t("modal.compatibility")}</p>
               <p className="text-lg font-semibold text-white">{setData.keyCompatibility}%</p>
             </div>
           </div>
@@ -121,7 +123,7 @@ export default function SetDetailsModal({ open, onOpenChange, setData }: SetDeta
 
           {/* Tracks List */}
           <div className="bg-slate-800/30 rounded-lg p-6 border border-purple-500/20">
-            <h3 className="text-lg font-semibold text-purple-400 mb-4">🎵 Tracks del Set</h3>
+            <h3 className="text-lg font-semibold text-purple-400 mb-4">{t("modal.tracksList")}</h3>
             <div className="space-y-3">
               {tracks.map((track, idx) => (
                 <div key={track.id}>
@@ -208,7 +210,7 @@ export default function SetDetailsModal({ open, onOpenChange, setData }: SetDeta
           {/* Transitions Summary */}
           {transitions.length > 0 && (
             <div className="bg-slate-800/30 rounded-lg p-6 border border-yellow-500/20">
-              <h3 className="text-lg font-semibold text-yellow-400 mb-4">🎛️ Guía de Mezcla</h3>
+              <h3 className="text-lg font-semibold text-yellow-400 mb-4">{t("modal.mixingGuide")}</h3>
               <p className="text-sm text-gray-400 mb-4">
                 Técnicas recomendadas para cada transición del set
               </p>

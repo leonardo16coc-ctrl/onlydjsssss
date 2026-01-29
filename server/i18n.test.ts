@@ -369,4 +369,48 @@ describe('i18n Translation System', () => {
       });
     });
   });
+
+  describe("Modals and Forms Translations", () => {
+    const translations = { en: enCommon, es: esCommon, "pt-BR": ptBRCommon, fr: frCommon, de: deCommon };
+    const languages = ["en", "es", "pt-BR", "fr", "de"];
+
+    it("should have SetDetailsModal translations in all languages", () => {
+      const keys = ["setType", "avgBpm", "compatibility", "energyCurve", "tracksList", "feedback", "rateSet", "mixingGuide", "mixingGuideDesc"];
+      
+      for (const lang of languages) {
+        for (const key of keys) {
+          expect(translations[lang].modal[key]).toBeDefined();
+          expect(translations[lang].modal[key]).not.toBe("");
+        }
+      }
+    });
+
+    it("should have SetFeedbackForm translations in all languages", () => {
+      const keys = ["overallRating", "excellent", "veryGood", "good", "fair", "needsImprovement", 
+                    "commentOptional", "commentPlaceholder", "whatWorkedWell", "whatToImprove", 
+                    "usedLive", "whereUsed", "sending", "updateFeedback", "sendFeedback", "selectRating",
+                    "smoothTransitions", "energyCurve", "harmonicCompatibility", "overallFlow", "perfectTiming",
+                    "bpmRange", "keyCompatibility", "trackOrder", "setDuration", "styleVariety",
+                    "club", "festival", "bar", "radio", "stream", "other", "errorSending"];
+      
+      for (const lang of languages) {
+        for (const key of keys) {
+          expect(translations[lang].feedbackForm[key]).toBeDefined();
+          expect(translations[lang].feedbackForm[key]).not.toBe("");
+        }
+      }
+    });
+
+    it("should have ProfileEdit validation translations in all languages", () => {
+      const keys = ["invalidFormat", "imageTooLarge", "errorReadingImage", "profileImageUpdated", 
+                    "errorUploadingImage", "profileUpdated", "errorUpdatingProfile"];
+      
+      for (const lang of languages) {
+        for (const key of keys) {
+          expect(translations[lang].profile[key]).toBeDefined();
+          expect(translations[lang].profile[key]).not.toBe("");
+        }
+      }
+    });
+  });
 });

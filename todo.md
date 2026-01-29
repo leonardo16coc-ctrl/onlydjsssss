@@ -1451,8 +1451,8 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Traducir DownloadButton (estados, mensajes)
 - [x] Traducir AudioPlayer (controles, preview messages)
 - [x] Traducir Toast notifications (success, error, info)
-- [ ] Traducir Forms (labels, placeholders, validation)
-- [ ] Traducir Modals (títulos, descripciones, botones)
+- [x] Traducir Forms (labels, placeholders, validation)
+- [x] Traducir Modals (títulos, descripciones, botones)
 
 ### SEO Internacional
 - [ ] Agregar meta tags de idioma en HTML
@@ -1465,7 +1465,7 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Test de persistencia en localStorage
 - [x] Test de detección automática de navegador
 - [x] Test de fallback a inglés
-- [x] Verificar que todas las traducciones están completas (37/37 tests pasando)
+- [x] Verificar que todas las traducciones están completas (40/40 tests pasando)
 
 
 ## 57. Traducir Páginas Restantes al Sistema i18n (NUEVO)
@@ -1515,3 +1515,16 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Modificar Dashboard.tsx para usar useTranslation
 - [x] Verificar funcionamiento en navegador
 - [x] Crear/actualizar tests de traducción (37/37 tests pasando)
+
+
+## 61. Traducir Modales, Formularios y Diálogos al Sistema i18n (NUEVO)
+- [x] Identificar todos los modales en el proyecto (SetDetailsModal, etc.)
+- [x] Identificar todos los formularios con validación
+- [x] Identificar diálogos de confirmación
+- [x] Actualizar archivos JSON con traducciones de modales (5 idiomas)
+- [x] Actualizar archivos JSON con traducciones de formularios (5 idiomas)
+- [x] Actualizar archivos JSON con traducciones de diálogos (5 idiomas)
+- [x] Modificar componentes de modales para usar useTranslation
+- [x] Modificar componentes de formularios para usar useTranslation
+- [x] Verificar funcionamiento en navegador
+- [x] Crear/actualizar tests de traducción (40/40 tests pasando)

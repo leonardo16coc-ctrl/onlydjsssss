@@ -10,9 +10,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 import { User, Loader2, Upload as UploadIcon, Save, Image as ImageIcon } from "lucide-react";
 
 export default function ProfileEdit() {
+  const { t } = useTranslation();
   const { user, isAuthenticated } = useAuth();
   const [username, setUsername] = useState("");
   const [djName, setDjName] = useState("");
@@ -57,13 +59,13 @@ export default function ProfileEdit() {
       // Validate file type
       const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
       if (!validTypes.includes(file.type)) {
-        toast.error("Formato no válido. Solo se aceptan JPG, PNG y WebP");
+        toast.error(t("profile.invalidFormat"));
         return;
       }
       
       // Validate file size (10MB max)
       if (file.size > 10 * 1024 * 1024) {
-        toast.error("La imagen es demasiado grande. Máximo 10MB");
+        toast.error(t("profile.imageTooLarge"));
         return;
       }
       
@@ -89,7 +91,7 @@ export default function ProfileEdit() {
       reader.onload = async () => {
         const base64 = reader.result?.toString().split(",")[1];
         if (!base64) {
-          toast.error("Error al leer la imagen");
+          toast.error(t("profile.errorReadingImage"));
           setIsUploadingImage(false);
           return;
         }
@@ -101,10 +103,10 @@ export default function ProfileEdit() {
             fileName: profileImage.name,
           });
 
-          toast.success("¡Imagen de perfil actualizada!");
+          toast.success(t("profile.profileImageUpdated"));
           setProfileImage(null);
         } catch (error) {
-          toast.error("Error al subir la imagen");
+          toast.error(t("profile.errorUploadingImage"));
           console.error(error);
         } finally {
           setIsUploadingImage(false);
@@ -112,13 +114,13 @@ export default function ProfileEdit() {
       };
 
       reader.onerror = () => {
-        toast.error("Error al leer la imagen");
+        toast.error(t("profile.errorReadingImage"));
         setIsUploadingImage(false);
       };
 
       reader.readAsDataURL(profileImage);
     } catch (error) {
-      toast.error("Error al subir la imagen");
+      toast.error(t("profile.errorUploadingImage"));
       setIsUploadingImage(false);
     }
   };
@@ -140,9 +142,9 @@ export default function ProfileEdit() {
         socialLinks: Object.keys(socialLinks).length > 0 ? socialLinks : undefined,
       });
 
-      toast.success("¡Perfil actualizado exitosamente!");
+      toast.success(t("profile.profileUpdated"));
     } catch (error: any) {
-      toast.error(error.message || "Error al actualizar el perfil");
+      toast.error(error.message || t("profile.errorUpdatingProfile"));
       console.error(error);
     }
   };
