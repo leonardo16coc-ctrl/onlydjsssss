@@ -1588,3 +1588,13 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Implementar lógica para mostrar datos demo vs datos reales
 - [x] Verificar funcionamiento en preview
 - [x] Guardar checkpoint
+
+
+## 72. Agregar Badge "Modo Demo" con Tooltip en Dashboard y DJ Mode (NUEVO)
+- [x] Agregar badge "Modo Demo" en Dashboard (solo visible para no autenticados)
+- [x] Agregar tooltip explicativo en Dashboard badge
+- [x] Agregar badge "Modo Demo" en DJ Mode (solo visible para no autenticados)
+- [x] Agregar tooltip explicativo en DJ Mode badge
+- [x] Agregar traducciones en 5 idiomas
+- [x] Verificar funcionamiento en preview
+- [x] Guardar checkpoint

@@ -340,7 +340,9 @@
     "clickDetails": "Klicken Sie, um Details anzuzeigen →",
     "compatibility": "Kompatibilität",
     "loginRequired": "Anmeldung Erforderlich",
-    "loginRequiredDesc": "Bitte melden Sie sich an, um DJ Mode-Funktionen zu nutzen"
+    "loginRequiredDesc": "Bitte melden Sie sich an, um DJ Mode-Funktionen zu nutzen",
+    "demoMode": "Demo-Modus",
+    "demoModeTooltip": "Registrieren Sie sich, um Ihre echten Statistiken zu sehen und alle Funktionen freizuschalten"
   },
   "mainstage": {
     "loading": "Lade MAINSTAGE MODE...",
@@ -380,7 +382,9 @@
     "availableBalance": "Verfügbares Guthaben",
     "pendingBalance": "Ausstehendes Guthaben",
     "recentActivity": "Letzte Aktivität",
-    "recentActivityDesc": "Demnächst: Download- und Einnahmenverlauf"
+    "recentActivityDesc": "Demnächst: Download- und Einnahmenverlauf",
+    "demoMode": "Demo-Modus",
+    "demoModeTooltip": "Registrieren Sie sich, um Ihre echten Statistiken zu sehen und alle Funktionen freizuschalten"
   },
   "modal": {
     "setType": "Set-Typ",

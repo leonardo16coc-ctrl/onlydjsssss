@@ -1,7 +1,14 @@
 import Navbar from "@/components/Navbar";
 import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { trpc } from "@/lib/trpc";
-import { DollarSign, Download, Music, TrendingUp } from "lucide-react";
+import { DollarSign, Download, Music, TrendingUp, Info } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useTranslation } from "react-i18next";
 
@@ -34,7 +41,24 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="container py-8">
-        <h1 className="text-4xl font-bold mb-8 text-glow-cyan">{t("dashboard.title")}</h1>
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-4xl font-bold text-glow-cyan">{t("dashboard.title")}</h1>
+          {!isAuthenticated && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Badge variant="outline" className="border-yellow-500 text-yellow-400 bg-yellow-500/10 px-4 py-2 text-sm cursor-help flex items-center gap-2">
+                    <Info className="h-4 w-4" />
+                    {t("dashboard.demoMode")}
+                  </Badge>
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs">
+                  <p>{t("dashboard.demoModeTooltip")}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+        </div>
 
         {isLoading && isAuthenticated ? (
           <div className="text-center py-20">

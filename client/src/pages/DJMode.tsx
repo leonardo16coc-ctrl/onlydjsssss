@@ -21,8 +21,15 @@ import {
   Flame,
   Rocket,
   Heart,
-  Share2
+  Share2,
+  Info
 } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Link } from "wouter";
 import DJDNABadge from "@/components/DJDNABadge";
 import BadgeCard from "@/components/BadgeCard";
@@ -151,9 +158,26 @@ export default function DJMode() {
               </h1>
               <p className="text-gray-400 mt-1">{t("djMode.subtitle")}</p>
             </div>
-            <Badge variant="outline" className="border-cyan-500 text-cyan-400 text-lg px-4 py-2">
-              {t("djMode.profileScore")}: {profile?.profileScore || 0}/100
-            </Badge>
+            <div className="flex items-center gap-3">
+              {!isAuthenticated && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Badge variant="outline" className="border-yellow-500 text-yellow-400 bg-yellow-500/10 px-4 py-2 text-sm cursor-help flex items-center gap-2">
+                        <Info className="h-4 w-4" />
+                        {t("djMode.demoMode")}
+                      </Badge>
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-xs">
+                      <p>{t("djMode.demoModeTooltip")}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+              <Badge variant="outline" className="border-cyan-500 text-cyan-400 text-lg px-4 py-2">
+                {t("djMode.profileScore")}: {profile?.profileScore || 0}/100
+              </Badge>
+            </div>
           </div>
         </div>
       </div>

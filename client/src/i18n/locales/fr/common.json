@@ -340,7 +340,9 @@
     "clickDetails": "Cliquez pour voir les détails →",
     "compatibility": "Compatibilité",
     "loginRequired": "Connexion Requise",
-    "loginRequiredDesc": "Veuillez vous connecter pour utiliser les fonctionnalités DJ Mode"
+    "loginRequiredDesc": "Veuillez vous connecter pour utiliser les fonctionnalités DJ Mode",
+    "demoMode": "Mode Démo",
+    "demoModeTooltip": "Inscrivez-vous pour voir vos statistiques réelles et débloquer toutes les fonctionnalités"
   },
   "mainstage": {
     "loading": "Chargement de MAINSTAGE MODE...",
@@ -380,7 +382,9 @@
     "availableBalance": "Solde Disponible",
     "pendingBalance": "Solde En Attente",
     "recentActivity": "Activité Récente",
-    "recentActivityDesc": "Prochainement : historique des téléchargements et des gains"
+    "recentActivityDesc": "Prochainement : historique des téléchargements et des gains",
+    "demoMode": "Mode Démo",
+    "demoModeTooltip": "Inscrivez-vous pour voir vos statistiques réelles et débloquer toutes les fonctionnalités"
   },
   "modal": {
     "setType": "Type de Set",
