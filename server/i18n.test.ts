@@ -247,4 +247,48 @@ describe('i18n Translation System', () => {
       expect(deCommon.download.download).toBeDefined();
     });
   });
+
+  describe('Footer Component Keys', () => {
+    it('should have footer keys in English', () => {
+      expect(enCommon.footer.tagline).toBeDefined();
+      expect(enCommon.footer.product).toBe('Product');
+      expect(enCommon.footer.company).toBe('Company');
+      expect(enCommon.footer.legal).toBe('Legal');
+      expect(enCommon.footer.support).toBe('Support');
+      expect(enCommon.footer.about).toBe('About');
+      expect(enCommon.footer.privacy).toBe('Privacy Policy');
+      expect(enCommon.footer.terms).toBe('Terms of Service');
+      expect(enCommon.footer.rights).toBe('All rights reserved.');
+      expect(enCommon.footer.madeWith).toBe('Made with');
+      expect(enCommon.footer.forDJs).toBe('for DJs worldwide');
+    });
+
+    it('should have footer keys in Spanish', () => {
+      expect(esCommon.footer.tagline).toBeDefined();
+      expect(esCommon.footer.product).toBe('Producto');
+      expect(esCommon.footer.company).toBe('Empresa');
+      expect(esCommon.footer.legal).toBe('Legal');
+      expect(esCommon.footer.support).toBe('Soporte');
+      expect(esCommon.footer.about).toBe('Acerca de');
+      expect(esCommon.footer.privacy).toBe('Política de Privacidad');
+      expect(esCommon.footer.terms).toBe('Términos de Servicio');
+      expect(esCommon.footer.rights).toBe('Todos los derechos reservados.');
+      expect(esCommon.footer.madeWith).toBe('Hecho con');
+      expect(esCommon.footer.forDJs).toBe('para DJs de todo el mundo');
+    });
+
+    it('should have footer keys in all languages', () => {
+      expect(enCommon.footer.product).toBeDefined();
+      expect(esCommon.footer.product).toBeDefined();
+      expect(ptBRCommon.footer.product).toBeDefined();
+      expect(frCommon.footer.product).toBeDefined();
+      expect(deCommon.footer.product).toBeDefined();
+      
+      expect(enCommon.footer.tagline).toBeDefined();
+      expect(esCommon.footer.tagline).toBeDefined();
+      expect(ptBRCommon.footer.tagline).toBeDefined();
+      expect(frCommon.footer.tagline).toBeDefined();
+      expect(deCommon.footer.tagline).toBeDefined();
+    });
+  });
 });

@@ -249,5 +249,27 @@
     "membershipRequired": "Necesitas una membresía activa para descargar",
     "membershipDesc": "Suscríbete por $4.99/mes para acceso ilimitado",
     "downloadError": "Error al descargar el track"
+  },
+  "footer": {
+    "tagline": "La plataforma #1 para DJs. Descarga, sube y monetiza música profesional.",
+    "product": "Producto",
+    "company": "Empresa",
+    "legal": "Legal",
+    "support": "Soporte",
+    "about": "Acerca de",
+    "blog": "Blog",
+    "careers": "Carreras",
+    "contact": "Contacto",
+    "privacy": "Política de Privacidad",
+    "terms": "Términos de Servicio",
+    "cookies": "Política de Cookies",
+    "dmca": "DMCA",
+    "help": "Centro de Ayuda",
+    "faq": "Preguntas Frecuentes",
+    "community": "Comunidad",
+    "feedback": "Comentarios",
+    "rights": "Todos los derechos reservados.",
+    "madeWith": "Hecho con",
+    "forDJs": "para DJs de todo el mundo"
   }
 }

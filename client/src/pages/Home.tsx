@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import { Music2, TrendingUp, DollarSign, Sparkles, Shield, Zap, Upload } from "lucide-react";
 import MonetizationSection from "@/components/MonetizationSection";
 import { useTranslation } from "react-i18next";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   const { t } = useTranslation();
@@ -138,11 +139,7 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="py-8 border-t border-border">
-        <div className="container text-center text-muted-foreground">
-          <p>{t('home.footer.copyright')}</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
