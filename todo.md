@@ -1539,3 +1539,14 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar lógica para respetar selección manual del usuario
 - [x] Verificar funcionamiento en diferentes navegadores
 - [x] Crear/actualizar tests de detección de idioma (49/49 tests pasando)
+
+
+## 64. Traducir Sección de Monetización en Home (NUEVO)
+- [x] Identificar textos no traducidos en sección "Monetiza Tu Música"
+- [x] Identificar textos en cards de features (Gana por Descarga, Tracking, Audiencia Global)
+- [x] Identificar textos en sección "¿Cómo Funciona?" (pasos 1, 2, 3)
+- [x] Identificar textos en cards de earnings (Promedio por Track, Top DJs Ganan, Pago Mínimo)
+- [x] Actualizar archivos JSON con traducciones de monetización (5 idiomas)
+- [x] Modificar MonetizationSection.tsx para usar useTranslation
+- [x] Verificar funcionamiento en navegador
+- [x] Guardar checkpoint

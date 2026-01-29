@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { DollarSign, TrendingUp, Users, Sparkles, Crown, Music, Download } from "lucide-react";
 import { useLocation } from "wouter";
+import { useTranslation } from "react-i18next";
 
 /**
  * MonetizationSection - Explains how DJs can earn money on ONLYDJS
@@ -9,35 +10,48 @@ import { useLocation } from "wouter";
  */
 export default function MonetizationSection() {
   const [, setLocation] = useLocation();
+  const { t } = useTranslation();
 
   const benefits = [
     {
       icon: DollarSign,
-      title: "Gana por Descarga",
-      description: "Cada vez que alguien descarga tu track, ganas dinero. Simple y directo.",
+      title: t("monetization.benefit1Title"),
+      description: t("monetization.benefit1Desc"),
       color: "text-green-500",
       bgColor: "bg-green-500/10",
     },
     {
       icon: TrendingUp,
-      title: "Tracking en Tiempo Real",
-      description: "Dashboard completo con estadísticas de descargas y ganancias actualizadas.",
+      title: t("monetization.benefit2Title"),
+      description: t("monetization.benefit2Desc"),
       color: "text-cyan-500",
       bgColor: "bg-cyan-500/10",
     },
     {
       icon: Users,
-      title: "Audiencia Global",
-      description: "Miles de DJs buscando tracks profesionales. Tu música, su próximo set.",
+      title: t("monetization.benefit3Title"),
+      description: t("monetization.benefit3Desc"),
       color: "text-purple-500",
       bgColor: "bg-purple-500/10",
     },
   ];
 
   const stats = [
-    { label: "Promedio por Track", value: "$50-200", sublabel: "mensual" },
-    { label: "Top DJs Ganan", value: "$500+", sublabel: "por mes" },
-    { label: "Pago Mínimo", value: "$25", sublabel: "retiro" },
+    { 
+      label: t("monetization.avgPerTrack"), 
+      value: t("monetization.avgPerTrackValue"), 
+      sublabel: t("monetization.avgPerTrackSub") 
+    },
+    { 
+      label: t("monetization.topDJsEarn"), 
+      value: t("monetization.topDJsEarnValue"), 
+      sublabel: t("monetization.topDJsEarnSub") 
+    },
+    { 
+      label: t("monetization.minPayout"), 
+      value: t("monetization.minPayoutValue"), 
+      sublabel: t("monetization.minPayoutSub") 
+    },
   ];
 
   return (
@@ -47,16 +61,17 @@ export default function MonetizationSection() {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/30 rounded-full mb-6">
             <Crown className="h-4 w-4 text-yellow-500" />
-            <span className="text-sm font-medium text-purple-300">Solo para Miembros PRO</span>
+            <span className="text-sm font-medium text-purple-300">{t("monetization.badge")}</span>
           </div>
           
           <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
-            Monetiza Tu Música
+            {t("monetization.title")}
           </h2>
           
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            ONLYDJS no es solo un pool de música. Es tu plataforma para{" "}
-            <span className="text-green-500 font-semibold">ganar dinero</span> con cada track que subes.
+            {t("monetization.subtitle")}{" "}
+            <span className="text-green-500 font-semibold">{t("monetization.subtitleHighlight")}</span>{" "}
+            {t("monetization.subtitleEnd")}
           </p>
         </div>
 
@@ -67,7 +82,7 @@ export default function MonetizationSection() {
             <div>
               <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
                 <Music className="h-6 w-6 text-purple-500" />
-                ¿Cómo Funciona?
+                {t("monetization.howItWorks")}
               </h3>
               
               <div className="space-y-6">
@@ -76,9 +91,9 @@ export default function MonetizationSection() {
                     1
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-1">Sube tus Tracks</h4>
+                    <h4 className="font-semibold mb-1">{t("monetization.step1Title")}</h4>
                     <p className="text-sm text-muted-foreground">
-                      Uploads ilimitados con membresía PRO ($4.99/mes)
+                      {t("monetization.step1Desc")}
                     </p>
                   </div>
                 </div>
@@ -88,9 +103,9 @@ export default function MonetizationSection() {
                     2
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-1">DJs Descargan</h4>
+                    <h4 className="font-semibold mb-1">{t("monetization.step2Title")}</h4>
                     <p className="text-sm text-muted-foreground">
-                      Cada descarga genera revenue automáticamente
+                      {t("monetization.step2Desc")}
                     </p>
                   </div>
                 </div>
@@ -100,9 +115,9 @@ export default function MonetizationSection() {
                     3
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-1">Recibe tu Pago</h4>
+                    <h4 className="font-semibold mb-1">{t("monetization.step3Title")}</h4>
                     <p className="text-sm text-muted-foreground">
-                      Retira tus ganancias cuando alcances $25 USD
+                      {t("monetization.step3Desc")}
                     </p>
                   </div>
                 </div>
@@ -113,10 +128,10 @@ export default function MonetizationSection() {
                   <Sparkles className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="text-sm font-medium text-green-500 mb-1">
-                      Ejemplo Real
+                      {t("monetization.exampleTitle")}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      Un track con 100 descargas mensuales puede generar entre $50-200 USD dependiendo del plan de los usuarios que lo descarguen.
+                      {t("monetization.exampleDesc")}
                     </p>
                   </div>
                 </div>
@@ -144,11 +159,11 @@ export default function MonetizationSection() {
                 <div className="flex items-center gap-2 mb-2">
                   <Crown className="h-4 w-4 text-yellow-500" />
                   <span className="text-sm font-semibold text-yellow-500">
-                    Requisito: Membresía PRO
+                    {t("monetization.requirementTitle")}
                   </span>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Solo usuarios PRO pueden monetizar sus tracks. Usuarios FREE pueden subir 1 track/mes pero sin monetización.
+                  {t("monetization.requirementDesc")}
                 </p>
               </div>
             </div>
@@ -179,12 +194,12 @@ export default function MonetizationSection() {
             className="bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-600 hover:from-purple-700 hover:via-pink-700 hover:to-cyan-700 text-white font-bold px-8 py-6 text-lg shadow-lg shadow-purple-500/50"
           >
             <Crown className="h-5 w-5 mr-2" />
-            Empieza a Ganar con PRO
+            {t("monetization.ctaButton")}
             <Sparkles className="h-5 w-5 ml-2" />
           </Button>
           
           <p className="text-sm text-muted-foreground mt-4">
-            Solo $4.99/mes · Cancela cuando quieras · Primeros 30 días con garantía
+            {t("monetization.ctaSubtext")}
           </p>
         </div>
       </div>
