@@ -1409,3 +1409,60 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Test de detección de bots (debe bloquear) ✅
 - [x] Test de integración completa ✅
 - [x] 14/15 tests pasando (93%)
+
+
+## 56. Sistema de Multi-Idioma (i18n) - 5 Idiomas Iniciales
+
+### Instalación y Configuración
+- [x] Instalar i18next, react-i18next, i18next-browser-languagedetector
+- [x] Crear archivo `client/src/i18n/config.ts` con configuración
+- [x] Configurar detección automática de idioma del navegador
+- [x] Configurar fallback a inglés (EN) como default
+- [x] Configurar persistencia en localStorage
+
+### Archivos de Traducción
+- [x] Crear estructura de carpetas `client/src/i18n/locales/{lang}/`
+- [x] Crear `en/common.json` (inglés - default)
+- [x] Crear `es/common.json` (español)
+- [x] Crear `pt-BR/common.json` (portugués brasileño)
+- [x] Crear `fr/common.json` (francés)
+- [x] Crear `de/common.json` (alemán)
+- [x] Organizar traducciones por secciones (nav, home, explore, upload, etc.)
+
+### Selector de Idioma
+- [x] Crear componente `LanguageSelector` con dropdown
+- [x] Agregar banderas de países para cada idioma
+- [x] Integrar en Navbar (esquina superior derecha)
+- [x] Persistir selección en localStorage
+- [x] Aplicar cambio inmediato sin reload
+
+### Traducción de Páginas Principales
+- [x] Traducir Home.tsx (hero, features, monetization, CTA)
+- [ ] Traducir Explore.tsx (filters, search, track cards)
+- [ ] Traducir Upload.tsx (forms, validation messages, limits)
+- [ ] Traducir Membership.tsx (plans, pricing, features)
+- [ ] Traducir DJMode.tsx (ADN DJ, suggestions, auto sets)
+- [ ] Traducir MainstageMode.tsx (festival intelligence, rankings)
+- [ ] Traducir Dashboard.tsx (stats, navigation)
+
+### Traducción de Componentes Comunes
+- [x] Traducir Navbar (links, botones)
+- [ ] Traducir Footer (links, copyright)
+- [ ] Traducir DownloadButton (estados, mensajes)
+- [ ] Traducir AudioPlayer (controles, preview messages)
+- [ ] Traducir Toast notifications (success, error, info)
+- [ ] Traducir Forms (labels, placeholders, validation)
+- [ ] Traducir Modals (títulos, descripciones, botones)
+
+### SEO Internacional
+- [ ] Agregar meta tags de idioma en HTML
+- [ ] Configurar hreflang tags para SEO
+- [ ] Traducir meta descriptions por idioma
+- [ ] Traducir títulos de página por idioma
+
+### Tests
+- [x] Test de cambio de idioma dinámico
+- [x] Test de persistencia en localStorage
+- [x] Test de detección automática de navegador
+- [x] Test de fallback a inglés
+- [x] Verificar que todas las traducciones están completas (13/13 tests pasando)

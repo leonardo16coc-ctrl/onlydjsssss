@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { Music, Sparkles, Trophy, LayoutDashboard, Upload, CreditCard, User, Settings, LogOut, Radio } from "lucide-react";
+import { LanguageSelector } from "@/components/LanguageSelector";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,9 +13,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { trpc } from "@/lib/trpc";
+import { useTranslation } from "react-i18next";
 
 export default function Navbar() {
   const { user, isAuthenticated } = useAuth();
+  const { t } = useTranslation();
 
   return (
     <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
@@ -31,7 +34,7 @@ export default function Navbar() {
             <Link href="/explore">
               <a className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
                 <Music className="h-4 w-4" />
-                <span>Explorar</span>
+                <span>{t('nav.explore')}</span>
               </a>
             </Link>
             
@@ -39,7 +42,7 @@ export default function Navbar() {
               <Link href="/dj-mode">
                 <a className="flex items-center space-x-2 text-foreground hover:text-purple-400 transition-colors">
                   <Radio className="h-4 w-4" />
-                  <span className="text-glow-purple">DJ MODE</span>
+                  <span className="text-glow-purple">{t('nav.djMode')}</span>
                 </a>
               </Link>
             )}
@@ -47,14 +50,14 @@ export default function Navbar() {
             <Link href="/mainstage">
               <a className="flex items-center space-x-2 text-foreground hover:text-accent transition-colors">
                 <Sparkles className="h-4 w-4" />
-                <span className="text-glow-pink">MAINSTAGE</span>
+                <span className="text-glow-pink">{t('nav.mainstage')}</span>
               </a>
             </Link>
             
             <Link href="/rankings">
               <a className="flex items-center space-x-2 text-foreground hover:text-secondary transition-colors">
                 <Trophy className="h-4 w-4" />
-                <span>Rankings</span>
+                <span>{t('nav.rankings')}</span>
               </a>
             </Link>
 
@@ -63,7 +66,7 @@ export default function Navbar() {
                 <Link href="/dashboard">
                   <a className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
                     <LayoutDashboard className="h-4 w-4" />
-                    <span>Dashboard</span>
+                    <span>{t('nav.dashboard')}</span>
                   </a>
                 </Link>
                 
@@ -71,7 +74,7 @@ export default function Navbar() {
                   <Link href="/upload">
                     <a className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
                       <Upload className="h-4 w-4" />
-                      <span>Subir</span>
+                      <span>{t('nav.upload')}</span>
                     </a>
                   </Link>
                 )}
@@ -80,13 +83,14 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center space-x-4">
+            <LanguageSelector />
             {isAuthenticated ? (
               <>
                 {user?.membershipStatus === "free" && (
                   <Link href="/membership">
                     <Button className="btn-neon bg-accent hover:bg-accent/90 glow-pink">
                       <CreditCard className="h-4 w-4 mr-2" />
-                      Suscribirse
+                      {t('nav.membership')}
                     </Button>
                   </Link>
                 )}
@@ -97,25 +101,25 @@ export default function Navbar() {
                       <div className="text-sm text-left">
                         <p className="font-semibold text-foreground">{user?.name || "DJ"}</p>
                         <p className="text-xs text-muted-foreground capitalize">
-                          {user?.membershipStatus === "member" ? "Miembro" : 
-                           user?.membershipStatus === "verified" ? "Verificado" : "Free"}
+                          {user?.membershipStatus === "member" ? "PRO" : 
+                           user?.membershipStatus === "verified" ? "Verified" : "FREE"}
                         </p>
                       </div>
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56">
-                    <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
+                    <DropdownMenuLabel>{t('nav.myProfile')}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <Link href="/profile/edit">
                       <DropdownMenuItem>
                         <Settings className="mr-2 h-4 w-4" />
-                        <span>Editar Perfil</span>
+                        <span>{t('nav.settings')}</span>
                       </DropdownMenuItem>
                     </Link>
                     <Link href="/dashboard">
                       <DropdownMenuItem>
                         <LayoutDashboard className="mr-2 h-4 w-4" />
-                        <span>Dashboard</span>
+                        <span>{t('nav.dashboard')}</span>
                       </DropdownMenuItem>
                     </Link>
                     <DropdownMenuSeparator />
@@ -124,7 +128,7 @@ export default function Navbar() {
                       window.location.href = "/";
                     }}>
                       <LogOut className="mr-2 h-4 w-4" />
-                      <span>Cerrar Sesión</span>
+                      <span>{t('nav.logout')}</span>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -132,7 +136,7 @@ export default function Navbar() {
             ) : (
               <a href={getLoginUrl()}>
                 <Button className="btn-neon bg-primary hover:bg-primary/90 glow-cyan">
-                  Iniciar Sesión
+                  {t('nav.login')}
                 </Button>
               </a>
             )}

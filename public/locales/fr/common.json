@@ -1,0 +1,147 @@
+{
+  "nav": {
+    "explore": "Explorer",
+    "upload": "Téléverser",
+    "djMode": "DJ MODE",
+    "mainstage": "MAINSTAGE",
+    "membership": "Abonnement",
+    "dashboard": "Tableau de bord",
+    "myProfile": "Mon Profil",
+    "settings": "Paramètres",
+    "logout": "Déconnexion",
+    "login": "Connexion",
+    "upgradeToPro": "Passer à PRO"
+  },
+  "home": {
+    "hero": {
+      "title": "La Plateforme #1 pour les DJs",
+      "subtitle": "Téléchargez, téléversez et monétisez de la musique professionnelle. Extended Mixes, Edits, Mashups et plus.",
+      "aiTagline": "IA + Musique + Sets + Intelligence = DJ MODE",
+      "exploreMusic": "Explorer la Musique",
+      "uploadFiles": "Téléverser vos Fichiers",
+      "subscribe": "S'abonner pour $4.99/mois"
+    },
+    "whySection": {
+      "title": "Pourquoi ONLYDJS?",
+      "professionalMusic": {
+        "title": "Musique Professionnelle",
+        "description": "Extended Mixes, Edits, Mashups, Remixes et Reworks en MP3 320kbps et WAV."
+      },
+      "mainstageEdits": {
+        "title": "MAINSTAGE EDITS",
+        "description": "Morceaux exclusifs pour festivals et grandes scènes. Festival Weapons, Peak Time, Anthems."
+      },
+      "monetization": {
+        "title": "Monétisation",
+        "description": "Gagnez de l'argent pour chaque téléchargement. 60% pour les DJs, 40% pour la plateforme."
+      },
+      "rankings": {
+        "title": "Classements & Stats",
+        "description": "Top 100 DJs, Morceaux tendance, statistiques en temps réel et analyses complètes."
+      },
+      "aiMusic": {
+        "title": "IA Musicale",
+        "description": "Détection automatique du BPM, Tonalité, drops et énergie. Recommandations intelligentes."
+      },
+      "protection": {
+        "title": "Protection Totale",
+        "description": "Système anti-fraude, filigranes inaudibles et protection contre les bots."
+      }
+    },
+    "footer": {
+      "copyright": "© 2026 ONLYDJS. La meilleure plateforme musicale pour DJs."
+    }
+  },
+  "membership": {
+    "title": "Choisissez Votre Plan",
+    "subtitle": "Débloquez toutes les fonctionnalités et monétisez votre musique",
+    "free": {
+      "name": "GRATUIT",
+      "price": "$0",
+      "period": "pour toujours",
+      "features": {
+        "uploads": "1 téléversement par mois",
+        "downloads": "1 téléchargement par mois",
+        "monetization": "Pas de monétisation",
+        "djMode": "DJ MODE limité",
+        "mainstage": "MAINSTAGE limité"
+      }
+    },
+    "pro": {
+      "name": "PRO",
+      "price": "$4.99",
+      "period": "par mois",
+      "popular": "POPULAIRE",
+      "features": {
+        "uploads": "Téléversements illimités",
+        "downloads": "Téléchargements illimités",
+        "monetization": "Monétisation activée",
+        "djMode": "Accès complet au DJ MODE",
+        "mainstage": "Accès complet au MAINSTAGE"
+      },
+      "cta": "Passer à PRO"
+    },
+    "comparison": {
+      "title": "Comparaison Détaillée",
+      "feature": "Fonctionnalité",
+      "uploads": "Téléversements",
+      "downloads": "Téléchargements",
+      "monetization": "Monétisation",
+      "djMode": "DJ MODE",
+      "mainstage": "MAINSTAGE MODE"
+    }
+  },
+  "upload": {
+    "title": "Téléversez Votre Morceau",
+    "audioFile": "Fichier Audio",
+    "selectFile": "Sélectionner un fichier MP3 ou WAV",
+    "coverImage": "Image de Couverture",
+    "selectImage": "Sélectionner une image",
+    "trackInfo": "Informations du Morceau",
+    "title": "Titre",
+    "artist": "Artiste",
+    "genre": "Genre",
+    "bpm": "BPM",
+    "key": "Tonalité",
+    "analyzing": "Analyse en cours...",
+    "publish": "Publier le Morceau",
+    "cancel": "Annuler"
+  },
+  "explore": {
+    "title": "Explorer la Musique",
+    "search": "Rechercher morceaux, artistes, genres...",
+    "filters": "Filtres",
+    "allGenres": "Tous les Genres",
+    "sortBy": "Trier par",
+    "newest": "Plus Récents",
+    "popular": "Plus Populaires",
+    "downloads": "Plus Téléchargés"
+  },
+  "auth": {
+    "loginRequired": "Connexion Requise",
+    "loginMessage": "Vous devez vous connecter pour accéder à cette fonctionnalité",
+    "login": "Connexion",
+    "logout": "Déconnexion"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "close": "Fermer",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "download": "Télécharger",
+    "upload": "Téléverser",
+    "play": "Lire",
+    "pause": "Pause",
+    "share": "Partager"
+  }
+}

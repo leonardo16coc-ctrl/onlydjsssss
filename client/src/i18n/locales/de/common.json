@@ -1,0 +1,192 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "explore": "Entdecken",
+    "djMode": "DJ-MODUS",
+    "mainstage": "MAINSTAGE",
+    "rankings": "Ranglisten",
+    "dashboard": "Dashboard",
+    "upload": "Hochladen",
+    "membership": "Abonnieren",
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "profile": "Profil"
+  },
+  "home": {
+    "hero": {
+      "title": "Die #1 Plattform für DJs",
+      "subtitle": "Laden Sie professionelle Musik herunter, hoch und monetarisieren Sie sie. Extended Mixes, Edits, Mashups und mehr.",
+      "djMode": "KI + Musik + Sets + Intelligenz = DJ-MODUS",
+      "exploreMusic": "Musik Entdecken",
+      "uploadFiles": "Dateien Hochladen",
+      "subscribe": "Für $4.99/Monat abonnieren",
+      "aiTagline": "KI + Musik + Sets + Intelligenz = DJ MODE"
+    },
+    "monetization": {
+      "title": "Verwandeln Sie Ihre Musik in Einnahmen",
+      "subtitle": "Laden Sie Ihre Tracks hoch und verdienen Sie Geld mit jedem Download. Schließen Sie sich Tausenden von DJs an, die bereits ihre Musik monetarisieren.",
+      "step1Title": "Laden Sie Ihre Tracks Hoch",
+      "step1Desc": "Teilen Sie Ihre Extended Mixes, Edits und Mashups mit der globalen DJ-Community.",
+      "step2Title": "Erhalten Sie Downloads",
+      "step2Desc": "DJs auf der ganzen Welt entdecken und laden Ihre Musik für ihre Sets herunter.",
+      "step3Title": "Verdienen Sie Geld",
+      "step3Desc": "Erhalten Sie $0.30 pro Download direkt in Ihre Brieftasche. Jederzeit abheben.",
+      "earnings1": "$50-200 pro populärem Track",
+      "earnings2": "$500+ monatlich für Top-DJs",
+      "earnings3": "Unbegrenztes Verdienstpotenzial",
+      "cta": "Beginnen Sie mit PRO zu verdienen"
+    },
+    "why": {
+      "title": "Warum ONLYDJS?",
+      "feature1Title": "Professionelle Musik",
+      "feature1Desc": "Extended Mixes, Edits, Mashups und exklusive Tracks für DJs.",
+      "feature2Title": "KI-Analyse",
+      "feature2Desc": "Automatische BPM-, Tonart- und Energieerkennung für perfektes Mixing.",
+      "feature3Title": "DJ-MODUS",
+      "feature3Desc": "KI-gestützter Set-Builder mit intelligenten Vorschlägen und DNA-Matching.",
+      "feature4Title": "Monetarisierung",
+      "feature4Desc": "Verdienen Sie Geld mit jedem Download Ihrer Tracks."
+    },
+    "whySection": {
+      "title": "Warum ONLYDJS?",
+      "professionalMusic": {
+        "title": "Professionelle Musik",
+        "description": "Extended Mixes, Edits, Mashups, Remixes und Reworks in MP3 320kbps und WAV."
+      },
+      "mainstageEdits": {
+        "title": "MAINSTAGE EDITS",
+        "description": "Exklusive Tracks für Festivals und große Bühnen. Festival Weapons, Peak Time, Anthems."
+      },
+      "monetization": {
+        "title": "Monetarisierung",
+        "description": "Verdienen Sie Geld für jeden Download. 60% für DJs, 40% für die Plattform."
+      },
+      "rankings": {
+        "title": "Rankings & Stats",
+        "description": "Top 100 DJs, Trending Tracks, Echtzeit-Statistiken und vollständige Analysen."
+      },
+      "aiMusic": {
+        "title": "Musik-KI",
+        "description": "Automatische Erkennung von BPM, Tonart, Drops und Energie. Intelligente Empfehlungen."
+      },
+      "protection": {
+        "title": "Totaler Schutz",
+        "description": "Anti-Betrugs-System, unhörbare Wasserzeichen und Bot-Schutz."
+      }
+    },
+    "footer": {
+      "copyright": "© 2026 ONLYDJS. Die beste Musikplattform für DJs."
+    }
+  },
+  "explore": {
+    "title": "Musik Entdecken",
+    "search": "Tracks, Künstler, Genres suchen...",
+    "filters": "Filter",
+    "genre": "Genre",
+    "allGenres": "Alle Genres",
+    "bpm": "BPM",
+    "key": "Tonart",
+    "type": "Typ",
+    "allTypes": "Alle Typen",
+    "sortBy": "Sortieren Nach",
+    "newest": "Neueste",
+    "popular": "Beliebteste",
+    "downloads": "Meist Heruntergeladen",
+    "noResults": "Keine Tracks gefunden",
+    "downloadLimits": "Download-Limits",
+    "downloadsThisMonth": "Downloads diesen Monat",
+    "downloadsRemaining": "Verbleibend",
+    "totalDownloads": "Gesamt-Downloads",
+    "thisMonth": "Diesen Monat",
+    "upgradeForMore": "Upgrade auf Pro für unbegrenzte Downloads"
+  },
+  "upload": {
+    "title": "Track Hochladen",
+    "audioFile": "Audiodatei",
+    "audioFileDesc": "MP3- oder WAV-Datei (max 100MB)",
+    "chooseFile": "Datei Wählen",
+    "uploadAudio": "Audio Hochladen",
+    "coverImage": "Coverbild",
+    "coverImageDesc": "JPG oder PNG (max 10MB)",
+    "uploadCover": "Cover Hochladen",
+    "trackInfo": "Track-Informationen",
+    "titleLabel": "Titel",
+    "titlePlaceholder": "Track-Name",
+    "artistLabel": "Künstler",
+    "artistPlaceholder": "Ihr Künstlername",
+    "genreLabel": "Genre",
+    "selectGenre": "Genre auswählen",
+    "typeLabel": "Track-Typ",
+    "selectType": "Typ auswählen",
+    "bpmLabel": "BPM",
+    "bpmPlaceholder": "z.B., 128",
+    "keyLabel": "Tonart",
+    "keyPlaceholder": "z.B., Am",
+    "publish": "Abonnieren zum Veröffentlichen",
+    "publishing": "Veröffentlichung...",
+    "uploadLimits": "Upload-Limits & Formate",
+    "plan": "Plan",
+    "uploadsThisMonth": "Uploads diesen Monat",
+    "maxSize": "Maximale Größe",
+    "maxDuration": "Maximale Dauer",
+    "supportedFormats": "Unterstützte Formate",
+    "upgradeText": "Upgrade auf Pro, um bis zu 50 Tracks/Monat hochzuladen",
+    "viewPlans": "Pläne Ansehen"
+  },
+  "membership": {
+    "title": "Wählen Sie Ihren Plan",
+    "subtitle": "Schalten Sie alle Funktionen frei und beginnen Sie, Ihre Musik zu monetarisieren",
+    "free": "KOSTENLOS",
+    "pro": "PRO",
+    "popular": "BELIEBT",
+    "perMonth": "/Monat",
+    "currentPlan": "Aktueller Plan",
+    "upgradeToPro": "Auf PRO upgraden",
+    "features": {
+      "uploads": "Uploads",
+      "downloads": "Downloads",
+      "monetization": "Monetarisierung",
+      "djMode": "DJ-MODUS",
+      "mainstage": "MAINSTAGE-MODUS",
+      "unlimited": "Unbegrenzt",
+      "perMonth": "/Monat",
+      "no": "Nein",
+      "yes": "Ja - Verdienen Sie pro Download",
+      "demoOnly": "Nur Demo",
+      "fullAccess": "Vollzugriff"
+    }
+  },
+  "common": {
+    "loading": "Laden...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "close": "Schließen",
+    "confirm": "Bestätigen",
+    "back": "Zurück",
+    "next": "Weiter",
+    "previous": "Vorherige",
+    "download": "Herunterladen",
+    "play": "Abspielen",
+    "pause": "Pause",
+    "preview": "Vorschau",
+    "membershipRequired": "Mitgliedschaft erforderlich",
+    "upgradeToUnlock": "Upgrade zum Freischalten",
+    "comingSoon": "Demnächst"
+  },
+  "player": {
+    "preview": "Vorschau",
+    "previewEnded": "Vorschau beendet - Abonnieren Sie, um den vollständigen Track zu hören!",
+    "subscribe": "Abonnieren"
+  },
+  "download": {
+    "downloading": "Herunterladen...",
+    "downloadComplete": "Download abgeschlossen!",
+    "downloadFailed": "Download fehlgeschlagen",
+    "limitReached": "Download-Limit erreicht",
+    "upgradeForMore": "Upgrade auf PRO für unbegrenzte Downloads"
+  }
+}

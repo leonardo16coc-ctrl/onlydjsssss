@@ -1,0 +1,147 @@
+{
+  "nav": {
+    "explore": "Explore",
+    "upload": "Upload",
+    "djMode": "DJ MODE",
+    "mainstage": "MAINSTAGE",
+    "membership": "Membership",
+    "dashboard": "Dashboard",
+    "myProfile": "My Profile",
+    "settings": "Settings",
+    "logout": "Logout",
+    "login": "Login",
+    "upgradeToPro": "Upgrade to PRO"
+  },
+  "home": {
+    "hero": {
+      "title": "The #1 Platform for DJs",
+      "subtitle": "Download, upload and monetize professional music. Extended Mixes, Edits, Mashups and more.",
+      "aiTagline": "AI + Music + Sets + Intelligence = DJ MODE",
+      "exploreMusic": "Explore Music",
+      "uploadFiles": "Upload Your Files",
+      "subscribe": "Subscribe for $4.99/mo"
+    },
+    "whySection": {
+      "title": "Why ONLYDJS?",
+      "professionalMusic": {
+        "title": "Professional Music",
+        "description": "Extended Mixes, Edits, Mashups, Remixes and Reworks in MP3 320kbps and WAV."
+      },
+      "mainstageEdits": {
+        "title": "MAINSTAGE EDITS",
+        "description": "Exclusive tracks for festivals and big stages. Festival Weapons, Peak Time, Anthems."
+      },
+      "monetization": {
+        "title": "Monetization",
+        "description": "Earn money for each download. 60% for DJs, 40% for the platform."
+      },
+      "rankings": {
+        "title": "Rankings & Stats",
+        "description": "Top 100 DJs, Trending tracks, real-time statistics and complete analytics."
+      },
+      "aiMusic": {
+        "title": "Musical AI",
+        "description": "Automatic detection of BPM, Key, drops and energy. Intelligent recommendations."
+      },
+      "protection": {
+        "title": "Total Protection",
+        "description": "Anti-fraud system, inaudible watermarks and bot protection."
+      }
+    },
+    "footer": {
+      "copyright": "© 2026 ONLYDJS. The best music platform for DJs."
+    }
+  },
+  "membership": {
+    "title": "Choose Your Plan",
+    "subtitle": "Unlock all features and monetize your music",
+    "free": {
+      "name": "FREE",
+      "price": "$0",
+      "period": "forever",
+      "features": {
+        "uploads": "1 upload per month",
+        "downloads": "1 download per month",
+        "monetization": "No monetization",
+        "djMode": "Limited DJ MODE",
+        "mainstage": "Limited MAINSTAGE"
+      }
+    },
+    "pro": {
+      "name": "PRO",
+      "price": "$4.99",
+      "period": "per month",
+      "popular": "POPULAR",
+      "features": {
+        "uploads": "Unlimited uploads",
+        "downloads": "Unlimited downloads",
+        "monetization": "Monetization enabled",
+        "djMode": "Full DJ MODE access",
+        "mainstage": "Full MAINSTAGE access"
+      },
+      "cta": "Upgrade to PRO"
+    },
+    "comparison": {
+      "title": "Detailed Comparison",
+      "feature": "Feature",
+      "uploads": "Uploads",
+      "downloads": "Downloads",
+      "monetization": "Monetization",
+      "djMode": "DJ MODE",
+      "mainstage": "MAINSTAGE MODE"
+    }
+  },
+  "upload": {
+    "title": "Upload Your Track",
+    "audioFile": "Audio File",
+    "selectFile": "Select MP3 or WAV file",
+    "coverImage": "Cover Image",
+    "selectImage": "Select image",
+    "trackInfo": "Track Information",
+    "title": "Title",
+    "artist": "Artist",
+    "genre": "Genre",
+    "bpm": "BPM",
+    "key": "Key",
+    "analyzing": "Analyzing...",
+    "publish": "Publish Track",
+    "cancel": "Cancel"
+  },
+  "explore": {
+    "title": "Explore Music",
+    "search": "Search tracks, artists, genres...",
+    "filters": "Filters",
+    "allGenres": "All Genres",
+    "sortBy": "Sort by",
+    "newest": "Newest",
+    "popular": "Most Popular",
+    "downloads": "Most Downloaded"
+  },
+  "auth": {
+    "loginRequired": "Login Required",
+    "loginMessage": "You need to login to access this feature",
+    "login": "Login",
+    "logout": "Logout"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "download": "Download",
+    "upload": "Upload",
+    "play": "Play",
+    "pause": "Pause",
+    "share": "Share"
+  }
+}

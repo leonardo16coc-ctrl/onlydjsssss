@@ -1,0 +1,147 @@
+{
+  "nav": {
+    "explore": "Erkunden",
+    "upload": "Hochladen",
+    "djMode": "DJ MODE",
+    "mainstage": "MAINSTAGE",
+    "membership": "Mitgliedschaft",
+    "dashboard": "Dashboard",
+    "myProfile": "Mein Profil",
+    "settings": "Einstellungen",
+    "logout": "Abmelden",
+    "login": "Anmelden",
+    "upgradeToPro": "Auf PRO upgraden"
+  },
+  "home": {
+    "hero": {
+      "title": "Die #1 Plattform für DJs",
+      "subtitle": "Laden Sie professionelle Musik herunter, hoch und monetarisieren Sie sie. Extended Mixes, Edits, Mashups und mehr.",
+      "aiTagline": "KI + Musik + Sets + Intelligenz = DJ MODE",
+      "exploreMusic": "Musik Erkunden",
+      "uploadFiles": "Dateien Hochladen",
+      "subscribe": "Abonnieren für $4.99/Monat"
+    },
+    "whySection": {
+      "title": "Warum ONLYDJS?",
+      "professionalMusic": {
+        "title": "Professionelle Musik",
+        "description": "Extended Mixes, Edits, Mashups, Remixes und Reworks in MP3 320kbps und WAV."
+      },
+      "mainstageEdits": {
+        "title": "MAINSTAGE EDITS",
+        "description": "Exklusive Tracks für Festivals und große Bühnen. Festival Weapons, Peak Time, Anthems."
+      },
+      "monetization": {
+        "title": "Monetarisierung",
+        "description": "Verdienen Sie Geld für jeden Download. 60% für DJs, 40% für die Plattform."
+      },
+      "rankings": {
+        "title": "Rankings & Stats",
+        "description": "Top 100 DJs, Trending Tracks, Echtzeit-Statistiken und vollständige Analysen."
+      },
+      "aiMusic": {
+        "title": "Musik-KI",
+        "description": "Automatische Erkennung von BPM, Tonart, Drops und Energie. Intelligente Empfehlungen."
+      },
+      "protection": {
+        "title": "Totaler Schutz",
+        "description": "Anti-Betrugs-System, unhörbare Wasserzeichen und Bot-Schutz."
+      }
+    },
+    "footer": {
+      "copyright": "© 2026 ONLYDJS. Die beste Musikplattform für DJs."
+    }
+  },
+  "membership": {
+    "title": "Wählen Sie Ihren Plan",
+    "subtitle": "Schalten Sie alle Funktionen frei und monetarisieren Sie Ihre Musik",
+    "free": {
+      "name": "KOSTENLOS",
+      "price": "$0",
+      "period": "für immer",
+      "features": {
+        "uploads": "1 Upload pro Monat",
+        "downloads": "1 Download pro Monat",
+        "monetization": "Keine Monetarisierung",
+        "djMode": "Eingeschränkter DJ MODE",
+        "mainstage": "Eingeschränkter MAINSTAGE"
+      }
+    },
+    "pro": {
+      "name": "PRO",
+      "price": "$4.99",
+      "period": "pro Monat",
+      "popular": "BELIEBT",
+      "features": {
+        "uploads": "Unbegrenzte Uploads",
+        "downloads": "Unbegrenzte Downloads",
+        "monetization": "Monetarisierung aktiviert",
+        "djMode": "Vollständiger DJ MODE Zugang",
+        "mainstage": "Vollständiger MAINSTAGE Zugang"
+      },
+      "cta": "Auf PRO upgraden"
+    },
+    "comparison": {
+      "title": "Detaillierter Vergleich",
+      "feature": "Funktion",
+      "uploads": "Uploads",
+      "downloads": "Downloads",
+      "monetization": "Monetarisierung",
+      "djMode": "DJ MODE",
+      "mainstage": "MAINSTAGE MODE"
+    }
+  },
+  "upload": {
+    "title": "Laden Sie Ihren Track Hoch",
+    "audioFile": "Audiodatei",
+    "selectFile": "MP3- oder WAV-Datei auswählen",
+    "coverImage": "Coverbild",
+    "selectImage": "Bild auswählen",
+    "trackInfo": "Track-Informationen",
+    "title": "Titel",
+    "artist": "Künstler",
+    "genre": "Genre",
+    "bpm": "BPM",
+    "key": "Tonart",
+    "analyzing": "Analysiere...",
+    "publish": "Track Veröffentlichen",
+    "cancel": "Abbrechen"
+  },
+  "explore": {
+    "title": "Musik Erkunden",
+    "search": "Tracks, Künstler, Genres suchen...",
+    "filters": "Filter",
+    "allGenres": "Alle Genres",
+    "sortBy": "Sortieren nach",
+    "newest": "Neueste",
+    "popular": "Beliebteste",
+    "downloads": "Meist Heruntergeladen"
+  },
+  "auth": {
+    "loginRequired": "Anmeldung Erforderlich",
+    "loginMessage": "Sie müssen sich anmelden, um auf diese Funktion zuzugreifen",
+    "login": "Anmelden",
+    "logout": "Abmelden"
+  },
+  "common": {
+    "loading": "Laden...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "close": "Schließen",
+    "back": "Zurück",
+    "next": "Weiter",
+    "previous": "Zurück",
+    "search": "Suchen",
+    "filter": "Filtern",
+    "sort": "Sortieren",
+    "download": "Herunterladen",
+    "upload": "Hochladen",
+    "play": "Abspielen",
+    "pause": "Pause",
+    "share": "Teilen"
+  }
+}

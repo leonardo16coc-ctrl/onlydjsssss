@@ -1,0 +1,147 @@
+{
+  "nav": {
+    "explore": "Explorar",
+    "upload": "Upload",
+    "djMode": "DJ MODE",
+    "mainstage": "MAINSTAGE",
+    "membership": "Assinatura",
+    "dashboard": "Dashboard",
+    "myProfile": "Meu Perfil",
+    "settings": "Configurações",
+    "logout": "Sair",
+    "login": "Entrar",
+    "upgradeToPro": "Atualizar para PRO"
+  },
+  "home": {
+    "hero": {
+      "title": "A Plataforma #1 para DJs",
+      "subtitle": "Baixe, faça upload e monetize música profissional. Extended Mixes, Edits, Mashups e mais.",
+      "aiTagline": "IA + Música + Sets + Inteligência = DJ MODE",
+      "exploreMusic": "Explorar Música",
+      "uploadFiles": "Enviar Arquivos",
+      "subscribe": "Assinar por $4.99/mês"
+    },
+    "whySection": {
+      "title": "Por que ONLYDJS?",
+      "professionalMusic": {
+        "title": "Música Profissional",
+        "description": "Extended Mixes, Edits, Mashups, Remixes e Reworks em MP3 320kbps e WAV."
+      },
+      "mainstageEdits": {
+        "title": "MAINSTAGE EDITS",
+        "description": "Faixas exclusivas para festivais e grandes palcos. Festival Weapons, Peak Time, Anthems."
+      },
+      "monetization": {
+        "title": "Monetização",
+        "description": "Ganhe dinheiro por cada download. 60% para DJs, 40% para a plataforma."
+      },
+      "rankings": {
+        "title": "Rankings & Stats",
+        "description": "Top 100 DJs, Faixas em alta, estatísticas em tempo real e análises completas."
+      },
+      "aiMusic": {
+        "title": "IA Musical",
+        "description": "Detecção automática de BPM, Tom, drops e energia. Recomendações inteligentes."
+      },
+      "protection": {
+        "title": "Proteção Total",
+        "description": "Sistema antifraude, marcas d'água inaudíveis e proteção contra bots."
+      }
+    },
+    "footer": {
+      "copyright": "© 2026 ONLYDJS. A melhor plataforma de música para DJs."
+    }
+  },
+  "membership": {
+    "title": "Escolha Seu Plano",
+    "subtitle": "Desbloqueie todos os recursos e monetize sua música",
+    "free": {
+      "name": "GRÁTIS",
+      "price": "$0",
+      "period": "para sempre",
+      "features": {
+        "uploads": "1 upload por mês",
+        "downloads": "1 download por mês",
+        "monetization": "Sem monetização",
+        "djMode": "DJ MODE limitado",
+        "mainstage": "MAINSTAGE limitado"
+      }
+    },
+    "pro": {
+      "name": "PRO",
+      "price": "$4.99",
+      "period": "por mês",
+      "popular": "POPULAR",
+      "features": {
+        "uploads": "Uploads ilimitados",
+        "downloads": "Downloads ilimitados",
+        "monetization": "Monetização ativada",
+        "djMode": "Acesso completo ao DJ MODE",
+        "mainstage": "Acesso completo ao MAINSTAGE"
+      },
+      "cta": "Atualizar para PRO"
+    },
+    "comparison": {
+      "title": "Comparação Detalhada",
+      "feature": "Recurso",
+      "uploads": "Uploads",
+      "downloads": "Downloads",
+      "monetization": "Monetização",
+      "djMode": "DJ MODE",
+      "mainstage": "MAINSTAGE MODE"
+    }
+  },
+  "upload": {
+    "title": "Envie Sua Faixa",
+    "audioFile": "Arquivo de Áudio",
+    "selectFile": "Selecionar arquivo MP3 ou WAV",
+    "coverImage": "Imagem de Capa",
+    "selectImage": "Selecionar imagem",
+    "trackInfo": "Informações da Faixa",
+    "title": "Título",
+    "artist": "Artista",
+    "genre": "Gênero",
+    "bpm": "BPM",
+    "key": "Tom",
+    "analyzing": "Analisando...",
+    "publish": "Publicar Faixa",
+    "cancel": "Cancelar"
+  },
+  "explore": {
+    "title": "Explorar Música",
+    "search": "Buscar faixas, artistas, gêneros...",
+    "filters": "Filtros",
+    "allGenres": "Todos os Gêneros",
+    "sortBy": "Ordenar por",
+    "newest": "Mais Recentes",
+    "popular": "Mais Populares",
+    "downloads": "Mais Baixados"
+  },
+  "auth": {
+    "loginRequired": "Login Necessário",
+    "loginMessage": "Você precisa fazer login para acessar este recurso",
+    "login": "Entrar",
+    "logout": "Sair"
+  },
+  "common": {
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "close": "Fechar",
+    "back": "Voltar",
+    "next": "Próximo",
+    "previous": "Anterior",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "download": "Baixar",
+    "upload": "Enviar",
+    "play": "Reproduzir",
+    "pause": "Pausar",
+    "share": "Compartilhar"
+  }
+}

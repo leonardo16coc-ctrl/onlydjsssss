@@ -1,0 +1,192 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "explore": "Explorar",
+    "djMode": "MODO DJ",
+    "mainstage": "MAINSTAGE",
+    "rankings": "Rankings",
+    "dashboard": "Panel",
+    "upload": "Subir",
+    "membership": "Suscribirse",
+    "login": "Iniciar Sesión",
+    "logout": "Cerrar Sesión",
+    "profile": "Perfil"
+  },
+  "home": {
+    "hero": {
+      "title": "La Plataforma #1 para DJs",
+      "subtitle": "Descarga, sube y monetiza música profesional. Extended Mixes, Edits, Mashups y más.",
+      "djMode": "IA + Música + Sets + Inteligencia = MODO DJ",
+      "aiTagline": "IA + Música + Sets + Inteligencia = DJ MODE",
+      "exploreMusic": "Explorar Música",
+      "uploadFiles": "Subir Tus Archivos",
+      "subscribe": "Suscribirse por $4.99/mes"
+    },
+    "monetization": {
+      "title": "Convierte Tu Música en Ingresos",
+      "subtitle": "Sube tus tracks y gana dinero con cada descarga. Únete a miles de DJs que ya monetizan su música.",
+      "step1Title": "Sube Tus Tracks",
+      "step1Desc": "Comparte tus Extended Mixes, Edits y Mashups con la comunidad global de DJs.",
+      "step2Title": "Recibe Descargas",
+      "step2Desc": "DJs de todo el mundo descubren y descargan tu música para sus sets.",
+      "step3Title": "Gana Dinero",
+      "step3Desc": "Recibe $0.30 por descarga directamente en tu billetera. Retira cuando quieras.",
+      "earnings1": "$50-200 por track popular",
+      "earnings2": "$500+ mensuales para top DJs",
+      "earnings3": "Potencial de ganancias ilimitado",
+      "cta": "Empieza a Ganar con PRO"
+    },
+    "why": {
+      "title": "¿Por Qué ONLYDJS?",
+      "feature1Title": "Música Profesional",
+      "feature1Desc": "Extended Mixes, Edits, Mashups y tracks exclusivos para DJs.",
+      "feature2Title": "Análisis IA",
+      "feature2Desc": "Detección automática de BPM, tonalidad y energía para mezclas perfectas.",
+      "feature3Title": "MODO DJ",
+      "feature3Desc": "Constructor de sets con IA, sugerencias inteligentes y matching de ADN.",
+      "feature4Title": "Monetización",
+      "feature4Desc": "Gana dinero con cada descarga de tus tracks."
+    },
+    "whySection": {
+      "title": "¿Por qué ONLYDJS?",
+      "professionalMusic": {
+        "title": "Música Profesional",
+        "description": "Extended Mixes, Edits, Mashups, Remixes y Reworks en MP3 320kbps y WAV."
+      },
+      "mainstageEdits": {
+        "title": "MAINSTAGE EDITS",
+        "description": "Tracks exclusivos para festivales y big stages. Festival Weapons, Peak Time, Anthems."
+      },
+      "monetization": {
+        "title": "Monetización",
+        "description": "Gana dinero por cada descarga. 60% para DJs, 40% para la plataforma."
+      },
+      "rankings": {
+        "title": "Rankings & Stats",
+        "description": "Top 100 DJs, Trending tracks, estadísticas en tiempo real y analytics completos."
+      },
+      "aiMusic": {
+        "title": "IA Musical",
+        "description": "Detección automática de BPM, Key, drops y energía. Recomendaciones inteligentes."
+      },
+      "protection": {
+        "title": "Protección Total",
+        "description": "Sistema antifraude, watermarks inaudibles y protección contra bots."
+      }
+    },
+    "footer": {
+      "copyright": "© 2026 ONLYDJS. La mejor plataforma de música para DJs."
+    }
+  },
+  "explore": {
+    "title": "Explorar Música",
+    "search": "Buscar tracks, artistas, géneros...",
+    "filters": "Filtros",
+    "genre": "Género",
+    "allGenres": "Todos los Géneros",
+    "bpm": "BPM",
+    "key": "Tonalidad",
+    "type": "Tipo",
+    "allTypes": "Todos los Tipos",
+    "sortBy": "Ordenar Por",
+    "newest": "Más Recientes",
+    "popular": "Más Populares",
+    "downloads": "Más Descargados",
+    "noResults": "No se encontraron tracks",
+    "downloadLimits": "Límites de Descarga",
+    "downloadsThisMonth": "Descargas este mes",
+    "downloadsRemaining": "Restantes",
+    "totalDownloads": "Descargas totales",
+    "thisMonth": "Este mes",
+    "upgradeForMore": "Actualiza a Pro para descargas ilimitadas"
+  },
+  "upload": {
+    "title": "Subir Track",
+    "audioFile": "Archivo de Audio",
+    "audioFileDesc": "Archivo MP3 o WAV (máx 100MB)",
+    "chooseFile": "Elegir Archivo",
+    "uploadAudio": "Subir Audio",
+    "coverImage": "Imagen de Portada",
+    "coverImageDesc": "JPG o PNG (máx 10MB)",
+    "uploadCover": "Subir Portada",
+    "trackInfo": "Información del Track",
+    "titleLabel": "Título",
+    "titlePlaceholder": "Nombre del track",
+    "artistLabel": "Artista",
+    "artistPlaceholder": "Tu nombre artístico",
+    "genreLabel": "Género",
+    "selectGenre": "Seleccionar género",
+    "typeLabel": "Tipo de Track",
+    "selectType": "Seleccionar tipo",
+    "bpmLabel": "BPM",
+    "bpmPlaceholder": "ej., 128",
+    "keyLabel": "Tonalidad Musical",
+    "keyPlaceholder": "ej., Am",
+    "publish": "Suscribirse para Publicar",
+    "publishing": "Publicando...",
+    "uploadLimits": "Límites de Subida y Formatos",
+    "plan": "Plan",
+    "uploadsThisMonth": "Subidas este mes",
+    "maxSize": "Tamaño máximo",
+    "maxDuration": "Duración máxima",
+    "supportedFormats": "Formatos soportados",
+    "upgradeText": "Actualiza a Pro para subir hasta 50 tracks/mes",
+    "viewPlans": "Ver Planes"
+  },
+  "membership": {
+    "title": "Elige Tu Plan",
+    "subtitle": "Desbloquea todas las funciones y comienza a monetizar tu música",
+    "free": "GRATIS",
+    "pro": "PRO",
+    "popular": "POPULAR",
+    "perMonth": "/mes",
+    "currentPlan": "Plan Actual",
+    "upgradeToPro": "Actualizar a PRO",
+    "features": {
+      "uploads": "Subidas",
+      "downloads": "Descargas",
+      "monetization": "Monetización",
+      "djMode": "MODO DJ",
+      "mainstage": "MODO MAINSTAGE",
+      "unlimited": "Ilimitado",
+      "perMonth": "/mes",
+      "no": "No",
+      "yes": "Sí - Gana por descarga",
+      "demoOnly": "Solo demo",
+      "fullAccess": "Acceso completo"
+    }
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "close": "Cerrar",
+    "confirm": "Confirmar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "download": "Descargar",
+    "play": "Reproducir",
+    "pause": "Pausar",
+    "preview": "Vista Previa",
+    "membershipRequired": "Membresía requerida",
+    "upgradeToUnlock": "Actualiza para desbloquear",
+    "comingSoon": "Próximamente"
+  },
+  "player": {
+    "preview": "Vista Previa",
+    "previewEnded": "Vista previa terminada - ¡Suscríbete para escuchar el track completo!",
+    "subscribe": "Suscribirse"
+  },
+  "download": {
+    "downloading": "Descargando...",
+    "downloadComplete": "¡Descarga completa!",
+    "downloadFailed": "Descarga fallida",
+    "limitReached": "Límite de descargas alcanzado",
+    "upgradeForMore": "Actualiza a PRO para descargas ilimitadas"
+  }
+}

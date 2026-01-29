@@ -1,0 +1,192 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "explore": "Explorer",
+    "djMode": "MODE DJ",
+    "mainstage": "MAINSTAGE",
+    "rankings": "Classements",
+    "dashboard": "Tableau de bord",
+    "upload": "Téléverser",
+    "membership": "S'abonner",
+    "login": "Se connecter",
+    "logout": "Se déconnecter",
+    "profile": "Profil"
+  },
+  "home": {
+    "hero": {
+      "title": "La Plateforme #1 pour les DJs",
+      "subtitle": "Téléchargez, téléversez et monétisez de la musique professionnelle. Extended Mixes, Edits, Mashups et plus.",
+      "djMode": "IA + Musique + Sets + Intelligence = MODE DJ",
+      "exploreMusic": "Explorer la Musique",
+      "uploadFiles": "Téléverser Vos Fichiers",
+      "subscribe": "S'abonner pour $4.99/mois",
+      "aiTagline": "IA + Musique + Sets + Intelligence = DJ MODE"
+    },
+    "monetization": {
+      "title": "Transformez Votre Musique en Revenus",
+      "subtitle": "Téléversez vos morceaux et gagnez de l'argent à chaque téléchargement. Rejoignez des milliers de DJs qui monétisent déjà leur musique.",
+      "step1Title": "Téléversez Vos Morceaux",
+      "step1Desc": "Partagez vos Extended Mixes, Edits et Mashups avec la communauté mondiale des DJs.",
+      "step2Title": "Recevez des Téléchargements",
+      "step2Desc": "Des DJs du monde entier découvrent et téléchargent votre musique pour leurs sets.",
+      "step3Title": "Gagnez de l'Argent",
+      "step3Desc": "Recevez $0.30 par téléchargement directement dans votre portefeuille. Retirez quand vous voulez.",
+      "earnings1": "$50-200 par morceau populaire",
+      "earnings2": "$500+ mensuels pour les top DJs",
+      "earnings3": "Potentiel de gains illimité",
+      "cta": "Commencez à Gagner avec PRO"
+    },
+    "why": {
+      "title": "Pourquoi ONLYDJS?",
+      "feature1Title": "Musique Professionnelle",
+      "feature1Desc": "Extended Mixes, Edits, Mashups et morceaux exclusifs pour DJs.",
+      "feature2Title": "Analyse IA",
+      "feature2Desc": "Détection automatique du BPM, de la tonalité et de l'énergie pour des mixages parfaits.",
+      "feature3Title": "MODE DJ",
+      "feature3Desc": "Constructeur de sets avec IA, suggestions intelligentes et matching ADN.",
+      "feature4Title": "Monétisation",
+      "feature4Desc": "Gagnez de l'argent à chaque téléchargement de vos morceaux."
+    },
+    "whySection": {
+      "title": "Pourquoi ONLYDJS?",
+      "professionalMusic": {
+        "title": "Musique Professionnelle",
+        "description": "Extended Mixes, Edits, Mashups, Remixes et Reworks en MP3 320kbps et WAV."
+      },
+      "mainstageEdits": {
+        "title": "MAINSTAGE EDITS",
+        "description": "Morceaux exclusifs pour festivals et grandes scènes. Festival Weapons, Peak Time, Anthems."
+      },
+      "monetization": {
+        "title": "Monétisation",
+        "description": "Gagnez de l'argent pour chaque téléchargement. 60% pour les DJs, 40% pour la plateforme."
+      },
+      "rankings": {
+        "title": "Classements & Stats",
+        "description": "Top 100 DJs, Morceaux tendance, statistiques en temps réel et analyses complètes."
+      },
+      "aiMusic": {
+        "title": "IA Musicale",
+        "description": "Détection automatique du BPM, Tonalité, drops et énergie. Recommandations intelligentes."
+      },
+      "protection": {
+        "title": "Protection Totale",
+        "description": "Système anti-fraude, filigranes inaudibles et protection contre les bots."
+      }
+    },
+    "footer": {
+      "copyright": "© 2026 ONLYDJS. La meilleure plateforme musicale pour DJs."
+    }
+  },
+  "explore": {
+    "title": "Explorer la Musique",
+    "search": "Rechercher morceaux, artistes, genres...",
+    "filters": "Filtres",
+    "genre": "Genre",
+    "allGenres": "Tous les Genres",
+    "bpm": "BPM",
+    "key": "Tonalité",
+    "type": "Type",
+    "allTypes": "Tous les Types",
+    "sortBy": "Trier Par",
+    "newest": "Plus Récents",
+    "popular": "Plus Populaires",
+    "downloads": "Plus Téléchargés",
+    "noResults": "Aucun morceau trouvé",
+    "downloadLimits": "Limites de Téléchargement",
+    "downloadsThisMonth": "Téléchargements ce mois",
+    "downloadsRemaining": "Restants",
+    "totalDownloads": "Téléchargements totaux",
+    "thisMonth": "Ce mois",
+    "upgradeForMore": "Passez à Pro pour des téléchargements illimités"
+  },
+  "upload": {
+    "title": "Téléverser un Morceau",
+    "audioFile": "Fichier Audio",
+    "audioFileDesc": "Fichier MP3 ou WAV (max 100MB)",
+    "chooseFile": "Choisir un Fichier",
+    "uploadAudio": "Téléverser l'Audio",
+    "coverImage": "Image de Couverture",
+    "coverImageDesc": "JPG ou PNG (max 10MB)",
+    "uploadCover": "Téléverser la Couverture",
+    "trackInfo": "Informations du Morceau",
+    "titleLabel": "Titre",
+    "titlePlaceholder": "Nom du morceau",
+    "artistLabel": "Artiste",
+    "artistPlaceholder": "Votre nom d'artiste",
+    "genreLabel": "Genre",
+    "selectGenre": "Sélectionner le genre",
+    "typeLabel": "Type de Morceau",
+    "selectType": "Sélectionner le type",
+    "bpmLabel": "BPM",
+    "bpmPlaceholder": "ex., 128",
+    "keyLabel": "Tonalité Musicale",
+    "keyPlaceholder": "ex., Am",
+    "publish": "S'abonner pour Publier",
+    "publishing": "Publication...",
+    "uploadLimits": "Limites de Téléversement et Formats",
+    "plan": "Plan",
+    "uploadsThisMonth": "Téléversements ce mois",
+    "maxSize": "Taille maximale",
+    "maxDuration": "Durée maximale",
+    "supportedFormats": "Formats supportés",
+    "upgradeText": "Passez à Pro pour téléverser jusqu'à 50 morceaux/mois",
+    "viewPlans": "Voir les Plans"
+  },
+  "membership": {
+    "title": "Choisissez Votre Plan",
+    "subtitle": "Débloquez toutes les fonctionnalités et commencez à monétiser votre musique",
+    "free": "GRATUIT",
+    "pro": "PRO",
+    "popular": "POPULAIRE",
+    "perMonth": "/mois",
+    "currentPlan": "Plan Actuel",
+    "upgradeToPro": "Passer à PRO",
+    "features": {
+      "uploads": "Téléversements",
+      "downloads": "Téléchargements",
+      "monetization": "Monétisation",
+      "djMode": "MODE DJ",
+      "mainstage": "MODE MAINSTAGE",
+      "unlimited": "Illimité",
+      "perMonth": "/mois",
+      "no": "Non",
+      "yes": "Oui - Gagnez par téléchargement",
+      "demoOnly": "Démo uniquement",
+      "fullAccess": "Accès complet"
+    }
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "close": "Fermer",
+    "confirm": "Confirmer",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "download": "Télécharger",
+    "play": "Lire",
+    "pause": "Pause",
+    "preview": "Aperçu",
+    "membershipRequired": "Abonnement requis",
+    "upgradeToUnlock": "Passez à la version supérieure pour débloquer",
+    "comingSoon": "Bientôt disponible"
+  },
+  "player": {
+    "preview": "Aperçu",
+    "previewEnded": "Aperçu terminé - Abonnez-vous pour écouter le morceau complet!",
+    "subscribe": "S'abonner"
+  },
+  "download": {
+    "downloading": "Téléchargement...",
+    "downloadComplete": "Téléchargement terminé!",
+    "downloadFailed": "Échec du téléchargement",
+    "limitReached": "Limite de téléchargements atteinte",
+    "upgradeForMore": "Passez à PRO pour des téléchargements illimités"
+  }
+}
