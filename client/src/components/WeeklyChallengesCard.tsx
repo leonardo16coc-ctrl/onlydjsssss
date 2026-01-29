@@ -1,8 +1,9 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Trophy, Target, CheckCircle2, Clock } from "lucide-react";
+import { Trophy, CheckCircle2, Clock } from "lucide-react";
 import { trpc } from "@/lib/trpc";
+import { useTranslation } from "react-i18next";
 
 const challengeIcons: Record<string, string> = {
   generate_sets: "🎛️",
@@ -17,34 +18,29 @@ const challengeIcons: Record<string, string> = {
   genre_specialist: "🎵",
 };
 
-const challengeTitles: Record<string, string> = {
-  generate_sets: "Maestro de Sets",
-  download_tracks: "Coleccionista",
-  play_tracks: "Oyente Activo",
-  upload_tracks: "Creador",
-  reach_plays: "Viral",
-  complete_profile: "Perfil Completo",
-  enter_rankings: "Top DJ",
-  gain_followers: "Influencer",
-  use_dj_mode: "DJ Mode Pro",
-  genre_specialist: "Especialista",
-};
-
-const challengeDescriptions: Record<string, (target: number) => string> = {
-  generate_sets: (target) => `Genera ${target} sets con IA`,
-  download_tracks: (target) => `Descarga ${target} tracks`,
-  play_tracks: (target) => `Reproduce ${target} tracks`,
-  upload_tracks: (target) => `Sube ${target} tracks originales`,
-  reach_plays: (target) => `Alcanza ${target} reproducciones`,
-  complete_profile: () => "Completa tu perfil al 100%",
-  enter_rankings: (target) => `Entra al Top ${target}`,
-  gain_followers: (target) => `Consigue ${target} nuevos seguidores`,
-  use_dj_mode: (target) => `Usa DJ MODE ${target} días`,
-  genre_specialist: (target) => `Descarga ${target} tracks del mismo género`,
-};
-
 export default function WeeklyChallengesCard() {
+  const { t } = useTranslation();
   const { data: challenges, isLoading } = trpc.weeklyChallenges.getMyWeeklyChallenges.useQuery();
+
+  const getChallengeTitle = (type: string): string => {
+    switch (type) {
+      case "generate_sets": return t('dashboard.setMaster');
+      case "download_tracks": return "Coleccionista";
+      case "play_tracks": return t('dashboard.activeListener');
+      case "upload_tracks": return t('dashboard.creator');
+      default: return "Reto";
+    }
+  };
+
+  const getChallengeDescription = (type: string, target: number): string => {
+    switch (type) {
+      case "generate_sets": return t('dashboard.setMasterDesc');
+      case "download_tracks": return `Descarga ${target} tracks`;
+      case "play_tracks": return t('dashboard.activeListenerDesc');
+      case "upload_tracks": return t('dashboard.creatorDesc');
+      default: return "Completa este reto";
+    }
+  };
 
   if (isLoading) {
     return (
@@ -52,7 +48,7 @@ export default function WeeklyChallengesCard() {
         <CardHeader>
           <CardTitle className="text-yellow-400 flex items-center gap-2">
             <Trophy className="w-5 h-5" />
-            🎯 Retos Semanales
+            {t('dashboard.weeklyChallenges')}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -76,15 +72,15 @@ export default function WeeklyChallengesCard() {
           <div>
             <CardTitle className="text-yellow-400 flex items-center gap-2">
               <Trophy className="w-5 h-5" />
-              🎯 Retos Semanales
+              {t('dashboard.weeklyChallenges')}
             </CardTitle>
-            <CardDescription>Completa retos para ganar badges exclusivos</CardDescription>
+            <CardDescription>{t('dashboard.completeChallenges')}</CardDescription>
           </div>
           <div className="text-right">
             <p className="text-2xl font-bold text-yellow-400">
               {completedCount}/{totalCount}
             </p>
-            <p className="text-xs text-gray-400">Completados</p>
+            <p className="text-xs text-gray-400">{t('dashboard.completed')}</p>
           </div>
         </div>
       </CardHeader>
@@ -92,8 +88,8 @@ export default function WeeklyChallengesCard() {
         {challenges.map((challenge) => {
           const progress = (challenge.currentValue / challenge.targetValue) * 100;
           const icon = challengeIcons[challenge.challengeType] || "🎯";
-          const title = challengeTitles[challenge.challengeType] || "Reto";
-          const description = challengeDescriptions[challenge.challengeType]?.(challenge.targetValue) || "Completa este reto";
+          const title = getChallengeTitle(challenge.challengeType);
+          const description = getChallengeDescription(challenge.challengeType, challenge.targetValue);
 
           return (
             <div
@@ -150,7 +146,7 @@ export default function WeeklyChallengesCard() {
         {/* Reset Info */}
         <div className="flex items-center gap-2 text-xs text-gray-400 pt-2 border-t border-slate-700">
           <Clock className="w-4 h-4" />
-          Los retos se resetean cada lunes
+          {t('dashboard.challengesReset')}
         </div>
       </CardContent>
     </Card>

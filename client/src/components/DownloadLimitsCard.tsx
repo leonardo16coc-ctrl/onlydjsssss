@@ -4,11 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Download, Crown, Sparkles, TrendingUp } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { useLocation } from "wouter";
+import { useTranslation } from "react-i18next";
 
 /**
  * DownloadLimitsCard - Shows download limits and usage for current user
  */
 export default function DownloadLimitsCard() {
+  const { t } = useTranslation();
   const [, setLocation] = useLocation();
   const { data: limits, isLoading } = trpc.downloads.getDownloadLimits.useQuery();
   const { data: stats } = trpc.downloads.getMyDownloadStats.useQuery();
@@ -34,11 +36,11 @@ export default function DownloadLimitsCard() {
   const getMembershipLabel = (status: string) => {
     switch (status) {
       case "verified":
-        return "Studio";
+        return t('downloadLimits.planStudio');
       case "member":
-        return "Pro";
+        return t('downloadLimits.planPro');
       default:
-        return "Free";
+        return t('downloadLimits.planFree');
     }
   };
 
@@ -53,11 +55,11 @@ export default function DownloadLimitsCard() {
     <Card className="p-6 border-border/50 bg-card/50 backdrop-blur">
       <div className="flex items-start justify-between mb-4">
         <div>
-          <h3 className="font-bold text-lg mb-1">Descargas Disponibles</h3>
+          <h3 className="font-bold text-lg mb-1">{t('downloadLimits.title')}</h3>
           <div className="flex items-center gap-2">
             <Crown className={`h-4 w-4 ${getMembershipColor(membershipStatus)}`} />
             <span className={`text-sm font-medium ${getMembershipColor(membershipStatus)}`}>
-              Plan {getMembershipLabel(membershipStatus)}
+              {t('downloadLimits.plan')} {getMembershipLabel(membershipStatus)}
             </span>
           </div>
         </div>
@@ -68,7 +70,7 @@ export default function DownloadLimitsCard() {
             className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
           >
             <Sparkles className="h-3 w-3 mr-1" />
-            Upgrade
+            {t('downloadLimits.upgrade')}
           </Button>
         )}
       </div>
@@ -77,12 +79,12 @@ export default function DownloadLimitsCard() {
         {/* Download count */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-muted-foreground">Este mes</span>
+            <span className="text-sm text-muted-foreground">{t('downloadLimits.thisMonth')}</span>
             <span className="text-sm font-medium">
               {unlimited ? (
                 <span className="text-green-500 flex items-center gap-1">
                   <Sparkles className="h-3 w-3" />
-                  Ilimitado
+                  {t('downloadLimits.unlimited')}
                 </span>
               ) : (
                 <span className={percentage >= 90 ? "text-red-500" : ""}>
@@ -100,7 +102,7 @@ export default function DownloadLimitsCard() {
         {!unlimited && (
           <div className="p-3 bg-primary/5 border border-primary/10 rounded-lg">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Descargas restantes</span>
+              <span className="text-sm text-muted-foreground">{t('downloadLimits.remaining')}</span>
               <span className="text-2xl font-bold text-primary">{remaining}</span>
             </div>
           </div>
@@ -112,14 +114,14 @@ export default function DownloadLimitsCard() {
             <div className="p-3 bg-muted/50 rounded-lg">
               <div className="flex items-center gap-2 mb-1">
                 <Download className="h-3 w-3 text-muted-foreground" />
-                <span className="text-xs text-muted-foreground">Total</span>
+                <span className="text-xs text-muted-foreground">{t('downloadLimits.total')}</span>
               </div>
               <span className="text-lg font-bold">{stats.totalDownloads}</span>
             </div>
             <div className="p-3 bg-muted/50 rounded-lg">
               <div className="flex items-center gap-2 mb-1">
                 <TrendingUp className="h-3 w-3 text-muted-foreground" />
-                <span className="text-xs text-muted-foreground">Este mes</span>
+                <span className="text-xs text-muted-foreground">{t('downloadLimits.thisMonth')}</span>
               </div>
               <span className="text-lg font-bold">{stats.thisMonthDownloads}</span>
             </div>
@@ -129,9 +131,7 @@ export default function DownloadLimitsCard() {
         {/* Warning for low remaining */}
         {!unlimited && remaining <= 5 && remaining > 0 && (
           <div className="p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
-            <p className="text-xs text-yellow-600 dark:text-yellow-500">
-              ⚠️ Te quedan solo {remaining} descargas este mes
-            </p>
+            <p className="text-xs text-yellow-600 dark:text-yellow-500" dangerouslySetInnerHTML={{ __html: t('downloadLimits.warning', { count: remaining }) }} />
           </div>
         )}
 
@@ -139,14 +139,14 @@ export default function DownloadLimitsCard() {
         {!unlimited && remaining === 0 && (
           <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
             <p className="text-xs text-red-600 dark:text-red-500 mb-2">
-              🚫 Has alcanzado tu límite mensual
+              {t('downloadLimits.limitReached')}
             </p>
             <Button
               size="sm"
               onClick={() => setLocation("/membership")}
               className="w-full bg-red-600 hover:bg-red-700"
             >
-              Actualizar Plan
+              {t('downloadLimits.updatePlan')}
             </Button>
           </div>
         )}
@@ -154,16 +154,14 @@ export default function DownloadLimitsCard() {
         {/* Upgrade CTA for free users */}
         {membershipStatus === "free" && remaining > 0 && (
           <div className="pt-4 border-t border-border/50">
-            <p className="text-xs text-muted-foreground mb-3">
-              Actualiza a <span className="text-purple-500 font-medium">Pro ($4.99/mes)</span> para descargas <span className="text-green-500 font-medium">ILIMITADAS</span>
-            </p>
+            <p className="text-xs text-muted-foreground mb-3" dangerouslySetInnerHTML={{ __html: t('downloadLimits.upgradeCTA') }} />
             <Button
               size="sm"
               variant="outline"
               onClick={() => setLocation("/membership")}
               className="w-full"
             >
-              Ver Planes
+              {t('downloadLimits.viewPlans')}
             </Button>
           </div>
         )}

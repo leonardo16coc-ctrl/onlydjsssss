@@ -46,37 +46,37 @@ const MainstageMode = () => {
         <TabsList className="grid w-full grid-cols-4 lg:grid-cols-7 mb-8">
           <TabsTrigger value="weapons" className="flex items-center gap-2">
             <Flame className="w-4 h-4" />
-            <span className="hidden sm:inline">Festival Weapons</span>
+            <span className="hidden sm:inline">{t("mainstage.festivalWeapons")}</span>
             <span className="sm:hidden">Weapons</span>
           </TabsTrigger>
           <TabsTrigger value="anthems" className="flex items-center gap-2">
             <Zap className="w-4 h-4" />
-            <span className="hidden sm:inline">Peak Time</span>
+            <span className="hidden sm:inline">{t("mainstage.peakTime")}</span>
             <span className="sm:hidden">Peak</span>
           </TabsTrigger>
           <TabsTrigger value="bombs" className="flex items-center gap-2">
             <Sparkles className="w-4 h-4" />
-            <span className="hidden sm:inline">Mainstage Bombs</span>
+            <span className="hidden sm:inline">{t("mainstage.mainstageBombs")}</span>
             <span className="sm:hidden">Bombs</span>
           </TabsTrigger>
           <TabsTrigger value="trending" className="flex items-center gap-2">
             <TrendingUp className="w-4 h-4" />
-            <span className="hidden sm:inline">Trending</span>
+            <span className="hidden sm:inline">{t("mainstage.trending")}</span>
             <span className="sm:hidden">Trend</span>
           </TabsTrigger>
           <TabsTrigger value="djs" className="flex items-center gap-2">
             <Users className="w-4 h-4" />
-            <span className="hidden sm:inline">Top DJs</span>
+            <span className="hidden sm:inline">{t("mainstage.topDJs")}</span>
             <span className="sm:hidden">DJs</span>
           </TabsTrigger>
           <TabsTrigger value="genres" className="flex items-center gap-2">
             <Music className="w-4 h-4" />
-            <span className="hidden sm:inline">Genres</span>
+            <span className="hidden sm:inline">{t("mainstage.genres")}</span>
             <span className="sm:hidden">Genre</span>
           </TabsTrigger>
           <TabsTrigger value="drops" className="flex items-center gap-2">
             <Trophy className="w-4 h-4" />
-            <span className="hidden sm:inline">Energy Drops</span>
+            <span className="hidden sm:inline">{t("mainstage.energyDrops")}</span>
             <span className="sm:hidden">Drops</span>
           </TabsTrigger>
         </TabsList>
@@ -89,7 +89,7 @@ const MainstageMode = () => {
               <h2 className="text-2xl font-bold">{t("mainstage.festivalWeapons")}</h2>
             </div>
             <p className="text-sm text-muted-foreground mb-6">
-              Los tracks más poderosos para festivales. Ordenados por Festival Score.
+              {t("mainstage.festivalWeaponsDesc")}
             </p>
             <div className="space-y-3">
               {allRankings?.festivalWeapons.map((track, index) => (

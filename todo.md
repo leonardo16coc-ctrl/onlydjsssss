@@ -1550,3 +1550,26 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Modificar MonetizationSection.tsx para usar useTranslation
 - [x] Verificar funcionamiento en navegador
 - [x] Guardar checkpoint
+
+
+## 65. Traducir Secciones Restantes Estáticas en Español (NUEVO)
+- [x] Identificar textos no traducidos en Rankings ("Top 100 DJs", "Trending (7 días)")
+- [x] Identificar textos no traducidos en Explore sidebar ("Descargas Disponibles", "Plan Free", "Este mes", "Descargas restantes", "Total", "Has alcanzado tu límite mensual", "Actualizar Plan")
+- [x] Identificar textos no traducidos en Dashboard ("Retos Semanales", "Completados", "Creador", "Sube 3 tracks originales", "Oyente Activo", "Reproduce 20 tracks", "Maestro de Sets", "Genera 2 sets con IA", "Los retos se resetean cada lunes")
+- [x] Identificar textos no traducidos en Mainstage ("Todos los países", "Últimos 7 días", "Festival Weapons", "Peak Time", "Mainstage Bombs", "Trending", "Top DJs", "Genres", "Energy Drops", "Los tracks más poderosos para festivales. Ordenados por Festival Score.")
+- [x] Identificar textos no traducidos en DJ Mode ("DJ Intelligence Platform", "Profile Score", "Tu ADN DJ", "DJ Profile", "Smart Suggestions", "Auto Set Builder", "Leaderboard", "Tracks Downloaded", "Tracks Played", "Average BPM", "Favorite Genres", "Based on your recent activity", "Download or play tracks to generate your profile", "Tus Badges", "Desbloquea badges completando desafíos", "Actualizar Perfil Ahora")
+- [x] Actualizar archivos JSON con traducciones de Rankings (5 idiomas)
+- [x] Actualizar archivos JSON con traducciones de Explore sidebar (5 idiomas)
+- [x] Actualizar archivos JSON con traducciones de Dashboard (5 idiomas)
+- [x] Actualizar archivos JSON con traducciones de Mainstage (5 idiomas)
+- [x] Actualizar archivos JSON con traducciones de DJ Mode (5 idiomas)
+- [x] Modificar componentes para usar useTranslation (Rankings.tsx, DownloadLimitsCard.tsx, WeeklyChallengesCard.tsx, MainstageMode.tsx)
+- [x] Verificar funcionamiento en navegador
+- [x] Guardar checkpoint
+
+## 66. Agregar Logo Clicable ONLYDJS en DJ Mode (NUEVO)
+- [x] Agregar logo "ONLYDJS" en la parte superior de DJ Mode
+- [x] Hacer que el logo sea clicable y redirija a Home (/)
+- [x] Mantener consistencia visual con el resto de la aplicación (gradiente purple-pink-cyan)
+- [x] Verificar funcionamiento
+- [x] Guardar checkpoint
