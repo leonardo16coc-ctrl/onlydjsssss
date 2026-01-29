@@ -1550,3 +1550,12 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Modificar MonetizationSection.tsx para usar useTranslation
 - [x] Verificar funcionamiento en navegador
 - [x] Guardar checkpoint
+
+
+## 67. Agregar Logo Clicable ONLYDJS en DJ Mode (NUEVO)
+- [x] Leer estructura actual del header en DJMode.tsx
+- [x] Agregar logo "ONLYDJS" con Link a Home (/)
+- [x] Aplicar estilos con gradiente purple-pink-cyan consistente
+- [x] Agregar hover effect
+- [x] Verificar funcionamiento
+- [x] Guardar checkpoint
