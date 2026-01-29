@@ -291,4 +291,82 @@ describe('i18n Translation System', () => {
       expect(deCommon.footer.tagline).toBeDefined();
     });
   });
+
+  describe('Premium Pages Keys', () => {
+    describe('DJMode Keys', () => {
+      it('should have djMode keys in English', () => {
+        expect(enCommon.djMode.loading).toBe('Loading DJ MODE...');
+        expect(enCommon.djMode.loginTitle).toBe('🎛 DJ MODE');
+        expect(enCommon.djMode.tabProfile).toBe('DJ Profile');
+        expect(enCommon.djMode.tabSuggestions).toBe('Smart Suggestions');
+        expect(enCommon.djMode.tabSetBuilder).toBe('Auto Set Builder');
+        expect(enCommon.djMode.tracksDownloaded).toBe('Tracks Downloaded');
+        expect(enCommon.djMode.autoSetBuilder).toBe('🎛 Auto Set Builder Pro');
+      });
+
+      it('should have djMode keys in Spanish', () => {
+        expect(esCommon.djMode.loading).toBe('Cargando DJ MODE...');
+        expect(esCommon.djMode.loginTitle).toBe('🎛 DJ MODE');
+        expect(esCommon.djMode.tracksDownloaded).toBe('Tracks Descargados');
+        expect(esCommon.djMode.autoSetBuilder).toBe('🎛 Auto Set Builder Pro');
+      });
+
+      it('should have djMode keys in all languages', () => {
+        expect(enCommon.djMode.loading).toBeDefined();
+        expect(esCommon.djMode.loading).toBeDefined();
+        expect(ptBRCommon.djMode.loading).toBeDefined();
+        expect(frCommon.djMode.loading).toBeDefined();
+        expect(deCommon.djMode.loading).toBeDefined();
+      });
+    });
+
+    describe('MainstageMode Keys', () => {
+      it('should have mainstage keys in English', () => {
+        expect(enCommon.mainstage.loading).toBe('Loading MAINSTAGE MODE...');
+        expect(enCommon.mainstage.title).toBe('MAINSTAGE MODE');
+        expect(enCommon.mainstage.festivalWeapons).toBe('🔥 Festival Weapons');
+        expect(enCommon.mainstage.peakTimeAnthems).toBe('🚀 Peak Time Anthems');
+        expect(enCommon.mainstage.mainstageBombs).toBe('🎆 Mainstage Bombs');
+      });
+
+      it('should have mainstage keys in Spanish', () => {
+        expect(esCommon.mainstage.loading).toBe('Cargando MAINSTAGE MODE...');
+        expect(esCommon.mainstage.title).toBe('MAINSTAGE MODE');
+        expect(esCommon.mainstage.festivalWeapons).toBe('🔥 Festival Weapons');
+      });
+
+      it('should have mainstage keys in all languages', () => {
+        expect(enCommon.mainstage.title).toBeDefined();
+        expect(esCommon.mainstage.title).toBeDefined();
+        expect(ptBRCommon.mainstage.title).toBeDefined();
+        expect(frCommon.mainstage.title).toBeDefined();
+        expect(deCommon.mainstage.title).toBeDefined();
+      });
+    });
+
+    describe('Dashboard Keys', () => {
+      it('should have dashboard keys in English', () => {
+        expect(enCommon.dashboard.title).toBe('Dashboard');
+        expect(enCommon.dashboard.loading).toBe('Loading statistics...');
+        expect(enCommon.dashboard.totalDownloads).toBe('Total Downloads');
+        expect(enCommon.dashboard.wallet).toBe('Wallet');
+        expect(enCommon.dashboard.availableBalance).toBe('Available Balance');
+      });
+
+      it('should have dashboard keys in Spanish', () => {
+        expect(esCommon.dashboard.title).toBe('Dashboard');
+        expect(esCommon.dashboard.loading).toBe('Cargando estadísticas...');
+        expect(esCommon.dashboard.totalDownloads).toBe('Descargas Totales');
+        expect(esCommon.dashboard.wallet).toBe('Wallet');
+      });
+
+      it('should have dashboard keys in all languages', () => {
+        expect(enCommon.dashboard.title).toBeDefined();
+        expect(esCommon.dashboard.title).toBeDefined();
+        expect(ptBRCommon.dashboard.title).toBeDefined();
+        expect(frCommon.dashboard.title).toBeDefined();
+        expect(deCommon.dashboard.title).toBeDefined();
+      });
+    });
+  });
 });

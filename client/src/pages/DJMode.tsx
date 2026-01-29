@@ -33,8 +33,10 @@ import EnergyFlowChart from "@/components/EnergyFlowChart";
 import ShareDJDNA from "@/components/ShareDJDNA";
 import TopSharersLeaderboard from "@/components/TopSharersLeaderboard";
 import { useNewBadges } from "@/hooks/useNewBadges";
+import { useTranslation } from "react-i18next";
 
 export default function DJMode() {
+  const { t } = useTranslation();
   const { user, loading: authLoading, isAuthenticated } = useAuth();
   const [selectedTracks, setSelectedTracks] = useState<number[]>([]);
   const [setType, setSetType] = useState<"warmup" | "peak_time" | "closing" | "festival">("peak_time");
@@ -77,14 +79,14 @@ export default function DJMode() {
   // Mutations
   const updateProfileMutation = trpc.djMode.updateProfile.useMutation({
     onSuccess: () => {
-      toast.success("Perfil DJ actualizado");
+      toast.success(t("djMode.profileUpdated"));
       refetchProfile();
     },
   });
 
   const buildSetMutation = trpc.djMode.buildAutoSet.useMutation({
     onSuccess: (data) => {
-      toast.success(`Set "${data.setName}" creado exitosamente`);
+      toast.success(t("djMode.setCreated", { name: data.setName }));
       setSelectedTracks([]);
       // Mostrar el set generado inmediatamente
       if (data && data.id) {
@@ -106,7 +108,7 @@ export default function DJMode() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto mb-4"></div>
-          <p className="text-gray-400">Cargando DJ MODE...</p>
+          <p className="text-gray-400">{t("djMode.loading")}</p>
         </div>
       </div>
     );
@@ -117,12 +119,12 @@ export default function DJMode() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
         <Card className="max-w-md w-full bg-slate-900/50 border-cyan-500/30">
           <CardHeader>
-            <CardTitle className="text-2xl text-cyan-400">🎛 DJ MODE</CardTitle>
-            <CardDescription>Inicia sesión para acceder al cerebro del DJ moderno</CardDescription>
+            <CardTitle className="text-2xl text-cyan-400">{t("djMode.loginTitle")}</CardTitle>
+            <CardDescription>{t("djMode.loginDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
             <Button asChild className="w-full bg-gradient-to-r from-cyan-500 to-purple-500">
-              <a href={getLoginUrl()}>Iniciar Sesión</a>
+              <a href={getLoginUrl()}>{t("djMode.loginButton")}</a>
             </Button>
           </CardContent>
         </Card>
@@ -143,12 +145,12 @@ export default function DJMode() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-                🎛 DJ MODE
+                {t("djMode.loginTitle")}
               </h1>
-              <p className="text-gray-400 mt-1">DJ Intelligence Platform</p>
+              <p className="text-gray-400 mt-1">{t("djMode.subtitle")}</p>
             </div>
             <Badge variant="outline" className="border-cyan-500 text-cyan-400 text-lg px-4 py-2">
-              Profile Score: {profile?.profileScore || 0}/100
+              {t("djMode.profileScore")}: {profile?.profileScore || 0}/100
             </Badge>
           </div>
         </div>
@@ -166,19 +168,19 @@ export default function DJMode() {
           <TabsList className="grid w-full grid-cols-4 bg-slate-900/50">
             <TabsTrigger value="profile" className="data-[state=active]:bg-cyan-500/20 data-[state=active]:text-cyan-400">
               <Activity className="w-4 h-4 mr-2" />
-              DJ Profile
+              {t("djMode.tabProfile")}
             </TabsTrigger>
             <TabsTrigger value="suggestions" className="data-[state=active]:bg-purple-500/20 data-[state=active]:text-purple-400">
               <Sparkles className="w-4 h-4 mr-2" />
-              Smart Suggestions
+              {t("djMode.tabSuggestions")}
             </TabsTrigger>
             <TabsTrigger value="setbuilder" className="data-[state=active]:bg-pink-500/20 data-[state=active]:text-pink-400">
               <Layers className="w-4 h-4 mr-2" />
-              Auto Set Builder
+              {t("djMode.tabSetBuilder")}
             </TabsTrigger>
             <TabsTrigger value="leaderboard" className="data-[state=active]:bg-yellow-500/20 data-[state=active]:text-yellow-400">
               <TrendingUp className="w-4 h-4 mr-2" />
-              Leaderboard
+              {t("djMode.tabLeaderboard")}
             </TabsTrigger>
           </TabsList>
 
@@ -190,7 +192,7 @@ export default function DJMode() {
                 <CardHeader>
                   <CardTitle className="text-cyan-400 flex items-center gap-2">
                     <Music className="w-5 h-5" />
-                    Tracks Descargados
+                    {t("djMode.tracksDownloaded")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -202,7 +204,7 @@ export default function DJMode() {
                 <CardHeader>
                   <CardTitle className="text-purple-400 flex items-center gap-2">
                     <Radio className="w-5 h-5" />
-                    Tracks Reproducidos
+                    {t("djMode.tracksPlayed")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -214,14 +216,14 @@ export default function DJMode() {
                 <CardHeader>
                   <CardTitle className="text-pink-400 flex items-center gap-2">
                     <BarChart3 className="w-5 h-5" />
-                    BPM Promedio
+                    {t("djMode.avgBpm")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-4xl font-bold text-white">{profile?.avgBpm || "N/A"}</p>
                   {profile?.minBpm && profile?.maxBpm && (
                     <p className="text-sm text-gray-400 mt-2">
-                      Rango: {profile.minBpm} - {profile.maxBpm}
+                      {t("djMode.bpmRange")}: {profile.minBpm} - {profile.maxBpm}
                     </p>
                   )}
                 </CardContent>
@@ -231,8 +233,8 @@ export default function DJMode() {
             {/* Géneros Favoritos */}
             <Card className="bg-slate-900/50 border-cyan-500/30">
               <CardHeader>
-                <CardTitle className="text-cyan-400">🎵 Géneros Favoritos</CardTitle>
-                <CardDescription>Basado en tu actividad reciente</CardDescription>
+                <CardTitle className="text-cyan-400">{t("djMode.favoriteGenres")}</CardTitle>
+                <CardDescription>{t("djMode.favoriteGenresDesc")}</CardDescription>
               </CardHeader>
               <CardContent>
                 {favoriteGenres.length > 0 ? (
@@ -248,7 +250,7 @@ export default function DJMode() {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-gray-400">Descarga o reproduce tracks para generar tu perfil</p>
+                  <p className="text-gray-400">{t("djMode.noGenres")}</p>
                 )}
               </CardContent>
             </Card>
@@ -256,8 +258,8 @@ export default function DJMode() {
             {/* Keys Favoritas */}
             <Card className="bg-slate-900/50 border-purple-500/30">
               <CardHeader>
-                <CardTitle className="text-purple-400">🎹 Tonalidades Preferidas</CardTitle>
-                <CardDescription>Compatibilidad armónica (Camelot Wheel)</CardDescription>
+                <CardTitle className="text-purple-400">{t("djMode.favoriteKeys")}</CardTitle>
+                <CardDescription>{t("djMode.favoriteKeysDesc")}</CardDescription>
               </CardHeader>
               <CardContent>
                 {favoriteKeys.length > 0 ? (
@@ -273,7 +275,7 @@ export default function DJMode() {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-gray-400">Descarga o reproduce tracks para generar tu perfil</p>
+                  <p className="text-gray-400">{t("djMode.noGenres")}</p>
                 )}
               </CardContent>
             </Card>
@@ -414,12 +416,12 @@ export default function DJMode() {
 
             {/* Sets Sugeridos */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Warmup */}
+              {/* {t("djMode.warmup")} */}
               <Card className="bg-slate-900/50 border-blue-500/30">
                 <CardHeader>
                   <CardTitle className="text-blue-400 flex items-center gap-2">
                     <Target className="w-5 h-5" />
-                    Warmup Tracks
+                    {t("djMode.warmup")} Tracks
                   </CardTitle>
                   <CardDescription>Energía baja, BPM progresivo</CardDescription>
                 </CardHeader>
@@ -434,17 +436,17 @@ export default function DJMode() {
                       ))}
                     </div>
                   ) : (
-                    <p className="text-sm text-gray-400">No hay tracks disponibles</p>
+                    <p className="text-sm text-gray-400">{t("djMode.noFestivalTracks")}</p>
                   )}
                 </CardContent>
               </Card>
 
-              {/* Peak Time */}
+              {/* {t("djMode.peakTime")} */}
               <Card className="bg-slate-900/50 border-red-500/30">
                 <CardHeader>
                   <CardTitle className="text-red-400 flex items-center gap-2">
                     <Zap className="w-5 h-5" />
-                    Peak Time Tracks
+                    {t("djMode.peakTime")} Tracks
                   </CardTitle>
                   <CardDescription>Energía alta, drops masivos</CardDescription>
                 </CardHeader>
@@ -459,17 +461,17 @@ export default function DJMode() {
                       ))}
                     </div>
                   ) : (
-                    <p className="text-sm text-gray-400">No hay tracks disponibles</p>
+                    <p className="text-sm text-gray-400">{t("djMode.noFestivalTracks")}</p>
                   )}
                 </CardContent>
               </Card>
 
-              {/* Closing */}
+              {/* {t("djMode.closing")} */}
               <Card className="bg-slate-900/50 border-purple-500/30">
                 <CardHeader>
                   <CardTitle className="text-purple-400 flex items-center gap-2">
                     <Heart className="w-5 h-5" />
-                    Closing Tracks
+                    {t("djMode.closing")} Tracks
                   </CardTitle>
                   <CardDescription>Energía descendente, emocional</CardDescription>
                 </CardHeader>
@@ -484,17 +486,17 @@ export default function DJMode() {
                       ))}
                     </div>
                   ) : (
-                    <p className="text-sm text-gray-400">No hay tracks disponibles</p>
+                    <p className="text-sm text-gray-400">{t("djMode.noFestivalTracks")}</p>
                   )}
                 </CardContent>
               </Card>
 
-              {/* Festival */}
+              {/* {t("djMode.festival")} */}
               <Card className="bg-slate-900/50 border-yellow-500/30">
                 <CardHeader>
                   <CardTitle className="text-yellow-400 flex items-center gap-2">
                     <Rocket className="w-5 h-5" />
-                    Festival Tracks
+                    {t("djMode.festival")} Tracks
                   </CardTitle>
                   <CardDescription>Anthems, crowd control</CardDescription>
                 </CardHeader>
@@ -509,7 +511,7 @@ export default function DJMode() {
                       ))}
                     </div>
                   ) : (
-                    <p className="text-sm text-gray-400">No hay tracks disponibles</p>
+                    <p className="text-sm text-gray-400">{t("djMode.noFestivalTracks")}</p>
                   )}
                 </CardContent>
               </Card>
@@ -520,9 +522,9 @@ export default function DJMode() {
               <CardHeader>
                 <CardTitle className="text-pink-400 flex items-center gap-2">
                   <TrendingUp className="w-5 h-5" />
-                  🚀 Próximas Bombas
+                  {t("djMode.upcomingBombs")}
                 </CardTitle>
-                <CardDescription>Trending tracks de los últimos 7 días</CardDescription>
+                <CardDescription>{t("djMode.upcomingBombsDesc")}</CardDescription>
               </CardHeader>
               <CardContent>
                 {suggestions?.trendingTracks && suggestions.trendingTracks.length > 0 ? (
@@ -536,7 +538,7 @@ export default function DJMode() {
                               <p className="text-sm text-gray-400">{track.artist}</p>
                             </div>
                             <Badge variant="outline" className="border-pink-500 text-pink-400">
-                              {track.downloadCount} descargas
+                              {track.downloadCount} {t("djMode.downloads")}
                             </Badge>
                           </div>
                         </div>
@@ -544,7 +546,7 @@ export default function DJMode() {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-gray-400">No hay tracks trending disponibles</p>
+                  <p className="text-gray-400">{t("djMode.noTrendingTracks")}</p>
                 )}
               </CardContent>
             </Card>
@@ -554,15 +556,15 @@ export default function DJMode() {
           <TabsContent value="setbuilder" className="space-y-6">
             <Card className="bg-slate-900/50 border-cyan-500/30">
               <CardHeader>
-                <CardTitle className="text-cyan-400">🎛 Auto Set Builder Pro</CardTitle>
+                <CardTitle className="text-cyan-400">🎛 {t("djMode.tabSetBuilder")} Pro</CardTitle>
                 <CardDescription>
-                  Genera sets automáticos con IA. Sube hasta 10 tracks y la IA creará el orden perfecto.
+                  {t("djMode.autoSetBuilderDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
                   <label className="text-sm font-medium text-gray-300 mb-2 block">
-                    Tipo de Set
+                    {t("djMode.setType")}
                   </label>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                     <Button
@@ -570,28 +572,28 @@ export default function DJMode() {
                       onClick={() => setSetType("warmup")}
                       className={setType === "warmup" ? "bg-blue-500" : ""}
                     >
-                      Warmup
+                      {t("djMode.warmup")}
                     </Button>
                     <Button
                       variant={setType === "peak_time" ? "default" : "outline"}
                       onClick={() => setSetType("peak_time")}
                       className={setType === "peak_time" ? "bg-red-500" : ""}
                     >
-                      Peak Time
+                      {t("djMode.peakTime")}
                     </Button>
                     <Button
                       variant={setType === "closing" ? "default" : "outline"}
                       onClick={() => setSetType("closing")}
                       className={setType === "closing" ? "bg-purple-500" : ""}
                     >
-                      Closing
+                      {t("djMode.closing")}
                     </Button>
                     <Button
                       variant={setType === "festival" ? "default" : "outline"}
                       onClick={() => setSetType("festival")}
                       className={setType === "festival" ? "bg-yellow-500" : ""}
                     >
-                      Festival
+                      {t("djMode.festival")}
                     </Button>
                   </div>
                 </div>
@@ -600,16 +602,16 @@ export default function DJMode() {
 
                 <div>
                   <p className="text-sm text-gray-400 mb-4">
-                    Selecciona tracks desde la página Explore y vuelve aquí para generar tu set.
+                    {t("djMode.selectTracksDesc")}
                   </p>
                   <div className="flex gap-2">
                     <Button asChild variant="outline" className="flex-1">
-                      <Link href="/explore">Ir a Explore</Link>
+                      <Link href="/explore">{t("djMode.goToExplore")}</Link>
                     </Button>
                     <Button
                       onClick={() => {
                         if (selectedTracks.length < 2) {
-                          toast.error("Necesitas al menos 2 tracks para generar un set");
+                          toast.error(t("djMode.minTracksError"));
                           return;
                         }
                         buildSetMutation.mutate({
@@ -620,7 +622,7 @@ export default function DJMode() {
                       disabled={selectedTracks.length < 2 || buildSetMutation.isPending}
                       className="flex-1 bg-gradient-to-r from-cyan-500 to-purple-500"
                     >
-                      {buildSetMutation.isPending ? "Generando..." : `Generar Set (${selectedTracks.length} tracks)`}
+                      {buildSetMutation.isPending ? t("djMode.generating") : `${t("djMode.generateSet")} (${selectedTracks.length} ${t("djMode.tracksCount", { count: selectedTracks.length })})`}
                     </Button>
                   </div>
                 </div>
@@ -633,17 +635,17 @@ export default function DJMode() {
                 <CardHeader>
                   <CardTitle className="text-cyan-400 flex items-center gap-2">
                     <Sparkles className="w-6 h-6" />
-                    ✨ Set Generado: {lastGeneratedSetDetails.name}
+                    {t("djMode.setGenerated")}: {lastGeneratedSetDetails.name}
                   </CardTitle>
                   <CardDescription>
-                    {lastGeneratedSetDetails.tracks.length} tracks • BPM promedio: {lastGeneratedSetDetails.avgBpm} • Compatibilidad: {lastGeneratedSetDetails.keyCompatibility}%
+                    {lastGeneratedSetDetails.tracks.length} tracks • BPM promedio: {lastGeneratedSetDetails.avgBpm} • {t("djMode.compatibility")}: {lastGeneratedSetDetails.keyCompatibility}%
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {/* Energy Curve Timeline */}
                   <div>
                     <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
-                      📈 Energy Curve Timeline
+                      {t("djMode.energyCurve")}
                     </h3>
                     <EnergyFlowChart tracks={lastGeneratedSetDetails.tracks} setType={lastGeneratedSetDetails.setType} />
                   </div>
@@ -653,7 +655,7 @@ export default function DJMode() {
                   {/* Tracks con Transiciones */}
                   <div>
                     <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
-                      🎛 Mixing Guide
+                      {t("djMode.mixingGuide")}
                     </h3>
                     <div className="space-y-4">
                       {lastGeneratedSetDetails.tracks.map((track, index) => (
@@ -668,7 +670,7 @@ export default function DJMode() {
                                 <p className="text-sm text-gray-400">{track.artist}</p>
                               </div>
                               <Badge variant="outline" className="border-cyan-500 text-cyan-400">
-                                Energía: {track.energy}/100
+                                {t("djMode.energy")}: {track.energy}/100
                               </Badge>
                             </div>
                             <div className="flex gap-3 text-xs text-gray-400">
@@ -682,7 +684,7 @@ export default function DJMode() {
                           {index < lastGeneratedSetDetails.tracks.length - 1 && lastGeneratedSetDetails.transitions && (
                             <div className="my-3 ml-8 p-3 bg-purple-500/10 border-l-2 border-purple-500 rounded-r-lg">
                               <p className="text-sm font-medium text-purple-400 mb-1 flex items-center gap-2">
-                                🎛 Mixing Tip:
+                                {t("djMode.mixingTip")}
                               </p>
                               <p className="text-sm text-gray-300">
                                 {lastGeneratedSetDetails.transitions[index]?.technique || "Transición suave"}
@@ -707,7 +709,7 @@ export default function DJMode() {
                     variant="outline"
                     className="w-full border-cyan-500 text-cyan-400 hover:bg-cyan-500/10"
                   >
-                    Cerrar Vista
+                    {t("djMode.closeView")}
                   </Button>
                 </CardContent>
               </Card>
@@ -716,7 +718,7 @@ export default function DJMode() {
             {/* Mis Sets */}
             <Card className="bg-slate-900/50 border-purple-500/30">
               <CardHeader>
-                <CardTitle className="text-purple-400">📝 Mis Sets Generados</CardTitle>
+                <CardTitle className="text-purple-400">{t("djMode.mySets")}</CardTitle>
               </CardHeader>
               <CardContent>
                 {mySets && mySets.length > 0 ? (
@@ -742,14 +744,14 @@ export default function DJMode() {
                         <div className="flex gap-2 text-xs text-gray-400">
                           <span>BPM: {set.avgBpm}</span>
                           <span>•</span>
-                          <span>Compatibilidad: {set.keyCompatibility}%</span>
+                          <span>{t("djMode.compatibility")}: {set.keyCompatibility}%</span>
                         </div>
-                        <p className="text-xs text-cyan-400 mt-2">Click para ver detalles →</p>
+                        <p className="text-xs text-cyan-400 mt-2">{t("djMode.clickDetails")}</p>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-gray-400">No has generado sets todavía</p>
+                  <p className="text-gray-400">{t("djMode.noSets")}</p>
                 )}
               </CardContent>
             </Card>

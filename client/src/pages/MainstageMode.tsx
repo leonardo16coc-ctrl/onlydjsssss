@@ -1,9 +1,11 @@
 import { trpc } from "@/lib/trpc";
+import { useTranslation } from "react-i18next";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Flame, Zap, Trophy, TrendingUp, Users, Music, Sparkles } from "lucide-react";
 
 const MainstageMode = () => {
+  const { t } = useTranslation();
   const { data: allRankings, isLoading } = trpc.festivalRankings.getAllRankings.useQuery({
     limit: 10,
   });
@@ -14,7 +16,7 @@ const MainstageMode = () => {
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
             <Sparkles className="w-12 h-12 mx-auto mb-4 text-purple-500 animate-pulse" />
-            <p className="text-muted-foreground">Cargando MAINSTAGE MODE...</p>
+            <p className="text-muted-foreground">{t("mainstage.loading")}</p>
           </div>
         </div>
       </div>
@@ -84,7 +86,7 @@ const MainstageMode = () => {
           <Card className="p-6 bg-gradient-to-br from-orange-500/10 to-red-500/10 border-orange-500/30">
             <div className="flex items-center gap-2 mb-4">
               <Flame className="w-6 h-6 text-orange-500" />
-              <h2 className="text-2xl font-bold">🔥 Festival Weapons</h2>
+              <h2 className="text-2xl font-bold">{t("mainstage.festivalWeapons")}</h2>
             </div>
             <p className="text-sm text-muted-foreground mb-6">
               Los tracks más poderosos para festivales. Ordenados por Festival Score.
@@ -121,7 +123,7 @@ const MainstageMode = () => {
                     <div className="text-2xl font-bold text-orange-500">
                       {track.festivalScore}
                     </div>
-                    <div className="text-xs text-muted-foreground">Festival Score</div>
+                    <div className="text-xs text-muted-foreground">{t("mainstage.festivalScore")}</div>
                   </div>
                 </div>
               ))}
@@ -134,7 +136,7 @@ const MainstageMode = () => {
           <Card className="p-6 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border-yellow-500/30">
             <div className="flex items-center gap-2 mb-4">
               <Zap className="w-6 h-6 text-yellow-500" />
-              <h2 className="text-2xl font-bold">🚀 Peak Time Anthems</h2>
+              <h2 className="text-2xl font-bold">{t("mainstage.peakTimeAnthems")}</h2>
             </div>
             <p className="text-sm text-muted-foreground mb-6">
               Los anthems definitivos para el momento peak del set.
@@ -171,7 +173,7 @@ const MainstageMode = () => {
                     <div className="text-2xl font-bold text-yellow-500">
                       {track.peakTimeScore}
                     </div>
-                    <div className="text-xs text-muted-foreground">Peak Time Score</div>
+                    <div className="text-xs text-muted-foreground">{t("mainstage.peakTimeScore")}</div>
                   </div>
                 </div>
               ))}
@@ -184,7 +186,7 @@ const MainstageMode = () => {
           <Card className="p-6 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-500/30">
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="w-6 h-6 text-purple-500" />
-              <h2 className="text-2xl font-bold">🎆 Mainstage Bombs</h2>
+              <h2 className="text-2xl font-bold">{t("mainstage.mainstageBombs")}</h2>
             </div>
             <p className="text-sm text-muted-foreground mb-6">
               Tracks perfectos para el mainstage. Máxima compatibilidad.
@@ -221,7 +223,7 @@ const MainstageMode = () => {
                     <div className="text-2xl font-bold text-purple-500">
                       {track.mainstageCompatibilityScore}
                     </div>
-                    <div className="text-xs text-muted-foreground">Mainstage Score</div>
+                    <div className="text-xs text-muted-foreground">{t("mainstage.mainstageScore")}</div>
                   </div>
                 </div>
               ))}
@@ -234,7 +236,7 @@ const MainstageMode = () => {
           <Card className="p-6 bg-gradient-to-br from-green-500/10 to-cyan-500/10 border-green-500/30">
             <div className="flex items-center gap-2 mb-4">
               <TrendingUp className="w-6 h-6 text-green-500" />
-              <h2 className="text-2xl font-bold">🌍 Global Trending</h2>
+              <h2 className="text-2xl font-bold">{t("mainstage.globalTrending")}</h2>
             </div>
             <p className="text-sm text-muted-foreground mb-6">
               Tracks con mayor crecimiento en los últimos 7 días.

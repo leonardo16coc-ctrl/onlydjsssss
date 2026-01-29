@@ -1441,9 +1441,9 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Traducir Explore.tsx (filters, search, track cards)
 - [x] Traducir Upload.tsx (forms, validation messages, limits)
 - [x] Traducir Membership.tsx (plans, pricing, features)
-- [ ] Traducir DJMode.tsx (ADN DJ, suggestions, auto sets)
-- [ ] Traducir MainstageMode.tsx (festival intelligence, rankings)
-- [ ] Traducir Dashboard.tsx (stats, navigation)
+- [x] Traducir DJMode.tsx (ADN DJ, suggestions, auto sets)
+- [x] Traducir MainstageMode.tsx (festival intelligence, rankings)
+- [x] Traducir Dashboard.tsx (stats, navigation)
 
 ### Traducción de Componentes Comunes
 - [x] Traducir Navbar (links, botones)
@@ -1465,7 +1465,7 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Test de persistencia en localStorage
 - [x] Test de detección automática de navegador
 - [x] Test de fallback a inglés
-- [x] Verificar que todas las traducciones están completas (28/28 tests pasando)
+- [x] Verificar que todas las traducciones están completas (37/37 tests pasando)
 
 
 ## 57. Traducir Páginas Restantes al Sistema i18n (NUEVO)
@@ -1501,3 +1501,17 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Modificar Footer.tsx para usar useTranslation
 - [x] Verificar funcionamiento en navegador
 - [x] Crear/actualizar tests de traducción (28/28 tests pasando)
+
+
+## 60. Traducir Páginas Premium al Sistema i18n (NUEVO)
+- [x] Leer y analizar DJMode.tsx para identificar textos
+- [x] Leer y analizar MainstageMode.tsx para identificar textos
+- [x] Leer y analizar Dashboard.tsx para identificar textos
+- [x] Actualizar archivos JSON con traducciones de DJMode (5 idiomas)
+- [x] Actualizar archivos JSON con traducciones de MainstageMode (5 idiomas)
+- [x] Actualizar archivos JSON con traducciones de Dashboard (5 idiomas)
+- [x] Modificar DJMode.tsx para usar useTranslation
+- [x] Modificar MainstageMode.tsx para usar useTranslation
+- [x] Modificar Dashboard.tsx para usar useTranslation
+- [x] Verificar funcionamiento en navegador
+- [x] Crear/actualizar tests de traducción (37/37 tests pasando)
