@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Play, Pause, Volume2, VolumeX } from "lucide-react";
@@ -15,6 +16,7 @@ interface AudioPlayerProps {
 
 export default function AudioPlayer({ audioUrl, trackId, trackTitle, compact = false }: AudioPlayerProps) {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -57,12 +59,12 @@ export default function AudioPlayer({ audioUrl, trackId, trackTitle, compact = f
           
           // Show toast notification
           toast.info(
-            "Preview terminado - ¡Suscríbete para escuchar completo!",
+            t('player.previewEnded'),
             {
-              description: `Has alcanzado el límite de 1 minuto de preview. Suscríbete por solo $4.99/mes para acceso ilimitado.`,
+              description: t('player.previewEndedDesc'),
               duration: 8000,
               action: {
-                label: "Suscribirse",
+                label: t('player.subscribe'),
                 onClick: () => setLocation("/membership"),
               },
             }
@@ -176,7 +178,7 @@ export default function AudioPlayer({ audioUrl, trackId, trackTitle, compact = f
           {formatTime(currentTime)} / {formatTime(maxDuration)}
         </span>
         {isPreviewLimited && (
-          <span className="text-xs text-primary font-medium">Preview</span>
+          <span className="text-xs text-primary font-medium">{t('player.preview')}</span>
         )}
       </div>
     );
@@ -191,7 +193,7 @@ export default function AudioPlayer({ audioUrl, trackId, trackTitle, compact = f
         <p className="text-sm font-medium truncate">{trackTitle}</p>
         {isPreviewLimited && (
           <span className="text-xs text-primary font-medium bg-primary/10 px-2 py-1 rounded">
-            Preview 1 min
+            {t('player.previewOneMin')}
           </span>
         )}
       </div>
@@ -253,7 +255,7 @@ export default function AudioPlayer({ audioUrl, trackId, trackTitle, compact = f
 
       {isPreviewLimited && (
         <p className="text-xs text-muted-foreground text-center">
-          Suscríbete para escuchar el track completo
+          {t('player.subscribeToListen')}
         </p>
       )}
     </div>

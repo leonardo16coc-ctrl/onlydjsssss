@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -21,6 +22,7 @@ interface DownloadButtonProps {
 
 export default function DownloadButton({ trackId, trackTitle, artist, compact = false }: DownloadButtonProps) {
   const { user, isAuthenticated } = useAuth();
+  const { t } = useTranslation();
   const [isDownloading, setIsDownloading] = useState(false);
   
   const downloadMutation = trpc.downloads.downloadTrack.useMutation({
@@ -34,19 +36,19 @@ export default function DownloadButton({ trackId, trackTitle, artist, compact = 
       link.click();
       document.body.removeChild(link);
       
-      toast.success(`Descargando ${data.filename}`);
+      toast.success(t('download.downloadingFile').replace('{filename}', data.filename));
       setIsDownloading(false);
     },
     onError: (error: any) => {
-      if (error.message.includes("membresía")) {
-        toast.error("Necesitas una membresía activa para descargar", {
+      if (error.message.includes("membresía") || error.message.includes("membership")) {
+        toast.error(t('download.membershipRequired'), {
           action: {
-            label: "Suscribirse",
+            label: t('player.subscribe'),
             onClick: () => window.location.href = "/membership",
           },
         });
       } else {
-        toast.error(error.message || "Error al descargar el track");
+        toast.error(error.message || t('download.downloadError'));
       }
       setIsDownloading(false);
     },
@@ -54,9 +56,9 @@ export default function DownloadButton({ trackId, trackTitle, artist, compact = 
 
   const handleDownload = (format: "mp3" | "wav") => {
     if (!isAuthenticated) {
-      toast.error("Debes iniciar sesión para descargar", {
+      toast.error(t('download.loginToDownload'), {
         action: {
-          label: "Iniciar sesión",
+          label: t('download.login'),
           onClick: () => window.location.href = getLoginUrl(),
         },
       });
@@ -64,10 +66,10 @@ export default function DownloadButton({ trackId, trackTitle, artist, compact = 
     }
 
     if (user?.membershipStatus === "free") {
-      toast.error("Necesitas una membresía activa para descargar", {
-        description: "Suscríbete por $4.99/mes para acceso ilimitado",
+      toast.error(t('download.membershipRequired'), {
+        description: t('download.membershipDesc'),
         action: {
-          label: "Suscribirse",
+          label: t('player.subscribe'),
           onClick: () => window.location.href = "/membership",
         },
       });
@@ -103,11 +105,11 @@ export default function DownloadButton({ trackId, trackTitle, artist, compact = 
         <DropdownMenuContent align="end">
           <DropdownMenuItem onClick={() => handleDownload("mp3")}>
             <Download className="h-4 w-4 mr-2" />
-            Descargar MP3 320kbps
+            {t('download.downloadMp3')}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => handleDownload("wav")}>
             <Download className="h-4 w-4 mr-2" />
-            Descargar WAV
+            {t('download.downloadWav')}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -125,17 +127,17 @@ export default function DownloadButton({ trackId, trackTitle, artist, compact = 
           {isDownloading ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Descargando...
+              {t('download.downloading')}
             </>
           ) : isFreeUser ? (
             <>
               <Lock className="h-4 w-4 mr-2" />
-              Descargar (Membresía requerida)
+              {t('download.downloadRequired')}
             </>
           ) : (
             <>
               <Download className="h-4 w-4 mr-2" />
-              Descargar
+              {t('download.download')}
             </>
           )}
         </Button>
@@ -145,14 +147,14 @@ export default function DownloadButton({ trackId, trackTitle, artist, compact = 
           <Download className="h-4 w-4 mr-2" />
           <div className="flex flex-col">
             <span className="font-medium">MP3 320kbps</span>
-            <span className="text-xs text-muted-foreground">Alta calidad, archivo pequeño</span>
+            <span className="text-xs text-muted-foreground">{t('download.mp3Quality')}</span>
           </div>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => handleDownload("wav")}>
           <Download className="h-4 w-4 mr-2" />
           <div className="flex flex-col">
             <span className="font-medium">WAV</span>
-            <span className="text-xs text-muted-foreground">Calidad máxima, sin compresión</span>
+            <span className="text-xs text-muted-foreground">{t('download.wavQuality')}</span>
           </div>
         </DropdownMenuItem>
       </DropdownMenuContent>

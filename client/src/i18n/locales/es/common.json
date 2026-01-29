@@ -224,15 +224,30 @@
     "comingSoon": "Próximamente"
   },
   "player": {
-    "preview": "Vista Previa",
-    "previewEnded": "Vista previa terminada - ¡Suscríbete para escuchar el track completo!",
-    "subscribe": "Suscribirse"
+    "preview": "Preview",
+    "previewEnded": "Preview terminado - ¡Suscríbete para escuchar completo!",
+    "subscribe": "Suscribirse",
+    "previewEndedDesc": "Has alcanzado el límite de 1 minuto de preview. Suscríbete por solo $4.99/mes para acceso ilimitado.",
+    "subscribeToListen": "Suscríbete para escuchar el track completo",
+    "previewOneMin": "Preview 1 min"
   },
   "download": {
     "downloading": "Descargando...",
     "downloadComplete": "¡Descarga completa!",
     "downloadFailed": "Descarga fallida",
     "limitReached": "Límite de descargas alcanzado",
-    "upgradeForMore": "Actualiza a PRO para descargas ilimitadas"
+    "upgradeForMore": "Actualiza a PRO para descargas ilimitadas",
+    "downloadingFile": "Descargando {filename}",
+    "download": "Descargar",
+    "downloadRequired": "Descargar (Membresía requerida)",
+    "downloadMp3": "Descargar MP3 320kbps",
+    "downloadWav": "Descargar WAV",
+    "mp3Quality": "Alta calidad, archivo pequeño",
+    "wavQuality": "Calidad máxima, sin compresión",
+    "loginToDownload": "Debes iniciar sesión para descargar",
+    "login": "Iniciar sesión",
+    "membershipRequired": "Necesitas una membresía activa para descargar",
+    "membershipDesc": "Suscríbete por $4.99/mes para acceso ilimitado",
+    "downloadError": "Error al descargar el track"
   }
 }

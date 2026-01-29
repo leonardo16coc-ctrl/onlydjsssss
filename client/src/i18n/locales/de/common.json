@@ -226,13 +226,28 @@
   "player": {
     "preview": "Vorschau",
     "previewEnded": "Vorschau beendet - Abonnieren Sie, um den vollständigen Track zu hören!",
-    "subscribe": "Abonnieren"
+    "subscribe": "Abonnieren",
+    "previewEndedDesc": "Sie haben das 1-Minuten-Vorschaulimit erreicht. Abonnieren Sie für nur $4.99/Monat für unbegrenzten Zugang.",
+    "subscribeToListen": "Abonnieren Sie, um den vollständigen Track zu hören",
+    "previewOneMin": "Vorschau 1 Min"
   },
   "download": {
-    "downloading": "Herunterladen...",
+    "downloading": "Wird heruntergeladen...",
     "downloadComplete": "Download abgeschlossen!",
     "downloadFailed": "Download fehlgeschlagen",
     "limitReached": "Download-Limit erreicht",
-    "upgradeForMore": "Upgrade auf PRO für unbegrenzte Downloads"
+    "upgradeForMore": "Upgrade auf PRO für unbegrenzte Downloads",
+    "downloadingFile": "{filename} wird heruntergeladen",
+    "download": "Herunterladen",
+    "downloadRequired": "Herunterladen (Mitgliedschaft erforderlich)",
+    "downloadMp3": "MP3 320kbps herunterladen",
+    "downloadWav": "WAV herunterladen",
+    "mp3Quality": "Hohe Qualität, kleine Datei",
+    "wavQuality": "Maximale Qualität, unkomprimiert",
+    "loginToDownload": "Sie müssen sich anmelden, um herunterzuladen",
+    "login": "Anmelden",
+    "membershipRequired": "Sie benötigen eine aktive Mitgliedschaft zum Herunterladen",
+    "membershipDesc": "Abonnieren Sie für $4.99/Monat für unbegrenzten Zugang",
+    "downloadError": "Fehler beim Herunterladen des Tracks"
   }
 }

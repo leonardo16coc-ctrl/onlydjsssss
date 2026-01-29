@@ -226,13 +226,28 @@
   "player": {
     "preview": "Preview",
     "previewEnded": "Preview ended - Subscribe to listen to the full track!",
-    "subscribe": "Subscribe"
+    "subscribe": "Subscribe",
+    "previewEndedDesc": "You've reached the 1-minute preview limit. Subscribe for just $4.99/month for unlimited access.",
+    "subscribeToListen": "Subscribe to listen to the full track",
+    "previewOneMin": "Preview 1 min"
   },
   "download": {
     "downloading": "Downloading...",
     "downloadComplete": "Download complete!",
     "downloadFailed": "Download failed",
     "limitReached": "Download limit reached",
-    "upgradeForMore": "Upgrade to PRO for unlimited downloads"
+    "upgradeForMore": "Upgrade to PRO for unlimited downloads",
+    "downloadingFile": "Downloading {filename}",
+    "download": "Download",
+    "downloadRequired": "Download (Membership required)",
+    "downloadMp3": "Download MP3 320kbps",
+    "downloadWav": "Download WAV",
+    "mp3Quality": "High quality, small file",
+    "wavQuality": "Maximum quality, uncompressed",
+    "loginToDownload": "You must log in to download",
+    "login": "Log in",
+    "membershipRequired": "You need an active membership to download",
+    "membershipDesc": "Subscribe for $4.99/month for unlimited access",
+    "downloadError": "Error downloading track"
   }
 }

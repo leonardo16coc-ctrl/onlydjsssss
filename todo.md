@@ -1448,9 +1448,9 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 ### Traducción de Componentes Comunes
 - [x] Traducir Navbar (links, botones)
 - [ ] Traducir Footer (links, copyright)
-- [ ] Traducir DownloadButton (estados, mensajes)
-- [ ] Traducir AudioPlayer (controles, preview messages)
-- [ ] Traducir Toast notifications (success, error, info)
+- [x] Traducir DownloadButton (estados, mensajes)
+- [x] Traducir AudioPlayer (controles, preview messages)
+- [x] Traducir Toast notifications (success, error, info)
 - [ ] Traducir Forms (labels, placeholders, validation)
 - [ ] Traducir Modals (títulos, descripciones, botones)
 
@@ -1465,7 +1465,7 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Test de persistencia en localStorage
 - [x] Test de detección automática de navegador
 - [x] Test de fallback a inglés
-- [x] Verificar que todas las traducciones están completas (13/13 tests pasando)
+- [x] Verificar que todas las traducciones están completas (25/25 tests pasando)
 
 
 ## 57. Traducir Páginas Restantes al Sistema i18n (NUEVO)
@@ -1480,3 +1480,16 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Modificar Membership.tsx para usar useTranslation
 - [x] Verificar funcionamiento en navegador
 - [x] Crear/actualizar tests de traducción (19/19 tests pasando)
+
+
+## 58. Traducir Componentes Comunes Restantes al Sistema i18n (NUEVO)
+- [x] Leer y analizar AudioPlayer.tsx para identificar textos
+- [x] Leer y analizar DownloadButton.tsx para identificar textos
+- [x] Identificar mensajes Toast en toda la aplicación
+- [x] Actualizar archivos JSON con traducciones de AudioPlayer (5 idiomas)
+- [x] Actualizar archivos JSON con traducciones de DownloadButton (5 idiomas)
+- [x] Actualizar archivos JSON con traducciones de Toast notifications (5 idiomas)
+- [x] Modificar AudioPlayer.tsx para usar useTranslation
+- [x] Modificar DownloadButton.tsx para usar useTranslation
+- [x] Verificar funcionamiento en navegador
+- [x] Crear/actualizar tests de traducción (25/25 tests pasando)

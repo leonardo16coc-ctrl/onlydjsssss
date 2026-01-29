@@ -191,4 +191,60 @@ describe('i18n Translation System', () => {
       expect(esCommon.membership.upgradeToPro).toBe('Actualizar a PRO');
     });
   });
+
+  describe('AudioPlayer Component Keys', () => {
+    it('should have player keys in English', () => {
+      expect(enCommon.player.preview).toBe('Preview');
+      expect(enCommon.player.previewEnded).toBeDefined();
+      expect(enCommon.player.subscribe).toBe('Subscribe');
+      expect(enCommon.player.subscribeToListen).toBeDefined();
+      expect(enCommon.player.previewOneMin).toBe('Preview 1 min');
+    });
+
+    it('should have player keys in Spanish', () => {
+      expect(esCommon.player.preview).toBe('Preview');
+      expect(esCommon.player.previewEnded).toBeDefined();
+      expect(esCommon.player.subscribe).toBe('Suscribirse');
+      expect(esCommon.player.subscribeToListen).toBeDefined();
+      expect(esCommon.player.previewOneMin).toBe('Preview 1 min');
+    });
+
+    it('should have player keys in all languages', () => {
+      expect(enCommon.player.preview).toBeDefined();
+      expect(esCommon.player.preview).toBeDefined();
+      expect(ptBRCommon.player.preview).toBeDefined();
+      expect(frCommon.player.preview).toBeDefined();
+      expect(deCommon.player.preview).toBeDefined();
+    });
+  });
+
+  describe('DownloadButton Component Keys', () => {
+    it('should have download keys in English', () => {
+      expect(enCommon.download.downloading).toBe('Downloading...');
+      expect(enCommon.download.download).toBe('Download');
+      expect(enCommon.download.downloadRequired).toBeDefined();
+      expect(enCommon.download.downloadMp3).toBe('Download MP3 320kbps');
+      expect(enCommon.download.downloadWav).toBe('Download WAV');
+      expect(enCommon.download.loginToDownload).toBeDefined();
+      expect(enCommon.download.membershipRequired).toBeDefined();
+    });
+
+    it('should have download keys in Spanish', () => {
+      expect(esCommon.download.downloading).toBe('Descargando...');
+      expect(esCommon.download.download).toBe('Descargar');
+      expect(esCommon.download.downloadRequired).toBeDefined();
+      expect(esCommon.download.downloadMp3).toBe('Descargar MP3 320kbps');
+      expect(esCommon.download.downloadWav).toBe('Descargar WAV');
+      expect(esCommon.download.loginToDownload).toBeDefined();
+      expect(esCommon.download.membershipRequired).toBeDefined();
+    });
+
+    it('should have download keys in all languages', () => {
+      expect(enCommon.download.download).toBeDefined();
+      expect(esCommon.download.download).toBeDefined();
+      expect(ptBRCommon.download.download).toBeDefined();
+      expect(frCommon.download.download).toBeDefined();
+      expect(deCommon.download.download).toBeDefined();
+    });
+  });
 });
