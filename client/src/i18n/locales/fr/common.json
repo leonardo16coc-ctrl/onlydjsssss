@@ -289,10 +289,7 @@
     "generateProfile": "Download or play tracks to generate your profile",
     "yourBadges": "🎯 🏆 Vos Badges",
     "unlockBadges": "Débloquez des badges en complétant des défis",
-    "updateProfile": "Mettre à Jour le Profil",
-    "loginTitle": "MODE DJ",
-    "loginDesc": "Connectez-vous pour accéder à votre profil DJ et aux fonctionnalités IA",
-    "loginButton": "Se Connecter"
+    "updateProfile": "Mettre à Jour le Profil"
   },
   "mainstage": {
     "allCountries": "🌍 Tous les pays",
