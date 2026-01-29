@@ -4,7 +4,7 @@ import { trpc } from "@/lib/trpc";
 import { DollarSign, Download, Music, TrendingUp } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useTranslation } from "react-i18next";
-import { Redirect } from "wouter";
+
 import WeeklyChallengesCard from "@/components/WeeklyChallengesCard";
 
 export default function Dashboard() {
@@ -13,9 +13,22 @@ export default function Dashboard() {
   const { data: stats, isLoading } = trpc.dashboard.stats.useQuery();
   const { data: wallet } = trpc.wallet.get.useQuery();
 
-  if (!isAuthenticated) {
-    return <Redirect to="/" />;
-  }
+  // Datos de ejemplo para usuarios no autenticados
+  const demoStats = {
+    totalDownloads: 1247,
+    totalTracks: 89,
+    totalEarnings: 3456.78,
+    monthlyDownloads: 342
+  };
+
+  const demoWallet = {
+    availableBalance: "1,234.56",
+    pendingBalance: "567.89"
+  };
+
+  // Usar datos reales si está autenticado, sino mostrar datos demo
+  const displayStats = isAuthenticated ? stats : demoStats;
+  const displayWallet = isAuthenticated ? wallet : demoWallet;
 
   return (
     <div className="min-h-screen bg-background">
@@ -23,7 +36,7 @@ export default function Dashboard() {
       <div className="container py-8">
         <h1 className="text-4xl font-bold mb-8 text-glow-cyan">{t("dashboard.title")}</h1>
 
-        {isLoading ? (
+        {isLoading && isAuthenticated ? (
           <div className="text-center py-20">
             <p className="text-muted-foreground">{t("dashboard.loading")}</p>
           </div>
@@ -34,7 +47,7 @@ export default function Dashboard() {
                 <p className="text-sm text-muted-foreground">{t("dashboard.totalDownloads")}</p>
                 <Download className="h-5 w-5 text-primary" />
               </div>
-              <p className="text-3xl font-bold">{stats?.totalDownloads || 0}</p>
+              <p className="text-3xl font-bold">{displayStats?.totalDownloads || 0}</p>
             </Card>
 
             <Card className="card-neon p-6 bg-card">
@@ -42,7 +55,7 @@ export default function Dashboard() {
                 <p className="text-sm text-muted-foreground">{t("dashboard.tracksUploaded")}</p>
                 <Music className="h-5 w-5 text-secondary" />
               </div>
-              <p className="text-3xl font-bold">{stats?.totalTracks || 0}</p>
+              <p className="text-3xl font-bold">{displayStats?.totalTracks || 0}</p>
             </Card>
 
             <Card className="card-neon p-6 bg-card">
@@ -50,7 +63,7 @@ export default function Dashboard() {
                 <p className="text-sm text-muted-foreground">{t("dashboard.totalEarnings")}</p>
                 <DollarSign className="h-5 w-5 text-accent" />
               </div>
-              <p className="text-3xl font-bold">${stats?.totalEarnings.toFixed(2) || "0.00"}</p>
+              <p className="text-3xl font-bold">${typeof displayStats?.totalEarnings === 'number' ? displayStats.totalEarnings.toFixed(2) : "0.00"}</p>
             </Card>
 
             <Card className="card-neon p-6 bg-card">
@@ -58,7 +71,7 @@ export default function Dashboard() {
                 <p className="text-sm text-muted-foreground">{t("dashboard.thisMonth")}</p>
                 <TrendingUp className="h-5 w-5 text-primary" />
               </div>
-              <p className="text-3xl font-bold">{stats?.monthlyDownloads || 0}</p>
+              <p className="text-3xl font-bold">{displayStats?.monthlyDownloads || 0}</p>
             </Card>
           </div>
         )}
@@ -70,13 +83,13 @@ export default function Dashboard() {
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground">{t("dashboard.availableBalance")}</span>
                 <span className="text-2xl font-bold text-primary">
-                  ${wallet?.availableBalance || "0.00"}
+                  ${displayWallet?.availableBalance || "0.00"}
                 </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground">{t("dashboard.pendingBalance")}</span>
                 <span className="text-xl font-semibold">
-                  ${wallet?.pendingBalance || "0.00"}
+                  ${displayWallet?.pendingBalance || "0.00"}
                 </span>
               </div>
             </div>

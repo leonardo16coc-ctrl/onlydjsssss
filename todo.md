@@ -1578,3 +1578,13 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Mostrar mensaje informativo antes de redirigir
 - [x] Verificar funcionamiento en preview
 - [x] Guardar checkpoint
+
+
+## 71. Aplicar Preview Protegido a Dashboard (NUEVO)
+- [x] Leer código actual de Dashboard.tsx
+- [x] Identificar botones y acciones interactivas en Dashboard
+- [x] Remover bloqueo completo de acceso (redirect)
+- [x] Agregar datos de ejemplo para usuarios no autenticados
+- [x] Implementar lógica para mostrar datos demo vs datos reales
+- [x] Verificar funcionamiento en preview
+- [x] Guardar checkpoint
