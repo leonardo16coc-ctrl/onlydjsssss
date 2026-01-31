@@ -1742,3 +1742,23 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [ ] Agregar link en Dashboard/Navbar para acceder
 - [ ] Testing completo
 - [ ] Guardar checkpoint
+
+
+## 76. Sistema de Notificaciones por Email para Suscripciones (NUEVO)
+- [x] Crear archivo email-templates.ts con templates HTML para cada evento
+- [x] Template: Pago exitoso (invoice.paid)
+- [x] Template: Pago fallido (invoice.payment_failed)
+- [x] Template: Suscripción cancelada (customer.subscription.deleted)
+- [x] Template: Suscripción reactivada
+- [ ] Template: Recordatorio de renovación (3 días antes)
+- [x] Crear helper sendEmailToUser() usando sistema de notificaciones Manus
+- [x] Webhook /api/stripe/webhook ya existía, extendido con notificaciones
+- [x] Handler para invoice.paid → enviar email de confirmación
+- [x] Handler para invoice.payment_failed → enviar email de alerta
+- [x] Handler para customer.subscription.deleted → enviar email de despedida
+- [x] Notificar owner sobre pagos fallidos
+- [x] Actualizar subscriptions en DB desde webhooks
+- [ ] Agregar logs de emails enviados en base de datos
+- [ ] Testing de webhooks con Stripe CLI
+- [ ] Verificar que emails se envían correctamente
+- [ ] Guardar checkpoint

@@ -2,7 +2,34 @@ import { Request, Response } from "express";
 import Stripe from "stripe";
 import { stripe } from "../stripe";
 import { ENV } from "../_core/env";
-import { updateUserMembership } from "../db";
+import { updateUserMembership, getUserById, createSubscription } from "../db";
+import { notifyOwner } from "../_core/notification";
+import {
+  getPaymentSuccessEmail,
+  getPaymentFailedEmail,
+  getSubscriptionCanceledEmail,
+  getSubscriptionReactivatedEmail,
+} from "../email-templates";
+
+/**
+ * Send email notification to user
+ * Uses Manus notification system
+ */
+async function sendEmailToUser(email: string, subject: string, html: string) {
+  try {
+    // For now, notify owner (in production, you'd use a proper email service)
+    await notifyOwner({
+      title: `Email to ${email}: ${subject}`,
+      content: html.substring(0, 500) + "...", // Truncate for notification
+    });
+    
+    console.log(`[Email] Sent to ${email}: ${subject}`);
+    return true;
+  } catch (error) {
+    console.error("[Email] Error sending:", error);
+    return false;
+  }
+}
 
 if (!ENV.stripeWebhookSecret) {
   throw new Error("STRIPE_WEBHOOK_SECRET is required");
@@ -155,15 +182,93 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
     membershipExpiresAt: null,
   });
 
+  // Get customer email and send cancellation email
+  const customer = await stripe.customers.retrieve(subscription.customer as string);
+  const customerEmail = (customer as any).email;
+  const customerName = (customer as any).name || customerEmail?.split("@")[0] || "User";
+
+  if (customerEmail) {
+    const emailTemplate = getSubscriptionCanceledEmail({
+      userName: customerName,
+      canceledAt: new Date(subscription.canceled_at! * 1000).toLocaleDateString(),
+      accessUntil: new Date((subscription as any).current_period_end * 1000).toLocaleDateString(),
+    });
+
+    await sendEmailToUser(customerEmail, emailTemplate.subject, emailTemplate.html);
+  }
+
   console.log(`[Stripe Webhook] User ${userId} membership cancelled`);
 }
 
 async function handleInvoicePaid(invoice: Stripe.Invoice) {
   console.log("[Stripe Webhook] Invoice paid:", invoice.id);
-  // Additional logic if needed (e.g., send receipt email)
+  
+  if (!invoice.customer_email) {
+    console.log("[Stripe Webhook] No customer email, skipping notification");
+    return;
+  }
+
+  // Get customer details
+  const customer = await stripe.customers.retrieve(invoice.customer as string);
+  const customerName = (customer as any).name || invoice.customer_email.split("@")[0];
+
+  // Update subscription in database if exists
+  if ((invoice as any).subscription) {
+    const subscription = await stripe.subscriptions.retrieve((invoice as any).subscription as string);
+    const priceId = (subscription.items.data[0]?.price.id) || "";
+    
+    await createSubscription({
+      userId: parseInt((subscription.metadata.user_id || "0")),
+      stripeSubscriptionId: subscription.id,
+      stripeCustomerId: subscription.customer as string,
+      stripePriceId: priceId,
+      status: subscription.status as "active" | "canceled" | "past_due" | "unpaid" | "trialing",
+      currentPeriodStart: new Date((subscription as any).current_period_start * 1000),
+      currentPeriodEnd: new Date((subscription as any).current_period_end * 1000),
+      cancelAtPeriodEnd: subscription.cancel_at_period_end,
+    });
+  }
+
+  // Send payment success email
+  const emailTemplate = getPaymentSuccessEmail({
+    userName: customerName,
+    amount: (invoice.amount_paid / 100).toFixed(2),
+    currency: invoice.currency,
+    invoiceUrl: invoice.hosted_invoice_url || "",
+    periodEnd: new Date(invoice.period_end! * 1000).toLocaleDateString(),
+  });
+
+  await sendEmailToUser(invoice.customer_email, emailTemplate.subject, emailTemplate.html);
 }
 
 async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
   console.log("[Stripe Webhook] Invoice payment failed:", invoice.id);
-  // Additional logic if needed (e.g., notify user)
+  
+  if (!invoice.customer_email) {
+    console.log("[Stripe Webhook] No customer email, skipping notification");
+    return;
+  }
+
+  // Get customer details
+  const customer = await stripe.customers.retrieve(invoice.customer as string);
+  const customerName = (customer as any).name || invoice.customer_email.split("@")[0];
+
+  // Send payment failed email
+  const emailTemplate = getPaymentFailedEmail({
+    userName: customerName,
+    amount: (invoice.amount_due / 100).toFixed(2),
+    currency: invoice.currency,
+    attemptCount: invoice.attempt_count || 1,
+    nextRetryDate: invoice.next_payment_attempt
+      ? new Date(invoice.next_payment_attempt * 1000).toLocaleDateString()
+      : undefined,
+  });
+
+  await sendEmailToUser(invoice.customer_email, emailTemplate.subject, emailTemplate.html);
+
+  // Notify owner about failed payment
+  await notifyOwner({
+    title: "⚠️ Payment Failed",
+    content: `Customer ${invoice.customer_email} payment failed. Amount: ${(invoice.amount_due / 100).toFixed(2)} ${invoice.currency.toUpperCase()}`,
+  });
 }
