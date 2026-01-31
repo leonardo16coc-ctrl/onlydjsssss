@@ -521,5 +521,32 @@
     "paymentFailed": "Falhou",
     "downloadInvoice": "Baixar",
     "noPayments": "Sem histórico de pagamentos ainda"
+  },
+  "wallet": {
+    "title": "Carteira",
+    "subtitle": "Gerencie seus ganhos e pagamentos como DJ",
+    "setupRequired": "Configure sua carteira para começar a receber pagamentos",
+    "setupDescription": "Para receber pagamentos dos downloads da sua música, você precisa configurar uma conta Stripe Connect. Este processo inclui verificação de identidade (KYC) para cumprir as regulamentações financeiras.",
+    "createAccount": "Criar Conta de Carteira",
+    "accountCreated": "Conta de carteira criada com sucesso",
+    "accountCreatedDesc": "Por favor, complete o processo de verificação",
+    "verificationRequired": "Verificação Necessária",
+    "verificationDescription": "Complete a verificação de identidade para começar a receber pagamentos",
+    "kycRequired": "Você precisa completar a verificação KYC (Conheça Seu Cliente) para receber pagamentos. Este é um processo único que leva cerca de 5 minutos.",
+    "completeVerification": "Completar Verificação",
+    "availableBalance": "Saldo Disponível",
+    "pendingBalance": "Saldo Pendente",
+    "totalEarnings": "Ganhos Totais",
+    "requestPayout": "Solicitar Pagamento",
+    "minPayout": "Pagamento mínimo",
+    "minPayoutError": "O valor mínimo de pagamento é $10.00",
+    "requestButton": "Solicitar Pagamento",
+    "payoutRequested": "Pagamento solicitado com sucesso",
+    "payoutRequestedDesc": "Seu pagamento será processado em 2-5 dias úteis",
+    "payoutHistory": "Histórico de Pagamentos",
+    "noPayouts": "Sem pagamentos ainda",
+    "transactionHistory": "Histórico de Transações",
+    "noTransactions": "Sem transações ainda",
+    "stripeDashboard": "Painel do Stripe"
   }
 }

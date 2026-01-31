@@ -521,5 +521,32 @@
     "paymentFailed": "Échoué",
     "downloadInvoice": "Télécharger",
     "noPayments": "Aucun historique de paiement pour le moment"
+  },
+  "wallet": {
+    "title": "Portefeuille",
+    "subtitle": "Gérez vos gains et paiements en tant que DJ",
+    "setupRequired": "Configurez votre portefeuille pour commencer à recevoir des paiements",
+    "setupDescription": "Pour recevoir des paiements pour les téléchargements de votre musique, vous devez configurer un compte Stripe Connect. Ce processus inclut la vérification d'identité (KYC) pour se conformer aux réglementations financières.",
+    "createAccount": "Créer un Compte Portefeuille",
+    "accountCreated": "Compte portefeuille créé avec succès",
+    "accountCreatedDesc": "Veuillez compléter le processus de vérification",
+    "verificationRequired": "Vérification Requise",
+    "verificationDescription": "Complétez la vérification d'identité pour commencer à recevoir des paiements",
+    "kycRequired": "Vous devez compléter la vérification KYC (Connaissez Votre Client) pour recevoir des paiements. C'est un processus unique qui prend environ 5 minutes.",
+    "completeVerification": "Compléter la Vérification",
+    "availableBalance": "Solde Disponible",
+    "pendingBalance": "Solde en Attente",
+    "totalEarnings": "Gains Totaux",
+    "requestPayout": "Demander un Paiement",
+    "minPayout": "Paiement minimum",
+    "minPayoutError": "Le montant minimum de paiement est de $10.00",
+    "requestButton": "Demander un Paiement",
+    "payoutRequested": "Paiement demandé avec succès",
+    "payoutRequestedDesc": "Votre paiement sera traité dans 2-5 jours ouvrables",
+    "payoutHistory": "Historique des Paiements",
+    "noPayouts": "Aucun paiement pour le moment",
+    "transactionHistory": "Historique des Transactions",
+    "noTransactions": "Aucune transaction pour le moment",
+    "stripeDashboard": "Tableau de Bord Stripe"
   }
 }

@@ -15,6 +15,7 @@ export const users = mysqlTable("users", {
   membershipExpiresAt: timestamp("membershipExpiresAt"),
   stripeCustomerId: varchar("stripeCustomerId", { length: 255 }),
   stripeSubscriptionId: varchar("stripeSubscriptionId", { length: 255 }),
+  stripeConnectAccountId: varchar("stripeConnectAccountId", { length: 255 }),
   // DJ profile fields
   username: varchar("username", { length: 50 }).unique(),
   djName: text("djName"),

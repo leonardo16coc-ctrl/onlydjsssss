@@ -1781,3 +1781,59 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [ ] Mostrar ganancia mensual estimada
 - [ ] Crear tests de cálculo de ganancias
 - [ ] Guardar checkpoint
+
+
+## 78. Sistema de Wallet para DJs con Stripe Connect (NUEVO)
+
+### 78.1 Configuración de Stripe Connect
+- [ ] Configurar Stripe Connect en Stripe Dashboard
+- [ ] Crear Stripe Connect Account (Express o Standard)
+- [ ] Obtener client_id de Stripe Connect
+- [ ] Agregar STRIPE_CONNECT_CLIENT_ID a variables de entorno
+- [ ] Crear helper para inicializar Stripe Connect
+
+### 78.2 Onboarding de DJs (KYC)
+- [ ] Crear procedure createConnectAccount para crear cuenta Connect
+- [ ] Crear procedure getConnectOnboardingLink para obtener link de onboarding
+- [ ] Crear procedure getConnectAccountStatus para verificar estado de KYC
+- [ ] Implementar página de onboarding (/wallet/onboarding)
+- [ ] Mostrar progreso de verificación KYC
+- [ ] Redirigir a Stripe para completar verificación
+- [ ] Guardar stripe_connect_account_id en tabla users
+
+### 78.3 Procedures tRPC de Wallet
+- [ ] Crear router wallet.router.ts
+- [ ] Procedure getBalance - Obtener balance disponible y pendiente
+- [ ] Procedure getTransactions - Historial de transacciones
+- [ ] Procedure requestPayout - Solicitar retiro de fondos
+- [ ] Procedure getPayoutHistory - Historial de pagos recibidos
+- [ ] Procedure getConnectDashboardLink - Link a Stripe Connect Dashboard
+- [ ] Agregar walletRouter al appRouter principal
+
+### 78.4 Página de Wallet
+- [ ] Crear página /wallet con UI completa
+- [ ] Mostrar balance disponible (verde)
+- [ ] Mostrar balance pendiente (amarillo)
+- [ ] Mostrar total histórico
+- [ ] Botón "Request Payout" con monto mínimo ($10)
+- [ ] Tabla de transacciones recientes
+- [ ] Tabla de historial de pagos recibidos
+- [ ] Link a Stripe Connect Dashboard
+- [ ] Agregar traducciones en 5 idiomas
+- [ ] Agregar ruta /wallet en App.tsx
+
+### 78.5 Pagos Automáticos Mensuales
+- [ ] Crear función processMonthlyPayouts() en revenue-calculator.ts
+- [ ] Integrar con Stripe Connect Transfers API
+- [ ] Verificar que cuenta Connect esté activa antes de pagar
+- [ ] Crear registro en artistPayouts por cada pago
+- [ ] Actualizar wallet balance después de cada pago
+- [ ] Enviar notificación por email a DJ sobre pago recibido
+- [ ] Notificar owner sobre resumen de pagos mensuales
+
+### 78.6 Testing
+- [ ] Crear tests de onboarding de Stripe Connect
+- [ ] Crear tests de procedures de wallet
+- [ ] Crear tests de pagos automáticos
+- [ ] Testing manual de flujo completo
+- [ ] Guardar checkpoint

@@ -18,7 +18,7 @@ export default function Dashboard() {
   const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
   const { data: stats, isLoading } = trpc.dashboard.stats.useQuery();
-  const { data: wallet } = trpc.wallet.get.useQuery();
+  const { data: wallet } = trpc.wallet.getBalance.useQuery();
 
   // Datos de ejemplo para usuarios no autenticados
   const demoStats = {
@@ -29,8 +29,8 @@ export default function Dashboard() {
   };
 
   const demoWallet = {
-    availableBalance: "1,234.56",
-    pendingBalance: "567.89"
+    available: 1234.56,
+    pending: 567.89
   };
 
   // Usar datos reales si está autenticado, sino mostrar datos demo
@@ -107,13 +107,13 @@ export default function Dashboard() {
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground">{t("dashboard.availableBalance")}</span>
                 <span className="text-2xl font-bold text-primary">
-                  ${displayWallet?.availableBalance || "0.00"}
+                  ${displayWallet?.available.toFixed(2) || "0.00"}
                 </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-muted-foreground">{t("dashboard.pendingBalance")}</span>
                 <span className="text-xl font-semibold">
-                  ${displayWallet?.pendingBalance || "0.00"}
+                  ${displayWallet?.pending.toFixed(2) || "0.00"}
                 </span>
               </div>
             </div>

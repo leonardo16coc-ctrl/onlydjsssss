@@ -16,6 +16,7 @@ import ProfileEdit from "./pages/ProfileEdit";
 import DJMode from "./pages/DJMode";
 import MainstageMode from "./pages/MainstageMode";
 import Subscription from "./pages/Subscription";
+import Wallet from "./pages/Wallet";
 
 function Router() {
   return (
@@ -30,6 +31,7 @@ function Router() {
       <Route path={"/upload"} component={Upload} />
       <Route path={"/membership"} component={Membership} />
       <Route path={"/subscription"} component={Subscription} />
+      <Route path={"/wallet"} component={Wallet} />
       <Route path={"/dj/:username"} component={DJProfile} />
       <Route path={"/profile/edit"} component={ProfileEdit} />
       <Route path={"/404"} component={NotFound} />

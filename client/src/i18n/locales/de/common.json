@@ -521,5 +521,32 @@
     "paymentFailed": "Fehlgeschlagen",
     "downloadInvoice": "Herunterladen",
     "noPayments": "Noch keine Zahlungshistorie"
+  },
+  "wallet": {
+    "title": "Wallet",
+    "subtitle": "Verwalten Sie Ihre DJ-Einnahmen und Auszahlungen",
+    "setupRequired": "Richten Sie Ihr Wallet ein, um Zahlungen zu erhalten",
+    "setupDescription": "Um Zahlungen für Ihre Musik-Downloads zu erhalten, müssen Sie ein Stripe Connect-Konto einrichten. Dieser Prozess umfasst eine Identitätsprüfung (KYC), um finanzielle Vorschriften einzuhalten.",
+    "createAccount": "Wallet-Konto Erstellen",
+    "accountCreated": "Wallet-Konto erfolgreich erstellt",
+    "accountCreatedDesc": "Bitte schließen Sie den Verifizierungsprozess ab",
+    "verificationRequired": "Verifizierung Erforderlich",
+    "verificationDescription": "Schließen Sie die Identitätsprüfung ab, um Zahlungen zu erhalten",
+    "kycRequired": "Sie müssen die KYC-Verifizierung (Know Your Customer) abschließen, um Auszahlungen zu erhalten. Dies ist ein einmaliger Prozess, der etwa 5 Minuten dauert.",
+    "completeVerification": "Verifizierung Abschließen",
+    "availableBalance": "Verfügbares Guthaben",
+    "pendingBalance": "Ausstehendes Guthaben",
+    "totalEarnings": "Gesamteinnahmen",
+    "requestPayout": "Auszahlung Anfordern",
+    "minPayout": "Mindestauszahlung",
+    "minPayoutError": "Der Mindestauszahlungsbetrag beträgt $10.00",
+    "requestButton": "Auszahlung Anfordern",
+    "payoutRequested": "Auszahlung erfolgreich angefordert",
+    "payoutRequestedDesc": "Ihre Auszahlung wird innerhalb von 2-5 Werktagen bearbeitet",
+    "payoutHistory": "Auszahlungshistorie",
+    "noPayouts": "Noch keine Auszahlungen",
+    "transactionHistory": "Transaktionshistorie",
+    "noTransactions": "Noch keine Transaktionen",
+    "stripeDashboard": "Stripe Dashboard"
   }
 }

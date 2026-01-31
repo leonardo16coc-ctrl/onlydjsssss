@@ -521,5 +521,32 @@
     "paymentFailed": "Failed",
     "downloadInvoice": "Download",
     "noPayments": "No payment history yet"
+  },
+  "wallet": {
+    "title": "Wallet",
+    "subtitle": "Manage your DJ earnings and payouts",
+    "setupRequired": "Set up your wallet to start receiving payments",
+    "setupDescription": "To receive payments from your music downloads, you need to set up a Stripe Connect account. This process includes identity verification (KYC) to comply with financial regulations.",
+    "createAccount": "Create Wallet Account",
+    "accountCreated": "Wallet account created successfully",
+    "accountCreatedDesc": "Please complete the verification process",
+    "verificationRequired": "Verification Required",
+    "verificationDescription": "Complete your identity verification to start receiving payments",
+    "kycRequired": "You need to complete KYC (Know Your Customer) verification to receive payouts. This is a one-time process that takes about 5 minutes.",
+    "completeVerification": "Complete Verification",
+    "availableBalance": "Available Balance",
+    "pendingBalance": "Pending Balance",
+    "totalEarnings": "Total Earnings",
+    "requestPayout": "Request Payout",
+    "minPayout": "Minimum payout",
+    "minPayoutError": "Minimum payout amount is $10.00",
+    "requestButton": "Request Payout",
+    "payoutRequested": "Payout requested successfully",
+    "payoutRequestedDesc": "Your payout will be processed within 2-5 business days",
+    "payoutHistory": "Payout History",
+    "noPayouts": "No payouts yet",
+    "transactionHistory": "Transaction History",
+    "noTransactions": "No transactions yet",
+    "stripeDashboard": "Stripe Dashboard"
   }
 }

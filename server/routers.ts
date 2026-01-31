@@ -20,6 +20,7 @@ import { uploadsRouter } from "./routers/uploads.router";
 import { downloadsRouter } from "./routers/downloads.router";
 import { earningsRouter } from "./routers/earnings.router";
 import { subscriptionsRouter } from "./routers/subscriptions.router";
+import { walletRouter } from "./routers/wallet.router";
 import { getDb } from "./db";
 import { tracks, downloads } from "../drizzle/schema";
 import { eq, and, gte, sql } from "drizzle-orm";
@@ -46,6 +47,7 @@ export const appRouter = router({
   downloads: downloadsRouter,
   earnings: earningsRouter,
   subscriptions: subscriptionsRouter,
+  wallet: walletRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
@@ -220,20 +222,6 @@ export const appRouter = router({
     myLikes: protectedProcedure.query(async ({ ctx }) => {
       return await db.getUserLikes(ctx.user.id);
     }),
-  }),
-
-
-
-  wallet: router({
-    get: protectedProcedure.query(async ({ ctx }) => {
-      return await db.getOrCreateWallet(ctx.user.id);
-    }),
-
-    earnings: protectedProcedure
-      .input(z.object({ limit: z.number().int().min(1).max(24).optional() }))
-      .query(async ({ ctx, input }) => {
-        return await db.getEarningsByUser(ctx.user.id, input.limit);
-      }),
   }),
 
   rankings: router({
