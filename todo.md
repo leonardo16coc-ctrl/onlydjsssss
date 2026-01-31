@@ -1607,3 +1607,116 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Implementar handleLogout() correctamente
 - [x] Probar logout en preview
 - [x] Guardar checkpoint
+
+
+## 74. Sistema Completo de Monetización Profesional (NUEVO)
+
+### 74.1 Diseño de Base de Datos
+- [x] Crear tabla `subscriptions` (Stripe subscription data)
+- [x] Crear tabla `download_limits` (control diario de descargas)
+- [x] Crear tabla `monthly_revenue_pools` (pools mensuales de ingresos)
+- [x] Crear tabla `dj_scores` (métricas de impacto)
+- [x] Crear tabla `device_fingerprints` (detección de dispositivos)
+- [x] Crear tabla `streaming_activity` (tracking de reproducción)
+- [x] Ejecutar SQL para crear tablas (pnpm db:push tuvo conflictos, creadas manualmente)
+- [x] Agregar helpers de DB para todas las nuevas tablas
+
+### 74.2 Sistema de Membresía Stripe
+- [x] Crear archivo stripe-products.ts con configuración PRO $4.99/mes
+- [x] Crear router subscriptions.router.ts
+- [x] Implementar procedure getStatus (obtener estado de suscripción)
+- [x] Implementar procedure createCheckoutSession (crear sesión de pago)
+- [x] Implementar procedure createPortalSession (portal de gestión)
+- [x] Implementar procedure cancelSubscription (cancelar al final del período)
+- [x] Implementar procedure reactivateSubscription (reactivar cancelada)
+- [ ] Agregar subscriptionsRouter al appRouter principal
+- [ ] Implementar webhook /api/stripe/webhook para eventos
+- [ ] Implementar handler para subscription.created
+- [ ] Implementar handler para subscription.updated
+- [ ] Implementar handler para subscription.deleted
+- [ ] Implementar handler para invoice.paid
+- [ ] Implementar handler para invoice.payment_failed
+- [ ] Actualizar membershipStatus dinámicamente según suscripción
+- [ ] Crear página de gestión de suscripción en frontend
+- [ ] Agregar botón "Cancelar Suscripción" en dashboard
+
+### 74.3 Sistema de Límites de Descarga
+- [ ] Implementar constantes MAX_DESCARGAS_POR_DIA = 20
+- [ ] Implementar constantes MAX_DESCARGAS_POR_TRACK_POR_DIA = 3
+- [ ] Crear función checkDownloadLimit()
+- [ ] Crear función recordDownload()
+- [ ] Implementar reset automático cada 24 horas
+- [ ] Implementar lógica: descargas repetidas no cuentan
+- [ ] Agregar UI de límites en Explore
+- [ ] Mostrar "X/20 descargas disponibles hoy"
+- [ ] Bloquear botón de descarga al alcanzar límite
+
+### 74.4 Modelo de Ganancias Híbrido
+- [ ] Implementar función calculateMonthlyRevenue()
+- [ ] Implementar split 50/50 (DJs / Plataforma)
+- [ ] Implementar sub-split DJs: 30% descargas + 20% score
+- [ ] Crear función calculateDJScore() con fórmula completa
+- [ ] Crear función calculateDownloadValue()
+- [ ] Crear función calculateDJEarnings()
+- [ ] Implementar tracking de descargas por DJ
+- [ ] Implementar tracking de streams por DJ
+- [ ] Implementar tracking de minutos escuchados
+- [ ] Implementar tracking de favoritos/playlists
+
+### 74.5 Wallet + Stripe Connect
+- [ ] Integrar Stripe Connect en backend
+- [ ] Crear endpoint para onboarding de DJ en Stripe
+- [ ] Implementar KYC obligatorio para DJs
+- [ ] Crear función updateWalletBalance()
+- [ ] Crear función createPayout()
+- [ ] Implementar webhook para payout.paid
+- [ ] Implementar webhook para payout.failed
+- [ ] Crear UI de wallet en Dashboard DJ
+- [ ] Mostrar balance disponible, pendiente, histórico
+- [ ] Crear página de historial de pagos
+
+### 74.6 Sistema Anti-Fraude
+- [ ] Implementar detección de IP única por cuenta
+- [ ] Implementar device fingerprinting (FingerprintJS o similar)
+- [ ] Crear función detectVPN()
+- [ ] Crear función detectBot()
+- [ ] Implementar análisis de comportamiento (velocidad de clicks, patrones)
+- [ ] Crear función detectAnomalousPatterns()
+- [ ] Implementar bloqueo automático por abuso
+- [ ] Crear tabla de logs de intentos fraudulentos
+- [ ] Agregar dashboard de seguridad para admin
+
+### 74.7 Cron Mensual Automático
+- [ ] Crear script monthlyFinancialProcess.ts
+- [ ] Implementar paso 1: Cálculo de ingresos reales del mes
+- [ ] Implementar paso 2: Aplicación del split financiero
+- [ ] Implementar paso 3: Cálculo de ganancias por DJ
+- [ ] Implementar paso 4: Actualización de wallets
+- [ ] Implementar paso 5: Ejecución automática de payouts
+- [ ] Configurar cron para ejecutar el día 1 de cada mes
+- [ ] Agregar notificaciones de éxito/error
+- [ ] Crear logs detallados del proceso
+
+### 74.8 Dashboard DJ Extendido
+- [ ] Agregar sección "Métricas de Impacto"
+- [ ] Mostrar descargas totales y mensuales
+- [ ] Mostrar streams totales y mensuales
+- [ ] Mostrar minutos escuchados
+- [ ] Mostrar DJ Score actual
+- [ ] Mostrar % participación en pool
+- [ ] Agregar sección "Finanzas"
+- [ ] Mostrar ganancia mensual estimada
+- [ ] Mostrar wallet (disponible, pendiente, total)
+- [ ] Mostrar historial de pagos (tabla)
+- [ ] Agregar gráficos de evolución
+
+### 74.9 Testing y Documentación
+- [ ] Escribir tests para límites de descarga
+- [ ] Escribir tests para cálculo de ganancias
+- [ ] Escribir tests para webhooks de Stripe
+- [ ] Escribir tests para anti-fraude
+- [ ] Probar flujo completo de suscripción
+- [ ] Probar flujo completo de payout
+- [ ] Documentar fórmulas matemáticas
+- [ ] Documentar proceso mensual
+- [ ] Guardar checkpoint

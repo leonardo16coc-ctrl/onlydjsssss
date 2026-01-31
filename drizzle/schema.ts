@@ -566,3 +566,186 @@ export const trackFestivalScores = mysqlTable("track_festival_scores", {
 
 export type TrackFestivalScores = typeof trackFestivalScores.$inferSelect;
 export type InsertTrackFestivalScores = typeof trackFestivalScores.$inferInsert;
+
+
+/**
+ * Subscriptions - Stripe subscription management
+ */
+export const subscriptions = mysqlTable("subscriptions", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull().unique(),
+  stripeSubscriptionId: varchar("stripeSubscriptionId", { length: 255 }).notNull().unique(),
+  stripeCustomerId: varchar("stripeCustomerId", { length: 255 }).notNull(),
+  stripePriceId: varchar("stripePriceId", { length: 255 }).notNull(),
+  status: mysqlEnum("status", ["active", "canceled", "past_due", "unpaid", "trialing"]).notNull(),
+  currentPeriodStart: timestamp("currentPeriodStart").notNull(),
+  currentPeriodEnd: timestamp("currentPeriodEnd").notNull(),
+  cancelAtPeriodEnd: boolean("cancelAtPeriodEnd").default(false).notNull(),
+  canceledAt: timestamp("canceledAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("subscriptions_user_id_idx").on(table.userId),
+  statusIdx: index("subscriptions_status_idx").on(table.status),
+}));
+
+export type Subscription = typeof subscriptions.$inferSelect;
+export type InsertSubscription = typeof subscriptions.$inferInsert;
+
+/**
+ * Download Limits - Daily download tracking per user
+ */
+export const downloadLimits = mysqlTable("download_limits", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  date: varchar("date", { length: 10 }).notNull(), // YYYY-MM-DD
+  downloadsCount: int("downloadsCount").default(0).notNull(),
+  // Track-specific limits
+  trackDownloads: text("trackDownloads"), // JSON: {trackId: count}
+  lastResetAt: timestamp("lastResetAt").defaultNow().notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("download_limits_user_id_idx").on(table.userId),
+  dateIdx: index("download_limits_date_idx").on(table.date),
+  userDateUnique: index("download_limits_user_date_unique").on(table.userId, table.date),
+}));
+
+export type DownloadLimit = typeof downloadLimits.$inferSelect;
+export type InsertDownloadLimit = typeof downloadLimits.$inferInsert;
+
+/**
+ * Monthly Revenue Pools - Monthly revenue distribution pools
+ */
+export const monthlyRevenuePools = mysqlTable("monthly_revenue_pools", {
+  id: int("id").autoincrement().primaryKey(),
+  month: varchar("month", { length: 7 }).notNull().unique(), // YYYY-MM
+  totalRevenue: decimal("totalRevenue", { precision: 12, scale: 2 }).default("0.00").notNull(),
+  platformShare: decimal("platformShare", { precision: 12, scale: 2 }).default("0.00").notNull(), // 50%
+  djsShare: decimal("djsShare", { precision: 12, scale: 2 }).default("0.00").notNull(), // 50%
+  downloadsPool: decimal("downloadsPool", { precision: 12, scale: 2 }).default("0.00").notNull(), // 30% of DJs share
+  scorePool: decimal("scorePool", { precision: 12, scale: 2 }).default("0.00").notNull(), // 20% of DJs share
+  totalDownloads: int("totalDownloads").default(0).notNull(),
+  totalDJScore: decimal("totalDJScore", { precision: 12, scale: 2 }).default("0.00").notNull(),
+  valuePerDownload: decimal("valuePerDownload", { precision: 8, scale: 4 }).default("0.0000").notNull(),
+  status: mysqlEnum("status", ["calculating", "completed", "paid"]).default("calculating").notNull(),
+  calculatedAt: timestamp("calculatedAt"),
+  paidAt: timestamp("paidAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  monthIdx: index("monthly_revenue_pools_month_idx").on(table.month),
+  statusIdx: index("monthly_revenue_pools_status_idx").on(table.status),
+}));
+
+export type MonthlyRevenuePool = typeof monthlyRevenuePools.$inferSelect;
+export type InsertMonthlyRevenuePool = typeof monthlyRevenuePools.$inferInsert;
+
+/**
+ * DJ Scores - Monthly impact metrics for each DJ
+ */
+export const djScores = mysqlTable("dj_scores", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  month: varchar("month", { length: 7 }).notNull(), // YYYY-MM
+  // Raw metrics
+  totalDownloads: int("totalDownloads").default(0).notNull(),
+  totalStreams: int("totalStreams").default(0).notNull(),
+  totalMinutesListened: int("totalMinutesListened").default(0).notNull(),
+  totalFavorites: int("totalFavorites").default(0).notNull(),
+  totalPlaylistAdds: int("totalPlaylistAdds").default(0).notNull(),
+  // Weighted scores (0-100 each)
+  downloadsScore: decimal("downloadsScore", { precision: 8, scale: 2 }).default("0.00").notNull(), // 40%
+  streamsScore: decimal("streamsScore", { precision: 8, scale: 2 }).default("0.00").notNull(), // 30%
+  listeningTimeScore: decimal("listeningTimeScore", { precision: 8, scale: 2 }).default("0.00").notNull(), // 20%
+  engagementScore: decimal("engagementScore", { precision: 8, scale: 2 }).default("0.00").notNull(), // 10%
+  // Final DJ Score
+  djScore: decimal("djScore", { precision: 10, scale: 2 }).default("0.00").notNull(),
+  // Participation percentage
+  participationPercentage: decimal("participationPercentage", { precision: 5, scale: 2 }).default("0.00").notNull(),
+  // Earnings
+  downloadEarnings: decimal("downloadEarnings", { precision: 10, scale: 2 }).default("0.00").notNull(),
+  scoreEarnings: decimal("scoreEarnings", { precision: 10, scale: 2 }).default("0.00").notNull(),
+  totalEarnings: decimal("totalEarnings", { precision: 10, scale: 2 }).default("0.00").notNull(),
+  calculatedAt: timestamp("calculatedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("dj_scores_user_id_idx").on(table.userId),
+  monthIdx: index("dj_scores_month_idx").on(table.month),
+  djScoreIdx: index("dj_scores_dj_score_idx").on(table.djScore),
+  userMonthUnique: index("dj_scores_user_month_unique").on(table.userId, table.month),
+}));
+
+export type DJScore = typeof djScores.$inferSelect;
+export type InsertDJScore = typeof djScores.$inferInsert;
+
+/**
+ * Device Fingerprints - Anti-fraud device tracking
+ */
+export const deviceFingerprints = mysqlTable("device_fingerprints", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId"),
+  fingerprintHash: varchar("fingerprintHash", { length: 64 }).notNull(),
+  ipAddress: varchar("ipAddress", { length: 45 }).notNull(),
+  userAgent: text("userAgent"),
+  deviceType: varchar("deviceType", { length: 50 }),
+  browser: varchar("browser", { length: 100 }),
+  os: varchar("os", { length: 100 }),
+  screenResolution: varchar("screenResolution", { length: 20 }),
+  timezone: varchar("timezone", { length: 100 }),
+  language: varchar("language", { length: 10 }),
+  // VPN/Proxy detection
+  isVPN: boolean("isVPN").default(false).notNull(),
+  isProxy: boolean("isProxy").default(false).notNull(),
+  isTor: boolean("isTor").default(false).notNull(),
+  // Bot detection
+  isBot: boolean("isBot").default(false).notNull(),
+  botScore: int("botScore").default(0).notNull(), // 0-100
+  // Fraud flags
+  isSuspicious: boolean("isSuspicious").default(false).notNull(),
+  isBlocked: boolean("isBlocked").default(false).notNull(),
+  blockReason: text("blockReason"),
+  // Activity tracking
+  firstSeenAt: timestamp("firstSeenAt").defaultNow().notNull(),
+  lastSeenAt: timestamp("lastSeenAt").defaultNow().notNull(),
+  activityCount: int("activityCount").default(1).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("device_fingerprints_user_id_idx").on(table.userId),
+  fingerprintHashIdx: index("device_fingerprints_hash_idx").on(table.fingerprintHash),
+  ipAddressIdx: index("device_fingerprints_ip_idx").on(table.ipAddress),
+  isSuspiciousIdx: index("device_fingerprints_suspicious_idx").on(table.isSuspicious),
+}));
+
+export type DeviceFingerprint = typeof deviceFingerprints.$inferSelect;
+export type InsertDeviceFingerprint = typeof deviceFingerprints.$inferInsert;
+
+/**
+ * Streaming Activity - Track listening time for revenue calculation
+ */
+export const streamingActivity = mysqlTable("streaming_activity", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(), // Listener
+  trackId: int("trackId").notNull(),
+  artistId: int("artistId").notNull(), // Track owner
+  // Listening metrics
+  durationSeconds: int("durationSeconds").notNull(), // How long they listened
+  completionPercentage: int("completionPercentage").notNull(), // 0-100
+  // Session info
+  sessionId: varchar("sessionId", { length: 64 }),
+  ipAddress: varchar("ipAddress", { length: 45 }),
+  device: varchar("device", { length: 100 }),
+  // Fraud detection
+  isSuspicious: boolean("isSuspicious").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("streaming_activity_user_id_idx").on(table.userId),
+  trackIdIdx: index("streaming_activity_track_id_idx").on(table.trackId),
+  artistIdIdx: index("streaming_activity_artist_id_idx").on(table.artistId),
+  createdAtIdx: index("streaming_activity_created_at_idx").on(table.createdAt),
+}));
+
+export type StreamingActivity = typeof streamingActivity.$inferSelect;
+export type InsertStreamingActivity = typeof streamingActivity.$inferInsert;

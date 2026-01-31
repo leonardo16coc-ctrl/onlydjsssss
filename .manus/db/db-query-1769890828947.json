@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS `streaming_activity` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `userId` int NOT NULL,\n  `trackId` int NOT NULL,\n  `artistId` int NOT NULL,\n  `durationSeconds` int NOT NULL,\n  `completionPercentage` int NOT NULL,\n  `sessionId` varchar(64) NULL,\n  `ipAddress` varchar(45) NULL,\n  `device` varchar(100) NULL,\n  `isSuspicious` boolean NOT NULL DEFAULT false,\n  `createdAt` timestamp NOT NULL DEFAULT (now()),\n  CONSTRAINT `streaming_activity_id` PRIMARY KEY(`id`),\n  INDEX `streaming_activity_user_id_idx` (`userId`),\n  INDEX `streaming_activity_track_id_idx` (`trackId`),\n  INDEX `streaming_activity_artist_id_idx` (`artistId`),\n  INDEX `streaming_activity_created_at_idx` (`createdAt`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute CREATE TABLE IF NOT EXISTS `streaming_activity` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `userId` int NOT NULL,\n  `trackId` int NOT NULL,\n  `artistId` int NOT NULL,\n  `durationSeconds` int NOT NULL,\n  `completionPercentage` int NOT NULL,\n  `sessionId` varchar(64) NULL,\n  `ipAddress` varchar(45) NULL,\n  `device` varchar(100) NULL,\n  `isSuspicious` boolean NOT NULL DEFAULT false,\n  `createdAt` timestamp NOT NULL DEFAULT (now()),\n  CONSTRAINT `streaming_activity_id` PRIMARY KEY(`id`),\n  INDEX `streaming_activity_user_id_idx` (`userId`),\n  INDEX `streaming_activity_track_id_idx` (`trackId`),\n  INDEX `streaming_activity_artist_id_idx` (`artistId`),\n  INDEX `streaming_activity_created_at_idx` (`createdAt`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 192
+}

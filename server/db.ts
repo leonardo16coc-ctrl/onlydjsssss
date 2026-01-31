@@ -455,3 +455,233 @@ export async function checkIPDownloadLimit(ipAddress: string, hours = 24): Promi
   
   return result[0]?.count || 0;
 }
+
+
+// ============= SUBSCRIPTION FUNCTIONS =============
+
+import { subscriptions, InsertSubscription, Subscription } from "../drizzle/schema";
+
+export async function createSubscription(data: InsertSubscription): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(subscriptions).values(data);
+}
+
+export async function updateSubscription(userId: number, data: Partial<Subscription>): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(subscriptions).set(data).where(eq(subscriptions.userId, userId));
+}
+
+export async function getSubscriptionByUserId(userId: number): Promise<Subscription | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(subscriptions).where(eq(subscriptions.userId, userId)).limit(1);
+  return result[0];
+}
+
+export async function getSubscriptionByStripeId(stripeSubscriptionId: string): Promise<Subscription | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(subscriptions).where(eq(subscriptions.stripeSubscriptionId, stripeSubscriptionId)).limit(1);
+  return result[0];
+}
+
+// ============= DOWNLOAD LIMIT FUNCTIONS =============
+
+import { downloadLimits, InsertDownloadLimit, DownloadLimit } from "../drizzle/schema";
+
+export async function getDownloadLimitToday(userId: number): Promise<DownloadLimit | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+  const result = await db.select().from(downloadLimits)
+    .where(and(eq(downloadLimits.userId, userId), eq(downloadLimits.date, today)))
+    .limit(1);
+  
+  return result[0];
+}
+
+export async function createOrUpdateDownloadLimit(userId: number, trackId: number): Promise<{ allowed: boolean; remaining: number }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const today = new Date().toISOString().split('T')[0];
+  const limit = await getDownloadLimitToday(userId);
+  
+  // Get user's membership status
+  const user = await getUserById(userId);
+  if (!user) throw new Error("User not found");
+  
+  const { DAILY, PER_TRACK_DAILY } = getDownloadLimits(user.membershipStatus);
+  
+  if (!limit) {
+    // Create new limit record
+    const trackDownloads = JSON.stringify({ [trackId]: 1 });
+    await db.insert(downloadLimits).values({
+      userId,
+      date: today,
+      downloadsCount: 1,
+      trackDownloads,
+    });
+    return { allowed: true, remaining: DAILY - 1 };
+  }
+  
+  // Check daily limit
+  if (limit.downloadsCount >= DAILY) {
+    return { allowed: false, remaining: 0 };
+  }
+  
+  // Check per-track limit
+  const trackDownloads = limit.trackDownloads ? JSON.parse(limit.trackDownloads) : {};
+  const trackCount = trackDownloads[trackId] || 0;
+  
+  if (trackCount >= PER_TRACK_DAILY) {
+    return { allowed: false, remaining: DAILY - limit.downloadsCount };
+  }
+  
+  // Update limits
+  trackDownloads[trackId] = trackCount + 1;
+  await db.update(downloadLimits)
+    .set({
+      downloadsCount: limit.downloadsCount + 1,
+      trackDownloads: JSON.stringify(trackDownloads),
+    })
+    .where(and(eq(downloadLimits.userId, userId), eq(downloadLimits.date, today)));
+  
+  return { allowed: true, remaining: DAILY - limit.downloadsCount - 1 };
+}
+
+// ============= MONTHLY REVENUE POOL FUNCTIONS =============
+
+import { monthlyRevenuePools, InsertMonthlyRevenuePool, MonthlyRevenuePool } from "../drizzle/schema";
+
+export async function getRevenuePoolByMonth(month: string): Promise<MonthlyRevenuePool | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(monthlyRevenuePools).where(eq(monthlyRevenuePools.month, month)).limit(1);
+  return result[0];
+}
+
+export async function createRevenuePool(data: InsertMonthlyRevenuePool): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(monthlyRevenuePools).values(data);
+}
+
+export async function updateRevenuePool(month: string, data: Partial<MonthlyRevenuePool>): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(monthlyRevenuePools).set(data).where(eq(monthlyRevenuePools.month, month));
+}
+
+// ============= DJ SCORE FUNCTIONS =============
+
+import { djScores, InsertDJScore, DJScore } from "../drizzle/schema";
+
+export async function getDJScoreByMonth(userId: number, month: string): Promise<DJScore | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(djScores)
+    .where(and(eq(djScores.userId, userId), eq(djScores.month, month)))
+    .limit(1);
+  
+  return result[0];
+}
+
+export async function createOrUpdateDJScore(userId: number, month: string, data: Partial<DJScore>): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const existing = await getDJScoreByMonth(userId, month);
+  
+  if (existing) {
+    await db.update(djScores).set(data).where(and(eq(djScores.userId, userId), eq(djScores.month, month)));
+  } else {
+    await db.insert(djScores).values({ userId, month, ...data } as InsertDJScore);
+  }
+}
+
+export async function getAllDJScoresForMonth(month: string): Promise<DJScore[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(djScores).where(eq(djScores.month, month));
+}
+
+// ============= STREAMING ACTIVITY FUNCTIONS =============
+
+import { streamingActivity, InsertStreamingActivity } from "../drizzle/schema";
+
+export async function recordStreamingActivity(data: InsertStreamingActivity): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(streamingActivity).values(data);
+}
+
+export async function getStreamingStatsByArtist(artistId: number, month: string): Promise<{ totalStreams: number; totalMinutes: number }> {
+  const db = await getDb();
+  if (!db) return { totalStreams: 0, totalMinutes: 0 };
+  
+  // Parse month to get start and end dates
+  const [year, monthNum] = month.split('-');
+  const startDate = new Date(parseInt(year), parseInt(monthNum) - 1, 1);
+  const endDate = new Date(parseInt(year), parseInt(monthNum), 0, 23, 59, 59);
+  
+  const result = await db.select({
+    totalStreams: sql<number>`COUNT(*)`,
+    totalMinutes: sql<number>`SUM(${streamingActivity.durationSeconds}) / 60`,
+  })
+  .from(streamingActivity)
+  .where(
+    and(
+      eq(streamingActivity.artistId, artistId),
+      gte(streamingActivity.createdAt, startDate),
+      lte(streamingActivity.createdAt, endDate)
+    )
+  );
+  
+  return {
+    totalStreams: result[0]?.totalStreams || 0,
+    totalMinutes: Math.floor(result[0]?.totalMinutes || 0),
+  };
+}
+
+// ============= DEVICE FINGERPRINT FUNCTIONS =============
+
+import { deviceFingerprints, InsertDeviceFingerprint, DeviceFingerprint } from "../drizzle/schema";
+
+export async function createDeviceFingerprint(data: InsertDeviceFingerprint): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(deviceFingerprints).values(data);
+}
+
+export async function getDeviceFingerprintByHash(hash: string): Promise<DeviceFingerprint | undefined> {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(deviceFingerprints).where(eq(deviceFingerprints.fingerprintHash, hash)).limit(1);
+  return result[0];
+}
+
+export async function updateDeviceFingerprint(hash: string, data: Partial<DeviceFingerprint>): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(deviceFingerprints).set(data).where(eq(deviceFingerprints.fingerprintHash, hash));
+}
+
+// Import missing operator
+import { getDownloadLimits } from "./stripe-products";

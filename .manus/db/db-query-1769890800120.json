@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS `download_limits` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `userId` int NOT NULL,\n  `date` varchar(10) NOT NULL,\n  `downloadsCount` int NOT NULL DEFAULT 0,\n  `trackDownloads` text NULL,\n  `lastResetAt` timestamp NOT NULL DEFAULT (now()),\n  `createdAt` timestamp NOT NULL DEFAULT (now()),\n  `updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n  CONSTRAINT `download_limits_id` PRIMARY KEY(`id`),\n  INDEX `download_limits_user_id_idx` (`userId`),\n  INDEX `download_limits_date_idx` (`date`),\n  UNIQUE INDEX `download_limits_user_date_unique` (`userId`, `date`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute CREATE TABLE IF NOT EXISTS `download_limits` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `userId` int NOT NULL,\n  `date` varchar(10) NOT NULL,\n  `downloadsCount` int NOT NULL DEFAULT 0,\n  `trackDownloads` text NULL,\n  `lastResetAt` timestamp NOT NULL DEFAULT (now()),\n  `createdAt` timestamp NOT NULL DEFAULT (now()),\n  `updatedAt` timestamp NOT NULL DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,\n  CONSTRAINT `download_limits_id` PRIMARY KEY(`id`),\n  INDEX `download_limits_user_id_idx` (`userId`),\n  INDEX `download_limits_date_idx` (`date`),\n  UNIQUE INDEX `download_limits_user_date_unique` (`userId`, `date`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 215
+}
