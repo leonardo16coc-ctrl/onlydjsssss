@@ -6,6 +6,8 @@ import { tracks, downloads, users, trackEarnings } from "../../drizzle/schema";
 import { eq, and, gte, sql, desc } from "drizzle-orm";
 import { storageGet } from "../storage";
 import { checkDownloadProtection, generateDownloadToken, logSuspiciousActivity } from "../antiHotlink";
+import { getDownloadLimits } from "../stripe-products";
+import * as dbHelpers from "../db";
 
 /**
  * Downloads Router - Professional download system with tracking and limits
@@ -19,54 +21,56 @@ import { checkDownloadProtection, generateDownloadToken, logSuspiciousActivity }
  * - Format selection (MP3/WAV)
  */
 
-// Download limits by membership level
-const DOWNLOAD_LIMITS = {
-  free: 1, // 1 download per month for FREE users
-  member: -1, // Unlimited for PRO users ($4.99/mes)
-};
-
 // Rate limiting: max downloads per 24h from same IP
 const MAX_DOWNLOADS_PER_IP_24H = 100;
 
 /**
- * Get user's download count for current month
+ * Check if user has reached daily download limit
+ * Uses new download_limits table with daily tracking
  */
-async function getUserMonthlyDownloadCount(userId: number): Promise<number> {
-  const db = await getDb();
-  if (!db) throw new Error("Database connection failed");
-  const startOfMonth = new Date();
-  startOfMonth.setDate(1);
-  startOfMonth.setHours(0, 0, 0, 0);
+async function checkDailyDownloadLimit(
+  userId: number,
+  membershipStatus: string,
+  trackId?: number
+): Promise<{ allowed: boolean; remaining: number; limit: number; reason?: string }> {
+  const limits = getDownloadLimits(membershipStatus);
+  const dailyLimit = limits.DAILY;
+  const perTrackLimit = limits.PER_TRACK_DAILY;
 
-  const result = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(downloads)
-    .where(
-      and(
-        eq(downloads.userId, userId),
-        gte(downloads.downloadedAt, startOfMonth)
-      )
-    );
+  // Get today's download stats
+  const downloadLimit = await dbHelpers.getDownloadLimitToday(userId);
 
-  return result[0]?.count || 0;
-}
+  const currentCount = downloadLimit?.downloadsCount || 0;
+  const remaining = Math.max(0, dailyLimit - currentCount);
 
-/**
- * Check if user has reached download limit
- */
-async function checkDownloadLimit(userId: number, membershipStatus: string): Promise<{ allowed: boolean; remaining: number; limit: number }> {
-  const limit = DOWNLOAD_LIMITS[membershipStatus as keyof typeof DOWNLOAD_LIMITS] || DOWNLOAD_LIMITS.free;
-  
-  // Unlimited for verified users
-  if (limit === -1) {
-    return { allowed: true, remaining: -1, limit: -1 };
+  // Check daily limit
+  if (currentCount >= dailyLimit) {
+    return {
+      allowed: false,
+      remaining: 0,
+      limit: dailyLimit,
+      reason: "daily_limit_reached"
+    };
   }
 
-  const currentCount = await getUserMonthlyDownloadCount(userId);
-  const remaining = Math.max(0, limit - currentCount);
-  const allowed = currentCount < limit;
+  // Check per-track limit if trackId provided
+  if (trackId && downloadLimit?.trackDownloads) {
+    const trackDownloads = typeof downloadLimit.trackDownloads === 'string' 
+      ? JSON.parse(downloadLimit.trackDownloads) 
+      : downloadLimit.trackDownloads;
+    const trackCount = trackDownloads[trackId.toString()] || 0;
+    
+    if (trackCount >= perTrackLimit) {
+      return {
+        allowed: false,
+        remaining,
+        limit: dailyLimit,
+        reason: "track_limit_reached"
+      };
+    }
+  }
 
-  return { allowed, remaining, limit };
+  return { allowed: true, remaining, limit: dailyLimit };
 }
 
 /**
@@ -109,12 +113,23 @@ export const downloadsRouter = router({
       }
       const track = trackResult[0];
 
-      // Check download limit
-      const limitCheck = await checkDownloadLimit(ctx.user.id, ctx.user.membershipStatus || "free");
+      // Check daily download limit
+      const limitCheck = await checkDailyDownloadLimit(
+        ctx.user.id,
+        ctx.user.membershipStatus || "free",
+        input.trackId
+      );
+      
       if (!limitCheck.allowed) {
+        if (limitCheck.reason === "track_limit_reached") {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Has alcanzado el límite de descargas para este track hoy (máximo 3 por día).",
+          });
+        }
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: `Has alcanzado tu límite de descargas mensuales (${limitCheck.limit}). Actualiza tu membresía para descargar más tracks.`,
+          message: `Has alcanzado tu límite de descargas diarias (${limitCheck.limit}). Vuelve mañana o actualiza tu membresía.`,
         });
       }
 
@@ -135,8 +150,11 @@ export const downloadsRouter = router({
       const userAgent = ctx.req.headers["user-agent"] || "unknown";
       const device = userAgent.includes("Mobile") ? "mobile" : "desktop";
 
-      // Record download for monetization
-      await db.insert(downloads).values({
+      // Record download in downloads table
+      const dbInstance = await getDb();
+      if (!dbInstance) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database connection failed" });
+      
+      await dbInstance.insert(downloads).values({
         userId: ctx.user.id,
         trackId: input.trackId,
         artistId: track.userId,
@@ -146,6 +164,16 @@ export const downloadsRouter = router({
         userAgent,
         isSuspicious: false,
       });
+
+      // Update download_limits table (daily tracking)
+      const limitUpdate = await dbHelpers.createOrUpdateDownloadLimit(ctx.user.id, input.trackId);
+      if (!limitUpdate.allowed) {
+        // This shouldn't happen as we already checked, but just in case
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Error al actualizar límites de descarga",
+        });
+      }
 
       // Get the download ID we just created
       const downloadRecords = await db
@@ -217,18 +245,20 @@ export const downloadsRouter = router({
     }),
 
   /**
-   * Get download limits for current user
+   * Get daily download limits for current user
    */
   getDownloadLimits: protectedProcedure.query(async ({ ctx }) => {
     const membershipStatus = ctx.user.membershipStatus || "free";
-    const limitCheck = await checkDownloadLimit(ctx.user.id, membershipStatus);
+    const limitCheck = await checkDailyDownloadLimit(ctx.user.id, membershipStatus);
+    const limits = getDownloadLimits(membershipStatus);
 
     return {
       membershipStatus,
-      limit: limitCheck.limit,
-      used: limitCheck.limit === -1 ? 0 : limitCheck.limit - limitCheck.remaining,
+      dailyLimit: limitCheck.limit,
+      used: limitCheck.limit - limitCheck.remaining,
       remaining: limitCheck.remaining,
-      unlimited: limitCheck.limit === -1,
+      perTrackLimit: limits.PER_TRACK_DAILY,
+      resetTime: "midnight", // Resets at midnight local time
     };
   }),
 

@@ -17,8 +17,8 @@ export default function DownloadLimitsCard() {
     return null;
   }
 
-  const { membershipStatus, limit, used, remaining, unlimited } = limits;
-  const percentage = unlimited ? 0 : (used / limit) * 100;
+  const { membershipStatus, dailyLimit, used, remaining, perTrackLimit } = limits;
+  const percentage = dailyLimit === 0 ? 0 : (used / dailyLimit) * 100;
 
   const getMembershipColor = (status: string) => {
     switch (status) {
@@ -43,7 +43,6 @@ export default function DownloadLimitsCard() {
   };
 
   const getProgressColor = () => {
-    if (unlimited) return "bg-green-500";
     if (percentage >= 90) return "bg-red-500";
     if (percentage >= 70) return "bg-yellow-500";
     return "bg-cyan-500";
@@ -77,31 +76,31 @@ export default function DownloadLimitsCard() {
         {/* Download count */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-muted-foreground">Este mes</span>
+            <span className="text-sm text-muted-foreground">Hoy</span>
             <span className="text-sm font-medium">
-              {unlimited ? (
-                <span className="text-green-500 flex items-center gap-1">
-                  <Sparkles className="h-3 w-3" />
-                  Ilimitado
+              {membershipStatus === "member" || membershipStatus === "verified" ? (
+                <span className={percentage >= 90 ? "text-red-500" : ""}>
+                  {used} / {dailyLimit}
                 </span>
               ) : (
-                <span className={percentage >= 90 ? "text-red-500" : ""}>
-                  {used} / {limit}
-                </span>
+                <span className="text-gray-500">0 / 0</span>
               )}
             </span>
           </div>
-          {!unlimited && (
+          {(membershipStatus === "member" || membershipStatus === "verified") && (
             <Progress value={percentage} className={`h-2 ${getProgressColor()}`} />
           )}
         </div>
 
         {/* Remaining downloads */}
-        {!unlimited && (
+        {(membershipStatus === "member" || membershipStatus === "verified") && (
           <div className="p-3 bg-primary/5 border border-primary/10 rounded-lg">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Descargas restantes</span>
+              <span className="text-sm text-muted-foreground">Descargas restantes hoy</span>
               <span className="text-2xl font-bold text-primary">{remaining}</span>
+            </div>
+            <div className="mt-2 text-xs text-muted-foreground">
+              Máximo {perTrackLimit} descargas por track
             </div>
           </div>
         )}
@@ -127,35 +126,31 @@ export default function DownloadLimitsCard() {
         )}
 
         {/* Warning for low remaining */}
-        {!unlimited && remaining <= 5 && remaining > 0 && (
+        {(membershipStatus === "member" || membershipStatus === "verified") && remaining <= 5 && remaining > 0 && (
           <div className="p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
             <p className="text-xs text-yellow-600 dark:text-yellow-500">
-              ⚠️ Te quedan solo {remaining} descargas este mes
+              ⚠️ Te quedan solo {remaining} descargas hoy
             </p>
           </div>
         )}
 
         {/* Limit reached */}
-        {!unlimited && remaining === 0 && (
+        {(membershipStatus === "member" || membershipStatus === "verified") && remaining === 0 && (
           <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
             <p className="text-xs text-red-600 dark:text-red-500 mb-2">
-              🚫 Has alcanzado tu límite mensual
+              🚫 Has alcanzado tu límite diario (20 descargas)
             </p>
-            <Button
-              size="sm"
-              onClick={() => setLocation("/membership")}
-              className="w-full bg-red-600 hover:bg-red-700"
-            >
-              Actualizar Plan
-            </Button>
+            <p className="text-xs text-muted-foreground">
+              Vuelve mañana para más descargas
+            </p>
           </div>
         )}
 
         {/* Upgrade CTA for free users */}
-        {membershipStatus === "free" && remaining > 0 && (
+        {membershipStatus === "free" && (
           <div className="pt-4 border-t border-border/50">
             <p className="text-xs text-muted-foreground mb-3">
-              Actualiza a <span className="text-purple-500 font-medium">Pro ($4.99/mes)</span> para descargas <span className="text-green-500 font-medium">ILIMITADAS</span>
+              Actualiza a <span className="text-purple-500 font-medium">Pro ($4.99/mes)</span> para <span className="text-green-500 font-medium">20 descargas diarias</span>
             </p>
             <Button
               size="sm"

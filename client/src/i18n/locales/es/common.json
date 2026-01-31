@@ -476,5 +476,15 @@
     "benefit3Desc": "Miles de DJs buscando tracks profesionales. Tu música, su próximo set.",
     "ctaButton": "Empieza a Ganar con PRO",
     "ctaSubtext": "Solo $4.99/mes · Cancela cuando quieras · Primeros 30 días con garantía"
+  },
+  "downloadLimits": {
+    "downloadsAvailable": "Descargas Disponibles",
+    "today": "Hoy",
+    "remainingToday": "Descargas restantes hoy",
+    "maxPerTrack": "Máximo {count} descargas por track",
+    "onlyRemaining": "⚠️ Te quedan solo {count} descargas hoy",
+    "dailyLimitReached": "🚫 Has alcanzado tu límite diario (20 descargas)",
+    "comeTomorrow": "Vuelve mañana para más descargas",
+    "upgradeFor20Daily": "Actualiza a <span class=\"text-purple-500 font-medium\">Pro ($4.99/mes)</span> para <span class=\"text-green-500 font-medium\">20 descargas diarias</span>"
   }
 }

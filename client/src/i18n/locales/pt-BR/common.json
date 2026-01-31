@@ -476,5 +476,15 @@
     "benefit3Desc": "Milhares de DJs procurando faixas profissionais. Sua música, o próximo set deles.",
     "ctaButton": "Comece a Ganhar com PRO",
     "ctaSubtext": "Apenas $4.99/mês · Cancele quando quiser · Primeiros 30 dias com garantia"
+  },
+  "downloadLimits": {
+    "downloadsAvailable": "Downloads Disponíveis",
+    "today": "Hoje",
+    "remainingToday": "Restantes hoje",
+    "maxPerTrack": "Máximo {count} downloads por faixa",
+    "onlyRemaining": "⚠️ Apenas {count} downloads restantes hoje",
+    "dailyLimitReached": "🚫 Limite diário atingido (20 downloads)",
+    "comeTomorrow": "Volte amanhã para mais downloads",
+    "upgradeFor20Daily": "Atualize para <span class=\"text-purple-500 font-medium\">Pro ($4.99/mês)</span> para <span class=\"text-green-500 font-medium\">20 downloads diários</span>"
   }
 }

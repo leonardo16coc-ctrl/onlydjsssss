@@ -1641,15 +1641,17 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [ ] Agregar botón "Cancelar Suscripción" en dashboard
 
 ### 74.3 Sistema de Límites de Descarga
-- [ ] Implementar constantes MAX_DESCARGAS_POR_DIA = 20
-- [ ] Implementar constantes MAX_DESCARGAS_POR_TRACK_POR_DIA = 3
-- [ ] Crear función checkDownloadLimit()
-- [ ] Crear función recordDownload()
-- [ ] Implementar reset automático cada 24 horas
-- [ ] Implementar lógica: descargas repetidas no cuentan
-- [ ] Agregar UI de límites en Explore
-- [ ] Mostrar "X/20 descargas disponibles hoy"
-- [ ] Bloquear botón de descarga al alcanzar límite
+- [x] Crear procedure tRPC getDownloadLimits para obtener límites del usuario
+- [x] Integrar createOrUpdateDownloadLimit() en downloads.router.ts
+- [x] Verificar límites antes de permitir descarga
+- [x] Implementar lógica: descargas repetidas del mismo track cuentan hasta 3 veces
+- [x] Actualizar componente DownloadLimitsCard para mostrar contador diario
+- [x] DownloadLimitsCard ya integrado en página Explore
+- [x] DownloadButton ya verifica límites y muestra errores
+- [x] Bloqueo automático al alcanzar límite con mensajes claros
+- [x] Agregar traducciones de mensajes de límite (5 idiomas)
+- [x] Toast informativo al alcanzar límite diario (ya implementado en DownloadButton)
+- [ ] Crear tests de límites de descarga
 
 ### 74.4 Modelo de Ganancias Híbrido
 - [ ] Implementar función calculateMonthlyRevenue()
