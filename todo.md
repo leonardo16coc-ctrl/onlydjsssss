@@ -1722,3 +1722,23 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [ ] Documentar fórmulas matemáticas
 - [ ] Documentar proceso mensual
 - [ ] Guardar checkpoint
+
+
+## 75. Página de Gestión de Suscripciones (NUEVO)
+- [x] Agregar procedure getDetails al subscriptionsRouter
+- [x] Agregar procedure getPaymentHistory al subscriptionsRouter
+- [x] Crear página Subscription.tsx con información del plan
+- [x] Mostrar estado de suscripción (activa/cancelada/expirada)
+- [x] Mostrar fecha de renovación/cancelación
+- [x] Mostrar método de pago actual (marca y últimos 4 dígitos)
+- [x] Implementar botón "Cancelar Suscripción" con confirmación
+- [x] Implementar botón "Reactivar Suscripción" si está cancelada
+- [x] Implementar botón "Actualizar Método de Pago" (Stripe Portal)
+- [x] Crear sección de historial de pagos con tabla
+- [x] Mostrar fecha, monto, estado, y botón de descarga de recibo
+- [x] Agregar traducciones en 5 idiomas
+- [x] Agregar ruta /subscription en App.tsx
+- [x] Agregar subscriptionsRouter al appRouter principal
+- [ ] Agregar link en Dashboard/Navbar para acceder
+- [ ] Testing completo
+- [ ] Guardar checkpoint
