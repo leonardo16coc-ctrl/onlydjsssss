@@ -22,6 +22,16 @@
       "subscribe": "Für $4.99/Monat abonnieren",
       "aiTagline": "KI + Musik + Sets + Intelligenz = DJ MODE"
     },
+    "featured": {
+      "title": "ERSTELLEN SIE IHR PERFEKTES SET",
+      "subtitle": "Wählen Sie Genre, Dauer und Energie Ihres Sets. ONLYDJS findet die ideale Musik für Sie.",
+      "feature1": "KI Set-Ersteller",
+      "feature1Desc": "Wählen Sie Genre, Dauer und Energie. Unsere KI findet die perfekten Tracks für Ihr Set.",
+      "feature2": "Hochladen & Monetarisieren",
+      "feature2Desc": "Laden Sie Ihre Extended Mixes, Mashups und Remixes hoch. Verdienen Sie Geld mit jedem Download.",
+      "feature3": "Alles-in-Einem-Plattform",
+      "feature3Desc": "Laden Sie Musik herunter, hoch und monetarisieren Sie sie von einem einzigen Ort."
+    },
     "monetization": {
       "title": "Verwandeln Sie Ihre Musik in Einnahmen",
       "subtitle": "Laden Sie Ihre Tracks hoch und verdienen Sie Geld mit jedem Download. Schließen Sie sich Tausenden von DJs an, die bereits ihre Musik monetarisieren.",

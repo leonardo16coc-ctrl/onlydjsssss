@@ -22,6 +22,16 @@
       "uploadFiles": "Subir Tus Archivos",
       "subscribe": "Suscribirse por $4.99/mes"
     },
+    "featured": {
+      "title": "CREA TU SET PERFECTO",
+      "subtitle": "Selecciona el género, la duración y la energía de tu set. ONLYDJS encuentra la música ideal para ti.",
+      "feature1": "Creador de Sets IA",
+      "feature1Desc": "Selecciona género, duración y energía. Nuestra IA encuentra los tracks perfectos para tu set.",
+      "feature2": "Sube y Monetiza",
+      "feature2Desc": "Sube tus extended mixes, mashups y remixes. Gana dinero con cada descarga.",
+      "feature3": "Plataforma Todo-en-Uno",
+      "feature3Desc": "Descarga, sube y monetiza tu música desde un solo lugar."
+    },
     "monetization": {
       "title": "Convierte Tu Música en Ingresos",
       "subtitle": "Sube tus tracks y gana dinero con cada descarga. Únete a miles de DJs que ya monetizan su música.",

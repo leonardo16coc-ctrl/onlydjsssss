@@ -54,6 +54,57 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Featured Section - Create Perfect Set */}
+      <section className="py-16 bg-gradient-to-br from-purple-900/20 via-pink-900/20 to-cyan-900/20 border-y border-cyan-500/20">
+        <div className="container">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-cyan-500 to-purple-500 rounded-full mb-4 animate-pulse">
+                <span className="text-3xl">🎧</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                {t('home.featured.title')}
+              </h2>
+              <p className="text-xl md:text-2xl text-muted-foreground mb-6 leading-relaxed">
+                {t('home.featured.subtitle')}
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card className="card-neon p-6 bg-card/50 backdrop-blur-sm border-cyan-500/30 hover:border-cyan-500/60 transition-all">
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-12 h-12 bg-cyan-500/20 rounded-full flex items-center justify-center mb-4">
+                    <Sparkles className="h-6 w-6 text-cyan-400" />
+                  </div>
+                  <h3 className="text-lg font-bold mb-2">{t('home.featured.feature1')}</h3>
+                  <p className="text-sm text-muted-foreground">{t('home.featured.feature1Desc')}</p>
+                </div>
+              </Card>
+              
+              <Card className="card-neon p-6 bg-card/50 backdrop-blur-sm border-purple-500/30 hover:border-purple-500/60 transition-all">
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mb-4">
+                    <Upload className="h-6 w-6 text-purple-400" />
+                  </div>
+                  <h3 className="text-lg font-bold mb-2">{t('home.featured.feature2')}</h3>
+                  <p className="text-sm text-muted-foreground">{t('home.featured.feature2Desc')}</p>
+                </div>
+              </Card>
+              
+              <Card className="card-neon p-6 bg-card/50 backdrop-blur-sm border-pink-500/30 hover:border-pink-500/60 transition-all">
+                <div className="flex flex-col items-center text-center">
+                  <div className="w-12 h-12 bg-pink-500/20 rounded-full flex items-center justify-center mb-4">
+                    <DollarSign className="h-6 w-6 text-pink-400" />
+                  </div>
+                  <h3 className="text-lg font-bold mb-2">{t('home.featured.feature3')}</h3>
+                  <p className="text-sm text-muted-foreground">{t('home.featured.feature3Desc')}</p>
+                </div>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Monetization Section */}
       <MonetizationSection />
 

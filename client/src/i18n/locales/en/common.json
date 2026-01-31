@@ -22,6 +22,16 @@
       "uploadFiles": "Upload Your Files",
       "subscribe": "Subscribe for $4.99/month"
     },
+    "featured": {
+      "title": "CREATE YOUR PERFECT SET",
+      "subtitle": "Select the genre, duration and energy of your set. ONLYDJS finds the ideal music for you.",
+      "feature1": "AI Set Builder",
+      "feature1Desc": "Select genre, duration and energy. Our AI finds the perfect tracks for your set.",
+      "feature2": "Upload & Monetize",
+      "feature2Desc": "Upload your extended mixes, mashups and remixes. Earn money with every download.",
+      "feature3": "All-in-One Platform",
+      "feature3Desc": "Download, upload and monetize your music from a single place."
+    },
     "monetization": {
       "title": "Turn Your Music Into Revenue",
       "subtitle": "Upload your tracks and earn money with every download. Join thousands of DJs already monetizing their music.",

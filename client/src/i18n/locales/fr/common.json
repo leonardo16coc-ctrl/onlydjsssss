@@ -22,6 +22,16 @@
       "subscribe": "S'abonner pour $4.99/mois",
       "aiTagline": "IA + Musique + Sets + Intelligence = DJ MODE"
     },
+    "featured": {
+      "title": "CRÉEZ VOTRE SET PARFAIT",
+      "subtitle": "Sélectionnez le genre, la durée et l'énergie de votre set. ONLYDJS trouve la musique idéale pour vous.",
+      "feature1": "Créateur de Sets IA",
+      "feature1Desc": "Sélectionnez genre, durée et énergie. Notre IA trouve les morceaux parfaits pour votre set.",
+      "feature2": "Téléversez et Monétisez",
+      "feature2Desc": "Téléversez vos extended mixes, mashups et remixes. Gagnez de l'argent à chaque téléchargement.",
+      "feature3": "Plateforme Tout-en-Un",
+      "feature3Desc": "Téléchargez, téléversez et monétisez votre musique depuis un seul endroit."
+    },
     "monetization": {
       "title": "Transformez Votre Musique en Revenus",
       "subtitle": "Téléversez vos morceaux et gagnez de l'argent à chaque téléchargement. Rejoignez des milliers de DJs qui monétisent déjà leur musique.",
