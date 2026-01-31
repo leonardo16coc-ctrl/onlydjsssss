@@ -59,3 +59,84 @@ export function getDownloadLimits(membershipStatus: string) {
   }
   return DOWNLOAD_LIMITS.FREE;
 }
+
+
+/**
+ * Revenue Model Configuration
+ * 
+ * REPARTO GLOBAL:
+ * - 50% para DJs
+ * - 50% para Plataforma
+ * 
+ * DISTRIBUCIÓN DJ (del 50% DJs):
+ * - 30% por descargas
+ * - 20% por DJ Score (impacto)
+ * 
+ * FÓRMULA DJ SCORE:
+ * - Descargas: 40%
+ * - Streams: 30%
+ * - Minutos escuchados: 20%
+ * - Engagement (favoritos + playlists): 10%
+ */
+
+export const REVENUE_MODEL = {
+  // Split global
+  PLATFORM_SHARE: 0.50, // 50% plataforma
+  DJ_SHARE: 0.50,       // 50% DJs
+  
+  // Distribución del pool de DJs
+  DOWNLOADS_POOL: 0.30,  // 30% por descargas
+  SCORE_POOL: 0.20,      // 20% por DJ Score
+  
+  // Pesos del DJ Score
+  SCORE_WEIGHTS: {
+    DOWNLOADS: 0.40,    // 40%
+    STREAMS: 0.30,      // 30%
+    MINUTES: 0.20,      // 20%
+    ENGAGEMENT: 0.10,   // 10%
+  },
+  
+  // Normalización de métricas para DJ Score
+  // Estos valores se ajustan según el crecimiento de la plataforma
+  NORMALIZATION: {
+    DOWNLOADS_MAX: 1000,  // Máximo esperado de descargas mensuales por DJ
+    STREAMS_MAX: 10000,   // Máximo esperado de streams mensuales
+    MINUTES_MAX: 100000,  // Máximo esperado de minutos escuchados
+    ENGAGEMENT_MAX: 500,  // Máximo esperado de favoritos + playlists
+  }
+} as const;
+
+/**
+ * Calculate DJ Score based on monthly metrics
+ * 
+ * @param downloads - Total downloads this month
+ * @param streams - Total streams this month
+ * @param minutes - Total minutes listened this month
+ * @param engagement - Total favorites + playlist adds this month
+ * @returns DJ Score (0-100)
+ */
+export function calculateDJScore(
+  downloads: number,
+  streams: number,
+  minutes: number,
+  engagement: number
+): number {
+  const norm = REVENUE_MODEL.NORMALIZATION;
+  const weights = REVENUE_MODEL.SCORE_WEIGHTS;
+  
+  // Normalize each metric to 0-1 range
+  const normalizedDownloads = Math.min(downloads / norm.DOWNLOADS_MAX, 1);
+  const normalizedStreams = Math.min(streams / norm.STREAMS_MAX, 1);
+  const normalizedMinutes = Math.min(minutes / norm.MINUTES_MAX, 1);
+  const normalizedEngagement = Math.min(engagement / norm.ENGAGEMENT_MAX, 1);
+  
+  // Calculate weighted score (0-100)
+  const score = (
+    normalizedDownloads * weights.DOWNLOADS +
+    normalizedStreams * weights.STREAMS +
+    normalizedMinutes * weights.MINUTES +
+    normalizedEngagement * weights.ENGAGEMENT
+  ) * 100;
+  
+  return Math.round(score * 100) / 100; // Round to 2 decimals
+}

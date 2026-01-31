@@ -1762,3 +1762,22 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [ ] Testing de webhooks con Stripe CLI
 - [ ] Verificar que emails se envían correctamente
 - [ ] Guardar checkpoint
+
+
+## 77. Modelo de Ganancias para DJs - Reparto 50/50 (NUEVO)
+- [x] Crear constantes de reparto en stripe-products.ts
+- [x] Crear helper calculateDJScore() con fórmula completa
+- [x] Crear archivo revenue-calculator.ts con todos los helpers:
+  - getMonthlyRevenue() - Calcular ingresos totales
+  - getDJMetrics() - Obtener métricas de un DJ
+  - calculateAllDJScores() - Calcular scores de todos los DJs
+  - distributeMonthlyRevenue() - Distribuir ganancias
+  - getDJEarningsSummary() - Resumen de ganancias
+- [ ] Implementar procedure tRPC getDJEarnings para obtener ganancias
+- [ ] Implementar procedure tRPC getDJStats para métricas completas
+- [ ] Crear proceso mensual automático (cron) para cálculo
+- [ ] Extender Dashboard con sección de ganancias
+- [ ] Mostrar DJ Score y % participación
+- [ ] Mostrar ganancia mensual estimada
+- [ ] Crear tests de cálculo de ganancias
+- [ ] Guardar checkpoint
