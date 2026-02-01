@@ -1894,3 +1894,10 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar badges con flechas ↑↓ en cards de favoritos+playlists
 - [x] Estilizar badges: verde para crecimiento positivo, rojo para negativo, gris para sin cambios
 - [x] Mostrar "N/A" cuando no hay datos del mes anterior (solo se muestra badge si hay datos)
+
+
+## 58. Cambio de Logo (NUEVO)
+- [x] Copiar nuevo logo con gradiente cyan-purple al directorio público
+- [x] Actualizar referencias del logo en Header/Navbar
+- [ ] Actualizar favicon si es necesario
+- [x] Verificar que el logo se vea bien en todas las páginas

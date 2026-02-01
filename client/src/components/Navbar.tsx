@@ -35,7 +35,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           <Link href="/">
             <a className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-              <img src="/logo.png" alt="ONLYDJS" className="h-10 w-auto" />
+              <img src="/logo-new-gradient.png" alt="ONLYDJS" className="h-10 w-auto" />
               <span className="text-2xl font-bold text-glow-cyan">ONLYDJS</span>
             </a>
           </Link>
