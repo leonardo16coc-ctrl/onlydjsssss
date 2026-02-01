@@ -278,6 +278,76 @@ export const earningsRouter = router({
       breakdown.fromMinutes +
       breakdown.fromFavoritesPlaylists;
 
+    // Get metrics from last month for growth calculation
+    const lastMonthStart = new Date();
+    lastMonthStart.setMonth(lastMonthStart.getMonth() - 1);
+    lastMonthStart.setDate(1);
+    lastMonthStart.setHours(0, 0, 0, 0);
+
+    const thisMonthStart = new Date();
+    thisMonthStart.setDate(1);
+    thisMonthStart.setHours(0, 0, 0, 0);
+
+    // Get DJ's track IDs
+    const trackIds = await db
+      .select({ id: tracks.id })
+      .from(tracks)
+      .where(eq(tracks.userId, ctx.user.id));
+
+    const trackIdList = trackIds.map(t => t.id);
+
+    // Get downloads from last month
+    const lastMonthDownloads = trackIdList.length > 0 ? await db
+      .select({ count: sql<number>`COUNT(*)` })
+      .from(downloads)
+      .where(
+        and(
+          sql`${downloads.trackId} IN (${sql.join(trackIdList.map(id => sql`${id}`), sql`, `)})`,
+          gte(downloads.downloadedAt, lastMonthStart),
+          sql`${downloads.downloadedAt} < ${thisMonthStart}`
+        )
+      ) : [{ count: 0 }];
+
+    // Get downloads from this month
+    const thisMonthDownloads = trackIdList.length > 0 ? await db
+      .select({ count: sql<number>`COUNT(*)` })
+      .from(downloads)
+      .where(
+        and(
+          sql`${downloads.trackId} IN (${sql.join(trackIdList.map(id => sql`${id}`), sql`, `)})`,
+          gte(downloads.downloadedAt, thisMonthStart)
+        )
+      ) : [{ count: 0 }];
+
+    const lastMonthMetrics = {
+      downloads: lastMonthDownloads[0]?.count || 0,
+      // For streams and minutes, we'll estimate based on proportional growth
+      // In production, you'd track these with timestamps too
+      streams: 0,
+      minutesListened: 0,
+      favoritesPlaylists: 0,
+    };
+
+    const thisMonthMetrics = {
+      downloads: thisMonthDownloads[0]?.count || 0,
+      streams: 0,
+      minutesListened: 0,
+      favoritesPlaylists: 0,
+    };
+
+    // Calculate growth percentages
+    const calculateGrowth = (current: number, previous: number): number | null => {
+      if (previous === 0) return current > 0 ? 100 : null;
+      return ((current - previous) / previous) * 100;
+    };
+
+    const growth = {
+      downloads: calculateGrowth(thisMonthMetrics.downloads, lastMonthMetrics.downloads),
+      streams: null, // Will be available when we track streams with timestamps
+      minutesListened: null,
+      favoritesPlaylists: null,
+    };
+
     return {
       isPro: true,
       djScore: parseFloat(djScore.toFixed(2)),
@@ -287,6 +357,12 @@ export const earningsRouter = router({
         fromStreams: parseFloat(breakdown.fromStreams.toFixed(2)),
         fromMinutes: parseFloat(breakdown.fromMinutes.toFixed(2)),
         fromFavoritesPlaylists: parseFloat(breakdown.fromFavoritesPlaylists.toFixed(2)),
+      },
+      growth: {
+        downloads: growth.downloads !== null ? parseFloat(growth.downloads.toFixed(1)) : null,
+        streams: growth.streams,
+        minutesListened: growth.minutesListened,
+        favoritesPlaylists: growth.favoritesPlaylists,
       },
     };
   }),

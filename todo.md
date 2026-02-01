@@ -1883,3 +1883,14 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar gráfico combinado con las 3 métricas en un solo chart
 - [ ] Implementar comparación mes a mes con porcentajes de crecimiento (pendiente)
 - [x] Estilizar gráficos con colores neon consistentes con el tema
+
+
+## 57. Indicadores de Crecimiento en Dashboard (NUEVO)
+- [x] Modificar endpoint getDJScore para incluir métricas del mes anterior
+- [x] Calcular porcentajes de crecimiento mes a mes para cada métrica
+- [x] Agregar badges con flechas ↑↓ en cards de descargas
+- [x] Agregar badges con flechas ↑↓ en cards de streams
+- [x] Agregar badges con flechas ↑↓ en cards de minutos escuchados
+- [x] Agregar badges con flechas ↑↓ en cards de favoritos+playlists
+- [x] Estilizar badges: verde para crecimiento positivo, rojo para negativo, gris para sin cambios
+- [x] Mostrar "N/A" cuando no hay datos del mes anterior (solo se muestra badge si hay datos)

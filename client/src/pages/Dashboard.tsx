@@ -8,7 +8,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { trpc } from "@/lib/trpc";
-import { DollarSign, Download, Music, TrendingUp, Info, Play, Clock, Heart, ListMusic, Award } from "lucide-react";
+import { DollarSign, Download, Music, TrendingUp, Info, Play, Clock, Heart, ListMusic, Award, ArrowUp, ArrowDown, Minus } from "lucide-react";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useTranslation } from "react-i18next";
@@ -150,36 +150,136 @@ export default function Dashboard() {
               {/* Metrics Grid */}
               <div className="lg:col-span-2 grid grid-cols-2 gap-4">
                 <Card className="card-neon p-4 bg-card">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Download className="h-5 w-5 text-cyan-400" />
-                    <p className="text-sm text-muted-foreground">Descargas</p>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-3">
+                      <Download className="h-5 w-5 text-cyan-400" />
+                      <p className="text-sm text-muted-foreground">Descargas</p>
+                    </div>
+                    {djScore.growth?.downloads !== null && djScore.growth?.downloads !== undefined && (
+                      <Badge 
+                        variant="outline" 
+                        className={`flex items-center gap-1 ${
+                          djScore.growth.downloads > 0 
+                            ? 'border-green-500/50 bg-green-500/10 text-green-400' 
+                            : djScore.growth.downloads < 0 
+                            ? 'border-red-500/50 bg-red-500/10 text-red-400'
+                            : 'border-gray-500/50 bg-gray-500/10 text-gray-400'
+                        }`}
+                      >
+                        {djScore.growth.downloads > 0 ? (
+                          <ArrowUp className="h-3 w-3" />
+                        ) : djScore.growth.downloads < 0 ? (
+                          <ArrowDown className="h-3 w-3" />
+                        ) : (
+                          <Minus className="h-3 w-3" />
+                        )}
+                        <span className="text-xs font-semibold">
+                          {Math.abs(djScore.growth.downloads).toFixed(1)}%
+                        </span>
+                      </Badge>
+                    )}
                   </div>
                   <p className="text-2xl font-bold">{djScore.metrics.downloads}</p>
                   <p className="text-xs text-cyan-400 mt-1">40% del Score</p>
                 </Card>
 
                 <Card className="card-neon p-4 bg-card">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Play className="h-5 w-5 text-green-400" />
-                    <p className="text-sm text-muted-foreground">Streams</p>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-3">
+                      <Play className="h-5 w-5 text-green-400" />
+                      <p className="text-sm text-muted-foreground">Streams</p>
+                    </div>
+                    {djScore.growth?.streams !== null && djScore.growth?.streams !== undefined && (
+                      <Badge 
+                        variant="outline" 
+                        className={`flex items-center gap-1 ${
+                          djScore.growth.streams > 0 
+                            ? 'border-green-500/50 bg-green-500/10 text-green-400' 
+                            : djScore.growth.streams < 0 
+                            ? 'border-red-500/50 bg-red-500/10 text-red-400'
+                            : 'border-gray-500/50 bg-gray-500/10 text-gray-400'
+                        }`}
+                      >
+                        {djScore.growth.streams > 0 ? (
+                          <ArrowUp className="h-3 w-3" />
+                        ) : djScore.growth.streams < 0 ? (
+                          <ArrowDown className="h-3 w-3" />
+                        ) : (
+                          <Minus className="h-3 w-3" />
+                        )}
+                        <span className="text-xs font-semibold">
+                          {Math.abs(djScore.growth.streams).toFixed(1)}%
+                        </span>
+                      </Badge>
+                    )}
                   </div>
                   <p className="text-2xl font-bold">{djScore.metrics.streams}</p>
                   <p className="text-xs text-green-400 mt-1">30% del Score</p>
                 </Card>
 
                 <Card className="card-neon p-4 bg-card">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Clock className="h-5 w-5 text-orange-400" />
-                    <p className="text-sm text-muted-foreground">Minutos</p>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-3">
+                      <Clock className="h-5 w-5 text-orange-400" />
+                      <p className="text-sm text-muted-foreground">Minutos</p>
+                    </div>
+                    {djScore.growth?.minutesListened !== null && djScore.growth?.minutesListened !== undefined && (
+                      <Badge 
+                        variant="outline" 
+                        className={`flex items-center gap-1 ${
+                          djScore.growth.minutesListened > 0 
+                            ? 'border-green-500/50 bg-green-500/10 text-green-400' 
+                            : djScore.growth.minutesListened < 0 
+                            ? 'border-red-500/50 bg-red-500/10 text-red-400'
+                            : 'border-gray-500/50 bg-gray-500/10 text-gray-400'
+                        }`}
+                      >
+                        {djScore.growth.minutesListened > 0 ? (
+                          <ArrowUp className="h-3 w-3" />
+                        ) : djScore.growth.minutesListened < 0 ? (
+                          <ArrowDown className="h-3 w-3" />
+                        ) : (
+                          <Minus className="h-3 w-3" />
+                        )}
+                        <span className="text-xs font-semibold">
+                          {Math.abs(djScore.growth.minutesListened).toFixed(1)}%
+                        </span>
+                      </Badge>
+                    )}
                   </div>
                   <p className="text-2xl font-bold">{djScore.metrics.minutesListened}</p>
                   <p className="text-xs text-orange-400 mt-1">20% del Score</p>
                 </Card>
 
                 <Card className="card-neon p-4 bg-card">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Heart className="h-5 w-5 text-pink-400" />
-                    <p className="text-sm text-muted-foreground">Favoritos + Playlists</p>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-3">
+                      <Heart className="h-5 w-5 text-pink-400" />
+                      <p className="text-sm text-muted-foreground">Favoritos + Playlists</p>
+                    </div>
+                    {djScore.growth?.favoritesPlaylists !== null && djScore.growth?.favoritesPlaylists !== undefined && (
+                      <Badge 
+                        variant="outline" 
+                        className={`flex items-center gap-1 ${
+                          djScore.growth.favoritesPlaylists > 0 
+                            ? 'border-green-500/50 bg-green-500/10 text-green-400' 
+                            : djScore.growth.favoritesPlaylists < 0 
+                            ? 'border-red-500/50 bg-red-500/10 text-red-400'
+                            : 'border-gray-500/50 bg-gray-500/10 text-gray-400'
+                        }`}
+                      >
+                        {djScore.growth.favoritesPlaylists > 0 ? (
+                          <ArrowUp className="h-3 w-3" />
+                        ) : djScore.growth.favoritesPlaylists < 0 ? (
+                          <ArrowDown className="h-3 w-3" />
+                        ) : (
+                          <Minus className="h-3 w-3" />
+                        )}
+                        <span className="text-xs font-semibold">
+                          {Math.abs(djScore.growth.favoritesPlaylists).toFixed(1)}%
+                        </span>
+                      </Badge>
+                    )}
                   </div>
                   <p className="text-2xl font-bold">{djScore.metrics.favoritesPlaylists}</p>
                   <p className="text-xs text-pink-400 mt-1">10% del Score</p>
