@@ -1837,3 +1837,38 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [ ] Crear tests de pagos automáticos
 - [ ] Testing manual de flujo completo
 - [ ] Guardar checkpoint
+
+
+## 55. Modelo Híbrido de Ganancias para DJs (NUEVO)
+- [x] Actualizar schema de base de datos con nuevas métricas:
+  - [x] Agregar campo `streamCount` en tabla tracks
+  - [x] Agregar campo `minutesListened` en tabla tracks
+  - [x] Agregar campo `favoritesCount` en tabla tracks
+  - [x] Agregar campo `playlistsCount` en tabla tracks
+- [x] Actualizar tabla earnings con nuevo modelo:
+  - [x] Cambiar distribución a 50% DJs / 50% Plataforma
+  - [x] Agregar campos para pool de descargas (30%)
+  - [x] Agregar campos para pool de score (20%)
+  - [x] Agregar campo djScore calculado
+- [x] Implementar fórmula de DJ Score:
+  - [x] (DESCARGAS × 40%) + (STREAMS × 30%) + (MINUTOS × 20%) + (FAVORITOS+PLAYLISTS × 10%)
+- [x] Actualizar router de earnings con nuevo modelo híbrido
+- [x] Implementar cálculo de POOL_DJS = INGRESO_TOTAL × 0.50
+- [x] Implementar cálculo de POOL_DESCARGAS = POOL_DJS × 0.30
+- [x] Implementar cálculo de POOL_SCORE = POOL_DJS × 0.20
+- [x] Implementar cálculo de VALOR_POR_DESCARGA = POOL_DESCARGAS / TOTAL_DESCARGAS
+- [x] Implementar cálculo de ganancia por DJ:
+  - [x] GANANCIA_DJ = (DESCARGAS_DJ × VALOR_POR_DESCARGA) + ((DJ_SCORE / TOTAL_SCORE) × POOL_SCORE)
+- [x] Crear router para tracking de streams
+- [x] Crear router para tracking de minutos escuchados
+- [x] Crear router para tracking de favoritos y playlists
+- [x] Ampliar Dashboard DJ con nuevas métricas:
+  - [x] Display de DJ Score con breakdown
+  - [x] Cards de métricas individuales (descargas, streams, minutos, favoritos+playlists)
+  - [x] Gráfico de pie chart con composición del DJ Score
+  - [ ] Gráfico de descargas en el tiempo (pendiente)
+  - [ ] Gráfico de streams en el tiempo (pendiente)
+  - [ ] Comparación de métricas mes a mes (pendiente)
+  - [ ] Top tracks por cada métrica (pendiente)
+- [ ] Actualizar traducciones en 5 idiomas para nuevas métricas
+- [ ] Crear tests de nuevo modelo de ganancias

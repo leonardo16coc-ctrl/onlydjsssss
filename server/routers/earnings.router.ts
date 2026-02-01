@@ -220,6 +220,78 @@ export const earningsRouter = router({
   }),
 
   /**
+   * Get DJ Score and metrics (NEW HYBRID MODEL)
+   */
+  getDJScore: protectedProcedure.query(async ({ ctx }) => {
+    const db = await getDb();
+    if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database connection failed" });
+
+    if (ctx.user.membershipStatus !== "member") {
+      return {
+        isPro: false,
+        djScore: 0,
+        metrics: {
+          downloads: 0,
+          streams: 0,
+          minutesListened: 0,
+          favoritesPlaylists: 0,
+        },
+        breakdown: {
+          fromDownloads: 0,
+          fromStreams: 0,
+          fromMinutes: 0,
+          fromFavoritesPlaylists: 0,
+        },
+      };
+    }
+
+    // Get DJ's tracks
+    const djTracks = await db
+      .select({
+        downloads: sql<number>`SUM(${tracks.downloadCount})`,
+        streams: sql<number>`SUM(${tracks.streamCount})`,
+        minutesListened: sql<number>`SUM(${tracks.minutesListened})`,
+        favorites: sql<number>`SUM(${tracks.favoritesCount})`,
+        playlists: sql<number>`SUM(${tracks.playlistsCount})`,
+      })
+      .from(tracks)
+      .where(eq(tracks.userId, ctx.user.id));
+
+    const metrics = {
+      downloads: djTracks[0]?.downloads || 0,
+      streams: djTracks[0]?.streams || 0,
+      minutesListened: djTracks[0]?.minutesListened || 0,
+      favoritesPlaylists: (djTracks[0]?.favorites || 0) + (djTracks[0]?.playlists || 0),
+    };
+
+    // Calculate DJ Score: (DOWNLOADS × 40%) + (STREAMS × 30%) + (MINUTES × 20%) + (FAVORITES+PLAYLISTS × 10%)
+    const breakdown = {
+      fromDownloads: metrics.downloads * 0.40,
+      fromStreams: metrics.streams * 0.30,
+      fromMinutes: metrics.minutesListened * 0.20,
+      fromFavoritesPlaylists: metrics.favoritesPlaylists * 0.10,
+    };
+
+    const djScore = 
+      breakdown.fromDownloads +
+      breakdown.fromStreams +
+      breakdown.fromMinutes +
+      breakdown.fromFavoritesPlaylists;
+
+    return {
+      isPro: true,
+      djScore: parseFloat(djScore.toFixed(2)),
+      metrics,
+      breakdown: {
+        fromDownloads: parseFloat(breakdown.fromDownloads.toFixed(2)),
+        fromStreams: parseFloat(breakdown.fromStreams.toFixed(2)),
+        fromMinutes: parseFloat(breakdown.fromMinutes.toFixed(2)),
+        fromFavoritesPlaylists: parseFloat(breakdown.fromFavoritesPlaylists.toFixed(2)),
+      },
+    };
+  }),
+
+  /**
    * Get dashboard stats (overview)
    */
   getDashboardStats: protectedProcedure.query(async ({ ctx }) => {

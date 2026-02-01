@@ -107,8 +107,12 @@ export const tracks = mysqlTable("tracks", {
   mainstageTags: text("mainstageTags"), // JSON: Festival Weapon, Peak Time, etc.
   // Stats
   downloadCount: int("downloadCount").default(0).notNull(),
-  playCount: int("playCount").default(0).notNull(),
+  playCount: int("playCount").default(0).notNull(), // Legacy field (kept for compatibility)
+  streamCount: int("streamCount").default(0).notNull(), // New: total streams (plays)
+  minutesListened: int("minutesListened").default(0).notNull(), // New: total minutes listened
   likeCount: int("likeCount").default(0).notNull(),
+  favoritesCount: int("favoritesCount").default(0).notNull(), // New: times added to favorites
+  playlistsCount: int("playlistsCount").default(0).notNull(), // New: times added to playlists
   // Status
   status: mysqlEnum("status", ["pending", "approved", "rejected"]).default("approved").notNull(),
   // Timestamps
@@ -185,12 +189,24 @@ export const earnings = mysqlTable("earnings", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull(),
   month: varchar("month", { length: 7 }).notNull(), // YYYY-MM format
-  // Revenue calculation
-  totalDownloads: int("totalDownloads").default(0).notNull(),
+  // Revenue calculation (NEW HYBRID MODEL: 50% DJs / 50% Platform)
+  totalDownloads: int("totalDownloads").default(0).notNull(), // DJ's downloads this month
+  totalStreams: int("totalStreams").default(0).notNull(), // DJ's streams this month
+  totalMinutesListened: int("totalMinutesListened").default(0).notNull(), // DJ's minutes this month
+  totalFavoritesPlaylists: int("totalFavoritesPlaylists").default(0).notNull(), // DJ's favorites+playlists
+  djScore: decimal("djScore", { precision: 10, scale: 2 }).default("0.00").notNull(), // Calculated DJ Score
   platformDownloads: int("platformDownloads").default(0).notNull(), // Total downloads on platform
-  revenuePool: decimal("revenuePool", { precision: 10, scale: 2 }).default("0.00").notNull(),
-  djShare: decimal("djShare", { precision: 10, scale: 2 }).default("0.00").notNull(), // 60% of pool
-  userEarnings: decimal("userEarnings", { precision: 10, scale: 2 }).default("0.00").notNull(),
+  platformTotalScore: decimal("platformTotalScore", { precision: 12, scale: 2 }).default("0.00").notNull(), // Sum of all DJ scores
+  // Revenue pools (50% DJs / 50% Platform)
+  totalRevenue: decimal("totalRevenue", { precision: 10, scale: 2 }).default("0.00").notNull(), // Total monthly revenue
+  poolDJs: decimal("poolDJs", { precision: 10, scale: 2 }).default("0.00").notNull(), // 50% for DJs
+  poolDownloads: decimal("poolDownloads", { precision: 10, scale: 2 }).default("0.00").notNull(), // 30% of DJ pool
+  poolScore: decimal("poolScore", { precision: 10, scale: 2 }).default("0.00").notNull(), // 20% of DJ pool
+  valuePerDownload: decimal("valuePerDownload", { precision: 5, scale: 4 }).default("0.0000").notNull(), // Pool / total downloads
+  // DJ earnings breakdown
+  earningsFromDownloads: decimal("earningsFromDownloads", { precision: 10, scale: 2 }).default("0.00").notNull(),
+  earningsFromScore: decimal("earningsFromScore", { precision: 10, scale: 2 }).default("0.00").notNull(),
+  userEarnings: decimal("userEarnings", { precision: 10, scale: 2 }).default("0.00").notNull(), // Total earnings
   // Status
   status: mysqlEnum("status", ["pending", "paid", "cancelled"]).default("pending").notNull(),
   paidAt: timestamp("paidAt"),

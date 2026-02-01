@@ -1,0 +1,9 @@
+{
+  "query": "\n-- Agregar nuevas métricas a tabla tracks\nALTER TABLE tracks \nADD COLUMN streamCount INT NOT NULL DEFAULT 0,\nADD COLUMN minutesListened INT NOT NULL DEFAULT 0,\nADD COLUMN favoritesCount INT NOT NULL DEFAULT 0,\nADD COLUMN playlistsCount INT NOT NULL DEFAULT 0;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute \n-- Agregar nuevas métricas a tabla tracks\nALTER TABLE tracks \nADD COLUMN streamCount INT NOT NULL DEFAULT 0,\nADD COLUMN minutesListened INT NOT NULL DEFAULT 0,\nADD COLUMN favoritesCount INT NOT NULL DEFAULT 0,\nADD COLUMN playlistsCount INT NOT NULL DEFAULT 0;\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1325
+}

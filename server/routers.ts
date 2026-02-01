@@ -21,6 +21,7 @@ import { downloadsRouter } from "./routers/downloads.router";
 import { earningsRouter } from "./routers/earnings.router";
 import { subscriptionsRouter } from "./routers/subscriptions.router";
 import { walletRouter } from "./routers/wallet.router";
+import { trackingRouter } from "./routers/tracking.router";
 import { getDb } from "./db";
 import { tracks, downloads } from "../drizzle/schema";
 import { eq, and, gte, sql } from "drizzle-orm";
@@ -48,6 +49,7 @@ export const appRouter = router({
   earnings: earningsRouter,
   subscriptions: subscriptionsRouter,
   wallet: walletRouter,
+  tracking: trackingRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),
