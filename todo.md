@@ -1964,3 +1964,14 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [ ] Agregar sección "Diseñado para DJs Reales" con tipos de DJs
 - [ ] Agregar CTA final "Únete a ONLYDJS" con precio $4.99/mes
 - [ ] Traducir todo el contenido nuevo a 5 idiomas (EN, ES, PT-BR, FR, DE)
+
+
+## 65. Sincronizar Modelo 50/50 en Sección "Por qué ONLYDJS" (COMPLETADO)
+- [x] Buscar sección whySection.monetization en traducciones
+- [x] Actualizar texto de "60% para DJs, 40% para la plataforma" a "50% para DJs, 50% para la plataforma"
+- [x] Actualizar en inglés (EN)
+- [x] Actualizar en español (ES)
+- [x] Actualizar en portugués (PT-BR)
+- [x] Actualizar en francés (FR)
+- [x] Actualizar en alemán (DE)
+- [x] Verificar que todo esté sincronizado
