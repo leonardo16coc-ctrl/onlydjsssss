@@ -1901,3 +1901,25 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Actualizar referencias del logo en Header/Navbar
 - [ ] Actualizar favicon si es necesario
 - [x] Verificar que el logo se vea bien en todas las páginas
+
+
+## 59. Verificación de Descarga en Formato WAV (NUEVO)
+- [x] Verificar que endpoint downloadTrack acepta formato WAV
+- [x] Verificar que UI de Explore tiene selector de formato MP3/WAV
+- [x] Verificar si hay conversión de formato implementada (NO implementada)
+- [x] Verificar si se almacenan múltiples formatos en S3 (NO, solo original)
+- [ ] Implementar conversión de formato híbrida (Opción 3 recomendada)
+  - [ ] Instalar FFmpeg en servidor
+  - [ ] Crear módulo audio-converter.ts
+  - [ ] Actualizar schema con audioFileKeyMp3
+  - [ ] Modificar upload para generar MP3 automáticamente
+  - [ ] Modificar download para usar MP3 instantáneo o convertir WAV on-the-fly
+  - [ ] Agregar tests de conversión
+
+
+## 60. Optimización de Logo a WebP (NUEVO)
+- [x] Convertir logo PNG (2.2MB) a WebP con compresión de alta calidad
+- [x] Actualizar referencia en Navbar.tsx
+- [x] Verificar reducción de tamaño (logrado: 155KB, 93% reducción)
+- [x] Verificar que la calidad visual se mantiene (PSNR 49.16 dB)
+- [ ] Eliminar PNG antiguo si WebP funciona correctamente (mantener por compatibilidad)
