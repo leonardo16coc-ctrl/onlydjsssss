@@ -2,8 +2,16 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
-import { Music, Sparkles, Trophy, LayoutDashboard, Upload, CreditCard, User, Settings, LogOut, Radio } from "lucide-react";
+import { Music, Sparkles, Trophy, LayoutDashboard, Upload, CreditCard, User, Settings, LogOut, Radio, Menu, X } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
+import { useState } from "react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,6 +26,7 @@ import { useTranslation } from "react-i18next";
 export default function Navbar() {
   const { user, isAuthenticated } = useAuth();
   const { t } = useTranslation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   const logoutMutation = trpc.auth.logout.useMutation({
     onSuccess: () => {
@@ -86,7 +95,17 @@ export default function Navbar() {
             )}
           </div>
 
-          <div className="flex items-center space-x-4">
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden p-2 text-foreground hover:text-primary transition-colors"
+            onClick={() => setMobileMenuOpen(true)}
+            aria-label="Open menu"
+          >
+            <Menu className="h-6 w-6" />
+          </button>
+
+          {/* Desktop Right Section */}
+          <div className="hidden md:flex items-center space-x-4">
             <LanguageSelector />
             {isAuthenticated ? (
               <>
@@ -142,6 +161,147 @@ export default function Navbar() {
               </a>
             )}
           </div>
+
+          {/* Mobile Menu Sheet */}
+          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+              <SheetHeader>
+                <SheetTitle className="text-left">
+                  <div className="flex items-center space-x-2">
+                    <img src="/logo-new-gradient.webp" alt="ONLYDJS" className="h-8 w-auto" />
+                    <span className="text-xl font-bold text-glow-cyan">ONLYDJS</span>
+                  </div>
+                </SheetTitle>
+              </SheetHeader>
+              
+              <div className="flex flex-col space-y-4 mt-8">
+                {/* Navigation Links */}
+                <Link href="/explore">
+                  <a 
+                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Music className="h-5 w-5 text-cyan-400" />
+                    <span className="text-lg">{t('nav.explore')}</span>
+                  </a>
+                </Link>
+                
+                <Link href="/dj-mode">
+                  <a 
+                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Radio className="h-5 w-5 text-purple-400" />
+                    <span className="text-lg text-glow-purple">{t('nav.djMode')}</span>
+                  </a>
+                </Link>
+                
+                <Link href="/mainstage">
+                  <a 
+                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Sparkles className="h-5 w-5 text-pink-400" />
+                    <span className="text-lg text-glow-pink">{t('nav.mainstage')}</span>
+                  </a>
+                </Link>
+                
+                <Link href="/rankings">
+                  <a 
+                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Trophy className="h-5 w-5 text-yellow-400" />
+                    <span className="text-lg">{t('nav.rankings')}</span>
+                  </a>
+                </Link>
+                
+                <Link href="/dashboard">
+                  <a 
+                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <LayoutDashboard className="h-5 w-5 text-cyan-400" />
+                    <span className="text-lg">{t('nav.dashboard')}</span>
+                  </a>
+                </Link>
+                
+                {isAuthenticated && user?.membershipStatus !== "free" && (
+                  <Link href="/upload">
+                    <a 
+                      className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Upload className="h-5 w-5 text-green-400" />
+                      <span className="text-lg">{t('nav.upload')}</span>
+                    </a>
+                  </Link>
+                )}
+
+                <div className="border-t border-border pt-4 mt-4">
+                  <div className="mb-4">
+                    <LanguageSelector />
+                  </div>
+                  
+                  {isAuthenticated ? (
+                    <>
+                      {user?.membershipStatus === "free" && (
+                        <Link href="/membership">
+                          <Button 
+                            className="w-full btn-neon bg-accent hover:bg-accent/90 glow-pink mb-3"
+                            onClick={() => setMobileMenuOpen(false)}
+                          >
+                            <CreditCard className="h-4 w-4 mr-2" />
+                            {t('nav.membership')}
+                          </Button>
+                        </Link>
+                      )}
+                      
+                      <div className="flex items-center space-x-3 p-3 bg-accent/10 rounded-lg mb-3">
+                        <User className="h-5 w-5" />
+                        <div>
+                          <p className="font-semibold">{user?.name || "DJ"}</p>
+                          <p className="text-xs text-muted-foreground capitalize">
+                            {user?.membershipStatus === "member" ? "PRO" : 
+                             user?.membershipStatus === "verified" ? "Verified" : "FREE"}
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <Link href="/profile/edit">
+                        <Button 
+                          variant="outline" 
+                          className="w-full justify-start mb-2"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          <Settings className="mr-2 h-4 w-4" />
+                          {t('nav.settings')}
+                        </Button>
+                      </Link>
+                      
+                      <Button 
+                        variant="outline" 
+                        className="w-full justify-start text-red-400 hover:text-red-500"
+                        onClick={() => {
+                          handleLogout();
+                          setMobileMenuOpen(false);
+                        }}
+                      >
+                        <LogOut className="mr-2 h-4 w-4" />
+                        {t('nav.logout')}
+                      </Button>
+                    </>
+                  ) : (
+                    <a href={getLoginUrl()}>
+                      <Button className="w-full btn-neon bg-primary hover:bg-primary/90 glow-cyan">
+                        {t('nav.login')}
+                      </Button>
+                    </a>
+                  )}
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </nav>

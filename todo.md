@@ -1931,3 +1931,14 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar Open Graph tags (og:title, og:description, og:image, og:type, og:url)
 - [x] Agregar Twitter Card tags (summary_large_image)
 - [x] Verificar que todos los meta tags se renderizan correctamente
+
+
+## 62. Menú Hamburguesa Deslizable para Móviles (NUEVO)
+- [x] Verificar si Sheet component de shadcn/ui está instalado
+- [x] Implementar Sheet/Drawer con todas las pestañas de navegación
+- [x] Agregar botón hamburguesa (Menu icon) visible solo en móviles
+- [x] Ocultar menú desktop en pantallas pequeñas (< md)
+- [x] Agregar animaciones de slide-in/slide-out (nativas de Sheet)
+- [x] Incluir selector de idioma en menú móvil
+- [x] Incluir botón de login/perfil en menú móvil
+- [x] Verificar funcionamiento en diferentes tamaños de pantalla
