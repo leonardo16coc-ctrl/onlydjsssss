@@ -453,39 +453,103 @@
     "errorUpdatingProfile": "Fehler beim Aktualisieren des Profils"
   },
   "monetization": {
-    "badge": "Nur für PRO-Mitglieder",
-    "title": "Monetarisieren Sie Ihre Musik",
-    "subtitle": "ONLYDJS ist nicht nur ein Musik-Pool. Es ist Ihre Plattform, um",
-    "subtitleHighlight": "Geld zu verdienen",
-    "subtitleEnd": "mit jedem Track, den Sie hochladen.",
-    "howItWorks": "Wie Funktioniert Es?",
-    "step1Title": "Laden Sie Ihre Tracks Hoch",
-    "step1Desc": "Unbegrenzte Uploads mit PRO-Mitgliedschaft ($4.99/Monat)",
-    "step2Title": "DJs Laden Herunter",
-    "step2Desc": "Jeder Download generiert automatisch Einnahmen",
-    "step3Title": "Erhalten Sie Ihre Zahlung",
-    "step3Desc": "Ziehen Sie Ihre Einnahmen ab, wenn Sie $25 USD erreichen",
-    "exampleTitle": "Echtes Beispiel",
-    "exampleDesc": "Ein Track mit 100 monatlichen Downloads kann zwischen $50-200 USD generieren, abhängig vom Plan der Benutzer, die ihn herunterladen.",
-    "avgPerTrack": "Durchschnitt pro Track",
-    "avgPerTrackValue": "$50-200",
-    "avgPerTrackSub": "monatlich",
-    "topDJsEarn": "Top DJs Verdienen",
-    "topDJsEarnValue": "$500+",
-    "topDJsEarnSub": "pro Monat",
-    "minPayout": "Mindestauszahlung",
-    "minPayoutValue": "$25",
-    "minPayoutSub": "Abhebung",
-    "requirementTitle": "Voraussetzung: PRO-Mitgliedschaft",
-    "requirementDesc": "Nur PRO-Benutzer können ihre Tracks monetarisieren. FREE-Benutzer können 1 Track/Monat hochladen, aber ohne Monetarisierung.",
-    "benefit1Title": "Verdienen pro Download",
-    "benefit1Desc": "Jedes Mal, wenn jemand Ihren Track herunterlädt, verdienen Sie Geld. Einfach und direkt.",
-    "benefit2Title": "Echtzeit-Tracking",
-    "benefit2Desc": "Vollständiges Dashboard mit aktualisierten Download- und Einnahmenstatistiken.",
-    "benefit3Title": "Globales Publikum",
-    "benefit3Desc": "Tausende von DJs suchen professionelle Tracks. Ihre Musik, ihr nächstes Set.",
-    "ctaButton": "Beginnen Sie mit PRO zu Verdienen",
-    "ctaSubtext": "Nur $4.99/Monat · Jederzeit kündbar · Erste 30 Tage mit Garantie"
+    "hero": {
+      "title": "ONLYDJS",
+      "tagline": "Die Plattform, auf der DJs ihre Wirkung monetarisieren, nicht nur ihre Tracks.",
+      "description": "Bereiten Sie sich vor, laden Sie herunter und monetarisieren Sie professionelle DJ-Musik von einem Ort aus. Extended Mixes, Edits, Mashups und Tools für echte Sets.",
+      "priceTag": "PRO-Zugang ab $4.99 USD / Monat"
+    },
+    "whatIs": {
+      "title": "Was ist ONLYDJS?",
+      "intro": "ONLYDJS ist eine professionelle Plattform für DJs, erstellt für:",
+      "point1": "Schnellere Set-Vorbereitung",
+      "point2": "Zugriff auf mixfertige Musik",
+      "point3": "Faire Monetarisierung Ihrer Musik",
+      "point4": "Wachstum Ihres globalen Publikums",
+      "notOneByOne": "Hier verkaufen Sie keine Songs einzeln.",
+      "platformBased": "Ihre Musik generiert Einnahmen basierend darauf, wie viel sie auf der Plattform genutzt wird."
+    },
+    "howItWorks": {
+      "title": "Wie funktioniert es?",
+      "forDJs": {
+        "title": "Für DJs",
+        "step1": "Laden Sie Ihre Musik hoch (Extended Mixes, Edits, Tools)",
+        "step2": "Ihr Inhalt wird gehört und heruntergeladen",
+        "step3": "Die Leistung wird gemessen (Downloads, Streams, Zeit)",
+        "step4": "Sie verdienen jeden Monat Geld basierend auf Ihrer tatsächlichen Wirkung",
+        "motto": "Je mehr Ihre Musik gespielt wird, desto mehr verdienen Sie."
+      },
+      "forUsers": {
+        "title": "Für Benutzer",
+        "feature1": "Unbegrenztes Streaming",
+        "feature2": "Bis zu 20 tägliche Downloads",
+        "feature3": "Vollständiger Katalogzugriff",
+        "feature4": "Mixfertige Musik für Clubs und Festivals",
+        "oneMembership": "Alles mit einer einzigen Mitgliedschaft."
+      }
+    },
+    "fairModel": {
+      "title": "Faires und Transparentes Verdienstmodell",
+      "intro": "ONLYDJS verteilt die monatlichen Einnahmen so:",
+      "djsShare": "Für DJs",
+      "djsShareDesc": "Verteilt nach Leistung",
+      "platformShare": "Für die Plattform",
+      "platformShareDesc": "Infrastruktur und Wachstum",
+      "djDistribution": "Die 50% für DJs werden verteilt nach:",
+      "downloads": "Echte Downloads",
+      "streams": "Wiedergaben",
+      "listeningTime": "Hörzeit",
+      "engagement": "Engagement (Favoriten und Playlists)",
+      "notPerTrack": "Wir zahlen nicht pro Track. Wir zahlen für Leistung."
+    },
+    "dashboard": {
+      "title": "Professionelles Dashboard für DJs",
+      "intro": "Jeder DJ hat Zugriff auf ein Panel mit:",
+      "totalDownloads": "Gesamt-Downloads",
+      "streams": "Streams",
+      "listeningTime": "Hörzeit",
+      "monthlyScore": "Monatlicher Score",
+      "participation": "Teilnahmeprozentsatz",
+      "earnings": "Geschätzte und endgültige Einnahmen",
+      "wallet": "Wallet und monatliche Zahlungen",
+      "monthlyPayments": "Monatliche Zahlungen",
+      "realTime": "Alles in Echtzeit, ohne Zwischenhändler."
+    },
+    "ambassador": {
+      "title": "Botschafter-Programm",
+      "intro": "Verwandeln Sie Ihr Publikum in zusätzliches Einkommen.",
+      "step1": "Teilen Sie Ihren Einladungslink",
+      "step2": "Verdienen Sie 10% wiederkehrend für jeden aktiven geworbenen Benutzer",
+      "step3": "Zusätzliches Einkommen, solange sie abonniert bleiben",
+      "motto": "DJs, die DJs wachsen lassen."
+    },
+    "payments": {
+      "title": "Automatische und Sichere Zahlungen",
+      "feature1": "Abonnements verwaltet mit Stripe",
+      "feature2": "Automatische monatliche Zahlungen an DJs",
+      "feature3": "Internes Wallet",
+      "feature4": "Vollständige Zahlungshistorie",
+      "motto": "Keine E-Mails. Keine Zahlungsverfolgung. Einfach Musik erstellen."
+    },
+    "realDJs": {
+      "title": "Entwickelt für Echte DJs",
+      "intro": "ONLYDJS ist entwickelt für:",
+      "type1": "Club-DJs",
+      "type2": "Festival-DJs",
+      "type3": "Underground-DJs",
+      "type4": "Edit- und Tool-Produzenten",
+      "type5": "DJs, die echtes Einkommen wollen"
+    },
+    "cta": {
+      "badge": "Treten Sie ONLYDJS bei",
+      "title": "Treten Sie ONLYDJS bei",
+      "feature1": "Zugriff auf professionelle Musik",
+      "feature2": "Monetarisieren Sie Ihre Wirkung",
+      "feature3": "Wachsen Sie Ihr Publikum",
+      "feature4": "Bereiten Sie sich auf jedes Set vor",
+      "button": "ONLYDJS PRO",
+      "price": "$4.99 USD / Monat"
+    }
   },
   "downloadLimits": {
     "downloadsAvailable": "Verfügbare Downloads",

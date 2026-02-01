@@ -1951,3 +1951,16 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar threshold de distancia mínima para activar cierre (100px)
 - [ ] Agregar feedback visual durante el swipe (arrastrar el panel) - opcional
 - [ ] Verificar funcionamiento en dispositivos táctiles reales (requiere testing manual)
+
+
+## 64. Actualización de Contenido de Monetización en Home (NUEVO)
+- [ ] Reemplazar sección "Monetiza tu Música" con nuevo contenido completo
+- [ ] Agregar sección "¿Qué es ONLYDJS?" con 4 puntos clave
+- [ ] Agregar sección "¿Cómo funciona?" (Para DJs y Para Usuarios)
+- [ ] Agregar sección "Modelo de Ganancias Justo y Transparente" (50/50 split)
+- [ ] Agregar sección "Dashboard Profesional para DJs" con métricas
+- [ ] Agregar sección "Programa de Embajadores" (10% recurrente)
+- [ ] Agregar sección "Pagos Automáticos y Seguros" con Stripe
+- [ ] Agregar sección "Diseñado para DJs Reales" con tipos de DJs
+- [ ] Agregar CTA final "Únete a ONLYDJS" con precio $4.99/mes
+- [ ] Traducir todo el contenido nuevo a 5 idiomas (EN, ES, PT-BR, FR, DE)
