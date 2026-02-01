@@ -469,25 +469,7 @@
       "notOneByOne": "Aquí no vendes canciones una por una.",
       "platformBased": "Tu música genera ingresos según cuánto se use dentro de la plataforma."
     },
-    "howItWorks": {
-      "title": "¿Cómo funciona?",
-      "forDJs": {
-        "title": "Para DJs",
-        "step1": "Sube tu música (extended mixes, edits, tools)",
-        "step2": "Tu contenido se escucha y se descarga",
-        "step3": "El rendimiento se mide (descargas, streams, tiempo)",
-        "step4": "Ganas dinero cada mes según tu impacto real",
-        "motto": "Cuanto más suena tu música, más ganas."
-      },
-      "forUsers": {
-        "title": "Para Usuarios",
-        "feature1": "Streaming ilimitado",
-        "feature2": "Hasta 20 descargas diarias",
-        "feature3": "Acceso completo al catálogo",
-        "feature4": "Música lista para mezclar en clubs y festivales",
-        "oneMembership": "Todo con una sola membresía."
-      }
-    },
+    "howItWorks": "¿Cómo Funciona?",
     "fairModel": {
       "title": "Modelo de Ganancias Justo y Transparente",
       "intro": "ONLYDJS reparte los ingresos mensuales así:",
@@ -555,7 +537,6 @@
     "subtitle": "ONLYDJS no es solo un pool de música. Es tu plataforma para",
     "subtitleHighlight": "ganar dinero",
     "subtitleEnd": "con cada track que subes.",
-    "howItWorks": "¿Cómo Funciona?",
     "step1Title": "Sube tus Tracks",
     "step1Desc": "Uploads ilimitados con membresía PRO ($4.99/mes)",
     "step2Title": "DJs Descargan",
@@ -655,5 +636,76 @@
     "transactionHistory": "Historial de Transacciones",
     "noTransactions": "Sin transacciones aún",
     "stripeDashboard": "Panel de Stripe"
+  },
+  "faq": {
+    "hero": {
+      "title": "Preguntas Frecuentes",
+      "subtitle": "Todo lo que necesitas saber sobre ONLYDJS, el modelo de monetización 50/50, DJ Score y más."
+    },
+    "monetization": {
+      "title": "Modelo de Monetización 50/50",
+      "q1": "¿Cómo funciona el modelo 50/50?",
+      "a1": "ONLYDJS distribuye los ingresos mensuales de forma equitativa: 50% va para los DJs y 50% para la plataforma. El pool de DJs se divide en dos partes:\n\n• 30% distribuido por descargas\n• 20% distribuido por DJ Score (impacto)\n\nEsto significa que ganas no solo por descargas, sino también por streams, tiempo de escucha y engagement.",
+      "q2": "¿Cuándo se distribuyen las ganancias?",
+      "a2": "Las ganancias se calculan y distribuyen automáticamente el día 1 de cada mes. El cálculo incluye toda la actividad del mes anterior (descargas, streams, minutos escuchados, favoritos y playlists).",
+      "q3": "¿Cómo se calcula mi parte del pool?",
+      "a3": "Tus ganancias = (Tus Descargas × Valor por Descarga) + ((Tu DJ Score / Score Total) × Pool de Score)\n\nEl valor por descarga varía mensualmente según los ingresos totales de la plataforma y el número de descargas.",
+      "q4": "¿Por qué 50/50 en lugar de 60/40?",
+      "a4": "El modelo 50/50 es más justo y sostenible. Nos permite invertir en tecnología, herramientas de IA, sistemas anti-fraude y mejoras continuas de la plataforma mientras mantenemos ganancias competitivas para los DJs."
+    },
+    "djscore": {
+      "title": "DJ Score",
+      "q1": "¿Qué es el DJ Score?",
+      "a1": "El DJ Score es una métrica que mide tu impacto real en la plataforma. No se trata solo de descargas, sino de cuánto se usa y valora realmente tu música en la comunidad.",
+      "q2": "¿Cómo se calcula el DJ Score?",
+      "a2": "DJ Score = (Descargas × 40%) + (Streams × 30%) + (Minutos Escuchados × 20%) + (Favoritos + Playlists × 10%)\n\nEsta fórmula recompensa a los DJs cuya música no solo se descarga, sino que también se reproduce activamente, se escucha por más tiempo y se guarda por los usuarios.",
+      "q3": "¿Cómo puedo mejorar mi DJ Score?",
+      "a3": "• Sube tracks de alta calidad (extended mixes, edits, tools)\n• Crea música para sets reales (peak time, warmup, closing)\n• Interactúa con la comunidad\n• Promociona tus tracks en redes sociales\n• Mantén consistencia en las subidas\n\nCuanto más se use tu música en sets reales, mayor será tu score."
+    },
+    "payments": {
+      "title": "Pagos y Wallet",
+      "q1": "¿Cuál es el mínimo para retirar?",
+      "a1": "El monto mínimo de retiro es $10 USD. Una vez que alcances este balance en tu wallet, puedes solicitar un pago en cualquier momento.",
+      "q2": "¿Qué métodos de pago están disponibles?",
+      "a2": "Usamos Stripe Connect para todos los pagos. Puedes recibir dinero vía:\n\n• Transferencia bancaria (ACH, SEPA)\n• Tarjeta de débito\n• PayPal (en algunos países)\n\nLos métodos de pago varían según el país. Stripe soporta más de 40 países.",
+      "q3": "¿Cuándo recibo mis pagos?",
+      "a3": "Después de solicitar un pago, el procesamiento toma 2-7 días hábiles dependiendo de tu país y método de pago. Las transferencias bancarias suelen ser más rápidas que las tarjetas.",
+      "q4": "¿Hay comisiones por retiros?",
+      "a4": "ONLYDJS no cobra comisiones por retiros. Sin embargo, Stripe puede aplicar pequeñas comisiones según tu país y método de pago (típicamente $0.25-1.00 USD por transferencia)."
+    },
+    "ambassador": {
+      "title": "Programa de Embajadores",
+      "q1": "¿Cómo funciona el programa de referidos?",
+      "a1": "Comparte tu link único de invitación con otros DJs o usuarios. Cuando alguien se suscribe a PRO usando tu link, ganas 10% de comisión recurrente mientras sigan suscritos.",
+      "q2": "¿Cuánto gano por referido?",
+      "a2": "Ganas 10% del valor de la suscripción:\n\n• Suscripción PRO ($4.99/mes) = $0.50/mes por referido\n\nSi refieres 100 usuarios activos, ganas $50 USD/mes en ingresos pasivos.",
+      "q3": "¿Cómo obtengo mi link de invitación?",
+      "a3": "Tu link de invitación está disponible en tu Dashboard bajo la sección 'Programa de Embajadores'. También lo encuentras en tu Wallet. Compártelo en redes sociales, en tu bio o directamente con otros DJs."
+    },
+    "membership": {
+      "title": "Membresías",
+      "q1": "¿Qué incluye la membresía PRO?",
+      "a1": "La membresía PRO ($4.99/mes) incluye:\n\n• Subidas ilimitadas\n• 20 descargas por día\n• Streaming ilimitado\n• Acceso a DJ MODE (herramientas de IA)\n• Acceso a MAINSTAGE EDITS\n• Soporte prioritario\n• Monetización habilitada",
+      "q2": "¿Puedo subir música siendo usuario Free?",
+      "a2": "¡Sí! Los usuarios Free pueden subir hasta 1 track por mes. Sin embargo, para subir más y monetizar tu música, necesitas una membresía PRO.",
+      "q3": "¿Cuántas descargas tengo por día?",
+      "a3": "• Free: 5 descargas por día\n• PRO: 20 descargas por día\n\nLas descargas se reinician diariamente a medianoche UTC.",
+      "q4": "¿Puedo cancelar mi membresía en cualquier momento?",
+      "a4": "Sí, puedes cancelar tu membresía PRO en cualquier momento desde tu página de Suscripción. Mantendrás el acceso hasta el final de tu período de facturación."
+    },
+    "uploads": {
+      "title": "Subidas y Contenido",
+      "q1": "¿Qué formatos puedo subir?",
+      "a1": "Puedes subir archivos de audio en los siguientes formatos:\n\n• MP3 (320kbps recomendado)\n• WAV (sin pérdida)\n• AIFF\n• FLAC\n\nTamaño máximo de archivo: 100MB por track.",
+      "q2": "¿Necesito analizar mis tracks antes de subir?",
+      "a2": "¡No! ONLYDJS analiza automáticamente tus tracks usando IA para detectar BPM, clave, energía y estructura. Puedes revisar y ajustar los resultados antes de publicar.",
+      "q3": "¿Puedo editar o eliminar mis tracks subidos?",
+      "a3": "Sí, puedes editar metadatos (título, artista, género, BPM, clave) o eliminar tus tracks en cualquier momento desde tu Dashboard. Nota: eliminar un track lo borra permanentemente y detiene las ganancias futuras."
+    },
+    "cta": {
+      "title": "¿Todavía tienes preguntas?",
+      "description": "Contacta a nuestro equipo de soporte y te ayudaremos en menos de 24 horas.",
+      "button": "Contactar Soporte"
+    }
   }
 }

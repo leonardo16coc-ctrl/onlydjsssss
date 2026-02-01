@@ -622,5 +622,76 @@
     "transactionHistory": "Histórico de Transações",
     "noTransactions": "Sem transações ainda",
     "stripeDashboard": "Painel do Stripe"
+  },
+  "faq": {
+    "hero": {
+      "title": "Perguntas Frequentes",
+      "subtitle": "Tudo o que você precisa saber sobre ONLYDJS, o modelo de monetização 50/50, DJ Score e mais."
+    },
+    "monetization": {
+      "title": "Modelo de Monetização 50/50",
+      "q1": "Como funciona o modelo 50/50?",
+      "a1": "ONLYDJS distribui a receita mensal igualmente: 50% vai para DJs e 50% para a plataforma. O pool de DJs é dividido em:\n\n• 30% distribuído por downloads\n• 20% distribuído por DJ Score (impacto)",
+      "q2": "Quando os ganhos são distribuídos?",
+      "a2": "Os ganhos são calculados e distribuídos automaticamente no dia 1 de cada mês.",
+      "q3": "Como minha parte do pool é calculada?",
+      "a3": "Seus ganhos = (Seus Downloads × Valor por Download) + ((Seu DJ Score / Score Total) × Pool de Score)",
+      "q4": "Por que 50/50 em vez de 60/40?",
+      "a4": "O modelo 50/50 é mais justo e sustentável, permitindo investimentos em tecnologia e IA."
+    },
+    "djscore": {
+      "title": "DJ Score",
+      "q1": "O que é DJ Score?",
+      "a1": "DJ Score mede seu impacto real na plataforma, não apenas downloads.",
+      "q2": "Como o DJ Score é calculado?",
+      "a2": "DJ Score = (Downloads × 40%) + (Streams × 30%) + (Minutos × 20%) + (Favoritos + Playlists × 10%)",
+      "q3": "Como posso melhorar meu DJ Score?",
+      "a3": "Faça upload de tracks de alta qualidade, crie música para sets reais e promova nas redes sociais."
+    },
+    "payments": {
+      "title": "Pagamentos e Carteira",
+      "q1": "Qual é o mínimo para sacar?",
+      "a1": "O valor mínimo de saque é $10 USD.",
+      "q2": "Quais métodos de pagamento estão disponíveis?",
+      "a2": "Usamos Stripe Connect: transferência bancária, cartão de débito, PayPal (em alguns países).",
+      "q3": "Quando recebo meus pagamentos?",
+      "a3": "Processamento leva 2-7 dias úteis após solicitar o saque.",
+      "q4": "Há taxas para saques?",
+      "a4": "ONLYDJS não cobra taxas. Stripe pode aplicar pequenas taxas ($0.25-1.00 USD)."
+    },
+    "ambassador": {
+      "title": "Programa de Embaixadores",
+      "q1": "Como funciona o programa de indicação?",
+      "a1": "Compartilhe seu link único. Ganhe 10% de comissão recorrente por cada assinante PRO.",
+      "q2": "Quanto ganho por indicação?",
+      "a2": "10% do valor da assinatura: PRO ($4.99/mês) = $0.50/mês por indicado.",
+      "q3": "Como obtenho meu link de convite?",
+      "a3": "Disponível no Dashboard na seção 'Programa de Embaixadores' ou na Carteira."
+    },
+    "membership": {
+      "title": "Assinaturas",
+      "q1": "O que inclui a assinatura PRO?",
+      "a1": "PRO ($4.99/mês): uploads ilimitados, 20 downloads/dia, streaming ilimitado, DJ MODE, MAINSTAGE EDITS.",
+      "q2": "Posso fazer upload como usuário Free?",
+      "a2": "Sim! Usuários Free podem fazer upload de até 1 track por mês.",
+      "q3": "Quantos downloads tenho por dia?",
+      "a3": "Free: 5 downloads/dia • PRO: 20 downloads/dia",
+      "q4": "Posso cancelar a qualquer momento?",
+      "a4": "Sim, cancele a qualquer momento. Acesso mantido até o fim do período de cobrança."
+    },
+    "uploads": {
+      "title": "Uploads e Conteúdo",
+      "q1": "Quais formatos posso fazer upload?",
+      "a1": "MP3 (320kbps), WAV, AIFF, FLAC. Tamanho máximo: 100MB.",
+      "q2": "Preciso analisar meus tracks antes?",
+      "a2": "Não! ONLYDJS analisa automaticamente com IA (BPM, key, energia).",
+      "q3": "Posso editar ou deletar tracks?",
+      "a3": "Sim, edite metadados ou delete a qualquer momento no Dashboard."
+    },
+    "cta": {
+      "title": "Ainda tem dúvidas?",
+      "description": "Entre em contato com nosso suporte. Responderemos em 24 horas.",
+      "button": "Contatar Suporte"
+    }
   }
 }

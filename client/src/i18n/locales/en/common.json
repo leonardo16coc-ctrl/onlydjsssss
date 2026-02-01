@@ -622,5 +622,76 @@
     "transactionHistory": "Transaction History",
     "noTransactions": "No transactions yet",
     "stripeDashboard": "Stripe Dashboard"
+  },
+  "faq": {
+    "hero": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Everything you need to know about ONLYDJS, the 50/50 monetization model, DJ Score, and more."
+    },
+    "monetization": {
+      "title": "50/50 Monetization Model",
+      "q1": "How does the 50/50 model work?",
+      "a1": "ONLYDJS distributes monthly revenue equally: 50% goes to DJs and 50% to the platform. The DJ pool is then split into two parts:\n\n• 30% distributed by downloads\n• 20% distributed by DJ Score (impact)\n\nThis means you earn not only for downloads, but also for streams, listening time, and engagement.",
+      "q2": "When are earnings distributed?",
+      "a2": "Earnings are calculated and distributed automatically on the 1st of each month. The calculation includes all activity from the previous month (downloads, streams, minutes listened, favorites, and playlists).",
+      "q3": "How is my share of the pool calculated?",
+      "a3": "Your earnings = (Your Downloads × Value per Download) + ((Your DJ Score / Total Score) × Score Pool)\n\nThe value per download varies monthly based on total platform revenue and number of downloads.",
+      "q4": "Why 50/50 instead of 60/40?",
+      "a4": "The 50/50 model is fairer and more sustainable. It allows us to invest in technology, AI tools, anti-fraud systems, and continuous platform improvements while maintaining competitive earnings for DJs."
+    },
+    "djscore": {
+      "title": "DJ Score",
+      "q1": "What is DJ Score?",
+      "a1": "DJ Score is a metric that measures your real impact on the platform. It's not just about downloads, but about how much your music is actually used and valued by the community.",
+      "q2": "How is DJ Score calculated?",
+      "a2": "DJ Score = (Downloads × 40%) + (Streams × 30%) + (Minutes Listened × 20%) + (Favorites + Playlists × 10%)\n\nThis formula rewards DJs whose music is not only downloaded, but also actively played, listened to for longer, and saved by users.",
+      "q3": "How can I improve my DJ Score?",
+      "a3": "• Upload high-quality tracks (extended mixes, edits, tools)\n• Create music for real sets (peak time, warmup, closing)\n• Engage with the community\n• Promote your tracks on social media\n• Maintain consistency in uploads\n\nThe more your music is used in real sets, the higher your score."
+    },
+    "payments": {
+      "title": "Payments & Wallet",
+      "q1": "What is the minimum to withdraw?",
+      "a1": "The minimum withdrawal amount is $10 USD. Once you reach this balance in your wallet, you can request a payout at any time.",
+      "q2": "What payment methods are available?",
+      "a2": "We use Stripe Connect for all payments. You can receive money via:\n\n• Bank transfer (ACH, SEPA)\n• Debit card\n• PayPal (in some countries)\n\nPayment methods vary by country. Stripe supports 40+ countries.",
+      "q3": "When do I receive my payments?",
+      "a3": "After requesting a payout, processing takes 2-7 business days depending on your country and payment method. Bank transfers are usually faster than cards.",
+      "q4": "Are there fees for withdrawals?",
+      "a4": "ONLYDJS does not charge withdrawal fees. However, Stripe may apply small fees depending on your country and payment method (typically $0.25-1.00 USD per transfer)."
+    },
+    "ambassador": {
+      "title": "Ambassador Program",
+      "q1": "How does the referral program work?",
+      "a1": "Share your unique invitation link with other DJs or users. When someone subscribes to PRO using your link, you earn 10% recurring commission for as long as they remain subscribed.",
+      "q2": "How much do I earn per referral?",
+      "a2": "You earn 10% of the subscription value:\n\n• PRO subscription ($4.99/month) = $0.50/month per referral\n\nIf you refer 100 active users, you earn $50 USD/month in passive income.",
+      "q3": "How do I get my invitation link?",
+      "a3": "Your invitation link is available in your Dashboard under the 'Ambassador Program' section. You can also find it in your Wallet. Share it on social media, in your bio, or directly with other DJs."
+    },
+    "membership": {
+      "title": "Memberships",
+      "q1": "What does PRO membership include?",
+      "a1": "PRO membership ($4.99/month) includes:\n\n• Unlimited uploads\n• 20 downloads per day\n• Unlimited streaming\n• Access to DJ MODE (AI tools)\n• Access to MAINSTAGE EDITS\n• Priority support\n• Monetization enabled",
+      "q2": "Can I upload music as a Free user?",
+      "a2": "Yes! Free users can upload up to 1 track per month. However, to upload more and monetize your music, you need a PRO membership.",
+      "q3": "How many downloads do I get per day?",
+      "a3": "• Free: 5 downloads per day\n• PRO: 20 downloads per day\n\nDownloads reset daily at midnight UTC.",
+      "q4": "Can I cancel my membership at any time?",
+      "a4": "Yes, you can cancel your PRO membership at any time from your Subscription page. You'll retain access until the end of your billing period."
+    },
+    "uploads": {
+      "title": "Uploads & Content",
+      "q1": "What formats can I upload?",
+      "a1": "You can upload audio files in the following formats:\n\n• MP3 (320kbps recommended)\n• WAV (lossless)\n• AIFF\n• FLAC\n\nMaximum file size: 100MB per track.",
+      "q2": "Do I need to analyze my tracks before uploading?",
+      "a2": "No! ONLYDJS automatically analyzes your tracks using AI to detect BPM, key, energy, and structure. You can review and adjust the results before publishing.",
+      "q3": "Can I edit or delete my uploaded tracks?",
+      "a3": "Yes, you can edit metadata (title, artist, genre, BPM, key) or delete your tracks at any time from your Dashboard. Note: deleting a track removes it permanently and stops future earnings."
+    },
+    "cta": {
+      "title": "Still have questions?",
+      "description": "Contact our support team and we'll help you within 24 hours.",
+      "button": "Contact Support"
+    }
   }
 }

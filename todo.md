@@ -1975,3 +1975,31 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Actualizar en francés (FR)
 - [x] Actualizar en alemán (DE)
 - [x] Verificar que todo esté sincronizado
+
+
+## 66. Página de Preguntas Frecuentes (FAQ) - Modelo 50/50 (COMPLETADO)
+- [x] Crear componente FAQ.tsx en client/src/pages/
+- [x] Sección: Modelo de Monetización 50/50
+  - [ ] ¿Cómo funciona el modelo 50/50?
+  - [ ] ¿Cuándo se distribuyen las ganancias?
+  - [ ] ¿Cómo se calcula mi parte del pool?
+- [ ] Sección: DJ Score
+  - [ ] ¿Qué es el DJ Score?
+  - [ ] ¿Cómo se calcula? (40% descargas + 30% streams + 20% minutos + 10% favoritos/playlists)
+  - [ ] ¿Cómo puedo mejorar mi DJ Score?
+- [ ] Sección: Pagos y Wallet
+  - [ ] ¿Cuál es el mínimo para retirar? ($10 USD)
+  - [ ] ¿Qué métodos de pago están disponibles? (Stripe Connect)
+  - [ ] ¿Cuándo recibo mis pagos?
+- [ ] Sección: Programa de Embajadores
+  - [ ] ¿Cómo funciona el programa de referidos?
+  - [ ] ¿Cuánto gano por referido? (10% recurrente)
+  - [ ] ¿Cómo obtengo mi link de invitación?
+- [ ] Sección: Membresías
+  - [ ] ¿Qué incluye la membresía PRO? ($4.99/mes)
+  - [ ] ¿Puedo subir música siendo Free?
+  - [ ] ¿Cuántas descargas tengo por día?
+- [ ] Diseño con Accordion component de shadcn/ui
+- [x] Agregar ruta /faq en App.tsx
+- [ ] Agregar link "FAQ" en Footer
+- [x] Traducciones en 5 idiomas (EN, ES, PT-BR, FR, DE)

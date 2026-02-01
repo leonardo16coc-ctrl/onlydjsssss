@@ -622,5 +622,76 @@
     "transactionHistory": "Transaktionshistorie",
     "noTransactions": "Noch keine Transaktionen",
     "stripeDashboard": "Stripe Dashboard"
+  },
+  "faq": {
+    "hero": {
+      "title": "Häufig gestellte Fragen",
+      "subtitle": "Alles, was Sie über ONLYDJS, das 50/50-Modell, DJ Score und mehr wissen müssen."
+    },
+    "monetization": {
+      "title": "50/50 Monetarisierungsmodell",
+      "q1": "Wie funktioniert das 50/50-Modell?",
+      "a1": "ONLYDJS verteilt monatliche Einnahmen gleichmäßig: 50% für DJs und 50% für die Plattform.\n\n• 30% verteilt nach Downloads\n• 20% verteilt nach DJ Score (Impact)",
+      "q2": "Wann werden Einnahmen verteilt?",
+      "a2": "Einnahmen werden automatisch am 1. jedes Monats berechnet und verteilt.",
+      "q3": "Wie wird mein Anteil am Pool berechnet?",
+      "a3": "Ihre Einnahmen = (Ihre Downloads × Wert pro Download) + ((Ihr DJ Score / Gesamt-Score) × Score-Pool)",
+      "q4": "Warum 50/50 statt 60/40?",
+      "a4": "Das 50/50-Modell ist fairer und nachhaltiger, ermöglicht Investitionen in Technologie und KI."
+    },
+    "djscore": {
+      "title": "DJ Score",
+      "q1": "Was ist der DJ Score?",
+      "a1": "Der DJ Score misst Ihren tatsächlichen Einfluss auf der Plattform, nicht nur Downloads.",
+      "q2": "Wie wird der DJ Score berechnet?",
+      "a2": "DJ Score = (Downloads × 40%) + (Streams × 30%) + (Minuten × 20%) + (Favoriten + Playlists × 10%)",
+      "q3": "Wie kann ich meinen DJ Score verbessern?",
+      "a3": "Laden Sie hochwertige Tracks hoch, erstellen Sie Musik für echte Sets und bewerben Sie sie in sozialen Medien."
+    },
+    "payments": {
+      "title": "Zahlungen und Wallet",
+      "q1": "Was ist der Mindestbetrag zum Abheben?",
+      "a1": "Der Mindestauszahlungsbetrag beträgt $10 USD.",
+      "q2": "Welche Zahlungsmethoden sind verfügbar?",
+      "a2": "Wir verwenden Stripe Connect: Banküberweisung, Debitkarte, PayPal (in einigen Ländern).",
+      "q3": "Wann erhalte ich meine Zahlungen?",
+      "a3": "Die Bearbeitung dauert 2-7 Werktage nach Auszahlungsantrag.",
+      "q4": "Gibt es Gebühren für Auszahlungen?",
+      "a4": "ONLYDJS erhebt keine Gebühren. Stripe kann kleine Gebühren erheben ($0.25-1.00 USD)."
+    },
+    "ambassador": {
+      "title": "Botschafter-Programm",
+      "q1": "Wie funktioniert das Empfehlungsprogramm?",
+      "a1": "Teilen Sie Ihren einzigartigen Link. Verdienen Sie 10% wiederkehrende Provision pro PRO-Abonnent.",
+      "q2": "Wie viel verdiene ich pro Empfehlung?",
+      "a2": "10% des Abonnementwerts: PRO ($4.99/Monat) = $0.50/Monat pro Empfehlung.",
+      "q3": "Wie erhalte ich meinen Einladungslink?",
+      "a3": "Verfügbar im Dashboard unter 'Botschafter-Programm' oder im Wallet."
+    },
+    "membership": {
+      "title": "Mitgliedschaften",
+      "q1": "Was beinhaltet die PRO-Mitgliedschaft?",
+      "a1": "PRO ($4.99/Monat): unbegrenzte Uploads, 20 Downloads/Tag, unbegrenztes Streaming, DJ MODE, MAINSTAGE EDITS.",
+      "q2": "Kann ich als Free-Nutzer hochladen?",
+      "a2": "Ja! Free-Nutzer können bis zu 1 Track pro Monat hochladen.",
+      "q3": "Wie viele Downloads habe ich pro Tag?",
+      "a3": "Free: 5 Downloads/Tag • PRO: 20 Downloads/Tag",
+      "q4": "Kann ich jederzeit kündigen?",
+      "a4": "Ja, jederzeit kündigen. Zugang bis Ende des Abrechnungszeitraums erhalten."
+    },
+    "uploads": {
+      "title": "Uploads und Inhalte",
+      "q1": "Welche Formate kann ich hochladen?",
+      "a1": "MP3 (320kbps), WAV, AIFF, FLAC. Maximale Größe: 100MB.",
+      "q2": "Muss ich meine Tracks vorher analysieren?",
+      "a2": "Nein! ONLYDJS analysiert automatisch mit KI (BPM, Tonart, Energie).",
+      "q3": "Kann ich Tracks bearbeiten oder löschen?",
+      "a3": "Ja, Metadaten bearbeiten oder jederzeit im Dashboard löschen."
+    },
+    "cta": {
+      "title": "Haben Sie noch Fragen?",
+      "description": "Kontaktieren Sie unseren Support. Wir antworten innerhalb von 24 Stunden.",
+      "button": "Support kontaktieren"
+    }
   }
 }

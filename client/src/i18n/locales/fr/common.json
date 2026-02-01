@@ -622,5 +622,76 @@
     "transactionHistory": "Historique des Transactions",
     "noTransactions": "Aucune transaction pour le moment",
     "stripeDashboard": "Tableau de Bord Stripe"
+  },
+  "faq": {
+    "hero": {
+      "title": "Questions Fréquentes",
+      "subtitle": "Tout ce que vous devez savoir sur ONLYDJS, le modèle 50/50, DJ Score et plus."
+    },
+    "monetization": {
+      "title": "Modèle de Monétisation 50/50",
+      "q1": "Comment fonctionne le modèle 50/50?",
+      "a1": "ONLYDJS distribue les revenus mensuels également: 50% pour les DJs et 50% pour la plateforme.\n\n• 30% distribué par téléchargements\n• 20% distribué par DJ Score (impact)",
+      "q2": "Quand les gains sont-ils distribués?",
+      "a2": "Les gains sont calculés et distribués automatiquement le 1er de chaque mois.",
+      "q3": "Comment ma part du pool est-elle calculée?",
+      "a3": "Vos gains = (Vos Téléchargements × Valeur par Téléchargement) + ((Votre DJ Score / Score Total) × Pool de Score)",
+      "q4": "Pourquoi 50/50 au lieu de 60/40?",
+      "a4": "Le modèle 50/50 est plus juste et durable, permettant des investissements en technologie et IA."
+    },
+    "djscore": {
+      "title": "DJ Score",
+      "q1": "Qu'est-ce que le DJ Score?",
+      "a1": "Le DJ Score mesure votre impact réel sur la plateforme, pas seulement les téléchargements.",
+      "q2": "Comment le DJ Score est-il calculé?",
+      "a2": "DJ Score = (Téléchargements × 40%) + (Streams × 30%) + (Minutes × 20%) + (Favoris + Playlists × 10%)",
+      "q3": "Comment améliorer mon DJ Score?",
+      "a3": "Téléchargez des tracks de haute qualité, créez de la musique pour des sets réels et promouvez sur les réseaux sociaux."
+    },
+    "payments": {
+      "title": "Paiements et Portefeuille",
+      "q1": "Quel est le minimum pour retirer?",
+      "a1": "Le montant minimum de retrait est de $10 USD.",
+      "q2": "Quels moyens de paiement sont disponibles?",
+      "a2": "Nous utilisons Stripe Connect: virement bancaire, carte de débit, PayPal (dans certains pays).",
+      "q3": "Quand vais-je recevoir mes paiements?",
+      "a3": "Le traitement prend 2-7 jours ouvrables après la demande de retrait.",
+      "q4": "Y a-t-il des frais pour les retraits?",
+      "a4": "ONLYDJS ne facture pas de frais. Stripe peut appliquer de petits frais ($0.25-1.00 USD)."
+    },
+    "ambassador": {
+      "title": "Programme d'Ambassadeurs",
+      "q1": "Comment fonctionne le programme de parrainage?",
+      "a1": "Partagez votre lien unique. Gagnez 10% de commission récurrente par abonné PRO.",
+      "q2": "Combien je gagne par parrainage?",
+      "a2": "10% de la valeur d'abonnement: PRO ($4.99/mois) = $0.50/mois par filleul.",
+      "q3": "Comment obtenir mon lien d'invitation?",
+      "a3": "Disponible dans le Dashboard sous 'Programme d'Ambassadeurs' ou dans le Portefeuille."
+    },
+    "membership": {
+      "title": "Abonnements",
+      "q1": "Que comprend l'abonnement PRO?",
+      "a1": "PRO ($4.99/mois): uploads illimités, 20 téléchargements/jour, streaming illimité, DJ MODE, MAINSTAGE EDITS.",
+      "q2": "Puis-je télécharger en tant qu'utilisateur Free?",
+      "a2": "Oui! Les utilisateurs Free peuvent télécharger jusqu'à 1 track par mois.",
+      "q3": "Combien de téléchargements par jour?",
+      "a3": "Free: 5 téléchargements/jour • PRO: 20 téléchargements/jour",
+      "q4": "Puis-je annuler à tout moment?",
+      "a4": "Oui, annulez à tout moment. Accès maintenu jusqu'à la fin de la période de facturation."
+    },
+    "uploads": {
+      "title": "Uploads et Contenu",
+      "q1": "Quels formats puis-je télécharger?",
+      "a1": "MP3 (320kbps), WAV, AIFF, FLAC. Taille maximale: 100MB.",
+      "q2": "Dois-je analyser mes tracks avant?",
+      "a2": "Non! ONLYDJS analyse automatiquement avec l'IA (BPM, tonalité, énergie).",
+      "q3": "Puis-je modifier ou supprimer des tracks?",
+      "a3": "Oui, modifiez les métadonnées ou supprimez à tout moment dans le Dashboard."
+    },
+    "cta": {
+      "title": "Vous avez encore des questions?",
+      "description": "Contactez notre support. Nous répondrons sous 24 heures.",
+      "button": "Contacter le Support"
+    }
   }
 }
