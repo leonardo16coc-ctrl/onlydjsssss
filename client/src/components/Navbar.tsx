@@ -4,7 +4,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { Music, Sparkles, Trophy, LayoutDashboard, Upload, CreditCard, User, Settings, LogOut, Radio, Menu, X } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Sheet,
   SheetContent,
@@ -27,6 +27,43 @@ export default function Navbar() {
   const { user, isAuthenticated } = useAuth();
   const { t } = useTranslation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const sheetContentRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef<number>(0);
+  const touchEndX = useRef<number>(0);
+
+  // Swipe gesture detection
+  useEffect(() => {
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartX.current = e.touches[0].clientX;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      touchEndX.current = e.touches[0].clientX;
+    };
+
+    const handleTouchEnd = () => {
+      const swipeDistance = touchEndX.current - touchStartX.current;
+      const minSwipeDistance = 100; // Minimum 100px swipe to close
+      
+      // Swipe right to close (only if swiping from left edge of sheet)
+      if (swipeDistance > minSwipeDistance && touchStartX.current < 50) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    const sheetElement = sheetContentRef.current;
+    if (sheetElement && mobileMenuOpen) {
+      sheetElement.addEventListener('touchstart', handleTouchStart);
+      sheetElement.addEventListener('touchmove', handleTouchMove);
+      sheetElement.addEventListener('touchend', handleTouchEnd);
+
+      return () => {
+        sheetElement.removeEventListener('touchstart', handleTouchStart);
+        sheetElement.removeEventListener('touchmove', handleTouchMove);
+        sheetElement.removeEventListener('touchend', handleTouchEnd);
+      };
+    }
+  }, [mobileMenuOpen]);
   
   const logoutMutation = trpc.auth.logout.useMutation({
     onSuccess: () => {
@@ -174,7 +211,7 @@ export default function Navbar() {
                 </SheetTitle>
               </SheetHeader>
               
-              <div className="flex flex-col space-y-4 mt-8">
+              <div ref={sheetContentRef} className="flex flex-col space-y-4 mt-8">
                 {/* Navigation Links */}
                 <Link href="/explore">
                   <a 

@@ -1942,3 +1942,12 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Incluir selector de idioma en menú móvil
 - [x] Incluir botón de login/perfil en menú móvil
 - [x] Verificar funcionamiento en diferentes tamaños de pantalla
+
+
+## 63. Gestos Táctiles para Menú Móvil (NUEVO)
+- [x] Investigar si Sheet component de shadcn/ui soporta swipe gestures nativamente (NO soporta)
+- [x] Verificar documentación de Radix UI Dialog (base de Sheet)
+- [x] Implementar detección de swipe hacia la derecha si no es nativo
+- [x] Agregar threshold de distancia mínima para activar cierre (100px)
+- [ ] Agregar feedback visual durante el swipe (arrastrar el panel) - opcional
+- [ ] Verificar funcionamiento en dispositivos táctiles reales (requiere testing manual)
