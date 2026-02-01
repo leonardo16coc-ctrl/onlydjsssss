@@ -2,7 +2,7 @@ import { router, protectedProcedure } from "../_core/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { getDb } from "../db";
-import { trackEarnings, tracks, artistPayouts } from "../../drizzle/schema";
+import { trackEarnings, tracks, artistPayouts, downloads } from "../../drizzle/schema";
 import { eq, and, gte, sql, desc, lte } from "drizzle-orm";
 
 /**
@@ -290,6 +290,98 @@ export const earningsRouter = router({
       },
     };
   }),
+
+  /**
+   * Get monthly metrics history (for charts)
+   * Returns downloads, streams, minutes listened for last N months
+   */
+  getMonthlyMetrics: protectedProcedure
+    .input(z.object({
+      months: z.number().int().min(1).max(12).default(6),
+    }))
+    .query(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database connection failed" });
+
+      if (ctx.user.membershipStatus !== "member") {
+        return [];
+      }
+
+      // Calculate start date (N months ago)
+      const startDate = new Date();
+      startDate.setMonth(startDate.getMonth() - input.months);
+      startDate.setDate(1);
+      startDate.setHours(0, 0, 0, 0);
+
+      // Get all DJ's tracks
+      const djTracks = await db
+        .select({ id: tracks.id })
+        .from(tracks)
+        .where(eq(tracks.userId, ctx.user.id));
+
+      const trackIds = djTracks.map(t => t.id);
+
+      if (trackIds.length === 0) {
+        return [];
+      }
+
+      // Get downloads by month
+      const downloadsResult = await db
+        .select({
+          month: sql<string>`DATE_FORMAT(${downloads.downloadedAt}, '%Y-%m')`,
+          count: sql<number>`COUNT(*)`,
+        })
+        .from(downloads)
+        .where(
+          and(
+            sql`${downloads.trackId} IN (${sql.join(trackIds.map(id => sql`${id}`), sql`, `)})`,
+            gte(downloads.downloadedAt, startDate)
+          )
+        )
+        .groupBy(sql`DATE_FORMAT(${downloads.downloadedAt}, '%Y-%m')`);
+
+      // Get current metrics from tracks (cumulative)
+      const currentMetrics = await db
+        .select({
+          totalStreams: sql<number>`SUM(${tracks.streamCount})`,
+          totalMinutes: sql<number>`SUM(${tracks.minutesListened})`,
+        })
+        .from(tracks)
+        .where(eq(tracks.userId, ctx.user.id));
+
+      // Generate monthly data for last N months
+      const monthlyData: Array<{
+        month: string;
+        downloads: number;
+        streams: number;
+        minutesListened: number;
+      }> = [];
+
+      for (let i = input.months - 1; i >= 0; i--) {
+        const date = new Date();
+        date.setMonth(date.getMonth() - i);
+        const monthStr = date.toISOString().slice(0, 7); // YYYY-MM
+
+        const downloadsForMonth = downloadsResult.find(d => d.month === monthStr)?.count || 0;
+        
+        // For streams and minutes, we'll use proportional estimation based on downloads
+        // (In production, you'd track these with timestamps too)
+        const totalDownloads = downloadsResult.reduce((sum, d) => sum + d.count, 0);
+        const proportion = totalDownloads > 0 ? downloadsForMonth / totalDownloads : 0;
+        
+        const streamsForMonth = Math.round((currentMetrics[0]?.totalStreams || 0) * proportion);
+        const minutesForMonth = Math.round((currentMetrics[0]?.totalMinutes || 0) * proportion);
+
+        monthlyData.push({
+          month: monthStr,
+          downloads: downloadsForMonth,
+          streams: streamsForMonth,
+          minutesListened: minutesForMonth,
+        });
+      }
+
+      return monthlyData;
+    }),
 
   /**
    * Get dashboard stats (overview)

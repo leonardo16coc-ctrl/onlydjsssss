@@ -21,6 +21,7 @@ export default function Dashboard() {
   const { data: stats, isLoading } = trpc.dashboard.stats.useQuery();
   const { data: wallet } = trpc.wallet.getBalance.useQuery();
   const { data: djScore } = trpc.earnings.getDJScore.useQuery();
+  const { data: monthlyMetrics } = trpc.earnings.getMonthlyMetrics.useQuery({ months: 6 });
 
   // Datos de ejemplo para usuarios no autenticados
   const demoStats = {
@@ -217,6 +218,161 @@ export default function Dashboard() {
                 </PieChart>
               </ResponsiveContainer>
             </Card>
+
+            {/* Monthly Metrics Charts */}
+            {monthlyMetrics && monthlyMetrics.length > 0 && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+                {/* Downloads Chart */}
+                <Card className="card-neon p-6 bg-card">
+                  <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                    <Download className="h-5 w-5 text-cyan-400" />
+                    Evolución de Descargas
+                  </h3>
+                  <ResponsiveContainer width="100%" height={250}>
+                    <LineChart data={monthlyMetrics}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                      <XAxis 
+                        dataKey="month" 
+                        stroke="#888" 
+                        tick={{ fill: '#888' }}
+                      />
+                      <YAxis stroke="#888" tick={{ fill: '#888' }} />
+                      <RechartsTooltip
+                        contentStyle={{
+                          backgroundColor: "rgba(0, 0, 0, 0.8)",
+                          border: "1px solid rgba(255, 255, 255, 0.1)",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="downloads" 
+                        stroke="#22d3ee" 
+                        strokeWidth={3}
+                        dot={{ fill: "#22d3ee", r: 4 }}
+                        activeDot={{ r: 6 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </Card>
+
+                {/* Streams Chart */}
+                <Card className="card-neon p-6 bg-card">
+                  <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                    <Play className="h-5 w-5 text-green-400" />
+                    Evolución de Streams
+                  </h3>
+                  <ResponsiveContainer width="100%" height={250}>
+                    <LineChart data={monthlyMetrics}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                      <XAxis 
+                        dataKey="month" 
+                        stroke="#888" 
+                        tick={{ fill: '#888' }}
+                      />
+                      <YAxis stroke="#888" tick={{ fill: '#888' }} />
+                      <RechartsTooltip
+                        contentStyle={{
+                          backgroundColor: "rgba(0, 0, 0, 0.8)",
+                          border: "1px solid rgba(255, 255, 255, 0.1)",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="streams" 
+                        stroke="#4ade80" 
+                        strokeWidth={3}
+                        dot={{ fill: "#4ade80", r: 4 }}
+                        activeDot={{ r: 6 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </Card>
+
+                {/* Minutes Listened Chart */}
+                <Card className="card-neon p-6 bg-card">
+                  <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                    <Clock className="h-5 w-5 text-orange-400" />
+                    Evolución de Minutos Escuchados
+                  </h3>
+                  <ResponsiveContainer width="100%" height={250}>
+                    <LineChart data={monthlyMetrics}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                      <XAxis 
+                        dataKey="month" 
+                        stroke="#888" 
+                        tick={{ fill: '#888' }}
+                      />
+                      <YAxis stroke="#888" tick={{ fill: '#888' }} />
+                      <RechartsTooltip
+                        contentStyle={{
+                          backgroundColor: "rgba(0, 0, 0, 0.8)",
+                          border: "1px solid rgba(255, 255, 255, 0.1)",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="minutesListened" 
+                        stroke="#fb923c" 
+                        strokeWidth={3}
+                        dot={{ fill: "#fb923c", r: 4 }}
+                        activeDot={{ r: 6 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </Card>
+
+                {/* Combined Chart */}
+                <Card className="card-neon p-6 bg-card">
+                  <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5 text-purple-400" />
+                    Todas las Métricas
+                  </h3>
+                  <ResponsiveContainer width="100%" height={250}>
+                    <LineChart data={monthlyMetrics}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                      <XAxis 
+                        dataKey="month" 
+                        stroke="#888" 
+                        tick={{ fill: '#888' }}
+                      />
+                      <YAxis stroke="#888" tick={{ fill: '#888' }} />
+                      <RechartsTooltip
+                        contentStyle={{
+                          backgroundColor: "rgba(0, 0, 0, 0.8)",
+                          border: "1px solid rgba(255, 255, 255, 0.1)",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      <Legend />
+                      <Line 
+                        type="monotone" 
+                        dataKey="downloads" 
+                        stroke="#22d3ee" 
+                        strokeWidth={2}
+                        name="Descargas"
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="streams" 
+                        stroke="#4ade80" 
+                        strokeWidth={2}
+                        name="Streams"
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="minutesListened" 
+                        stroke="#fb923c" 
+                        strokeWidth={2}
+                        name="Minutos"
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </Card>
+              </div>
+            )}
           </div>
         )}
 

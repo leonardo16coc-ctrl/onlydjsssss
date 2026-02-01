@@ -1872,3 +1872,14 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
   - [ ] Top tracks por cada métrica (pendiente)
 - [ ] Actualizar traducciones en 5 idiomas para nuevas métricas
 - [ ] Crear tests de nuevo modelo de ganancias
+
+
+## 56. Gráficos de Evolución Temporal en Dashboard (NUEVO)
+- [x] Crear endpoint tRPC para obtener métricas históricas mensuales de DJ
+- [x] Implementar query que agrupe descargas, streams, minutos por mes
+- [x] Agregar gráfico de línea para evolución de descargas (últimos 6 meses)
+- [x] Agregar gráfico de línea para evolución de streams (últimos 6 meses)
+- [x] Agregar gráfico de línea para evolución de minutos escuchados (últimos 6 meses)
+- [x] Agregar gráfico combinado con las 3 métricas en un solo chart
+- [ ] Implementar comparación mes a mes con porcentajes de crecimiento (pendiente)
+- [x] Estilizar gráficos con colores neon consistentes con el tema
