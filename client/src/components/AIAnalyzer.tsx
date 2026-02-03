@@ -10,25 +10,14 @@ import { Link } from "wouter";
 export function AIAnalyzer() {
   const { t } = useTranslation();
   const [analyzing, setAnalyzing] = useState(false);
+  const [uploadedAudioUrl, setUploadedAudioUrl] = useState<string | null>(null);
   const [result, setResult] = useState<{
     bpm: number;
-    key: string;
-    camelotKey: string;
-    songTitle?: string;
-    artist?: string;
+    musicalKey: string;
+    camelotKey?: string;
   } | null>(null);
 
-  const analyzeMutation = trpc.aiAnalyzer.analyzeAudio.useMutation({
-    onSuccess: (data) => {
-      setResult(data);
-      setAnalyzing(false);
-      toast.success(t("aiAnalyzer.analysisComplete"));
-    },
-    onError: (error) => {
-      setAnalyzing(false);
-      toast.error(error.message || t("aiAnalyzer.analysisFailed"));
-    },
-  });
+  const analyzeAudio = trpc.musicAnalysis.analyze.useMutation();
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
@@ -47,24 +36,52 @@ export function AIAnalyzer() {
       setResult(null);
 
       try {
-        // Read file as base64
-        const reader = new FileReader();
-        reader.onload = async (e) => {
-          const audioBase64 = e.target?.result as string;
+        // Upload audio file to get URL
+        const formData = new FormData();
+        formData.append("file", file);
 
-          analyzeMutation.mutate({
-            audioBase64,
-            filename: file.name,
-          });
+        const uploadResponse = await fetch("/api/upload/audio", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!uploadResponse.ok) {
+          throw new Error("Error al subir el archivo");
+        }
+
+        const uploadData = await uploadResponse.json();
+        setUploadedAudioUrl(uploadData.fileUrl);
+
+        // Analyze audio using existing musicAnalysis
+        const analysis = await analyzeAudio.mutateAsync({
+          audioFileUrl: uploadData.fileUrl,
+        });
+
+        // Map musicalKey to Camelot notation
+        const camelotMap: Record<string, string> = {
+          "C major": "8B", "G major": "9B", "D major": "10B", "A major": "11B",
+          "E major": "12B", "B major": "1B", "F# major": "2B", "Db major": "3B",
+          "Ab major": "4B", "Eb major": "5B", "Bb major": "6B", "F major": "7B",
+          "A minor": "8A", "E minor": "9A", "B minor": "10A", "F# minor": "11A",
+          "C# minor": "12A", "G# minor": "1A", "D# minor": "2A", "Bb minor": "3A",
+          "F minor": "4A", "C minor": "5A", "G minor": "6A", "D minor": "7A",
         };
-        reader.readAsDataURL(file);
-      } catch (error) {
-        console.error("Upload error:", error);
+
+        setResult({
+          bpm: analysis.bpm || 0,
+          musicalKey: analysis.musicalKey || "Unknown",
+          camelotKey: camelotMap[analysis.musicalKey || ""] || "?",
+        });
+
+        toast.success(t("aiAnalyzer.analysisComplete"));
+      } catch (error: any) {
+        console.error("Analysis error:", error);
+        toast.error(error.message || t("aiAnalyzer.analysisFailed"));
+      } finally {
         setAnalyzing(false);
-        toast.error(t("aiAnalyzer.analysisFailed"));
       }
     },
-    [analyzeMutation, t]
+    [analyzeAudio, t]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -143,17 +160,6 @@ export function AIAnalyzer() {
           {/* Results - Integrated Bars */}
           {result && !analyzing && (
             <div className="space-y-4">
-              {/* Song Detection (if available) */}
-              {result.songTitle && (
-                <div className="text-center mb-4 p-4 bg-white/5 rounded-xl border border-white/10">
-                  <p className="text-sm text-gray-400 mb-1">{t("aiAnalyzer.detectedSong")}</p>
-                  <p className="text-xl font-bold text-white">{result.songTitle}</p>
-                  {result.artist && (
-                    <p className="text-md text-purple-300">{result.artist}</p>
-                  )}
-                </div>
-              )}
-
               {/* BPM Bar */}
               <div className="relative bg-gradient-to-r from-blue-600/30 to-cyan-600/30 backdrop-blur-sm rounded-full p-4 border-2 border-blue-400/50 shadow-lg">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-full blur-lg -z-10" />
@@ -172,10 +178,10 @@ export function AIAnalyzer() {
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-lg -z-10" />
                 <div className="flex items-center justify-between px-4">
                   <div className="text-4xl font-black text-white">
-                    {result.key.split(' ')[0]} {/* Show only key (e.g., "F#") */}
+                    {result.musicalKey.split(' ')[0]} {/* Show only key (e.g., "F#") */}
                   </div>
                   <div className="text-xl font-bold text-purple-300 uppercase tracking-wider">
-                    {result.key.split(' ')[1]?.substring(0, 3)} {/* Show "MIN" or "MAJ" */}
+                    {result.musicalKey.split(' ')[1]?.substring(0, 3)} {/* Show "MIN" or "MAJ" */}
                   </div>
                   <div className="text-sm text-gray-300">
                     {t("aiAnalyzer.camelot")}: <span className="font-bold text-white">{result.camelotKey}</span>
