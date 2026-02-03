@@ -151,43 +151,10 @@ except Exception as e:
         // Convert to Camelot notation
         const camelotKey = CAMELOT_WHEEL[result.key] || "Unknown";
 
-        // Try to detect song using audio fingerprinting (optional)
-        let songTitle: string | undefined;
-        let artist: string | undefined;
-
-        try {
-          // Use AudD API for song recognition (free tier available)
-          const auddApiKey = process.env.AUDD_API_KEY;
-          
-          if (auddApiKey) {
-            const formData = new FormData();
-            formData.append('api_token', auddApiKey);
-            formData.append('audio', new Blob([buffer]), input.filename);
-            
-            const recognitionResponse = await fetch('https://api.audd.io/', {
-              method: 'POST',
-              body: formData,
-            });
-
-            if (recognitionResponse.ok) {
-              const recognitionData = await recognitionResponse.json();
-              if (recognitionData.status === 'success' && recognitionData.result) {
-                songTitle = recognitionData.result.title;
-                artist = recognitionData.result.artist;
-              }
-            }
-          }
-        } catch (error) {
-          // Song recognition is optional, continue without it
-          console.log('Song recognition failed (optional feature):', error);
-        }
-
         return {
           bpm: result.bpm,
           key: result.key,
           camelotKey,
-          songTitle,
-          artist,
         };
       } catch (error: any) {
         // Clean up on error
