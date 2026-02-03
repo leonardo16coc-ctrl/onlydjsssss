@@ -42,7 +42,7 @@ export const aiAnalyzerRouter = router({
   analyzeAudio: publicProcedure
     .input(
       z.object({
-        audioUrl: z.string().url(),
+        audioBase64: z.string(),
         filename: z.string(),
       })
     )
@@ -51,16 +51,9 @@ export const aiAnalyzerRouter = router({
       const tempPath = path.join("/tmp", `${tempId}-${input.filename}`);
       
       try {
-        // Download audio file from URL
-        const response = await fetch(input.audioUrl);
-        if (!response.ok) {
-          throw new TRPCError({
-            code: "BAD_REQUEST",
-            message: "Failed to download audio file",
-          });
-        }
-
-        const buffer = Buffer.from(await response.arrayBuffer());
+        // Decode base64 to buffer
+        const base64Data = input.audioBase64.split(',')[1] || input.audioBase64;
+        const buffer = Buffer.from(base64Data, 'base64');
         
         // Check file size (max 1000MB = 1GB)
         const fileSizeMB = buffer.length / (1024 * 1024);

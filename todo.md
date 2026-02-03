@@ -2034,4 +2034,5 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
   - [ ] Probar con archivos WAV y MP3
   - [ ] Verificar precisión de BPM en música electrónica
   - [ ] Verificar precisión de Key detection
+- [x] BUG: Error "Failed to analyze" al subir archivos - fetch failed al descargar audio desde URL (RESUELTO: cambiado de blob URL a base64)
   - [ ] Probar con archivos grandes (cerca de 1000MB)

@@ -45,22 +45,13 @@ export function AIAnalyzer() {
       setResult(null);
 
       try {
-        // Upload file to get URL
-        const formData = new FormData();
-        formData.append("file", file);
-
-        // For now, we'll use a data URL (in production, upload to S3)
+        // Read file as base64
         const reader = new FileReader();
         reader.onload = async (e) => {
-          const audioUrl = e.target?.result as string;
-
-          // Convert data URL to blob URL for analysis
-          const response = await fetch(audioUrl);
-          const blob = await response.blob();
-          const blobUrl = URL.createObjectURL(blob);
+          const audioBase64 = e.target?.result as string;
 
           analyzeMutation.mutate({
-            audioUrl: blobUrl,
+            audioBase64,
             filename: file.name,
           });
         };
@@ -68,7 +59,7 @@ export function AIAnalyzer() {
       } catch (error) {
         console.error("Upload error:", error);
         setAnalyzing(false);
-        toast.error(t("aiAnalyzer.uploadFailed"));
+        toast.error(t("aiAnalyzer.analysisFailed"));
       }
     },
     [analyzeMutation, t]
