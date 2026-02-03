@@ -9,6 +9,8 @@ import { Link } from "wouter";
 
 export function AIAnalyzer() {
   const { t } = useTranslation();
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [analyzing, setAnalyzing] = useState(false);
   const [uploadedAudioUrl, setUploadedAudioUrl] = useState<string | null>(null);
   const [result, setResult] = useState<{
@@ -32,8 +34,9 @@ export function AIAnalyzer() {
         return;
       }
 
-      setAnalyzing(true);
       setResult(null);
+      setUploading(true);
+      setUploadProgress(0);
 
       try {
         // Upload audio file to get URL
@@ -51,6 +54,11 @@ export function AIAnalyzer() {
 
         const uploadData = await uploadResponse.json();
         setUploadedAudioUrl(uploadData.fileUrl);
+        setUploadProgress(100);
+        setUploading(false);
+
+        // Start analyzing
+        setAnalyzing(true);
 
         // Analyze audio using existing musicAnalysis
         const analysis = await analyzeAudio.mutateAsync({
@@ -78,6 +86,7 @@ export function AIAnalyzer() {
         console.error("Analysis error:", error);
         toast.error(error.message || t("aiAnalyzer.analysisFailed"));
       } finally {
+        setUploading(false);
         setAnalyzing(false);
       }
     },
@@ -121,15 +130,20 @@ export function AIAnalyzer() {
               {/* Outer glow ring */}
               <div className={`absolute inset-0 rounded-full bg-gradient-to-br from-purple-500 via-blue-500 to-cyan-500 blur-2xl opacity-60 ${analyzing ? "animate-pulse" : ""}`} />
               
-              {/* Logo container */}
-              <div className="relative w-32 h-32 rounded-full bg-gradient-to-br from-purple-600/80 via-blue-600/80 to-cyan-600/80 backdrop-blur-sm border-4 border-white/20 flex items-center justify-center shadow-2xl">
-                {analyzing ? (
-                  <Loader2 className="w-16 h-16 text-white animate-spin" />
+              {/* Glass sphere container */}
+              <div className="relative w-32 h-32 rounded-full bg-gradient-to-br from-purple-600/80 via-blue-600/80 to-cyan-600/80 backdrop-blur-sm border-4 border-white/20 flex items-center justify-center shadow-2xl overflow-hidden">
+                {/* Inner glass sphere effect */}
+                <div className="absolute inset-2 rounded-full bg-gradient-to-br from-white/20 via-transparent to-transparent" />
+                <div className="absolute top-4 left-4 w-8 h-8 rounded-full bg-white/30 blur-md" />
+                
+                {/* Logo */}
+                {uploading || analyzing ? (
+                  <Loader2 className="w-16 h-16 text-white animate-spin relative z-10" />
                 ) : (
                   <img
-                    src="/logo.webp"
+                    src="/logo-circle.webp"
                     alt="ONLYDJS"
-                    className="w-20 h-20 object-contain"
+                    className="w-20 h-20 object-contain relative z-10"
                   />
                 )}
               </div>
@@ -139,13 +153,9 @@ export function AIAnalyzer() {
           {/* Drop Zone */}
           <div
             {...getRootProps()}
-            className={`relative border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all duration-300 mb-6 ${
-              isDragActive
-                ? "border-cyan-400 bg-cyan-500/10"
-                : "border-white/30 hover:border-purple-400 hover:bg-purple-500/5"
-            } ${result ? "opacity-50 pointer-events-none" : ""}`}
+            className={`relative border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all duration-300 mb-6 ${isDragActive ? "border-cyan-400 bg-cyan-500/10" : "border-white/30 hover:border-purple-400 hover:bg-purple-500/5"} ${result || uploading ? "opacity-50 pointer-events-none" : ""}`}
           >
-            <input {...getInputProps()} disabled={!!result} />
+            <input {...getInputProps()} disabled={!!result || uploading} />
             <Upload className="w-12 h-12 mx-auto mb-3 text-gray-300" />
             <p className="text-lg font-semibold text-white mb-1">
               {isDragActive
@@ -178,10 +188,10 @@ export function AIAnalyzer() {
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-lg -z-10" />
                 <div className="flex items-center justify-between px-4">
                   <div className="text-4xl font-black text-white">
-                    {result.musicalKey.split(' ')[0]} {/* Show only key (e.g., "F#") */}
+                    {result.musicalKey.split(' ')[0]}
                   </div>
                   <div className="text-xl font-bold text-purple-300 uppercase tracking-wider">
-                    {result.musicalKey.split(' ')[1]?.substring(0, 3)} {/* Show "MIN" or "MAJ" */}
+                    {result.musicalKey.split(' ')[1]?.substring(0, 3)}
                   </div>
                   <div className="text-sm text-gray-300">
                     {t("aiAnalyzer.camelot")}: <span className="font-bold text-white">{result.camelotKey}</span>
@@ -222,8 +232,27 @@ export function AIAnalyzer() {
             </div>
           )}
 
+          {/* Uploading State */}
+          {uploading && (
+            <div className="text-center py-8">
+              <Loader2 className="w-16 h-16 mx-auto mb-4 text-cyan-400 animate-spin" />
+              <p className="text-xl font-semibold text-white mb-2">
+                Subiendo archivo...
+              </p>
+              <div className="w-full max-w-md mx-auto mt-4">
+                <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-300"
+                    style={{ width: `${uploadProgress}%` }}
+                  />
+                </div>
+                <p className="text-sm text-gray-400 mt-2">{uploadProgress}%</p>
+              </div>
+            </div>
+          )}
+
           {/* Analyzing State */}
-          {analyzing && (
+          {analyzing && !uploading && (
             <div className="text-center py-8">
               <Loader2 className="w-16 h-16 mx-auto mb-4 text-cyan-400 animate-spin" />
               <p className="text-xl font-semibold text-white mb-2">
@@ -236,7 +265,7 @@ export function AIAnalyzer() {
           )}
 
           {/* Footer */}
-          {!result && !analyzing && (
+          {!result && !analyzing && !uploading && (
             <div className="text-center mt-6 pt-4 border-t border-white/10">
               <p className="text-sm text-gray-400">
                 {t("aiAnalyzer.footer")}
