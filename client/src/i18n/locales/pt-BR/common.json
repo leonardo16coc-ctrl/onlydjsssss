@@ -709,6 +709,7 @@
     "bpmLabel": "BPM",
     "keyLabel": "TOM",
     "camelot": "Camelot",
+    "detectedSong": "Música Detectada",
     "ctaText": "Quer monetizar esta faixa?",
     "ctaButton": "Enviar para ONLYDJS",
     "analyzeAnother": "Analisar Outra Faixa",

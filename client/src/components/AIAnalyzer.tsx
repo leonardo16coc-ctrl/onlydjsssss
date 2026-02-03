@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { trpc } from "../lib/trpc";
-import { Loader2, Music, Upload } from "lucide-react";
+import { Loader2, Upload } from "lucide-react";
 import { Button } from "./ui/button";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -14,6 +14,8 @@ export function AIAnalyzer() {
     bpm: number;
     key: string;
     camelotKey: string;
+    songTitle?: string;
+    artist?: string;
   } | null>(null);
 
   const analyzeMutation = trpc.aiAnalyzer.analyzeAudio.useMutation({
@@ -78,13 +80,13 @@ export function AIAnalyzer() {
   return (
     <div className="relative w-full max-w-4xl mx-auto px-4 py-16">
       {/* Title */}
-      <div className="text-center mb-12">
-        <h2 className="text-4xl md:text-5xl font-bold mb-4">
+      <div className="text-center mb-8">
+        <h2 className="text-4xl md:text-5xl font-bold mb-2">
           <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
             AI BPM & KEY ANALYZER
           </span>
         </h2>
-        <p className="text-lg text-gray-300 font-medium">
+        <p className="text-sm text-blue-300 font-semibold uppercase tracking-wider">
           {t("aiAnalyzer.subtitle")}
         </p>
       </div>
@@ -97,7 +99,7 @@ export function AIAnalyzer() {
           <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-blue-500/20 to-cyan-500/20 rounded-3xl blur-xl -z-10" />
 
           {/* Logo Circle (Shazam style) */}
-          <div className="flex justify-center mb-8">
+          <div className="flex justify-center mb-6">
             <div className="relative">
               {/* Outer glow ring */}
               <div className={`absolute inset-0 rounded-full bg-gradient-to-br from-purple-500 via-blue-500 to-cyan-500 blur-2xl opacity-60 ${analyzing ? "animate-pulse" : ""}`} />
@@ -108,7 +110,7 @@ export function AIAnalyzer() {
                   <Loader2 className="w-16 h-16 text-white animate-spin" />
                 ) : (
                   <img
-                    src="/logo-circle.webp"
+                    src="/logo.webp"
                     alt="ONLYDJS"
                     className="w-20 h-20 object-contain"
                   />
@@ -118,59 +120,74 @@ export function AIAnalyzer() {
           </div>
 
           {/* Drop Zone */}
-          {!result && (
-            <div
-              {...getRootProps()}
-              className={`relative border-2 border-dashed rounded-2xl p-12 text-center cursor-pointer transition-all duration-300 ${
-                isDragActive
-                  ? "border-cyan-400 bg-cyan-500/10"
-                  : "border-white/30 hover:border-purple-400 hover:bg-purple-500/5"
-              }`}
-            >
-              <input {...getInputProps()} />
-              <Upload className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-              <p className="text-xl font-semibold text-white mb-2">
-                {isDragActive
-                  ? t("aiAnalyzer.dropHere")
-                  : t("aiAnalyzer.dropZone")}
-              </p>
-              <p className="text-sm text-gray-400">
-                {t("aiAnalyzer.supportedFormats")}
-              </p>
-              <p className="text-xs text-gray-500 mt-2">
-                {t("aiAnalyzer.maxSize")}
-              </p>
-            </div>
-          )}
+          <div
+            {...getRootProps()}
+            className={`relative border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all duration-300 mb-6 ${
+              isDragActive
+                ? "border-cyan-400 bg-cyan-500/10"
+                : "border-white/30 hover:border-purple-400 hover:bg-purple-500/5"
+            } ${result ? "opacity-50 pointer-events-none" : ""}`}
+          >
+            <input {...getInputProps()} disabled={!!result} />
+            <Upload className="w-12 h-12 mx-auto mb-3 text-gray-300" />
+            <p className="text-lg font-semibold text-white mb-1">
+              {isDragActive
+                ? t("aiAnalyzer.dropHere")
+                : t("aiAnalyzer.dropZone")}
+            </p>
+            <p className="text-xs text-gray-400">
+              {t("aiAnalyzer.supportedFormats")} • {t("aiAnalyzer.maxSize")}
+            </p>
+          </div>
 
-          {/* Results */}
+          {/* Results - Integrated Bars */}
           {result && !analyzing && (
-            <div className="space-y-6">
-              {/* BPM Card */}
-              <div className="relative bg-gradient-to-r from-cyan-500/20 to-blue-500/20 backdrop-blur-sm rounded-2xl p-6 border border-cyan-400/30 shadow-lg">
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-2xl blur-xl -z-10" />
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-300 mb-1">{t("aiAnalyzer.bpmLabel")}</p>
-                    <p className="text-5xl font-bold text-white">{result.bpm}</p>
+            <div className="space-y-4">
+              {/* Song Detection (if available) */}
+              {result.songTitle && (
+                <div className="text-center mb-4 p-4 bg-white/5 rounded-xl border border-white/10">
+                  <p className="text-sm text-gray-400 mb-1">{t("aiAnalyzer.detectedSong")}</p>
+                  <p className="text-xl font-bold text-white">{result.songTitle}</p>
+                  {result.artist && (
+                    <p className="text-md text-purple-300">{result.artist}</p>
+                  )}
+                </div>
+              )}
+
+              {/* BPM Bar */}
+              <div className="relative bg-gradient-to-r from-blue-600/30 to-cyan-600/30 backdrop-blur-sm rounded-full p-4 border-2 border-blue-400/50 shadow-lg">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-full blur-lg -z-10" />
+                <div className="flex items-center justify-between px-4">
+                  <div className="text-5xl font-black text-white">
+                    {result.bpm}
                   </div>
-                  <div className="text-cyan-400 text-6xl font-bold">BPM</div>
+                  <div className="text-2xl font-bold text-blue-300 uppercase tracking-wider">
+                    BPM
+                  </div>
                 </div>
               </div>
 
-              {/* Key Card */}
-              <div className="relative bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-2xl p-6 border border-purple-400/30 shadow-lg">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-2xl blur-xl -z-10" />
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-300 mb-1">{t("aiAnalyzer.keyLabel")}</p>
-                    <p className="text-4xl font-bold text-white">{result.key}</p>
-                    <p className="text-xl text-purple-300 mt-2">
-                      {t("aiAnalyzer.camelot")}: {result.camelotKey}
-                    </p>
+              {/* Key Bar */}
+              <div className="relative bg-gradient-to-r from-purple-600/30 to-pink-600/30 backdrop-blur-sm rounded-full p-4 border-2 border-purple-400/50 shadow-lg">
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-lg -z-10" />
+                <div className="flex items-center justify-between px-4">
+                  <div className="text-4xl font-black text-white">
+                    {result.key.split(' ')[0]} {/* Show only key (e.g., "F#") */}
                   </div>
-                  <Music className="w-16 h-16 text-purple-400" />
+                  <div className="text-xl font-bold text-purple-300 uppercase tracking-wider">
+                    {result.key.split(' ')[1]?.substring(0, 3)} {/* Show "MIN" or "MAJ" */}
+                  </div>
+                  <div className="text-sm text-gray-300">
+                    {t("aiAnalyzer.camelot")}: <span className="font-bold text-white">{result.camelotKey}</span>
+                  </div>
                 </div>
+              </div>
+
+              {/* Analyzer Label */}
+              <div className="text-center">
+                <p className="text-xs text-gray-400 uppercase tracking-widest">
+                  ONLYDJS ANALYZER
+                </p>
               </div>
 
               {/* CTA */}
@@ -201,7 +218,7 @@ export function AIAnalyzer() {
 
           {/* Analyzing State */}
           {analyzing && (
-            <div className="text-center py-12">
+            <div className="text-center py-8">
               <Loader2 className="w-16 h-16 mx-auto mb-4 text-cyan-400 animate-spin" />
               <p className="text-xl font-semibold text-white mb-2">
                 {t("aiAnalyzer.analyzing")}
@@ -213,11 +230,13 @@ export function AIAnalyzer() {
           )}
 
           {/* Footer */}
-          <div className="text-center mt-8 pt-6 border-t border-white/10">
-            <p className="text-sm text-gray-400">
-              {t("aiAnalyzer.footer")}
-            </p>
-          </div>
+          {!result && !analyzing && (
+            <div className="text-center mt-6 pt-4 border-t border-white/10">
+              <p className="text-sm text-gray-400">
+                {t("aiAnalyzer.footer")}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -723,6 +723,7 @@
     "bpmLabel": "BPM",
     "keyLabel": "TONALIDAD",
     "camelot": "Camelot",
+    "detectedSong": "Canción Detectada",
     "ctaText": "¿Quieres monetizar este track?",
     "ctaButton": "Subir a ONLYDJS",
     "analyzeAnother": "Analizar Otro Track",
