@@ -2003,3 +2003,35 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar ruta /faq en App.tsx
 - [ ] Agregar link "FAQ" en Footer
 - [x] Traducciones en 5 idiomas (EN, ES, PT-BR, FR, DE)
+
+
+## 67. AI BPM & Key Analyzer - Herramienta Gratuita (COMPLETADO)
+- [x] Backend API para análisis de audio:
+  - [x] Investigar librerías de análisis de audio (librosa seleccionada)
+  - [x] Crear endpoint tRPC `analyzeAudio` que acepte archivo de audio
+  - [x] Implementar detección de BPM con precisión DJ/club
+  - [x] Implementar detección de tonalidad musical (Key)
+  - [x] Convertir Key a notación Camelot (ej: F# minor → 11A)
+  - [x] Limitar tamaño de archivo a 1000MB
+  - [x] Soportar formatos WAV, MP3
+  - [x] Borrar archivos automáticamente después del análisis
+  - [x] Optimizar para procesamiento rápido (<10 segundos)
+- [x] Frontend - Componente AIAnalyzer.tsx:
+  - [x] Crear componente con diseño glassmorphism
+  - [x] Implementar drag & drop zone con react-dropzone
+  - [x] Agregar logo ONLYDJS en círculo central (estilo Shazam)
+  - [x] Animación sutil durante análisis (spinner + glow)
+  - [x] Cards luminosas para resultados (BPM y Key)
+  - [x] Mostrar Key en formato musical (ej: F# minor) y Camelot (ej: 11A)
+  - [x] Colores: violeta, azul, blanco con glow effects
+  - [x] CTA opcional: "Upload this track to ONLYDJS & monetize it"
+- [x] Integración:
+  - [x] Agregar componente en Home.tsx debajo del hero principal
+  - [ ] Crear ruta independiente /ai-bpm-key-analyzer (opcional)
+  - [ ] Agregar link en navegación (no necesario, ya está en Home)
+- [x] Traducciones en 5 idiomas (EN, ES, PT-BR, FR, DE)
+- [ ] Testing:
+  - [ ] Probar con archivos WAV y MP3
+  - [ ] Verificar precisión de BPM en música electrónica
+  - [ ] Verificar precisión de Key detection
+  - [ ] Probar con archivos grandes (cerca de 1000MB)
