@@ -14,6 +14,8 @@ export function AIAnalyzer() {
     bpm: number;
     key: string;
     camelotKey: string;
+    songTitle?: string;
+    artist?: string;
   } | null>(null);
 
   const analyzeMutation = trpc.aiAnalyzer.analyzeAudio.useMutation({
@@ -141,6 +143,17 @@ export function AIAnalyzer() {
           {/* Results - Integrated Bars */}
           {result && !analyzing && (
             <div className="space-y-4">
+              {/* Song Detection (if available) */}
+              {result.songTitle && (
+                <div className="text-center mb-4 p-4 bg-white/5 rounded-xl border border-white/10">
+                  <p className="text-sm text-gray-400 mb-1">{t("aiAnalyzer.detectedSong")}</p>
+                  <p className="text-xl font-bold text-white">{result.songTitle}</p>
+                  {result.artist && (
+                    <p className="text-md text-purple-300">{result.artist}</p>
+                  )}
+                </div>
+              )}
+
               {/* BPM Bar */}
               <div className="relative bg-gradient-to-r from-blue-600/30 to-cyan-600/30 backdrop-blur-sm rounded-full p-4 border-2 border-blue-400/50 shadow-lg">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-full blur-lg -z-10" />

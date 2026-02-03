@@ -2040,7 +2040,7 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 ## 61. Mejoras de Diseño y Funcionalidad del AI BPM & Key Analyzer (NUEVO)
 - [x] Rediseñar UI con resultados integrados en el mismo card glassmorphism
 - [x] Mostrar BPM y Key en barras redondeadas debajo de la zona de drop
+- [x] Agregar detección de canción (título + artista) usando API de reconocimiento de audio (preparado con AudD API)
 - [x] Mantener diseño compacto con logo circular ONLYDJS en la parte superior
 - [x] Animaciones suaves al mostrar resultados
 - [x] Traducciones en 5 idiomas para nuevos textos
-- [x] Solo análisis de BPM y tonalidad (sin detección de canción)
