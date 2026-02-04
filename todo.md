@@ -2069,3 +2069,8 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Cambiado AIAnalyzer.tsx para usar trpc.aiAnalyzer.analyzeAudio (librosa)
 - [x] Ahora usa análisis real con Python librosa en lugar de IA generativa
 - [x] Sistema detecta correctamente F# minor = 11A
+
+## 66. Librosa no instalado en sistema (BUG CRÍTICO) - RESUELTO
+- [x] Error: ModuleNotFoundError: No module named 'librosa'
+- [x] Instalado librosa 0.11.0 con sudo pip3 install
+- [x] Instaladas dependencias: soundfile, audioread, numpy, scipy, numba
