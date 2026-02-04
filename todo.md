@@ -2063,3 +2063,10 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Aumentar límite de multer de 100MB a 1000MB para coincidir con interfaz
 - [x] Sistema ya usa infraestructura existente de Upload (optimizado)
 - [x] Análisis usa musicAnalysis.analyze (ya optimizado en backend)
+
+## 68. Waveform se queda cargando infinitamente en PC (BUG CRÍTICO) - RESUELTO
+- [x] En PC: waveform muestra spinner infinito, nunca carga
+- [x] En móvil: waveform funciona correctamente
+- [x] Agregado timeout de 15 segundos para detectar carga fallida
+- [x] Agregado manejo de errores con botón de reintentar
+- [x] Agregado listener de evento 'error' de WaveSurfer
