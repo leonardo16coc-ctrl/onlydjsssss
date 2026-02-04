@@ -2058,3 +2058,8 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Soportar WAV y MP3 correctamente
 - [x] Mantener diseño estético sin modificaciones
 - [x] Logo circular muestra spinner durante subida y análisis
+
+## 64. Corregir error 502 en /api/upload/audio (BUG CRÍTICO)
+- [x] Aumentar límite de multer de 100MB a 1000MB para coincidir con interfaz
+- [x] Sistema ya usa infraestructura existente de Upload (optimizado)
+- [x] Análisis usa musicAnalysis.analyze (ya optimizado en backend)
