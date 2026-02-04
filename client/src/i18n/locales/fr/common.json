@@ -693,26 +693,5 @@
       "description": "Contactez notre support. Nous répondrons sous 24 heures.",
       "button": "Contacter le Support"
     }
-  },
-  "aiAnalyzer": {
-    "subtitle": "OUTIL D'ANALYSE GRATUIT",
-    "dropZone": "Déposez votre fichier audio ici",
-    "dropHere": "Relâchez pour analyser",
-    "supportedFormats": "WAV, MP3 supportés",
-    "maxSize": "Max 1000MB",
-    "analyzing": "Analyse de votre piste...",
-    "analyzingSubtext": "Cela peut prendre quelques secondes",
-    "analysisComplete": "Analyse terminée!",
-    "analysisFailed": "Analyse échouée. Veuillez réessayer.",
-    "fileTooLarge": "Taille du fichier ({{size}}MB) dépasse la limite de 1000MB",
-    "uploadFailed": "Téléchargement échoué. Veuillez réessayer.",
-    "bpmLabel": "BPM",
-    "keyLabel": "TONALITÉ",
-    "camelot": "Camelot",
-    "detectedSong": "Chanson Détectée",
-    "ctaText": "Vous voulez monétiser cette piste?",
-    "ctaButton": "Télécharger sur ONLYDJS",
-    "analyzeAnother": "Analyser Une Autre Piste",
-    "footer": "100% Gratuit • Sans Inscription • Analyseur ONLYDJS"
   }
 }

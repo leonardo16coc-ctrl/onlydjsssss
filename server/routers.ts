@@ -22,7 +22,6 @@ import { earningsRouter } from "./routers/earnings.router";
 import { subscriptionsRouter } from "./routers/subscriptions.router";
 import { walletRouter } from "./routers/wallet.router";
 import { trackingRouter } from "./routers/tracking.router";
-import { aiAnalyzerRouter } from "./routers/ai-analyzer.router";
 import { getDb } from "./db";
 import { tracks, downloads } from "../drizzle/schema";
 import { eq, and, gte, sql } from "drizzle-orm";
@@ -49,7 +48,6 @@ export const appRouter = router({
   downloads: downloadsRouter,
   earnings: earningsRouter,
   subscriptions: subscriptionsRouter,
-  aiAnalyzer: aiAnalyzerRouter,
   wallet: walletRouter,
   tracking: trackingRouter,
   

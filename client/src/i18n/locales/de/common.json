@@ -693,26 +693,5 @@
       "description": "Kontaktieren Sie unseren Support. Wir antworten innerhalb von 24 Stunden.",
       "button": "Support kontaktieren"
     }
-  },
-  "aiAnalyzer": {
-    "subtitle": "KOSTENLOSES ANALYSE-TOOL",
-    "dropZone": "Legen Sie Ihre Audiodatei hier ab",
-    "dropHere": "Loslassen zum Analysieren",
-    "supportedFormats": "WAV, MP3 unterstützt",
-    "maxSize": "Max 1000MB",
-    "analyzing": "Analysiere deinen Track...",
-    "analyzingSubtext": "Dies kann einige Sekunden dauern",
-    "analysisComplete": "Analyse abgeschlossen!",
-    "analysisFailed": "Analyse fehlgeschlagen. Bitte versuchen Sie es erneut.",
-    "fileTooLarge": "Dateigröße ({{size}}MB) überschreitet das Limit von 1000MB",
-    "uploadFailed": "Upload fehlgeschlagen. Bitte versuchen Sie es erneut.",
-    "bpmLabel": "BPM",
-    "keyLabel": "TONART",
-    "camelot": "Camelot",
-    "detectedSong": "Erkanntes Lied",
-    "ctaText": "Möchten Sie diesen Track monetarisieren?",
-    "ctaButton": "Auf ONLYDJS hochladen",
-    "analyzeAnother": "Einen Anderen Track Analysieren",
-    "footer": "100% Kostenlos • Keine Registrierung • ONLYDJS Analysator"
   }
 }
