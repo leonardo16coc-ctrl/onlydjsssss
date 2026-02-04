@@ -2063,3 +2063,9 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Aumentar límite de multer de 100MB a 1000MB para coincidir con interfaz
 - [x] Sistema ya usa infraestructura existente de Upload (optimizado)
 - [x] Análisis usa musicAnalysis.analyze (ya optimizado en backend)
+
+## 65. Detección incorrecta de tonalidad en AI Analyzer (BUG CRÍTICO) - RESUELTO
+- [x] Problema identificado: musicAnalysis usa LLM (aleatorio), aiAnalyzer usa librosa (real)
+- [x] Cambiado AIAnalyzer.tsx para usar trpc.aiAnalyzer.analyzeAudio (librosa)
+- [x] Ahora usa análisis real con Python librosa en lugar de IA generativa
+- [x] Sistema detecta correctamente F# minor = 11A

@@ -19,7 +19,7 @@ export function AIAnalyzer() {
     camelotKey?: string;
   } | null>(null);
 
-  const analyzeAudio = trpc.musicAnalysis.analyze.useMutation();
+  const analyzeAudio = trpc.aiAnalyzer.analyzeAudio.useMutation();
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
@@ -39,46 +39,33 @@ export function AIAnalyzer() {
       setUploadProgress(0);
 
       try {
-        // Upload audio file to get URL
-        const formData = new FormData();
-        formData.append("file", file);
-
-        const uploadResponse = await fetch("/api/upload/audio", {
-          method: "POST",
-          body: formData,
+        // Convert file to base64
+        const reader = new FileReader();
+        const base64Promise = new Promise<string>((resolve, reject) => {
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
         });
 
-        if (!uploadResponse.ok) {
-          throw new Error("Error al subir el archivo");
-        }
-
-        const uploadData = await uploadResponse.json();
-        setUploadedAudioUrl(uploadData.fileUrl);
-        setUploadProgress(100);
+        const audioBase64 = await base64Promise;
+        setUploadProgress(50);
         setUploading(false);
 
         // Start analyzing
         setAnalyzing(true);
 
-        // Analyze audio using existing musicAnalysis
+        // Analyze audio using aiAnalyzer (librosa-based)
         const analysis = await analyzeAudio.mutateAsync({
-          audioFileUrl: uploadData.fileUrl,
+          audioBase64,
+          filename: file.name,
         });
 
-        // Map musicalKey to Camelot notation
-        const camelotMap: Record<string, string> = {
-          "C major": "8B", "G major": "9B", "D major": "10B", "A major": "11B",
-          "E major": "12B", "B major": "1B", "F# major": "2B", "Db major": "3B",
-          "Ab major": "4B", "Eb major": "5B", "Bb major": "6B", "F major": "7B",
-          "A minor": "8A", "E minor": "9A", "B minor": "10A", "F# minor": "11A",
-          "C# minor": "12A", "G# minor": "1A", "D# minor": "2A", "Bb minor": "3A",
-          "F minor": "4A", "C minor": "5A", "G minor": "6A", "D minor": "7A",
-        };
+        setUploadProgress(100);
 
         setResult({
           bpm: analysis.bpm || 0,
-          musicalKey: analysis.musicalKey || "Unknown",
-          camelotKey: camelotMap[analysis.musicalKey || ""] || "?",
+          musicalKey: analysis.key || "Unknown",
+          camelotKey: analysis.camelotKey || "?",
         });
 
         toast.success(t("aiAnalyzer.analysisComplete"));
