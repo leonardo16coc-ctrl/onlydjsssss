@@ -41,7 +41,7 @@ export default function WaveformPlayer({
       height: 120,
       barGap: 2,
       normalize: true,
-      backend: "MediaElement",
+      backend: "WebAudio",
     });
 
     wavesurferRef.current = wavesurfer;
