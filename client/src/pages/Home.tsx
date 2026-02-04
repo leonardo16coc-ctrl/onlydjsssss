@@ -6,7 +6,6 @@ import { Music2, TrendingUp, DollarSign, Sparkles, Shield, Zap, Upload } from "l
 import MonetizationSection from "@/components/MonetizationSection";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
-import { AIAnalyzer } from "@/components/AIAnalyzer";
 
 export default function Home() {
   const { t } = useTranslation();
@@ -54,9 +53,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* AI BPM & Key Analyzer - Free Tool */}
-      <AIAnalyzer />
 
       {/* Featured Section - Create Perfect Set */}
       <section className="py-16 bg-gradient-to-br from-purple-900/20 via-pink-900/20 to-cyan-900/20 border-y border-cyan-500/20">
