@@ -2070,3 +2070,7 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregado timeout de 15 segundos para detectar carga fallida
 - [x] Agregado manejo de errores con botón de reintentar
 - [x] Agregado listener de evento 'error' de WaveSurfer
+
+## 69. Revertir WaveformPlayer a versión funcional original - COMPLETADO
+- [x] Usuario reporta que waveform dejó de funcionar después de cambios
+- [x] Revertido a versión c9863bdc que funcionaba correctamente
