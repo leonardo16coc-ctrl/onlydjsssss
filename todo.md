@@ -2074,3 +2074,10 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 ## 69. Revertir WaveformPlayer a versión funcional original - COMPLETADO
 - [x] Usuario reporta que waveform dejó de funcionar después de cambios
 - [x] Revertido a versión c9863bdc que funcionaba correctamente
+
+## 70. Investigar problema de waveform en PC (funciona en móvil) - RESUELTO
+- [x] Waveform se queda cargando infinitamente en PC/desktop
+- [x] Waveform funciona correctamente en móvil
+- [x] Problema identificado: backend "WebAudio" no compatible con desktop
+- [x] Solución: Cambiado backend de "WebAudio" a "MediaElement"
+- [x] MediaElement es más compatible con todos los navegadores
