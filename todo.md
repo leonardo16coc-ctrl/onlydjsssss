@@ -2063,3 +2063,11 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Aumentar límite de multer de 100MB a 1000MB para coincidir con interfaz
 - [x] Sistema ya usa infraestructura existente de Upload (optimizado)
 - [x] Análisis usa musicAnalysis.analyze (ya optimizado en backend)
+
+## 71. Ajustar sistema de uploads para usuarios FREE - COMPLETADO
+- [ ] Usuarios FREE pueden subir 1 track por mes (límite ya existe en backend)
+- [x] Usuarios FREE pueden publicar el track y aparece en Explorer (eliminada restricción de membresía)
+- [x] Monetización es automática para TODOS (modelo 50/50), no requiere configuración
+- [x] Usuarios FREE NO pueden ver analytics/estadísticas reales (solo datos demo)
+- [x] Dashboard muestra badge "Vista Demo (FREE)" para usuarios sin membresía
+- [x] Queries de analytics deshabilitadas para usuarios FREE

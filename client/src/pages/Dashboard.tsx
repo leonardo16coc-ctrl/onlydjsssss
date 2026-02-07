@@ -17,13 +17,23 @@ import WeeklyChallengesCard from "@/components/WeeklyChallengesCard";
 
 export default function Dashboard() {
   const { t } = useTranslation();
-  const { isAuthenticated } = useAuth();
-  const { data: stats, isLoading } = trpc.dashboard.stats.useQuery();
-  const { data: wallet } = trpc.wallet.getBalance.useQuery();
-  const { data: djScore } = trpc.earnings.getDJScore.useQuery();
-  const { data: monthlyMetrics } = trpc.earnings.getMonthlyMetrics.useQuery({ months: 6 });
+  const { isAuthenticated, user } = useAuth();
+  const isPremiumUser = isAuthenticated && user?.membershipStatus === "member";
+  
+  const { data: stats, isLoading } = trpc.dashboard.stats.useQuery(undefined, {
+    enabled: isPremiumUser // Solo cargar stats si es premium
+  });
+  const { data: wallet } = trpc.wallet.getBalance.useQuery(undefined, {
+    enabled: isPremiumUser // Solo cargar wallet si es premium
+  });
+  const { data: djScore } = trpc.earnings.getDJScore.useQuery(undefined, {
+    enabled: isPremiumUser // Solo cargar djScore si es premium
+  });
+  const { data: monthlyMetrics } = trpc.earnings.getMonthlyMetrics.useQuery({ months: 6 }, {
+    enabled: isPremiumUser // Solo cargar metrics si es premium
+  });
 
-  // Datos de ejemplo para usuarios no autenticados
+  // Datos de ejemplo para usuarios FREE o no autenticados
   const demoStats = {
     totalDownloads: 1247,
     totalTracks: 89,
@@ -36,9 +46,9 @@ export default function Dashboard() {
     pending: 567.89
   };
 
-  // Usar datos reales si está autenticado, sino mostrar datos demo
-  const displayStats = isAuthenticated ? stats : demoStats;
-  const displayWallet = isAuthenticated ? wallet : demoWallet;
+  // Usar datos reales solo si es PREMIUM, sino mostrar datos demo
+  const displayStats = isPremiumUser ? stats : demoStats;
+  const displayWallet = isPremiumUser ? wallet : demoWallet;
 
   return (
     <div className="min-h-screen bg-background">
@@ -46,17 +56,17 @@ export default function Dashboard() {
       <div className="container py-8">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-4xl font-bold text-glow-cyan">{t("dashboard.title")}</h1>
-          {!isAuthenticated && (
+          {!isPremiumUser && (
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Badge variant="outline" className="border-yellow-500 text-yellow-400 bg-yellow-500/10 px-4 py-2 text-sm cursor-help flex items-center gap-2">
                     <Info className="h-4 w-4" />
-                    {t("dashboard.demoMode")}
+                    {isAuthenticated ? "Vista Demo (FREE)" : t("dashboard.demoMode")}
                   </Badge>
                 </TooltipTrigger>
                 <TooltipContent className="max-w-xs">
-                  <p>{t("dashboard.demoModeTooltip")}</p>
+                  <p>{isAuthenticated ? "Suscríbete por $4.99/mes para ver tus estadísticas reales y ganancias." : t("dashboard.demoModeTooltip")}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>

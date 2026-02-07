@@ -216,19 +216,6 @@ export default function Upload() {
   };
 
   const handleSubmit = async () => {
-    // Check membership
-    if (isFreeUser) {
-      toast.error(t('upload.membershipRequired'), {
-        description: "Has completado todo el proceso. Suscríbete por $4.99/mes para publicar tu track y empezar a ganar dinero.",
-        duration: 8000,
-        action: {
-          label: "💎 Suscribirse Ahora",
-          onClick: () => setLocation("/membership"),
-        },
-      });
-      return;
-    }
-
     // Validate required fields
     if (!uploadedAudio) {
       toast.error(t('upload.uploadAudio'));
