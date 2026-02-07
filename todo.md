@@ -2077,3 +2077,10 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Cambiado a "Publicar Track" sin candado para usuarios FREE
 - [x] Eliminado disabled={isFreeUser} del botón
 - [x] Mensaje actualizado: "Track publicado con éxito. Suscríbete para ver estadísticas"
+
+## 73. Backend rechaza publicación de usuarios FREE (BUG CRÍTICO) - RESUELTO
+- [x] Error: "Se requiere membresía activa para esta acción"
+- [x] Frontend permitía publicar pero backend rechazaba la petición
+- [x] Cambiado memberProcedure a protectedProcedure en tracks.create
+- [x] Agregada validación personalizada: FREE = 1 track/mes, MEMBER = ilimitado
+- [x] Mensaje de error claro cuando FREE alcanza límite mensual

@@ -104,7 +104,7 @@ export const appRouter = router({
   }),
 
   tracks: router({
-    create: memberProcedure
+    create: protectedProcedure
       .input(z.object({
         title: z.string().min(1).max(255),
         artist: z.string().min(1).max(255),
@@ -135,6 +135,39 @@ export const appRouter = router({
         mainstageTags: z.array(z.string()).optional(),
       }))
       .mutation(async ({ ctx, input }) => {
+        // Validar límite de uploads para usuarios FREE (1 por mes)
+        if (ctx.user.membershipStatus === "free") {
+          const dbInstance = await getDb();
+          if (!dbInstance) {
+            throw new TRPCError({
+              code: "INTERNAL_SERVER_ERROR",
+              message: "Error al conectar con la base de datos",
+            });
+          }
+          
+          const startOfMonth = new Date();
+          startOfMonth.setDate(1);
+          startOfMonth.setHours(0, 0, 0, 0);
+          
+          const uploadsThisMonth = await dbInstance
+            .select({ count: sql<number>`count(*)` })
+            .from(tracks)
+            .where(
+              and(
+                eq(tracks.userId, ctx.user.id),
+                gte(tracks.createdAt, startOfMonth)
+              )
+            );
+          
+          const count = Number(uploadsThisMonth[0]?.count || 0);
+          if (count >= 1) {
+            throw new TRPCError({
+              code: "FORBIDDEN",
+              message: "Has alcanzado tu límite de 1 upload por mes. Suscríbete por $4.99/mes para uploads ilimitados.",
+            });
+          }
+        }
+        
         // Analyze audio file automatically if BPM or key not provided
         let analysisData = null;
         if (!input.bpm || !input.musicalKey) {
