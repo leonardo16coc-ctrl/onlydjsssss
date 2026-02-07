@@ -571,16 +571,11 @@ export default function Upload() {
               {/* Submit Button */}
               <Button
                 onClick={handleSubmit}
-                disabled={createTrack.isPending || !uploadedAudio || isFreeUser}
+                disabled={createTrack.isPending || !uploadedAudio}
                 className="w-full btn-neon glow-pink h-14 text-lg"
                 size="lg"
               >
-                {isFreeUser ? (
-                  <>
-                    <Lock className="h-5 w-5 mr-2" />
-                    Suscríbete para Publicar
-                  </>
-                ) : createTrack.isPending ? (
+                {createTrack.isPending ? (
                   <>
                     <Loader2 className="h-5 w-5 mr-2 animate-spin" />
                     Publicando...
@@ -588,18 +583,15 @@ export default function Upload() {
                 ) : (
                   <>
                     <UploadIcon className="h-5 w-5 mr-2" />
-                    {isFreeUser ? t('upload.subscribeToPublish') : t('upload.publish')}
+                    {t('upload.publish')}
                   </>
                 )}
               </Button>
 
               {isFreeUser && (
-                <div className="text-center space-y-2">
+                <div className="text-center space-y-2 mt-4">
                   <p className="text-sm text-muted-foreground">
-                    🎉 ¡Casi listo! Solo falta un paso para publicar tu track
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    Suscríbete por $4.99/mes y empieza a ganar dinero con tu música
+                    🎵 Track publicado con éxito. Suscríbete por $4.99/mes para ver tus estadísticas y ganancias reales.
                   </p>
                 </div>
               )}

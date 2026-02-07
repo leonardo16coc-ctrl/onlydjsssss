@@ -2071,3 +2071,9 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Usuarios FREE NO pueden ver analytics/estadísticas reales (solo datos demo)
 - [x] Dashboard muestra badge "Vista Demo (FREE)" para usuarios sin membresía
 - [x] Queries de analytics deshabilitadas para usuarios FREE
+
+## 72. Cambiar botón de publicar para usuarios FREE - COMPLETADO
+- [x] Botón actual mostraba "Suscríbete para Publicar" con candado
+- [x] Cambiado a "Publicar Track" sin candado para usuarios FREE
+- [x] Eliminado disabled={isFreeUser} del botón
+- [x] Mensaje actualizado: "Track publicado con éxito. Suscríbete para ver estadísticas"
