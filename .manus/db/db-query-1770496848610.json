@@ -1,0 +1,24 @@
+{
+  "query": "SELECT t.id, t.title, t.userId, u.name as userName, u.email FROM tracks t LEFT JOIN users u ON t.userId = u.id ORDER BY t.createdAt DESC LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute SELECT t.id, t.title, t.userId, u.name as userName, u.email FROM tracks t LEFT JOIN users u ON t.userId = u.id ORDER BY t.createdAt DESC LIMIT 5;",
+  "rows": [
+    {
+      "id": "159992",
+      "title": "ONLY FRIENDS",
+      "userId": "3660001",
+      "userName": "NYELO NYELO",
+      "email": "djnyelo@gmail.com"
+    },
+    {
+      "id": "1",
+      "title": "Summer Vibes (Extended Mix)",
+      "userId": "1",
+      "userName": "Leo Zam",
+      "email": "leonardo16coc@gmail.com"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\ttitle\tuserId\tuserName\temail\n159992\tONLY FRIENDS\t3660001\tNYELO NYELO\tdjnyelo@gmail.com\n1\tSummer Vibes (Extended Mix)\t1\tLeo Zam\tleonardo16coc@gmail.com\n",
+  "stderr": "",
+  "execution_time_ms": 73
+}

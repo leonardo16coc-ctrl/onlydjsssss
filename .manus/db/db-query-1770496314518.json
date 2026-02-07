@@ -1,0 +1,22 @@
+{
+  "query": "SELECT id, title, coverImageUrl, createdAt FROM tracks ORDER BY createdAt DESC LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute SELECT id, title, coverImageUrl, createdAt FROM tracks ORDER BY createdAt DESC LIMIT 5;",
+  "rows": [
+    {
+      "id": "159992",
+      "title": "ONLY FRIENDS",
+      "coverImageUrl": "NULL",
+      "createdAt": "2026-02-07 20:27:44"
+    },
+    {
+      "id": "1",
+      "title": "Summer Vibes (Extended Mix)",
+      "coverImageUrl": "https://picsum.photos/800/800",
+      "createdAt": "2026-01-26 18:38:13"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\ttitle\tcoverImageUrl\tcreatedAt\n159992\tONLY FRIENDS\tNULL\t2026-02-07 20:27:44\n1\tSummer Vibes (Extended Mix)\thttps://picsum.photos/800/800\t2026-01-26 18:38:13\n",
+  "stderr": "",
+  "execution_time_ms": 106
+}

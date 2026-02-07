@@ -18,6 +18,7 @@ import MainstageMode from "./pages/MainstageMode";
 import Subscription from "./pages/Subscription";
 import Wallet from "./pages/Wallet";
 import FAQ from "./pages/FAQ";
+import EditTrack from "./pages/EditTrack";
 
 function Router() {
   return (
@@ -36,6 +37,7 @@ function Router() {
       <Route path={"/faq"} component={FAQ} />
       <Route path={"/dj/:username"} component={DJProfile} />
       <Route path={"/profile/edit"} component={ProfileEdit} />
+      <Route path={"/track/edit/:id"} component={EditTrack} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>

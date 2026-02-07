@@ -2,7 +2,7 @@ import Navbar from "@/components/Navbar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
-import { Music, Play, Download, Heart, TrendingUp } from "lucide-react";
+import { Music, Play, Download, Heart, TrendingUp, Edit } from "lucide-react";
 import { MusicAnalysisDisplay } from "@/components/MusicAnalysisDisplay";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -15,7 +15,7 @@ import DownloadLimitsCard from "@/components/DownloadLimitsCard";
 import { useAuth } from "@/_core/hooks/useAuth";
 
 export default function Explore() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const { t } = useTranslation();
   const [filters, setFilters] = useState<SearchFilters>({});
   const [offset, setOffset] = useState(0);
@@ -184,6 +184,18 @@ export default function Explore() {
                         compact
                       />
                     </div>
+                  )}
+
+                  {/* Edit Button (only for track owner) */}
+                  {user && track.userId === user.id && (
+                    <Button
+                      onClick={() => window.location.href = `/track/edit/${track.id}`}
+                      variant="outline"
+                      className="w-full mb-2"
+                    >
+                      <Edit className="h-4 w-4 mr-2" />
+                      Editar Track
+                    </Button>
                   )}
 
                   {/* Download Button */}

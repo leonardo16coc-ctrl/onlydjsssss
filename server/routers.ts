@@ -249,6 +249,75 @@ export const appRouter = router({
         return { success: true };
       }),
 
+    update: protectedProcedure
+      .input(z.object({
+        id: z.number().int(),
+        title: z.string().min(1).max(255).optional(),
+        artist: z.string().min(1).max(255).optional(),
+        coverImageKey: z.string().optional(),
+        coverImageUrl: z.string().optional(),
+        bpm: z.number().int().min(1).max(300).optional(),
+        musicalKey: z.string().max(10).optional(),
+        genre: z.enum([
+          "Tech House", "Bass House", "Afro House", "Techno", "Melodic Techno",
+          "Big Room", "EDM", "Hard Techno", "Latin", "Reggaeton", "Hip-Hop", "Open Format"
+        ]).optional(),
+        trackType: z.enum(["Extended Mix", "Edit", "Mashup", "Remix", "Rework"]).optional(),
+        energy: z.number().int().min(1).optional(),
+        mood: z.string().max(100).optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const dbInstance = await getDb();
+        if (!dbInstance) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Error al conectar con la base de datos",
+          });
+        }
+
+        // Verificar que el track existe y pertenece al usuario
+        const existingTrack = await dbInstance
+          .select()
+          .from(tracks)
+          .where(eq(tracks.id, input.id))
+          .limit(1);
+
+        if (!existingTrack || existingTrack.length === 0) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Track no encontrado",
+          });
+        }
+
+        if (existingTrack[0].userId !== ctx.user.id) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "No tienes permiso para editar este track",
+          });
+        }
+
+        // Actualizar solo los campos proporcionados
+        const updateData: any = {};
+        if (input.title !== undefined) updateData.title = input.title;
+        if (input.artist !== undefined) updateData.artist = input.artist;
+        if (input.coverImageKey !== undefined) updateData.coverImageKey = input.coverImageKey;
+        if (input.coverImageUrl !== undefined) updateData.coverImageUrl = input.coverImageUrl;
+        if (input.bpm !== undefined) updateData.bpm = input.bpm;
+        if (input.musicalKey !== undefined) updateData.musicalKey = input.musicalKey;
+        if (input.genre !== undefined) updateData.genre = input.genre;
+        if (input.trackType !== undefined) updateData.trackType = input.trackType;
+        if (input.energy !== undefined) updateData.energy = input.energy;
+        if (input.mood !== undefined) updateData.mood = input.mood;
+        updateData.updatedAt = new Date();
+
+        await dbInstance
+          .update(tracks)
+          .set(updateData)
+          .where(eq(tracks.id, input.id));
+
+        return { success: true };
+      }),
+
     toggleLike: protectedProcedure
       .input(z.object({ trackId: z.number().int() }))
       .mutation(async ({ ctx, input }) => {

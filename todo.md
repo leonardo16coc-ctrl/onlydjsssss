@@ -2090,3 +2090,20 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Backend rechazaba valores de energy mayores a 10
 - [x] Eliminada restricción max(10) del campo energy
 - [x] Ahora acepta cualquier valor entero >= 1
+
+## 75. Imagen de portada no se muestra en Explorer (BUG) - RESUELTO
+- [x] Track se publicó correctamente pero no aparece la foto de portada
+- [x] Revisar cómo Explorer carga las imágenes de portada
+- [x] Verificar que coverImageUrl se esté guardando correctamente en la DB
+- [x] Verificar que la URL de S3 sea accesible públicamente
+- [x] SOLUCIÓN: El sistema funciona correctamente. El track sin imagen simplemente no tenía una imagen subida. Se implementó función de edición para agregar imágenes a tracks existentes.
+
+## 76. Función de edición de tracks (NUEVA FUNCIONALIDAD)
+- [x] Crear endpoint backend tracks.update para actualizar tracks
+- [x] Permitir actualizar: título, artista, género, tipo, BPM, key, imagen de portada
+- [x] Validar que solo el propietario del track pueda editarlo
+- [x] Crear página/modal de edición en el frontend
+- [x] Agregar botón "Editar" en las tarjetas de tracks del usuario
+- [x] Permitir cambiar imagen de portada sin re-subir el audio
+- [x] Probar edición completa del track "ONLY FRIENDS" agregando imagen de portada
+- [x] Crear tests de actualización de tracks (5 tests pasando)
