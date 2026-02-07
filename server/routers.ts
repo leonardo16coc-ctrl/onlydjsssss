@@ -120,7 +120,7 @@ export const appRouter = router({
         ]),
         subgenre: z.string().max(100).optional(),
         trackType: z.enum(["Extended Mix", "Edit", "Mashup", "Remix", "Rework"]),
-        energy: z.number().int().min(1).max(10).optional(),
+        energy: z.number().int().min(1).optional(),
         mood: z.string().max(100).optional(),
         tags: z.array(z.string()).optional(),
         fileFormat: z.string().max(20).optional(),

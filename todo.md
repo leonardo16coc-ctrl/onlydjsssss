@@ -2084,3 +2084,9 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Cambiado memberProcedure a protectedProcedure en tracks.create
 - [x] Agregada validación personalizada: FREE = 1 track/mes, MEMBER = ilimitado
 - [x] Mensaje de error claro cuando FREE alcanza límite mensual
+
+## 74. Error de validación en campo energy (BUG CRÍTICO) - RESUELTO
+- [x] Error: "Too big: expected number to be <=10" al publicar track
+- [x] Backend rechazaba valores de energy mayores a 10
+- [x] Eliminada restricción max(10) del campo energy
+- [x] Ahora acepta cualquier valor entero >= 1
