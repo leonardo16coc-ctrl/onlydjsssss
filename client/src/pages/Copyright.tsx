@@ -1,8 +1,14 @@
 import Navbar from "@/components/Navbar";
+import { Helmet } from "react-helmet";
 
 export default function Copyright() {
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <Helmet>
+        <title>Copyright & DMCA Policy - ONLYDJS</title>
+        <meta name="description" content="ONLYDJS Copyright and DMCA Policy: Learn how to report copyright infringement, submit DMCA takedown notices, and file counter-notifications. Protect your intellectual property." />
+      </Helmet>
+      <div className="min-h-screen bg-background">
       <Navbar />
       <div className="container py-12 max-w-4xl">
         <h1 className="text-4xl font-bold mb-2">Copyright Policy / DMCA</h1>
@@ -225,5 +231,6 @@ export default function Copyright() {
         </div>
       </div>
     </div>
+    </>
   );
 }

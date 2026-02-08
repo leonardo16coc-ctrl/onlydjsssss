@@ -1,4 +1,5 @@
 import { Link } from "wouter";
+import { Helmet } from "react-helmet";
 import { FileText, Shield, Copyright as CopyrightIcon } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -28,7 +29,12 @@ export default function Legal() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <Helmet>
+        <title>Legal Information - ONLYDJS</title>
+        <meta name="description" content="Access ONLYDJS legal policies: Terms of Service, Privacy Policy, and Copyright/DMCA procedures. Review your rights, data protection practices, and platform guidelines." />
+      </Helmet>
+      <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
@@ -101,5 +107,6 @@ export default function Legal() {
         </div>
       </div>
     </div>
+    </>
   );
 }

@@ -1,8 +1,14 @@
 import Navbar from "@/components/Navbar";
+import { Helmet } from "react-helmet";
 
 export default function Terms() {
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <Helmet>
+        <title>Terms of Service - ONLYDJS</title>
+        <meta name="description" content="Read ONLYDJS Terms of Service. Learn about subscriptions, user responsibilities, acceptable use policies, and platform guidelines for our DJ music platform." />
+      </Helmet>
+      <div className="min-h-screen bg-background">
       <Navbar />
       <div className="container py-12 max-w-4xl">
         <h1 className="text-4xl font-bold mb-2">Terms of Service</h1>
@@ -212,5 +218,6 @@ export default function Terms() {
         </div>
       </div>
     </div>
+    </>
   );
 }

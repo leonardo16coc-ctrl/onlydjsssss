@@ -1,8 +1,14 @@
 import Navbar from "@/components/Navbar";
+import { Helmet } from "react-helmet";
 
 export default function Privacy() {
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <Helmet>
+        <title>Privacy Policy - ONLYDJS</title>
+        <meta name="description" content="ONLYDJS Privacy Policy: Learn how we collect, use, and protect your personal information. Review your data rights, security practices, and GDPR compliance." />
+      </Helmet>
+      <div className="min-h-screen bg-background">
       <Navbar />
       <div className="container py-12 max-w-4xl">
         <h1 className="text-4xl font-bold mb-2">Privacy Policy</h1>
@@ -178,5 +184,6 @@ export default function Privacy() {
         </div>
       </div>
     </div>
+    </>
   );
 }
