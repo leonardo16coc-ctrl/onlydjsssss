@@ -2148,3 +2148,17 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 ## 82. Ajustar ubicación de nota en Copyright/DMCA (CORRECCIÓN)
 - [x] Mover "(for notice delivery only)" desde título general a sección United States Office
 - [x] Verificar que la nota aparezca correctamente en United States Office
+
+## 83. Hacer páginas legales públicamente accesibles para Stripe (CONFIGURACIÓN)
+- [x] Verificar que /terms, /privacy, /copyright no requieran autenticación
+- [x] Asegurar que las páginas sean accesibles en onlydjss.com
+- [x] Probar acceso público a las 3 URLs sin login
+- [x] Verificar que el contenido se cargue correctamente para bots de Stripe
+- [ ] OPCIONAL: Actualizar email en Privacy Policy a privacy@onlydjss.com para consistencia
+
+## 84. Crear página de índice legal /legal (NUEVA FUNCIONALIDAD)
+- [x] Crear componente Legal.tsx con índice de políticas
+- [x] Agregar descripciones breves de Terms, Privacy y Copyright
+- [x] Agregar enlaces a las 3 páginas legales
+- [x] Registrar ruta /legal en App.tsx
+- [x] Probar acceso público a /legal

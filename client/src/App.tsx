@@ -22,6 +22,7 @@ import EditTrack from "./pages/EditTrack";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import Copyright from "./pages/Copyright";
+import Legal from "./pages/Legal";
 
 function Router() {
   return (
@@ -41,6 +42,7 @@ function Router() {
       <Route path={"/dj/:username"} component={DJProfile} />
       <Route path={"/profile/edit"} component={ProfileEdit} />
       <Route path={"/track/edit/:id"} component={EditTrack} />
+      <Route path={"/legal"} component={Legal} />
       <Route path={"/terms"} component={Terms} />
       <Route path={"/privacy"} component={Privacy} />
       <Route path={"/copyright"} component={Copyright} />
