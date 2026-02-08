@@ -2116,3 +2116,13 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Mostrar diálogo de confirmación antes de eliminar
 - [x] Actualizar UI después de eliminar (remover de lista)
 - [x] Crear tests de eliminación de tracks (4 tests pasando)
+
+## 78. Páginas legales en inglés (NUEVA FUNCIONALIDAD)
+- [x] Generar contenido completo de Terms of Service
+- [x] Generar contenido completo de Privacy Policy
+- [x] Generar contenido completo de Copyright/DMCA Policy
+- [x] Crear página /terms con Terms of Service
+- [x] Crear página /privacy con Privacy Policy
+- [x] Crear página /copyright con Copyright/DMCA Policy
+- [x] Agregar enlaces a páginas legales en footer de todas las páginas
+- [x] Verificar que todo el contenido esté en inglés profesional

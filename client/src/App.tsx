@@ -19,6 +19,9 @@ import Subscription from "./pages/Subscription";
 import Wallet from "./pages/Wallet";
 import FAQ from "./pages/FAQ";
 import EditTrack from "./pages/EditTrack";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
+import Copyright from "./pages/Copyright";
 
 function Router() {
   return (
@@ -38,6 +41,9 @@ function Router() {
       <Route path={"/dj/:username"} component={DJProfile} />
       <Route path={"/profile/edit"} component={ProfileEdit} />
       <Route path={"/track/edit/:id"} component={EditTrack} />
+      <Route path={"/terms"} component={Terms} />
+      <Route path={"/privacy"} component={Privacy} />
+      <Route path={"/copyright"} component={Copyright} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
     </Switch>

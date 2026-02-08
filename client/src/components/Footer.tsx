@@ -26,12 +26,11 @@ export default function Footer() {
       ],
     },
     {
-      title: t('footer.legal'),
+      title: "Legal",
       links: [
-        { label: t('footer.privacy'), href: "/privacy" },
-        { label: t('footer.terms'), href: "/terms" },
-        { label: t('footer.cookies'), href: "/cookies" },
-        { label: t('footer.dmca'), href: "/dmca" },
+        { label: "Terms of Service", href: "/terms" },
+        { label: "Privacy Policy", href: "/privacy" },
+        { label: "Copyright / DMCA", href: "/copyright" },
       ],
     },
     {
