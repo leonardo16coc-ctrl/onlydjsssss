@@ -2167,3 +2167,7 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Actualizar Footer.tsx con enlace a página /legal
 - [x] Verificar que el enlace aparezca correctamente en el footer
 - [x] Probar navegación desde footer a /legal
+
+## 86. Actualizar email en Privacy Policy (CONSISTENCIA)
+- [x] Cambiar privacy@onlydjs.com a privacy@onlydjss.com en Privacy.tsx
+- [x] Verificar que el email se muestre correctamente en la página

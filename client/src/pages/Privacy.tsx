@@ -166,7 +166,7 @@ export default function Privacy() {
               If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us at:
             </p>
             <p>
-              <strong>Email:</strong> <a href="mailto:privacy@onlydjs.com" className="text-primary hover:underline">privacy@onlydjs.com</a>
+              <strong>Email:</strong> <a href="mailto:privacy@onlydjss.com" className="text-primary hover:underline">privacy@onlydjss.com</a>
             </p>
           </section>
 
