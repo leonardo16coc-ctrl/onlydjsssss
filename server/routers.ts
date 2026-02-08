@@ -318,6 +318,54 @@ export const appRouter = router({
         return { success: true };
       }),
 
+    delete: protectedProcedure
+      .input(z.object({
+        id: z.number().int(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const dbInstance = await getDb();
+        if (!dbInstance) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "Error al conectar con la base de datos",
+          });
+        }
+
+        // Verificar que el track existe y pertenece al usuario
+        const existingTrack = await dbInstance
+          .select()
+          .from(tracks)
+          .where(eq(tracks.id, input.id))
+          .limit(1);
+
+        if (!existingTrack || existingTrack.length === 0) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Track no encontrado",
+          });
+        }
+
+        if (existingTrack[0].userId !== ctx.user.id) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "No tienes permiso para eliminar este track",
+          });
+        }
+
+        // TODO: Eliminar archivos de S3 (audio, cover, preview)
+        // const track = existingTrack[0];
+        // if (track.audioFileKey) await storageDelete(track.audioFileKey);
+        // if (track.coverImageKey) await storageDelete(track.coverImageKey);
+        // if (track.previewFileKey) await storageDelete(track.previewFileKey);
+
+        // Eliminar el track de la base de datos
+        await dbInstance
+          .delete(tracks)
+          .where(eq(tracks.id, input.id));
+
+        return { success: true };
+      }),
+
     toggleLike: protectedProcedure
       .input(z.object({ trackId: z.number().int() }))
       .mutation(async ({ ctx, input }) => {

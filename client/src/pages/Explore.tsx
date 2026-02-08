@@ -2,12 +2,22 @@ import Navbar from "@/components/Navbar";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
-import { Music, Play, Download, Heart, TrendingUp, Edit } from "lucide-react";
+import { Music, Play, Download, Heart, TrendingUp, Edit, Trash2 } from "lucide-react";
 import { MusicAnalysisDisplay } from "@/components/MusicAnalysisDisplay";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import AdvancedFilters, { SearchFilters } from "@/components/AdvancedFilters";
 import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import AudioPlayer from "@/components/AudioPlayer";
 import DownloadButton from "@/components/DownloadButton";
@@ -20,6 +30,21 @@ export default function Explore() {
   const [filters, setFilters] = useState<SearchFilters>({});
   const [offset, setOffset] = useState(0);
   const limit = 20;
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [trackToDelete, setTrackToDelete] = useState<{ id: number; title: string } | null>(null);
+
+  const utils = trpc.useUtils();
+  const deleteTrackMutation = trpc.tracks.delete.useMutation({
+    onSuccess: () => {
+      toast.success("Track eliminado correctamente");
+      utils.search.advancedSearch.invalidate();
+      setDeleteDialogOpen(false);
+      setTrackToDelete(null);
+    },
+    onError: (error) => {
+      toast.error(error.message || "Error al eliminar el track");
+    },
+  });
 
   // Get filter options
   const { data: filterOptions } = trpc.search.getFilterOptions.useQuery();
@@ -186,16 +211,29 @@ export default function Explore() {
                     </div>
                   )}
 
-                  {/* Edit Button (only for track owner) */}
+                  {/* Edit and Delete Buttons (only for track owner) */}
                   {user && track.userId === user.id && (
-                    <Button
-                      onClick={() => window.location.href = `/track/edit/${track.id}`}
-                      variant="outline"
-                      className="w-full mb-2"
-                    >
-                      <Edit className="h-4 w-4 mr-2" />
-                      Editar Track
-                    </Button>
+                    <div className="space-y-2 mb-2">
+                      <Button
+                        onClick={() => window.location.href = `/track/edit/${track.id}`}
+                        variant="outline"
+                        className="w-full"
+                      >
+                        <Edit className="h-4 w-4 mr-2" />
+                        Editar Track
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          setTrackToDelete({ id: track.id, title: track.title });
+                          setDeleteDialogOpen(true);
+                        }}
+                        variant="destructive"
+                        className="w-full"
+                      >
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        Eliminar Track
+                      </Button>
+                    </div>
                   )}
 
                   {/* Download Button */}
@@ -233,6 +271,31 @@ export default function Explore() {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Eliminar track?</AlertDialogTitle>
+            <AlertDialogDescription>
+              ¿Estás seguro de que deseas eliminar "{trackToDelete?.title}"? Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (trackToDelete) {
+                  deleteTrackMutation.mutate({ id: trackToDelete.id });
+                }
+              }}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

@@ -2107,3 +2107,12 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Permitir cambiar imagen de portada sin re-subir el audio
 - [x] Probar edición completa del track "ONLY FRIENDS" agregando imagen de portada
 - [x] Crear tests de actualización de tracks (5 tests pasando)
+
+## 77. Función de eliminación de tracks (NUEVA FUNCIONALIDAD)
+- [x] Crear endpoint backend tracks.delete para eliminar tracks
+- [x] Validar que solo el propietario del track pueda eliminarlo
+- [ ] Eliminar archivos asociados de S3 (audio, cover, preview) - TODO pendiente
+- [x] Agregar botón "Eliminar" en las tarjetas de tracks del usuario
+- [x] Mostrar diálogo de confirmación antes de eliminar
+- [x] Actualizar UI después de eliminar (remover de lista)
+- [x] Crear tests de eliminación de tracks (4 tests pasando)
