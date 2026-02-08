@@ -192,7 +192,7 @@ export default function Copyright() {
               </div>
               
               <div>
-                <p className="font-semibold mb-2">Mailing Addresses (for notice delivery only):</p>
+                <p className="font-semibold mb-2">Mailing Addresses:</p>
                 
                 <div className="mb-3">
                   <p className="text-sm font-medium text-muted-foreground mb-1">Mexico Office:</p>
@@ -204,7 +204,7 @@ export default function Copyright() {
                 </div>
                 
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground mb-1">United States Office:</p>
+                  <p className="text-sm font-medium text-muted-foreground mb-1">United States Office (for notice delivery only):</p>
                   <p className="text-sm">Onlydjs</p>
                   <p className="text-sm">304 S. Jones Blvd #3779</p>
                   <p className="text-sm">Las Vegas, NV 89107</p>

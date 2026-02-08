@@ -2144,3 +2144,7 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar "Mailing Addresses (for notice delivery only)" en sección de direcciones
 - [x] Agregar frase sobre no promocionar contenido en "Service Provider Status"
 - [x] Verificar que todos los ajustes se muestren correctamente
+
+## 82. Ajustar ubicación de nota en Copyright/DMCA (CORRECCIÓN)
+- [x] Mover "(for notice delivery only)" desde título general a sección United States Office
+- [x] Verificar que la nota aparezca correctamente en United States Office
