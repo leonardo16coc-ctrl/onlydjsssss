@@ -186,9 +186,31 @@ export default function Copyright() {
             <p>
               For all DMCA-related inquiries, notices, and counter-notifications, please contact our designated Copyright Agent at:
             </p>
-            <div className="bg-muted/30 p-4 rounded-lg">
-              <p><strong>Email:</strong> <a href="mailto:dmca@onlydjs.com" className="text-primary hover:underline">dmca@onlydjs.com</a></p>
-              <p><strong>Mailing Address:</strong> [Address to be provided]</p>
+            <div className="bg-muted/30 p-4 rounded-lg space-y-4">
+              <div>
+                <p><strong>Email:</strong> <a href="mailto:dmca@onlydjs.com" className="text-primary hover:underline">dmca@onlydjs.com</a></p>
+              </div>
+              
+              <div>
+                <p className="font-semibold mb-2">Mailing Addresses:</p>
+                
+                <div className="mb-3">
+                  <p className="text-sm font-medium text-muted-foreground mb-1">Mexico Office:</p>
+                  <p className="text-sm">Onlydjs</p>
+                  <p className="text-sm">Av. Paseo de la Reforma 404, Int. 602</p>
+                  <p className="text-sm">Colonia Juárez, Cuauhtémoc</p>
+                  <p className="text-sm">Ciudad de México, 06600</p>
+                  <p className="text-sm">Mexico</p>
+                </div>
+                
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground mb-1">United States Office:</p>
+                  <p className="text-sm">Onlydjs</p>
+                  <p className="text-sm">304 S. Jones Blvd #3779</p>
+                  <p className="text-sm">Las Vegas, NV 89107</p>
+                  <p className="text-sm">United States</p>
+                </div>
+              </div>
             </div>
             <p className="mt-4">
               Please ensure that your DMCA notice or counter-notification includes all required elements as outlined above. Incomplete notices may not be processed.

@@ -2126,3 +2126,8 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Crear página /copyright con Copyright/DMCA Policy
 - [x] Agregar enlaces a páginas legales en footer de todas las páginas
 - [x] Verificar que todo el contenido esté en inglés profesional
+
+## 79. Actualizar direcciones postales en Copyright/DMCA (ACTUALIZACIÓN)
+- [x] Agregar dirección postal de México en página Copyright
+- [x] Agregar dirección postal de Estados Unidos en página Copyright
+- [x] Verificar que ambas direcciones se muestren correctamente
