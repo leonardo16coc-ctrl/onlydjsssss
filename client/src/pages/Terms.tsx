@@ -17,7 +17,7 @@ export default function Terms() {
               ONLYDJS is a subscription-based Software-as-a-Service (SaaS) platform that provides users with access to software tools, platform features, and a private community for DJs. ONLYDJS operates strictly as a technology and platform provider. We do not sell digital products individually, provide content creation services, offer custom or commissioned creative work, operate as a freelance platform or marketplace, or facilitate payments between users.
             </p>
             <p>
-              By subscribing to ONLYDJS, you gain access to our platform's features and tools. You do not purchase individual content or services.
+              By subscribing to ONLYDJS, you gain access to our platform's features and tools. You do not purchase individual content or services. ONLYDJS does not promote, distribute, or commercially exploit user-generated content.
             </p>
           </section>
 
@@ -71,7 +71,7 @@ export default function Terms() {
               <strong>User Responsibility:</strong> You are solely responsible for all content you upload to ONLYDJS. We do not own, sell, license, or pre-approve user content.
             </p>
             <p>
-              <strong>Content Ownership:</strong> You retain all ownership rights to your content. By uploading content to the platform, you grant ONLYDJS a limited, non-exclusive, royalty-free license to host, store, and display your content solely for the purpose of operating and providing the platform services.
+              <strong>Content Ownership:</strong> You retain all ownership rights to your content. By uploading content to the platform, you grant ONLYDJS a limited, non-exclusive, royalty-free license to host, store, and display your content solely for the technical operation of the platform and user account functionality.
             </p>
             <p>
               <strong>Content Removal:</strong> We reserve the right to remove any content that violates these Terms of Service, infringes on third-party rights, or is otherwise objectionable, without prior notice.
@@ -86,7 +86,7 @@ export default function Terms() {
               <li>Infringe on the intellectual property rights, privacy rights, or other rights of any third party.</li>
               <li>Engage in any activity that disrupts or interferes with the platform or servers.</li>
               <li>Attempt to gain unauthorized access to any part of the platform, other user accounts, or computer systems or networks.</li>
-              <li>Use the platform for any commercial purpose not expressly permitted by these Terms.</li>
+              <li>Use the platform for any unauthorized commercial activity outside the scope of personal platform access.</li>
               <li>Impersonate any person or entity or misrepresent your affiliation with any person or entity.</li>
               <li>Distribute viruses, malware, or any other harmful code.</li>
             </ul>
@@ -200,7 +200,7 @@ export default function Terms() {
               If you have any questions about these Terms of Service, please contact us at:
             </p>
             <p>
-              <strong>Email:</strong> <a href="mailto:support@onlydjs.com" className="text-primary hover:underline">support@onlydjs.com</a>
+              <strong>Email:</strong> <a href="mailto:support@onlydjss.com" className="text-primary hover:underline">support@onlydjss.com</a>
             </p>
           </section>
 

@@ -2131,3 +2131,10 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar dirección postal de México en página Copyright
 - [x] Agregar dirección postal de Estados Unidos en página Copyright
 - [x] Verificar que ambas direcciones se muestren correctamente
+
+## 80. Optimizar Terms of Service para Stripe (AJUSTES ESTRATÉGICOS)
+- [x] Ajuste 1: Modificar "User Content" - cambiar "display your content" por versión técnica
+- [x] Ajuste 2: Agregar frase en "Platform Overview" sobre no promocionar contenido
+- [x] Ajuste 3: Ajustar "Acceptable Use Policy" para evitar ambigüedad comercial
+- [x] Ajuste 4: Actualizar email de contacto a support@onlydjss.com
+- [x] Verificar que todos los ajustes se muestren correctamente
