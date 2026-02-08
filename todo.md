@@ -2138,3 +2138,9 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Ajuste 3: Ajustar "Acceptable Use Policy" para evitar ambigüedad comercial
 - [x] Ajuste 4: Actualizar email de contacto a support@onlydjss.com
 - [x] Verificar que todos los ajustes se muestren correctamente
+
+## 81. Ajustes en Copyright/DMCA (OPTIMIZACIÓN)
+- [x] Cambiar email de dmca@onlydjs.com a dmca@onlydjss.com (3 ocurrencias)
+- [x] Agregar "Mailing Addresses (for notice delivery only)" en sección de direcciones
+- [x] Agregar frase sobre no promocionar contenido en "Service Provider Status"
+- [x] Verificar que todos los ajustes se muestren correctamente

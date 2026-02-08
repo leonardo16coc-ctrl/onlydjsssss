@@ -24,7 +24,7 @@ export default function Copyright() {
           <section>
             <h2 className="text-2xl font-semibold mb-4">2. Service Provider Status</h2>
             <p>
-              ONLYDJS operates as a technology and platform provider. We do not own, create, sell, or pre-approve user-generated content. We act as a service provider under the DMCA and provide a platform for users to upload and share their own original content.
+              ONLYDJS operates as a technology and platform provider. We do not own, create, sell, or pre-approve user-generated content. We act as a service provider under the DMCA and provide a platform for users to upload and share their own original content. ONLYDJS does not promote, distribute, or commercially exploit user-generated content.
             </p>
           </section>
 
@@ -70,7 +70,7 @@ export default function Copyright() {
               Please send your DMCA takedown notice to our designated Copyright Agent at:
             </p>
             <div className="bg-muted/30 p-4 rounded-lg">
-              <p><strong>Email:</strong> <a href="mailto:dmca@onlydjs.com" className="text-primary hover:underline">dmca@onlydjs.com</a></p>
+              <p><strong>Email:</strong> <a href="mailto:dmca@onlydjss.com" className="text-primary hover:underline">dmca@onlydjss.com</a></p>
               <p><strong>Subject Line:</strong> DMCA Takedown Notice</p>
             </div>
             <p className="mt-4">
@@ -123,7 +123,7 @@ export default function Copyright() {
               Please send your counter-notification to our Copyright Agent at:
             </p>
             <div className="bg-muted/30 p-4 rounded-lg">
-              <p><strong>Email:</strong> <a href="mailto:dmca@onlydjs.com" className="text-primary hover:underline">dmca@onlydjs.com</a></p>
+              <p><strong>Email:</strong> <a href="mailto:dmca@onlydjss.com" className="text-primary hover:underline">dmca@onlydjss.com</a></p>
               <p><strong>Subject Line:</strong> DMCA Counter-Notification</p>
             </div>
             <p className="mt-4">
@@ -188,11 +188,11 @@ export default function Copyright() {
             </p>
             <div className="bg-muted/30 p-4 rounded-lg space-y-4">
               <div>
-                <p><strong>Email:</strong> <a href="mailto:dmca@onlydjs.com" className="text-primary hover:underline">dmca@onlydjs.com</a></p>
+                <p><strong>Email:</strong> <a href="mailto:dmca@onlydjss.com" className="text-primary hover:underline">dmca@onlydjss.com</a></p>
               </div>
               
               <div>
-                <p className="font-semibold mb-2">Mailing Addresses:</p>
+                <p className="font-semibold mb-2">Mailing Addresses (for notice delivery only):</p>
                 
                 <div className="mb-3">
                   <p className="text-sm font-medium text-muted-foreground mb-1">Mexico Office:</p>
