@@ -2162,3 +2162,8 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar enlaces a las 3 páginas legales
 - [x] Registrar ruta /legal en App.tsx
 - [x] Probar acceso público a /legal
+
+## 85. Agregar enlace a /legal en footer (MEJORA UX)
+- [x] Actualizar Footer.tsx con enlace a página /legal
+- [x] Verificar que el enlace aparezca correctamente en el footer
+- [x] Probar navegación desde footer a /legal

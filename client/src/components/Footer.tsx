@@ -28,6 +28,7 @@ export default function Footer() {
     {
       title: "Legal",
       links: [
+        { label: "Legal Information", href: "/legal" },
         { label: "Terms of Service", href: "/terms" },
         { label: "Privacy Policy", href: "/privacy" },
         { label: "Copyright / DMCA", href: "/copyright" },
