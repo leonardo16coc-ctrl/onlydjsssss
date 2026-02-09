@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import AudioPlayer from "@/components/AudioPlayer";
 import DownloadButton from "@/components/DownloadButton";
 import DownloadLimitsCard from "@/components/DownloadLimitsCard";
+import ShareTrackButtons from "@/components/ShareTrackButtons";
 import { useAuth } from "@/_core/hooks/useAuth";
 
 export default function Explore() {
@@ -235,6 +236,15 @@ export default function Explore() {
                       </Button>
                     </div>
                   )}
+
+                  {/* Share Buttons */}
+                  <div className="mb-2">
+                    <ShareTrackButtons
+                      trackId={track.id}
+                      trackTitle={track.title}
+                      artistName={track.artist}
+                    />
+                  </div>
 
                   {/* Download Button */}
                   <DownloadButton

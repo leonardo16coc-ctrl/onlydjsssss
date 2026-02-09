@@ -2203,3 +2203,11 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar enlace https://x.com/onlydjss a icono de X/Twitter
 - [x] Verificar que los enlaces abran en nueva pestaña (target="_blank" ya configurado)
 - [x] Probar que los enlaces funcionen correctamente (URLs verificadas en Footer.tsx)
+
+## 91. Botones de compartir en redes sociales para tracks
+- [x] Crear componente ShareTrackButtons con iconos de redes sociales
+- [x] Implementar función de compartir en X/Twitter con texto pre-formateado
+- [x] Implementar función de compartir en Facebook
+- [x] Implementar función de copiar enlace del track
+- [x] Integrar botones en tarjetas de tracks en Explore
+- [x] Probar que los enlaces de compartir funcionen correctamente
