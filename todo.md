@@ -2196,3 +2196,10 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Probar acceso con curl sin JavaScript
 - [x] Verificar que bots de Stripe puedan leer el contenido
 - [x] VERIFICADO: /terms, /privacy, /copyright son legibles sin JavaScript
+
+## 90. Conectar redes sociales (Instagram y X/Twitter) a iconos
+- [x] Localizar iconos de redes sociales en el sitio (Footer)
+- [x] Agregar enlace https://www.instagram.com/onlydjss/ a icono de Instagram
+- [x] Agregar enlace https://x.com/onlydjss a icono de X/Twitter
+- [x] Verificar que los enlaces abran en nueva pestaña (target="_blank" ya configurado)
+- [x] Probar que los enlaces funcionen correctamente (URLs verificadas en Footer.tsx)

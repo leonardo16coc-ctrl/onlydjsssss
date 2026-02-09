@@ -46,8 +46,8 @@ export default function Footer() {
   ];
 
   const socialLinks = [
-    { icon: Twitter, href: "https://twitter.com/onlydjs", label: "Twitter" },
-    { icon: Instagram, href: "https://instagram.com/onlydjs", label: "Instagram" },
+    { icon: Twitter, href: "https://x.com/onlydjss", label: "Twitter" },
+    { icon: Instagram, href: "https://www.instagram.com/onlydjss/", label: "Instagram" },
     { icon: Github, href: "https://github.com/onlydjs", label: "GitHub" },
     { icon: Mail, href: "mailto:hello@onlydjs.com", label: "Email" },
   ];
