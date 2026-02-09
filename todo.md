@@ -2245,3 +2245,7 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 ## 94. Logo clickeable en navbar (NUEVA FUNCIONALIDAD)
 - [x] Hacer que el logo de ONLYDJS en el navbar redirija al home al hacer clic
 - [x] Probar navegación desde diferentes páginas
+
+## 95. Barra de navegación superior en Community (NUEVA FUNCIONALIDAD)
+- [x] Agregar tabs de navegación (Explore, DJ MODE, MAINSTAGE, Rankings, Dashboard) a la página Community
+- [x] Probar navegación desde Community hacia otras páginas

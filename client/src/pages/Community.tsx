@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { trpc } from "../lib/trpc";
+import Navbar from "../components/Navbar";
 import { Button } from "../components/ui/button";
 import { Card } from "../components/ui/card";
 import { Textarea } from "../components/ui/textarea";
@@ -169,7 +170,9 @@ export default function Community() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <div className="container mx-auto px-4 py-8">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold mb-6">Community</h1>
 
@@ -224,6 +227,8 @@ export default function Community() {
             <p>No posts yet. Be the first to share something!</p>
           </Card>
         )}
+      </div>
+
       </div>
 
       {/* Delete Confirmation Dialog */}
