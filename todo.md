@@ -2229,3 +2229,15 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Implementar sistema de comentarios en publicaciones
 - [x] Agregar ruta /community en App.tsx
 - [x] Probar toda la funcionalidad de comunidad (crear posts, likes, comentarios)
+
+## 93. Edición y eliminación de publicaciones y comentarios (NUEVA FUNCIONALIDAD)
+- [x] Implementar endpoint backend `community.updatePost`
+- [x] Implementar endpoint backend `community.deletePost`
+- [x] Implementar endpoint backend `community.updateComment`
+- [x] Implementar endpoint backend `community.deleteComment`
+- [x] Agregar botones de editar y eliminar en publicaciones (solo para propietarios)
+- [x] Agregar botones de editar y eliminar en comentarios (solo para propietarios)
+- [x] Implementar modal/inline edit para editar publicaciones
+- [x] Implementar modal/inline edit para editar comentarios
+- [x] Agregar confirmación antes de eliminar
+- [x] Probar toda la funcionalidad de edición y eliminación

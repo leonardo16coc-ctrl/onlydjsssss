@@ -183,6 +183,7 @@ export const communityRouter = router({
           id: postComments.id,
           content: postComments.content,
           createdAt: postComments.createdAt,
+          userId: postComments.userId,
           user: {
             id: users.id,
             name: users.name,
@@ -197,5 +198,141 @@ export const communityRouter = router({
         .orderBy(desc(postComments.createdAt));
 
       return comments;
+    }),
+
+  // Update a post (only owner can update)
+  updatePost: protectedProcedure
+    .input(
+      z.object({
+        postId: z.number(),
+        content: z.string().min(1).max(5000),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+
+      // Check if post exists and belongs to user
+      const [post] = await db
+        .select()
+        .from(communityPosts)
+        .where(eq(communityPosts.id, input.postId));
+
+      if (!post) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Post not found" });
+      }
+
+      if (post.userId !== ctx.user.id) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "You can only edit your own posts" });
+      }
+
+      // Update the post
+      await db
+        .update(communityPosts)
+        .set({ content: input.content })
+        .where(eq(communityPosts.id, input.postId));
+
+      return { success: true };
+    }),
+
+  // Delete a post (only owner can delete)
+  deletePost: protectedProcedure
+    .input(z.object({ postId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+
+      // Check if post exists and belongs to user
+      const [post] = await db
+        .select()
+        .from(communityPosts)
+        .where(eq(communityPosts.id, input.postId));
+
+      if (!post) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Post not found" });
+      }
+
+      if (post.userId !== ctx.user.id) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "You can only delete your own posts" });
+      }
+
+      // Delete associated comments first
+      await db.delete(postComments).where(eq(postComments.postId, input.postId));
+
+      // Delete associated likes
+      await db.delete(postLikes).where(eq(postLikes.postId, input.postId));
+
+      // Delete the post
+      await db.delete(communityPosts).where(eq(communityPosts.id, input.postId));
+
+      return { success: true };
+    }),
+
+  // Update a comment (only owner can update)
+  updateComment: protectedProcedure
+    .input(
+      z.object({
+        commentId: z.number(),
+        content: z.string().min(1).max(1000),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+
+      // Check if comment exists and belongs to user
+      const [comment] = await db
+        .select()
+        .from(postComments)
+        .where(eq(postComments.id, input.commentId));
+
+      if (!comment) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Comment not found" });
+      }
+
+      if (comment.userId !== ctx.user.id) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "You can only edit your own comments" });
+      }
+
+      // Update the comment
+      await db
+        .update(postComments)
+        .set({ content: input.content })
+        .where(eq(postComments.id, input.commentId));
+
+      return { success: true };
+    }),
+
+  // Delete a comment (only owner can delete)
+  deleteComment: protectedProcedure
+    .input(z.object({ commentId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database not available" });
+
+      // Check if comment exists and belongs to user
+      const [comment] = await db
+        .select()
+        .from(postComments)
+        .where(eq(postComments.id, input.commentId));
+
+      if (!comment) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Comment not found" });
+      }
+
+      if (comment.userId !== ctx.user.id) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "You can only delete your own comments" });
+      }
+
+      // Delete the comment
+      await db.delete(postComments).where(eq(postComments.id, input.commentId));
+
+      // Decrement comments count
+      await db
+        .update(communityPosts)
+        .set({ commentsCount: sql`${communityPosts.commentsCount} - 1` })
+        .where(eq(communityPosts.id, comment.postId));
+
+      return { success: true };
     }),
 });
