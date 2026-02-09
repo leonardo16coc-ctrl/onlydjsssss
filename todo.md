@@ -2241,3 +2241,7 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Implementar modal/inline edit para editar comentarios
 - [x] Agregar confirmación antes de eliminar
 - [x] Probar toda la funcionalidad de edición y eliminación
+
+## 94. Logo clickeable en navbar (NUEVA FUNCIONALIDAD)
+- [x] Hacer que el logo de ONLYDJS en el navbar redirija al home al hacer clic
+- [x] Probar navegación desde diferentes páginas
