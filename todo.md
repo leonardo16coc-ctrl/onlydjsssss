@@ -2178,3 +2178,21 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar meta description en Privacy.tsx
 - [x] Agregar meta description en Copyright.tsx
 - [x] Verificar que las meta tags se rendericen correctamente
+
+## 88. Verificar páginas legales sean estáticas y legibles por Stripe (CRÍTICO)
+- [x] Verificar que Terms.tsx no use tabs, accordions, modals o contenido colapsable
+- [x] Verificar que Privacy.tsx no use tabs, accordions, modals o contenido colapsable
+- [x] Verificar que Copyright.tsx no use tabs, accordions, modals o contenido colapsable
+- [x] Asegurar que todo el contenido sea visible en carga inicial sin JavaScript
+- [x] Confirmar que el HTML sea semántico (h1, h2, h3, p, ul, ol, li) sin interacciones
+- [x] Probar que sistemas automatizados puedan leer el contenido completo
+- [x] PROBLEMA DETECTADO: SPA de React no es legible por bots sin JavaScript
+
+## 89. Implementar SSR para páginas legales (CRÍTICO PARA STRIPE)
+- [x] Crear template HTML estático para /terms con contenido completo
+- [x] Crear template HTML estático para /privacy con contenido completo
+- [x] Crear template HTML estático para /copyright con contenido completo
+- [x] Configurar rutas SSR en Express para servir HTML pre-renderizado
+- [x] Probar acceso con curl sin JavaScript
+- [x] Verificar que bots de Stripe puedan leer el contenido
+- [x] VERIFICADO: /terms, /privacy, /copyright son legibles sin JavaScript

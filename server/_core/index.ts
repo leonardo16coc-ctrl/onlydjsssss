@@ -110,6 +110,43 @@ async function startServer() {
   });
   
   
+  // Static legal pages for Stripe compliance (bot-readable)
+  const path = await import("path");
+  const fs = await import("fs");
+  const { fileURLToPath } = await import("url");
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  // Use project root to find static-legal directory
+  const projectRoot = path.resolve(__dirname, "../..");
+  const legalPagesDir = path.join(projectRoot, "server/static-legal");
+  
+  app.get("/terms", (req, res) => {
+    const filePath = path.join(legalPagesDir, "terms.html");
+    if (fs.existsSync(filePath)) {
+      res.sendFile(filePath);
+    } else {
+      res.status(404).send("Terms of Service not found");
+    }
+  });
+  
+  app.get("/privacy", (req, res) => {
+    const filePath = path.join(legalPagesDir, "privacy.html");
+    if (fs.existsSync(filePath)) {
+      res.sendFile(filePath);
+    } else {
+      res.status(404).send("Privacy Policy not found");
+    }
+  });
+  
+  app.get("/copyright", (req, res) => {
+    const filePath = path.join(legalPagesDir, "copyright.html");
+    if (fs.existsSync(filePath)) {
+      res.sendFile(filePath);
+    } else {
+      res.status(404).send("Copyright Policy not found");
+    }
+  });
+  
   // tRPC API
   app.use(
     "/api/trpc",
