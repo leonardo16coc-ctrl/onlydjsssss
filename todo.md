@@ -2211,3 +2211,21 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Implementar función de copiar enlace del track
 - [x] Integrar botones en tarjetas de tracks en Explore
 - [x] Probar que los enlaces de compartir funcionen correctamente
+
+## 92. Desarrollar pestaña de Comunidad con interacción social
+- [x] Crear tabla `community_posts` en schema para publicaciones
+- [x] Crear tabla `post_likes` en schema para likes de publicaciones
+- [x] Crear tabla `post_comments` en schema para comentarios
+- [x] Implementar endpoint backend `community.createPost`
+- [x] Implementar endpoint backend `community.getPosts` con paginación
+- [x] Implementar endpoint backend `community.likePost` y `community.unlikePost`
+- [x] Implementar endpoint backend `community.addComment`
+- [x] Implementar endpoint backend `community.getComments`
+- [x] Implementar endpoint backend `community.getUserLikes`
+- [x] Crear página Community.tsx con feed de publicaciones
+- [x] Implementar componente para crear nuevas publicaciones
+- [x] Implementar componente de tarjeta de publicación con likes y comentarios
+- [x] Agregar funcionalidad de like/unlike en publicaciones
+- [x] Implementar sistema de comentarios en publicaciones
+- [x] Agregar ruta /community en App.tsx
+- [x] Probar toda la funcionalidad de comunidad (crear posts, likes, comentarios)

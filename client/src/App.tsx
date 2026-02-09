@@ -23,6 +23,7 @@ import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import Copyright from "./pages/Copyright";
 import Legal from "./pages/Legal";
+import Community from "./pages/Community";
 
 function Router() {
   return (
@@ -39,6 +40,7 @@ function Router() {
       <Route path={"/subscription"} component={Subscription} />
       <Route path={"/wallet"} component={Wallet} />
       <Route path={"/faq"} component={FAQ} />
+      <Route path={"/community"} component={Community} />
       <Route path={"/dj/:username"} component={DJProfile} />
       <Route path={"/profile/edit"} component={ProfileEdit} />
       <Route path={"/track/edit/:id"} component={EditTrack} />

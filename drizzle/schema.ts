@@ -766,3 +766,62 @@ export const streamingActivity = mysqlTable("streaming_activity", {
 
 export type StreamingActivity = typeof streamingActivity.$inferSelect;
 export type InsertStreamingActivity = typeof streamingActivity.$inferInsert;
+
+/**
+ * Community Posts - User-generated content for community interaction
+ */
+export const communityPosts = mysqlTable("community_posts", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  content: text("content").notNull(),
+  // Optional track reference
+  trackId: int("trackId"),
+  // Engagement metrics
+  likesCount: int("likesCount").default(0).notNull(),
+  commentsCount: int("commentsCount").default(0).notNull(),
+  // Timestamps
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("community_posts_user_id_idx").on(table.userId),
+  createdAtIdx: index("community_posts_created_at_idx").on(table.createdAt),
+}));
+
+export type CommunityPost = typeof communityPosts.$inferSelect;
+export type InsertCommunityPost = typeof communityPosts.$inferInsert;
+
+/**
+ * Post Likes - Track which users liked which posts
+ */
+export const postLikes = mysqlTable("post_likes", {
+  id: int("id").autoincrement().primaryKey(),
+  postId: int("postId").notNull(),
+  userId: int("userId").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => ({
+  postIdIdx: index("post_likes_post_id_idx").on(table.postId),
+  userIdIdx: index("post_likes_user_id_idx").on(table.userId),
+  uniqueLike: index("post_likes_unique").on(table.postId, table.userId),
+}));
+
+export type PostLike = typeof postLikes.$inferSelect;
+export type InsertPostLike = typeof postLikes.$inferInsert;
+
+/**
+ * Post Comments - Comments on community posts
+ */
+export const postComments = mysqlTable("post_comments", {
+  id: int("id").autoincrement().primaryKey(),
+  postId: int("postId").notNull(),
+  userId: int("userId").notNull(),
+  content: text("content").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  postIdIdx: index("post_comments_post_id_idx").on(table.postId),
+  userIdIdx: index("post_comments_user_id_idx").on(table.userId),
+  createdAtIdx: index("post_comments_created_at_idx").on(table.createdAt),
+}));
+
+export type PostComment = typeof postComments.$inferSelect;
+export type InsertPostComment = typeof postComments.$inferInsert;
