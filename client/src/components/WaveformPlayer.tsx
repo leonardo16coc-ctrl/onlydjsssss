@@ -29,19 +29,22 @@ export default function WaveformPlayer({
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Create WaveSurfer instance
+    // Create WaveSurfer instance with optimized settings
     const wavesurfer = WaveSurfer.create({
       container: containerRef.current,
       waveColor: "#06b6d4", // cyan
       progressColor: "#ec4899", // pink
       cursorColor: "#f0abfc", // purple
-      barWidth: 2,
+      barWidth: 3, // Increased from 2 for better performance
       barRadius: 3,
       cursorWidth: 2,
       height: 120,
-      barGap: 2,
+      barGap: 3, // Increased from 2 for fewer bars
       normalize: true,
       backend: "WebAudio",
+      // Performance optimizations
+      hideScrollbar: true,
+      minPxPerSec: 1 // Reduce detail for faster loading
     });
 
     wavesurferRef.current = wavesurfer;

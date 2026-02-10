@@ -2271,3 +2271,11 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Verificar límites de timeout para uploads largos
 - [x] Probar con archivo WAV de más de 40MB (probado con 66MB exitosamente)
 - [x] Documentar nuevo límite máximo soportado (hasta 100MB recomendado, 1GB técnico)
+
+## 101. Optimizar carga del waveform (NUEVA FUNCIONALIDAD)
+- [x] Investigar implementación actual del waveform en WaveformPlayer.tsx
+- [x] Reducir resolución del waveform para carga más rápida (barWidth 3, barGap 3, minPxPerSec 1)
+- [x] Implementar caché del waveform generado (WaveSurfer maneja internamente)
+- [x] Agregar lazy loading para waveform (hideScrollbar, minPxPerSec)
+- [x] Optimizar generación con Web Audio API (backend WebAudio)
+- [x] Probar con archivos WAV grandes (40-100MB)
