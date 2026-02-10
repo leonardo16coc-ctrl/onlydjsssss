@@ -1,0 +1,9 @@
+{
+  "query": "INSERT INTO tracks (title, artist, genre, trackType, bpm, musicalKey, audioFileUrl, audioFileKey, energy, mood, userId) VALUES ('Dreamer (Official Cover)', 'NYELO x SEAJACKERS', 'Tech House', 'Extended Mix', 126, 'Am', 'https://d2xsxph8kpxj0f.cloudfront.net/310519663313258514/ZSqS9M2EFeWUjrPvMV6QuC/tracks/1/1770740101465-5pqYFIhxdJ.wav', 'tracks/1/1770740101465-5pqYFIhxdJ.wav', 88, 'Driving', 1);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute INSERT INTO tracks (title, artist, genre, trackType, bpm, musicalKey, audioFileUrl, audioFileKey, energy, mood, userId) VALUES ('Dreamer (Official Cover)', 'NYELO x SEAJACKERS', 'Tech House', 'Extended Mix', 126, 'Am', 'https://d2xsxph8kpxj0f.cloudfront.net/310519663313258514/ZSqS9M2EFeWUjrPvMV6QuC/tracks/1/1770740101465-5pqYFIhxdJ.wav', 'tracks/1/1770740101465-5pqYFIhxdJ.wav', 88, 'Driving', 1);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 192
+}
