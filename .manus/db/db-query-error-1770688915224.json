@@ -1,0 +1,8 @@
+{
+  "query": "INSERT INTO tracks (\n  title,\n  artist,\n  genre,\n  track_type,\n  bpm,\n  musical_key,\n  audio_file_key,\n  audio_file_url,\n  user_id,\n  created_at\n) VALUES (\n  'Destination (Original Mix)',\n  'SEAJACKERS x NYELO',\n  'Progressive House',\n  'Original Mix',\n  128,\n  'Am',\n  'tracks/1/1770688888051-P0Kd2MvOPB.wav',\n  'https://d2xsxph8kpxj0f.cloudfront.net/310519663313258514/ZSqS9M2EFeWUjrPvMV6QuC/tracks/1/1770688888051-P0Kd2MvOPB.wav',\n  1,\n  NOW()\n);\nSELECT * FROM tracks WHERE audio_file_key = 'tracks/1/1770688888051-P0Kd2MvOPB.wav';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute INSERT INTO tracks (\n  title,\n  artist,\n  genre,\n  track_type,\n  bpm,\n  musical_key,\n  audio_file_key,\n  audio_file_url,\n  user_id,\n  created_at\n) VALUES (\n  'Destination (Original Mix)',\n  'SEAJACKERS x NYELO',\n  'Progressive House',\n  'Original Mix',\n  128,\n  'Am',\n  'tracks/1/1770688888051-P0Kd2MvOPB.wav',\n  'https://d2xsxph8kpxj0f.cloudfront.net/310519663313258514/ZSqS9M2EFeWUjrPvMV6QuC/tracks/1/1770688888051-P0Kd2MvOPB.wav',\n  1,\n  NOW()\n);\nSELECT * FROM tracks WHERE audio_file_key = 'tracks/1/1770688888051-P0Kd2MvOPB.wav';",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 1: Unknown column 'track_type' in 'field list'"
+  ]
+}
