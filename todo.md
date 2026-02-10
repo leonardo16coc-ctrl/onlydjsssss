@@ -2263,3 +2263,11 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Mantener formato WAV original sin conversión
 - [x] Agregar barra de progreso precisa durante la subida
 - [x] Probar con archivos WAV grandes
+
+## 100. Solucionar error de subida de archivos WAV grandes (REPORTE DE USUARIO)
+- [x] Investigar límites actuales de tamaño de archivo en el servidor
+- [x] Aumentar límite de body-parser en Express (de 50MB a 150MB)
+- [x] Aumentar límite de multer para file uploads (ya estaba en 1GB)
+- [x] Verificar límites de timeout para uploads largos
+- [x] Probar con archivo WAV de más de 40MB (probado con 66MB exitosamente)
+- [x] Documentar nuevo límite máximo soportado (hasta 100MB recomendado, 1GB técnico)
