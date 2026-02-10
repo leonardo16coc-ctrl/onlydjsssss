@@ -3,9 +3,12 @@ import { useDropzone } from "react-dropzone";
 import { trpc } from "../lib/trpc";
 import { Loader2, Upload } from "lucide-react";
 import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Link } from "wouter";
+import { Pencil, Check } from "lucide-react";
 
 export function AIAnalyzer() {
   const { t } = useTranslation();
@@ -18,6 +21,42 @@ export function AIAnalyzer() {
     musicalKey: string;
     camelotKey?: string;
   } | null>(null);
+  const [editingBpm, setEditingBpm] = useState(false);
+  const [editingKey, setEditingKey] = useState(false);
+  const [editedBpm, setEditedBpm] = useState<string>("");
+  const [editedKey, setEditedKey] = useState<string>("");
+
+  const MUSICAL_KEYS = [
+    "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B",
+    "Cm", "C#m", "Dm", "D#m", "Em", "Fm", "F#m", "Gm", "G#m", "Am", "A#m", "Bm"
+  ];
+
+  const handleSaveBpm = () => {
+    const newBpm = parseInt(editedBpm);
+    if (newBpm && newBpm >= 60 && newBpm <= 200) {
+      setResult(prev => prev ? { ...prev, bpm: newBpm } : null);
+      setEditingBpm(false);
+      toast.success("BPM actualizado");
+    } else {
+      toast.error("BPM debe estar entre 60 y 200");
+    }
+  };
+
+  const handleSaveKey = () => {
+    if (editedKey && MUSICAL_KEYS.includes(editedKey)) {
+      const camelotMap: Record<string, string> = {
+        "C": "8B", "G": "9B", "D": "10B", "A": "11B",
+        "E": "12B", "B": "1B", "F#": "2B", "C#": "3B",
+        "G#": "4B", "D#": "5B", "A#": "6B", "F": "7B",
+        "Am": "8A", "Em": "9A", "Bm": "10A", "F#m": "11A",
+        "C#m": "12A", "G#m": "1A", "D#m": "2A", "A#m": "3A",
+        "Fm": "4A", "Cm": "5A", "Gm": "6A", "Dm": "7A",
+      };
+      setResult(prev => prev ? { ...prev, musicalKey: editedKey, camelotKey: camelotMap[editedKey] || "?" } : null);
+      setEditingKey(false);
+      toast.success("Clave musical actualizada");
+    }
+  };
 
   const analyzeAudio = trpc.musicAnalysis.analyze.useMutation();
 
@@ -173,10 +212,40 @@ export function AIAnalyzer() {
               {/* BPM Bar */}
               <div className="relative bg-gradient-to-r from-blue-600/30 to-cyan-600/30 backdrop-blur-sm rounded-full p-4 border-2 border-blue-400/50 shadow-lg">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-full blur-lg -z-10" />
-                <div className="flex items-center justify-between px-4">
-                  <div className="text-5xl font-black text-white">
-                    {result.bpm}
-                  </div>
+                <div className="flex items-center justify-between px-4 gap-4">
+                  {editingBpm ? (
+                    <div className="flex items-center gap-2 flex-1">
+                      <Input
+                        type="number"
+                        value={editedBpm}
+                        onChange={(e) => setEditedBpm(e.target.value)}
+                        className="text-3xl font-black bg-white/10 border-white/30 text-white"
+                        placeholder="BPM"
+                        min="60"
+                        max="200"
+                      />
+                      <Button size="sm" onClick={handleSaveBpm} className="bg-green-600 hover:bg-green-700">
+                        <Check className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="text-5xl font-black text-white">
+                        {result.bpm}
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => {
+                          setEditedBpm(result.bpm.toString());
+                          setEditingBpm(true);
+                        }}
+                        className="text-white/70 hover:text-white hover:bg-white/10"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </Button>
+                    </>
+                  )}
                   <div className="text-2xl font-bold text-blue-300 uppercase tracking-wider">
                     BPM
                   </div>
@@ -186,13 +255,43 @@ export function AIAnalyzer() {
               {/* Key Bar */}
               <div className="relative bg-gradient-to-r from-purple-600/30 to-pink-600/30 backdrop-blur-sm rounded-full p-4 border-2 border-purple-400/50 shadow-lg">
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-lg -z-10" />
-                <div className="flex items-center justify-between px-4">
-                  <div className="text-4xl font-black text-white">
-                    {result.musicalKey.split(' ')[0]}
-                  </div>
-                  <div className="text-xl font-bold text-purple-300 uppercase tracking-wider">
-                    {result.musicalKey.split(' ')[1]?.substring(0, 3)}
-                  </div>
+                <div className="flex items-center justify-between px-4 gap-4">
+                  {editingKey ? (
+                    <div className="flex items-center gap-2 flex-1">
+                      <Select value={editedKey} onValueChange={setEditedKey}>
+                        <SelectTrigger className="text-2xl font-black bg-white/10 border-white/30 text-white">
+                          <SelectValue placeholder="Seleccionar clave" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {MUSICAL_KEYS.map((key) => (
+                            <SelectItem key={key} value={key}>
+                              {key}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Button size="sm" onClick={handleSaveKey} className="bg-green-600 hover:bg-green-700">
+                        <Check className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="text-4xl font-black text-white">
+                        {result.musicalKey}
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => {
+                          setEditedKey(result.musicalKey);
+                          setEditingKey(true);
+                        }}
+                        className="text-white/70 hover:text-white hover:bg-white/10"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </Button>
+                    </>
+                  )}
                   <div className="text-sm text-gray-300">
                     {t("aiAnalyzer.camelot")}: <span className="font-bold text-white">{result.camelotKey}</span>
                   </div>
