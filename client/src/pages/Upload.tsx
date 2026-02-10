@@ -123,36 +123,71 @@ export default function Upload() {
     setIsUploadingAudio(true);
     setUploadProgress(0);
 
-    try {
+    return new Promise<void>((resolve, reject) => {
       const formData = new FormData();
       formData.append("file", audioFile);
 
-      const response = await fetch("/api/upload/audio", {
-        method: "POST",
-        body: formData,
+      const xhr = new XMLHttpRequest();
+
+      // Track upload progress
+      xhr.upload.addEventListener('progress', (e) => {
+        if (e.lengthComputable) {
+          const percentComplete = Math.round((e.loaded / e.total) * 100);
+          setUploadProgress(percentComplete);
+        }
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Error al subir el archivo");
-      }
-
-      const data = await response.json();
-      setUploadedAudio({
-        fileKey: data.fileKey,
-        fileUrl: data.fileUrl,
+      // Handle completion
+      xhr.addEventListener('load', () => {
+        setIsUploadingAudio(false);
+        
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try {
+            const data = JSON.parse(xhr.responseText);
+            setUploadedAudio({
+              fileKey: data.fileKey,
+              fileUrl: data.fileUrl,
+            });
+            setAudioUploaded(true);
+            setUploadProgress(100);
+            toast.success(t('upload.uploadSuccess'));
+            
+            // Auto-analyze after upload
+            handleAnalyzeAudio(data.fileUrl);
+            resolve();
+          } catch (error) {
+            toast.error("Error al procesar la respuesta del servidor");
+            reject(error);
+          }
+        } else {
+          try {
+            const error = JSON.parse(xhr.responseText);
+            toast.error(error.error || "Error al subir el archivo");
+          } catch {
+            toast.error("Error al subir el archivo");
+          }
+          reject(new Error("Upload failed"));
+        }
       });
-      setAudioUploaded(true);
-      setUploadProgress(100);
-      toast.success(t('upload.uploadSuccess'));
 
-      // Auto-analyze after upload
-      handleAnalyzeAudio(data.fileUrl);
-    } catch (error: any) {
-      toast.error(error.message || "Error al subir el audio");
-    } finally {
-      setIsUploadingAudio(false);
-    }
+      // Handle errors
+      xhr.addEventListener('error', () => {
+        setIsUploadingAudio(false);
+        toast.error("Error de red al subir el archivo");
+        reject(new Error("Network error"));
+      });
+
+      // Handle abort
+      xhr.addEventListener('abort', () => {
+        setIsUploadingAudio(false);
+        toast.error("Subida cancelada");
+        reject(new Error("Upload aborted"));
+      });
+
+      // Send request
+      xhr.open('POST', '/api/upload/audio');
+      xhr.send(formData);
+    });
   };
 
   const handleUploadCover = async () => {
@@ -334,7 +369,7 @@ export default function Upload() {
                         {isUploadingAudio ? (
                           <>
                             <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                            Subiendo...
+                            Subiendo... {uploadProgress}%
                           </>
                         ) : (
                           <>
@@ -345,7 +380,12 @@ export default function Upload() {
                       </Button>
 
                       {isUploadingAudio && (
-                        <Progress value={uploadProgress} className="w-full" />
+                        <div className="space-y-2">
+                          <Progress value={uploadProgress} className="w-full" />
+                          <p className="text-xs text-center text-muted-foreground">
+                            {uploadProgress}% completado
+                          </p>
+                        </div>
                       )}
                     </div>
                   )}

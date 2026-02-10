@@ -2249,3 +2249,17 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 ## 95. Barra de navegación superior en Community (NUEVA FUNCIONALIDAD)
 - [x] Agregar tabs de navegación (Explore, DJ MODE, MAINSTAGE, Rankings, Dashboard) a la página Community
 - [x] Probar navegación desde Community hacia otras páginas
+
+## 96. Optimización de carga de archivos WAV (NUEVA FUNCIONALIDAD)
+- [x] Analizar código actual de upload en Upload.tsx
+- [x] Implementar conversión automática de WAV a MP3 en el cliente antes de subir
+- [x] Agregar barra de progreso detallada durante la conversión y subida
+- [x] Optimizar tamaño de chunks para uploads más rápidos
+- [x] Probar con archivos WAV grandes (>50MB)
+- [x] Documentar mejoras de rendimiento
+
+## 97. Optimizar subida WAV con upload chunked (CAMBIO DE REQUISITOS)
+- [x] Implementar upload con XMLHttpRequest para progreso en tiempo real
+- [x] Mantener formato WAV original sin conversión
+- [x] Agregar barra de progreso precisa durante la subida
+- [x] Probar con archivos WAV grandes
