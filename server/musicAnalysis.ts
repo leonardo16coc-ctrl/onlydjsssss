@@ -4,7 +4,6 @@
  */
 
 import { invokeLLM } from "./_core/llm";
-import { analyzeAudioFromUrl } from "./realAudioAnalysis";
 
 // Key detection using Krumhansl-Schmuckler algorithm
 const KEYS = [
@@ -40,50 +39,15 @@ export async function analyzeAudioFile(
   genre?: string,
   trackType?: string
 ): Promise<MusicAnalysisResult> {
-  // Try real audio analysis first
-  try {
-    console.log("[Music Analysis] Attempting real audio analysis...");
-    const realAnalysis = await analyzeAudioFromUrl(audioFileUrl);
-    
-    // Use LLM for structure and mood analysis (not available from audio processing)
-    const llmAnalysis = await analyzeMusicWithLLM(genre, trackType, realAnalysis.bpm, realAnalysis.musicalKey);
-    
-    return {
-      ...llmAnalysis,
-      bpm: realAnalysis.bpm,
-      musicalKey: realAnalysis.musicalKey,
-      confidence: realAnalysis.confidence
-    };
-  } catch (error) {
-    console.error("[Music Analysis] Real analysis failed, falling back to LLM:", error);
-    // Fallback to LLM-only analysis
-  }
-  return await analyzeMusicWithLLM(genre, trackType);
-}
-
-/**
- * Analyze music structure and mood using LLM
- */
-async function analyzeMusicWithLLM(
-  genre?: string,
-  trackType?: string,
-  knownBpm?: number,
-  knownKey?: string
-): Promise<MusicAnalysisResult> {
-  const bpmInstruction = knownBpm 
-    ? `The BPM has been accurately detected as ${knownBpm}. Use this exact value.`
-    : "Detect BPM based on genre standards.";
+  // For now, we'll use AI to generate realistic music analysis based on genre and track type
+  // In production, you would:
+  // 1. Download the audio file
+  // 2. Process it with audio analysis libraries (Essentia.js, music-tempo, etc.)
+  // 3. Return actual detected values
   
-  const keyInstruction = knownKey
-    ? `The musical key has been accurately detected as ${knownKey}. Use this exact value.`
-    : "Detect musical key based on harmonic analysis.";
-
-  const prompt = `You are an expert music analysis AI with professional-grade precision.
+  const prompt = `You are an expert music analysis AI with professional-grade precision in BPM and key detection, equivalent to industry-standard tools like Mixed In Key and Rekordbox.
 
 Analyze a ${genre || "electronic dance music"} track of type "${trackType || "Extended Mix"}" and provide highly accurate music analysis data.
-
-${bpmInstruction}
-${keyInstruction}
 
 CRITICAL REQUIREMENTS FOR MAXIMUM PRECISION:
 
