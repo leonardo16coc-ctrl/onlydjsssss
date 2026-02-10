@@ -1,0 +1,103 @@
+{
+  "query": "SHOW TABLES;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute SHOW TABLES;",
+  "rows": [
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "__drizzle_migrations"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "artist_payouts"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "auto_sets"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "blocked_ips"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "community_posts"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "device_fingerprints"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "dj_activity"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "dj_badges"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "dj_profiles"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "dj_scores"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "dna_share_analytics"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "download_limits"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "downloads"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "earnings"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "fraud_logs"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "likes"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "monthly_revenue_pools"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "playlist_tracks"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "playlists"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "post_comments"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "post_likes"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "set_feedback"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "streaming_activity"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "subscriptions"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "suspicious_activities"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "track_earnings"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "track_festival_scores"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "tracks"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "users"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "wallets"
+    },
+    {
+      "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC": "weekly_challenges"
+    }
+  ],
+  "messages": [],
+  "stdout": "Tables_in_ZSqS9M2EFeWUjrPvMV6QuC\n__drizzle_migrations\nartist_payouts\nauto_sets\nblocked_ips\ncommunity_posts\ndevice_fingerprints\ndj_activity\ndj_badges\ndj_profiles\ndj_scores\ndna_share_analytics\ndownload_limits\ndownloads\nearnings\nfraud_logs\nlikes\nmonthly_revenue_pools\nplaylist_tracks\nplaylists\npost_comments\npost_likes\nset_feedback\nstreaming_activity\nsubscriptions\nsuspicious_activities\ntrack_earnings\ntrack_festival_scores\ntracks\nusers\nwallets\nweekly_challenges\n",
+  "stderr": "",
+  "execution_time_ms": 59
+}

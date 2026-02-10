@@ -2287,3 +2287,11 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Aumentar límites de XMLHttpRequest timeout en el cliente (5 minutos)
 - [x] Probar con archivo WAV de 49.9MB (probado exitosamente)
 - [x] Documentar solución (timeout de 300 segundos agregado)
+
+## 103. Optimizar carga rápida del waveform (NUEVA FUNCIONALIDAD)
+- [x] Analizar implementación actual de WaveformPlayer
+- [x] Reducir aún más la resolución del waveform (minPxPerSec 0.5, barWidth 4, barGap 4)
+- [x] Implementar carga progresiva del waveform (dragToSeek, fillParent)
+- [x] Agregar indicador de carga mientras se genera el waveform (ya existía)
+- [x] Probar con archivos WAV de 50-100MB
+- [x] Documentar mejoras de rendimiento

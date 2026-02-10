@@ -35,16 +35,20 @@ export default function WaveformPlayer({
       waveColor: "#06b6d4", // cyan
       progressColor: "#ec4899", // pink
       cursorColor: "#f0abfc", // purple
-      barWidth: 3, // Increased from 2 for better performance
+      barWidth: 4, // Increased for faster rendering
       barRadius: 3,
       cursorWidth: 2,
       height: 120,
-      barGap: 3, // Increased from 2 for fewer bars
+      barGap: 4, // Increased for fewer bars
       normalize: true,
       backend: "WebAudio",
       // Performance optimizations
       hideScrollbar: true,
-      minPxPerSec: 1 // Reduce detail for faster loading
+      minPxPerSec: 0.5, // Reduced for faster loading
+      fillParent: true,
+      autoCenter: false,
+      interact: true,
+      dragToSeek: true
     });
 
     wavesurferRef.current = wavesurfer;

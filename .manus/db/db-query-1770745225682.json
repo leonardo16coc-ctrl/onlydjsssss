@@ -1,0 +1,314 @@
+{
+  "query": "DESCRIBE tracks;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute DESCRIBE tracks;",
+  "rows": [
+    {
+      "Field": "id",
+      "Type": "int(11)",
+      "Null": "NO",
+      "Key": "PRI",
+      "Default": "NULL",
+      "Extra": "auto_increment"
+    },
+    {
+      "Field": "userId",
+      "Type": "int(11)",
+      "Null": "NO",
+      "Key": "MUL",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "title",
+      "Type": "varchar(255)",
+      "Null": "NO",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "artist",
+      "Type": "varchar(255)",
+      "Null": "NO",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "audioFileKey",
+      "Type": "text",
+      "Null": "NO",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "audioFileUrl",
+      "Type": "text",
+      "Null": "NO",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "previewFileKey",
+      "Type": "text",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "previewFileUrl",
+      "Type": "text",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "waveformData",
+      "Type": "text",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "coverImageKey",
+      "Type": "text",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "coverImageUrl",
+      "Type": "text",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "bpm",
+      "Type": "int(11)",
+      "Null": "YES",
+      "Key": "MUL",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "musicalKey",
+      "Type": "varchar(10)",
+      "Null": "YES",
+      "Key": "MUL",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "genre",
+      "Type": "enum('Tech House','Bass House','Afro House','Techno','Melodic Techno','Big Room','EDM','Hard Techno','Latin','Reggaeton','Hip-Hop','Open Format')",
+      "Null": "NO",
+      "Key": "MUL",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "subgenre",
+      "Type": "varchar(100)",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "trackType",
+      "Type": "enum('Extended Mix','Edit','Mashup','Remix','Rework')",
+      "Null": "NO",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "energy",
+      "Type": "int(11)",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "mood",
+      "Type": "varchar(100)",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "tags",
+      "Type": "text",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "fileFormat",
+      "Type": "varchar(20)",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "fileSizeBytes",
+      "Type": "bigint(20)",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "durationSeconds",
+      "Type": "int(11)",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "hasDrops",
+      "Type": "tinyint(1)",
+      "Null": "YES",
+      "Key": "",
+      "Default": "0",
+      "Extra": ""
+    },
+    {
+      "Field": "dropsTimestamps",
+      "Type": "text",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "buildsTimestamps",
+      "Type": "text",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "isMainstage",
+      "Type": "tinyint(1)",
+      "Null": "NO",
+      "Key": "MUL",
+      "Default": "0",
+      "Extra": ""
+    },
+    {
+      "Field": "mainstageCategory",
+      "Type": "enum('Tech House Mainstage','Bass House Mainstage','Techno Mainstage','Melodic Techno Mainstage','Big Room','EDM Festival','Hard Techno','Latin Mainstage','Reggaeton Mainstage','Hip-Hop Mainstage')",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "mainstageTags",
+      "Type": "text",
+      "Null": "YES",
+      "Key": "",
+      "Default": "NULL",
+      "Extra": ""
+    },
+    {
+      "Field": "downloadCount",
+      "Type": "int(11)",
+      "Null": "NO",
+      "Key": "MUL",
+      "Default": "0",
+      "Extra": ""
+    },
+    {
+      "Field": "playCount",
+      "Type": "int(11)",
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": ""
+    },
+    {
+      "Field": "likeCount",
+      "Type": "int(11)",
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": ""
+    },
+    {
+      "Field": "status",
+      "Type": "enum('pending','approved','rejected')",
+      "Null": "NO",
+      "Key": "",
+      "Default": "approved",
+      "Extra": ""
+    },
+    {
+      "Field": "createdAt",
+      "Type": "timestamp",
+      "Null": "NO",
+      "Key": "MUL",
+      "Default": "CURRENT_TIMESTAMP",
+      "Extra": ""
+    },
+    {
+      "Field": "updatedAt",
+      "Type": "timestamp",
+      "Null": "NO",
+      "Key": "",
+      "Default": "CURRENT_TIMESTAMP",
+      "Extra": "DEFAULT_GENERATED on update CURRENT_TIMESTAMP"
+    },
+    {
+      "Field": "streamCount",
+      "Type": "int(11)",
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": ""
+    },
+    {
+      "Field": "minutesListened",
+      "Type": "int(11)",
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": ""
+    },
+    {
+      "Field": "favoritesCount",
+      "Type": "int(11)",
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": ""
+    },
+    {
+      "Field": "playlistsCount",
+      "Type": "int(11)",
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": ""
+    }
+  ],
+  "messages": [],
+  "stdout": "Field\tType\tNull\tKey\tDefault\tExtra\nid\tint(11)\tNO\tPRI\tNULL\tauto_increment\nuserId\tint(11)\tNO\tMUL\tNULL\t\ntitle\tvarchar(255)\tNO\t\tNULL\t\nartist\tvarchar(255)\tNO\t\tNULL\t\naudioFileKey\ttext\tNO\t\tNULL\t\naudioFileUrl\ttext\tNO\t\tNULL\t\npreviewFileKey\ttext\tYES\t\tNULL\t\npreviewFileUrl\ttext\tYES\t\tNULL\t\nwaveformData\ttext\tYES\t\tNULL\t\ncoverImageKey\ttext\tYES\t\tNULL\t\ncoverImageUrl\ttext\tYES\t\tNULL\t\nbpm\tint(11)\tYES\tMUL\tNULL\t\nmusicalKey\tvarchar(10)\tYES\tMUL\tNULL\t\ngenre\tenum('Tech House','Bass House','Afro House','Techno','Melodic Techno','Big Room','EDM','Hard Techno','Latin','Reggaeton','Hip-Hop','Open Format')\tNO\tMUL\tNULL\t\nsubgenre\tvarchar(100)\tYES\t\tNULL\t\ntrackType\tenum('Extended Mix','Edit','Mashup','Remix','Rework')\tNO\t\tNULL\t\nenergy\tint(11)\tYES\t\tNULL\t\nmood\tvarchar(100)\tYES\t\tNULL\t\ntags\ttext\tYES\t\tNULL\t\nfileFormat\tvarchar(20)\tYES\t\tNULL\t\nfileSizeBytes\tbigint(20)\tYES\t\tNULL\t\ndurationSeconds\tint(11)\tYES\t\tNULL\t\nhasDrops\ttinyint(1)\tYES\t\t0\t\ndropsTimestamps\ttext\tYES\t\tNULL\t\nbuildsTimestamps\ttext\tYES\t\tNULL\t\nisMainstage\ttinyint(1)\tNO\tMUL\t0\t\nmainstageCategory\tenum('Tech House Mainstage','Bass House Mainstage','Techno Mainstage','Melodic Techno Mainstage','Big Room','EDM Festival','Hard Techno','Latin Mainstage','Reggaeton Mainstage','Hip-Hop Mainstage')\tYES\t\tNULL\t\nmainstageTags\ttext\tYES\t\tNULL\t\ndownloadCount\tint(11)\tNO\tMUL\t0\t\nplayCount\tint(11)\tNO\t\t0\t\nlikeCount\tint(11)\tNO\t\t0\t\nstatus\tenum('pending','approved','rejected')\tNO\t\tapproved\t\ncreatedAt\ttimestamp\tNO\tMUL\tCURRENT_TIMESTAMP\t\nupdatedAt\ttimestamp\tNO\t\tCURRENT_TIMESTAMP\tDEFAULT_GENERATED on update CURRENT_TIMESTAMP\nstreamCount\tint(11)\tNO\t\t0\t\nminutesListened\tint(11)\tNO\t\t0\t\nfavoritesCount\tint(11)\tNO\t\t0\t\nplaylistsCount\tint(11)\tNO\t\t0\t\n",
+  "stderr": "",
+  "execution_time_ms": 53
+}
