@@ -2279,3 +2279,11 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar lazy loading para waveform (hideScrollbar, minPxPerSec)
 - [x] Optimizar generación con Web Audio API (backend WebAudio)
 - [x] Probar con archivos WAV grandes (40-100MB)
+
+## 102. Solucionar error de subida de archivos WAV de 49.9MB (REPORTE DE USUARIO)
+- [x] Revisar logs del servidor para identificar error específico
+- [x] Verificar límites de timeout en el servidor
+- [x] Verificar límites de proxy/nginx si existen
+- [x] Aumentar límites de XMLHttpRequest timeout en el cliente (5 minutos)
+- [x] Probar con archivo WAV de 49.9MB (probado exitosamente)
+- [x] Documentar solución (timeout de 300 segundos agregado)

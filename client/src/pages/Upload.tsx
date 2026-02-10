@@ -128,6 +128,9 @@ export default function Upload() {
       formData.append("file", audioFile);
 
       const xhr = new XMLHttpRequest();
+      
+      // Set timeout to 5 minutes (300000ms) for large files
+      xhr.timeout = 300000;
 
       // Track upload progress
       xhr.upload.addEventListener('progress', (e) => {
@@ -182,6 +185,13 @@ export default function Upload() {
         setIsUploadingAudio(false);
         toast.error("Subida cancelada");
         reject(new Error("Upload aborted"));
+      });
+      
+      // Handle timeout
+      xhr.addEventListener('timeout', () => {
+        setIsUploadingAudio(false);
+        toast.error("Tiempo de espera agotado. El archivo es muy grande o la conexión es lenta.");
+        reject(new Error("Upload timeout"));
       });
 
       // Send request
