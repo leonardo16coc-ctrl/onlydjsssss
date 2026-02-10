@@ -597,12 +597,37 @@ export default function Upload() {
 
                     <div>
                       <Label htmlFor="key">Clave Musical</Label>
-                        <Input
-                          id="key"
-                          value={musicalKey}
-                          onChange={(e) => setMusicalKey(e.target.value)}
-                          placeholder="Am"
-                        />
+                      <Select value={musicalKey} onValueChange={setMusicalKey}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Seleccionar" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="C">C</SelectItem>
+                          <SelectItem value="C#">C#</SelectItem>
+                          <SelectItem value="D">D</SelectItem>
+                          <SelectItem value="D#">D#</SelectItem>
+                          <SelectItem value="E">E</SelectItem>
+                          <SelectItem value="F">F</SelectItem>
+                          <SelectItem value="F#">F#</SelectItem>
+                          <SelectItem value="G">G</SelectItem>
+                          <SelectItem value="G#">G#</SelectItem>
+                          <SelectItem value="A">A</SelectItem>
+                          <SelectItem value="A#">A#</SelectItem>
+                          <SelectItem value="B">B</SelectItem>
+                          <SelectItem value="Cm">Cm</SelectItem>
+                          <SelectItem value="C#m">C#m</SelectItem>
+                          <SelectItem value="Dm">Dm</SelectItem>
+                          <SelectItem value="D#m">D#m</SelectItem>
+                          <SelectItem value="Em">Em</SelectItem>
+                          <SelectItem value="Fm">Fm</SelectItem>
+                          <SelectItem value="F#m">F#m</SelectItem>
+                          <SelectItem value="Gm">Gm</SelectItem>
+                          <SelectItem value="G#m">G#m</SelectItem>
+                          <SelectItem value="Am">Am</SelectItem>
+                          <SelectItem value="A#m">A#m</SelectItem>
+                          <SelectItem value="Bm">Bm</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                 </div>
