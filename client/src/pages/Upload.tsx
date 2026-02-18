@@ -155,8 +155,7 @@ export default function Upload() {
             setUploadProgress(100);
             toast.success(t('upload.uploadSuccess'));
             
-            // Auto-analyze after upload
-            handleAnalyzeAudio(data.fileUrl);
+            // Note: Auto-analysis is now triggered by WaveformPlayer's onAnalysisComplete
             resolve();
           } catch (error) {
             toast.error("Error al procesar la respuesta del servidor");
@@ -413,8 +412,10 @@ export default function Upload() {
                         autoAnalyze={true}
                         onAnalysisComplete={(duration) => {
                           console.log("Audio duration:", duration);
-                          // Trigger automatic analysis
-                          handleAnalyzeAudio(uploadedAudio.fileUrl);
+                          // Trigger automatic analysis only once
+                          if (!analysisResult && !isAnalyzing) {
+                            handleAnalyzeAudio(uploadedAudio.fileUrl);
+                          }
                         }}
                         onReady={() => {
                           console.log("Waveform ready");

@@ -85,47 +85,35 @@ export default function Navbar() {
           </Link>
 
           <div className="hidden md:flex items-center space-x-6">
-            <Link href="/explore">
-              <a className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
-                <Music className="h-4 w-4" />
-                <span>{t('nav.explore')}</span>
-              </a>
+            <Link href="/explore" className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
+              <Music className="h-4 w-4" />
+              <span>{t('nav.explore')}</span>
             </Link>
             
-            <Link href="/dj-mode">
-              <a className="flex items-center space-x-2 text-foreground hover:text-purple-400 transition-colors">
-                <Radio className="h-4 w-4" />
-                <span className="text-glow-purple">{t('nav.djMode')}</span>
-              </a>
+            <Link href="/dj-mode" className="flex items-center space-x-2 text-foreground hover:text-purple-400 transition-colors">
+              <Radio className="h-4 w-4" />
+              <span className="text-glow-purple">{t('nav.djMode')}</span>
             </Link>
             
-            <Link href="/mainstage">
-              <a className="flex items-center space-x-2 text-foreground hover:text-accent transition-colors">
-                <Sparkles className="h-4 w-4" />
-                <span className="text-glow-pink">{t('nav.mainstage')}</span>
-              </a>
+            <Link href="/mainstage" className="flex items-center space-x-2 text-foreground hover:text-accent transition-colors">
+              <Sparkles className="h-4 w-4" />
+              <span className="text-glow-pink">{t('nav.mainstage')}</span>
             </Link>
             
-            <Link href="/rankings">
-              <a className="flex items-center space-x-2 text-foreground hover:text-secondary transition-colors">
-                <Trophy className="h-4 w-4" />
-                <span>{t('nav.rankings')}</span>
-              </a>
+            <Link href="/rankings" className="flex items-center space-x-2 text-foreground hover:text-secondary transition-colors">
+              <Trophy className="h-4 w-4" />
+              <span>{t('nav.rankings')}</span>
             </Link>
 
-            <Link href="/dashboard">
-              <a className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
-                <LayoutDashboard className="h-4 w-4" />
-                <span>{t('nav.dashboard')}</span>
-              </a>
+            <Link href="/dashboard" className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
+              <LayoutDashboard className="h-4 w-4" />
+              <span>{t('nav.dashboard')}</span>
             </Link>
             
             {isAuthenticated && user?.membershipStatus !== "free" && (
-              <Link href="/upload">
-                <a className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
-                  <Upload className="h-4 w-4" />
-                  <span>{t('nav.upload')}</span>
-                </a>
+              <Link href="/upload" className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
+                <Upload className="h-4 w-4" />
+                <span>{t('nav.upload')}</span>
               </Link>
             )}
           </div>
@@ -211,88 +199,79 @@ export default function Navbar() {
               
               <div ref={sheetContentRef} className="flex flex-col space-y-4 mt-8">
                 {/* Navigation Links */}
-                <Link href="/explore">
-                  <a 
-                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Music className="h-5 w-5 text-cyan-400" />
-                    <span className="text-lg">{t('nav.explore')}</span>
-                  </a>
+                <Link 
+                  href="/explore"
+                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Music className="h-5 w-5 text-cyan-400" />
+                  <span className="text-lg">{t('nav.explore')}</span>
                 </Link>
                 
-                <Link href="/dj-mode">
-                  <a 
-                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Radio className="h-5 w-5 text-purple-400" />
-                    <span className="text-lg text-glow-purple">{t('nav.djMode')}</span>
-                  </a>
+                <Link 
+                  href="/dj-mode"
+                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Radio className="h-5 w-5 text-purple-400" />
+                  <span className="text-lg text-glow-purple">{t('nav.djMode')}</span>
                 </Link>
                 
-                <Link href="/mainstage">
-                  <a 
-                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Sparkles className="h-5 w-5 text-pink-400" />
-                    <span className="text-lg text-glow-pink">{t('nav.mainstage')}</span>
-                  </a>
+                <Link 
+                  href="/mainstage"
+                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Sparkles className="h-5 w-5 text-pink-400" />
+                  <span className="text-lg text-glow-pink">{t('nav.mainstage')}</span>
                 </Link>
                 
-                <Link href="/rankings">
-                  <a 
-                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Trophy className="h-5 w-5 text-yellow-400" />
-                    <span className="text-lg">{t('nav.rankings')}</span>
-                  </a>
+                <Link 
+                  href="/rankings"
+                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Trophy className="h-5 w-5 text-yellow-400" />
+                  <span className="text-lg">{t('nav.rankings')}</span>
                 </Link>
                 
-                <Link href="/dashboard">
-                  <a 
-                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <LayoutDashboard className="h-5 w-5 text-cyan-400" />
-                    <span className="text-lg">{t('nav.dashboard')}</span>
-                  </a>
+                <Link 
+                  href="/dashboard"
+                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <LayoutDashboard className="h-5 w-5 text-cyan-400" />
+                  <span className="text-lg">{t('nav.dashboard')}</span>
                 </Link>
                 
                 {isAuthenticated && user?.membershipStatus !== "free" && (
-                  <Link href="/upload">
-                    <a 
-                      className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      <Upload className="h-5 w-5 text-green-400" />
-                      <span className="text-lg">{t('nav.upload')}</span>
-                    </a>
+                  <Link 
+                    href="/upload"
+                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Upload className="h-5 w-5 text-green-400" />
+                    <span className="text-lg">{t('nav.upload')}</span>
                   </Link>
                 )}
-
+                
                 <div className="border-t border-border pt-4 mt-4">
-                  <div className="mb-4">
-                    <LanguageSelector />
-                  </div>
-                  
-                  {isAuthenticated ? (
-                    <>
-                      {user?.membershipStatus === "free" && (
-                        <Link href="/membership">
-                          <Button 
-                            className="w-full btn-neon bg-accent hover:bg-accent/90 glow-pink mb-3"
-                            onClick={() => setMobileMenuOpen(false)}
-                          >
-                            <CreditCard className="h-4 w-4 mr-2" />
-                            {t('nav.membership')}
-                          </Button>
-                        </Link>
-                      )}
-                      
-                      <div className="flex items-center space-x-3 p-3 bg-accent/10 rounded-lg mb-3">
+                  <LanguageSelector />
+                </div>
+                
+                {isAuthenticated ? (
+                  <>
+                    {user?.membershipStatus === "free" && (
+                      <Link href="/membership" onClick={() => setMobileMenuOpen(false)}>
+                        <Button className="w-full btn-neon bg-accent hover:bg-accent/90 glow-pink">
+                          <CreditCard className="h-4 w-4 mr-2" />
+                          {t('nav.membership')}
+                        </Button>
+                      </Link>
+                    )}
+                    
+                    <div className="border-t border-border pt-4 space-y-2">
+                      <div className="flex items-center space-x-3 p-3">
                         <User className="h-5 w-5" />
                         <div>
                           <p className="font-semibold">{user?.name || "DJ"}</p>
@@ -303,37 +282,34 @@ export default function Navbar() {
                         </div>
                       </div>
                       
-                      <Link href="/profile/edit">
-                        <Button 
-                          variant="outline" 
-                          className="w-full justify-start mb-2"
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          <Settings className="mr-2 h-4 w-4" />
-                          {t('nav.settings')}
-                        </Button>
+                      <Link 
+                        href="/profile/edit"
+                        className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <Settings className="h-5 w-5" />
+                        <span>{t('nav.settings')}</span>
                       </Link>
                       
-                      <Button 
-                        variant="outline" 
-                        className="w-full justify-start text-red-400 hover:text-red-500"
+                      <button
                         onClick={() => {
                           handleLogout();
                           setMobileMenuOpen(false);
                         }}
+                        className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors text-left"
                       >
-                        <LogOut className="mr-2 h-4 w-4" />
-                        {t('nav.logout')}
-                      </Button>
-                    </>
-                  ) : (
-                    <a href={getLoginUrl()}>
-                      <Button className="w-full btn-neon bg-primary hover:bg-primary/90 glow-cyan">
-                        {t('nav.login')}
-                      </Button>
-                    </a>
-                  )}
-                </div>
+                        <LogOut className="h-5 w-5" />
+                        <span>{t('nav.logout')}</span>
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <a href={getLoginUrl()}>
+                    <Button className="w-full btn-neon bg-primary hover:bg-primary/90 glow-cyan">
+                      {t('nav.login')}
+                    </Button>
+                  </a>
+                )}
               </div>
             </SheetContent>
           </Sheet>

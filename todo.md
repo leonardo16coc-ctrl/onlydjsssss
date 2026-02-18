@@ -2295,3 +2295,14 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar indicador de carga mientras se genera el waveform (ya existía)
 - [x] Probar con archivos WAV de 50-100MB
 - [x] Documentar mejoras de rendimiento
+
+## 104. Solucionar waveform cargando indefinidamente en PC (REPORTE DE USUARIO)
+- [x] Reiniciar servidor de desarrollo
+- [x] Verificar logs del servidor para identificar errores
+- [x] Revisar código de WaveformPlayer para problemas específicos de navegadores de escritorio
+- [x] Agregar manejo de errores y timeout para carga de waveform (60 segundos)
+- [x] Implementar prevención de análisis duplicado con useRef
+- [x] Agregar estados visuales de error con botón de reintentar
+- [x] Corregir etiquetas <a> anidadas en Navbar.tsx
+- [x] Eliminar doble llamada al análisis automático en Upload.tsx
+- [x] Documentar solución
