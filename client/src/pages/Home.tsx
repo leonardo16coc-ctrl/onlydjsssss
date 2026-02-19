@@ -8,7 +8,55 @@ import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
 import { AIAnalyzer } from "@/components/AIAnalyzer";
 import TrackCarousel from "@/components/TrackCarousel";
+import MiniTrackCarousel from "@/components/MiniTrackCarousel";
 import { trpc } from "@/lib/trpc";
+
+function HeroTracksPreview() {
+  const { data: tracks, isLoading } = trpc.tracks.list.useQuery({
+    limit: 8,
+  });
+
+  if (isLoading || !tracks || tracks.length === 0) {
+    return (
+      <div className="relative">
+        <div className="relative rounded-2xl overflow-hidden border border-slate-700/50 shadow-2xl shadow-cyan-500/10 h-[500px]">
+          <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-6 h-full flex items-center justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400"></div>
+          </div>
+        </div>
+        <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-full blur-2xl"></div>
+        <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full blur-2xl"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative">
+      <div className="relative rounded-2xl overflow-hidden border border-slate-700/50 shadow-2xl shadow-cyan-500/10 hover:shadow-cyan-500/20 transition-shadow h-[500px]">
+        <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-6 h-full flex flex-col">
+          {/* Header */}
+          <div className="flex items-center justify-between pb-4 border-b border-slate-800 flex-shrink-0">
+            <h3 className="text-lg font-semibold text-white">Trending Now</h3>
+            <div className="flex gap-2">
+              <div className="w-3 h-3 rounded-full bg-red-500/50"></div>
+              <div className="w-3 h-3 rounded-full bg-yellow-500/50"></div>
+              <div className="w-3 h-3 rounded-full bg-green-500/50"></div>
+            </div>
+          </div>
+
+          {/* Mini Carousel */}
+          <div className="flex-1 overflow-hidden mt-4">
+            <MiniTrackCarousel tracks={tracks} />
+          </div>
+        </div>
+      </div>
+      
+      {/* Floating Elements */}
+      <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-full blur-2xl"></div>
+      <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full blur-2xl"></div>
+    </div>
+  );
+}
 
 function FeaturedTracksSection() {
   const { data: tracks, isLoading } = trpc.tracks.list.useQuery({
@@ -121,85 +169,10 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right: Dashboard Preview Mockup */}
-            <div className="relative">
-              <div className="relative rounded-2xl overflow-hidden border border-slate-700/50 shadow-2xl shadow-cyan-500/10 hover:shadow-cyan-500/20 transition-shadow">
-                {/* Dashboard Container */}
-                <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-6 space-y-4">
-                  {/* Header */}
-                  <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-                    <h3 className="text-lg font-semibold text-white">DJ Dashboard</h3>
-                    <div className="flex gap-2">
-                      <div className="w-3 h-3 rounded-full bg-red-500/50"></div>
-                      <div className="w-3 h-3 rounded-full bg-yellow-500/50"></div>
-                      <div className="w-3 h-3 rounded-full bg-green-500/50"></div>
-                    </div>
-                  </div>
+            {/* Right: Live Tracks Preview */}
+            <HeroTracksPreview />
 
-                  {/* Analytics Cards */}
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="bg-gradient-to-br from-cyan-500/10 to-cyan-500/5 border border-cyan-500/20 rounded-xl p-4 hover:border-cyan-500/40 transition-colors">
-                      <div className="text-xs text-cyan-400 mb-1">Total Streams</div>
-                      <div className="text-2xl font-bold text-white">24.5K</div>
-                      <div className="text-xs text-green-400 mt-1">+12% this week</div>
-                    </div>
-                    <div className="bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/20 rounded-xl p-4 hover:border-purple-500/40 transition-colors">
-                      <div className="text-xs text-purple-400 mb-1">Earnings</div>
-                      <div className="text-2xl font-bold text-white">$1,247</div>
-                      <div className="text-xs text-green-400 mt-1">+8% this month</div>
-                    </div>
-                  </div>
 
-                  {/* Upload Manager */}
-                  <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-4 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="text-sm font-medium text-white">Upload Manager</div>
-                      <Upload className="w-4 h-4 text-slate-400" />
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-gradient-to-br from-cyan-500 to-purple-500 rounded"></div>
-                        <div className="flex-1">
-                          <div className="text-xs text-slate-300">Track_001.wav</div>
-                          <div className="w-full bg-slate-700 rounded-full h-1.5 mt-1">
-                            <div className="bg-gradient-to-r from-cyan-500 to-purple-500 h-1.5 rounded-full" style={{width: '75%'}}></div>
-                          </div>
-                        </div>
-                        <div className="text-xs text-slate-400">75%</div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded"></div>
-                        <div className="flex-1">
-                          <div className="text-xs text-slate-300">Mix_Festival.mp3</div>
-                          <div className="w-full bg-slate-700 rounded-full h-1.5 mt-1">
-                            <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-1.5 rounded-full" style={{width: '45%'}}></div>
-                          </div>
-                        </div>
-                        <div className="text-xs text-slate-400">45%</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* AI Set Generator Preview */}
-                  <div className="bg-gradient-to-br from-pink-500/10 to-pink-500/5 border border-pink-500/20 rounded-xl p-4 space-y-2">
-                    <div className="flex items-center gap-2">
-                      <Brain className="w-4 h-4 text-pink-400" />
-                      <div className="text-sm font-medium text-white">AI Set Generator</div>
-                    </div>
-                    <div className="text-xs text-slate-400">Analyzing 8 tracks...</div>
-                    <div className="flex gap-2">
-                      <div className="flex-1 h-12 bg-slate-700/30 rounded border border-slate-600/30"></div>
-                      <div className="flex-1 h-12 bg-slate-700/30 rounded border border-slate-600/30"></div>
-                      <div className="flex-1 h-12 bg-slate-700/30 rounded border border-slate-600/30"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Floating Elements */}
-              <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-full blur-2xl"></div>
-              <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full blur-2xl"></div>
-            </div>
           </div>
         </div>
       </section>

@@ -2601,3 +2601,14 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Diseño consistente con estilo SaaS (gradientes, shadows)
 - [x] Responsive design para mobile
 - [x] Guardar checkpoint
+
+
+## 74. Mini Carousel en Hero Section (reemplazar dashboard mockup) (NUEVO)
+- [x] Crear componente MiniTrackCarousel compacto para hero
+- [x] Diseño vertical con scroll automático
+- [x] Cards pequeñas con cover, título, artista
+- [x] Animación sutil para no distraer del copy
+- [x] Reemplazar dashboard mockup estático con mini carousel
+- [x] Integración con tracks reales de DB
+- [x] Mantener bordes redondeados y sombras del diseño original
+- [x] Guardar checkpoint
