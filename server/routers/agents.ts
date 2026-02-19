@@ -26,6 +26,7 @@ import {
   getAccountStats,
   cleanupOldLogs
 } from '../agents/scrapers/account-manager';
+import { proxyManager, ProxyProvider } from '../agents/scrapers/proxy-manager';
 
 export const agentsRouter = router({
   /**
@@ -632,5 +633,83 @@ export const agentsRouter = router({
       const deleted = await cleanupOldLogs();
       
       return { deleted, success: true };
+    }),
+  
+  // ========================================
+  // PROXY MANAGEMENT ENDPOINTS
+  // ========================================
+  
+  /**
+   * Get proxy health status
+   */
+  getProxyHealth: protectedProcedure
+    .query(async ({ ctx }) => {
+      if (ctx.user.role !== 'admin') {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Only admins can access proxy health'
+        });
+      }
+      
+      const health = proxyManager.getHealthStatus();
+      return health;
+    }),
+  
+  /**
+   * Get proxy statistics
+   */
+  getProxyStats: protectedProcedure
+    .query(async ({ ctx }) => {
+      if (ctx.user.role !== 'admin') {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Only admins can access proxy stats'
+        });
+      }
+      
+      const stats = proxyManager.getStats();
+      return stats;
+    }),
+  
+  /**
+   * Switch proxy provider
+   */
+  switchProxyProvider: protectedProcedure
+    .input(z.object({
+      provider: z.enum(['brightdata', 'smartproxy', 'oxylabs', 'none'])
+    }))
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.user.role !== 'admin') {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Only admins can switch proxy providers'
+        });
+      }
+      
+      try {
+        proxyManager.switchProvider(input.provider as ProxyProvider);
+        return { success: true, provider: input.provider };
+      } catch (error: any) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: error.message
+        });
+      }
+    }),
+  
+  /**
+   * Reset proxy statistics
+   */
+  resetProxyStats: protectedProcedure
+    .mutation(async ({ ctx }) => {
+      if (ctx.user.role !== 'admin') {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Only admins can reset proxy stats'
+        });
+      }
+      
+      proxyManager.resetStats();
+      return { success: true };
     })
 });

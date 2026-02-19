@@ -2436,3 +2436,20 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar botón de cleanup de logs antiguos
 - [x] Agregar enlace desde AgentsDashboard
 - [ ] Implementar tests del dashboard
+
+
+## 108. Configuración de Proxies Residenciales (NUEVO) 🌐
+- [x] Crear sistema de configuración de proxies con múltiples proveedores (ProxyManager)
+- [x] Agregar soporte para Bright Data (brd.superproxy.io:22225)
+- [x] Agregar soporte para Smartproxy (gate.smartproxy.com:7000)
+- [x] Agregar soporte para Oxylabs (pr.oxylabs.io:7777)
+- [x] Implementar rotación automática de proxies con sticky sessions
+- [x] Crear health check de proxies con detección de failure rate
+- [x] Implementar fallback a proxies alternativos automático
+- [x] Agregar variables de entorno para credenciales (BRIGHTDATA_*, SMARTPROXY_*, OXYLABS_*)
+- [x] Actualizar Instagram scraper para usar proxies
+- [x] Actualizar SoundCloud scraper para usar proxies
+- [x] Crear endpoints tRPC para gestión de proxies (getProxyHealth, switchProxyProvider, etc.)
+- [x] Crear tabla proxy_stats en base de datos
+- [x] Documentar configuración completa para cada proveedor (guía de 50+ páginas)
+- [ ] Agregar UI en dashboard para configurar y monitorear proxies

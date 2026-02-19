@@ -17,6 +17,7 @@ import {
   randomScroll
 } from './config';
 import { db } from '../db-helper';
+import { proxyManager } from './proxy-manager';
 
 puppeteer.use(StealthPlugin());
 
@@ -71,9 +72,20 @@ async function initBrowser(): Promise<void> {
   const userAgent = getRandomItem(USER_AGENTS);
   const viewport = getRandomItem(VIEWPORTS);
   
+  // Get proxy configuration
+  const proxyUrl = proxyManager.getProxyUrlWithSession();
+  const launchArgs = [...SCRAPER_CONFIG.browser.args];
+  
+  if (proxyUrl) {
+    launchArgs.push(`--proxy-server=${proxyUrl}`);
+    console.log(`🔒 Using proxy: ${proxyManager.getCurrentProvider()}`);
+  } else {
+    console.warn('⚠️  No proxy configured - scraping without proxy');
+  }
+  
   session.browser = await puppeteer.launch({
     headless: SCRAPER_CONFIG.browser.headless,
-    args: SCRAPER_CONFIG.browser.args,
+    args: launchArgs,
     defaultViewport: viewport
   });
   
