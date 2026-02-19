@@ -92,7 +92,7 @@ export default function Navbar() {
             
             <Link href="/dj-mode" className="flex items-center space-x-2 text-foreground hover:text-purple-400 transition-colors">
               <Radio className="h-4 w-4" />
-              <span className="text-glow-purple">AI Studio</span>
+              <span className="text-glow-purple">DJ MODE</span>
             </Link>
             
             <Link href="/mainstage" className="flex items-center space-x-2 text-foreground hover:text-accent transition-colors">
@@ -214,7 +214,7 @@ export default function Navbar() {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <Radio className="h-5 w-5 text-purple-400" />
-                  <span className="text-lg text-glow-purple">AI Studio</span>
+                  <span className="text-lg text-glow-purple">DJ MODE</span>
                 </Link>
                 
                 <Link 

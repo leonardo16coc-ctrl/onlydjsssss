@@ -2548,3 +2548,10 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Verificar que rutas y funcionalidad permanezcan intactas
 - [ ] Probar navegación en navegador
 - [ ] Guardar checkpoint final
+
+
+## 115. Revertir "AI Studio" a "DJ MODE" (CORRECCIÓN)
+- [ ] Revertir label en Navbar de "AI Studio" a "DJ MODE"
+- [ ] Revertir label en mobile menu
+- [ ] Revertir título de página DJMode.tsx
+- [ ] Guardar checkpoint
