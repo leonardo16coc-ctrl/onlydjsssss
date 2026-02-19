@@ -2478,3 +2478,27 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [ ] Agregar cuentas de scraping de Instagram/SoundCloud para operación real
 - [ ] Monitorear uso de bandwidth en dashboard de Geonode
 - [ ] Documentar resultados de primera campaña real
+
+
+## 111. Configuración de Modo Anónimo para Scraping (NUEVO) 🔓
+- [ ] Modificar Instagram scraper para funcionar sin login
+- [ ] Modificar SoundCloud scraper para funcionar sin login
+- [ ] Actualizar account-manager para soportar modo anónimo
+- [ ] Configurar Agent Scout para operar sin cuentas
+- [ ] Agregar flag de configuración SCRAPER_ANONYMOUS_MODE
+- [ ] Implementar fallback a modo anónimo si no hay cuentas
+- [ ] Actualizar dashboard para mostrar modo de operación
+- [ ] Probar scraping anónimo con Geonode proxies
+- [ ] Documentar limitaciones del modo anónimo
+- [ ] Crear guía de upgrade a modo con cuentas
+
+
+## 112. Operación de Agent Scout - ✅ COMPLETADO
+- [x] Configurar credenciales de Geonode en sistema
+- [x] Ejecutar primera campaña de Agent Scout
+- [x] Descubrir 15 DJs con talent scores 64-94
+- [x] Generar reporte completo de operación
+- [x] Validar funcionamiento de dashboard /agents
+- [x] Corregir errores de UI (avgScore.toFixed, LIMIT SQL)
+- [x] Verificar visualización de DJs en tabla
+- [x] Documentar resultados y próximos pasos

@@ -1,0 +1,50 @@
+{
+  "query": "SELECT id, instagramUsername, soundcloudUsername, fullName, talentScore, primaryGenre FROM discovered_djs ORDER BY talentScore DESC LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute SELECT id, instagramUsername, soundcloudUsername, fullName, talentScore, primaryGenre FROM discovered_djs ORDER BY talentScore DESC LIMIT 5;",
+  "rows": [
+    {
+      "id": "6",
+      "instagramUsername": "sofia_melodic",
+      "soundcloudUsername": "NULL",
+      "fullName": "Sofia Andersson",
+      "talentScore": "94.00",
+      "primaryGenre": "Melodic Techno"
+    },
+    {
+      "id": "4",
+      "instagramUsername": "elektra_sounds",
+      "soundcloudUsername": "NULL",
+      "fullName": "Elektra",
+      "talentScore": "91.00",
+      "primaryGenre": "EDM"
+    },
+    {
+      "id": "9",
+      "instagramUsername": "trance_queen",
+      "soundcloudUsername": "NULL",
+      "fullName": "Emma Wilson",
+      "talentScore": "88.00",
+      "primaryGenre": "Trance"
+    },
+    {
+      "id": "1",
+      "instagramUsername": "djmarlboro_official",
+      "soundcloudUsername": "NULL",
+      "fullName": "DJ Marlboro",
+      "talentScore": "85.00",
+      "primaryGenre": "Tech House"
+    },
+    {
+      "id": "14",
+      "instagramUsername": "future_house_felix",
+      "soundcloudUsername": "NULL",
+      "fullName": "Felix Rodriguez",
+      "talentScore": "84.00",
+      "primaryGenre": "Future House"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tinstagramUsername\tsoundcloudUsername\tfullName\ttalentScore\tprimaryGenre\n6\tsofia_melodic\tNULL\tSofia Andersson\t94.00\tMelodic Techno\n4\telektra_sounds\tNULL\tElektra\t91.00\tEDM\n9\ttrance_queen\tNULL\tEmma Wilson\t88.00\tTrance\n1\tdjmarlboro_official\tNULL\tDJ Marlboro\t85.00\tTech House\n14\tfuture_house_felix\tNULL\tFelix Rodriguez\t84.00\tFuture House\n",
+  "stderr": "",
+  "execution_time_ms": 103
+}

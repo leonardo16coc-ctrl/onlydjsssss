@@ -220,9 +220,9 @@ export const agentsRouter = router({
       const djs = await db.query(
         `SELECT * FROM discovered_djs 
          WHERE ${whereClause}
-         ORDER BY talentScore DESC, discoveryDate DESC
-         LIMIT ? OFFSET ?`,
-        [...params, input.limit, offset]
+         ORDER BY talentScore DESC, lastScraped DESC
+         LIMIT ${input.limit} OFFSET ${offset}`,
+        params
       );
       
       const [{ total }] = await db.query<{ total: number }>(

@@ -148,7 +148,7 @@ export default function AgentsDashboard() {
             <CheckCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats?.avgScore?.toFixed(1) || 0}</div>
+            <div className="text-2xl font-bold">{stats?.avgScore ? Number(stats.avgScore).toFixed(1) : '0.0'}</div>
             <p className="text-xs text-muted-foreground">Average talent score</p>
           </CardContent>
         </Card>
@@ -316,7 +316,7 @@ export default function AgentsDashboard() {
                           dj.talentScore >= 70 ? 'secondary' :
                           'outline'
                         }>
-                          {dj.talentScore?.toFixed(1) || 'N/A'}
+                          {dj.talentScore ? Number(dj.talentScore).toFixed(1) : 'N/A'}
                         </Badge>
                       </td>
                       <td className="py-2 px-4 text-center">

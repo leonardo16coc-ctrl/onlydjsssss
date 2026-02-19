@@ -1,0 +1,115 @@
+{
+  "query": "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'discovered_djs' AND TABLE_SCHEMA = DATABASE();",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'discovered_djs' AND TABLE_SCHEMA = DATABASE();",
+  "rows": [
+    {
+      "COLUMN_NAME": "id"
+    },
+    {
+      "COLUMN_NAME": "instagramUsername"
+    },
+    {
+      "COLUMN_NAME": "soundcloudUsername"
+    },
+    {
+      "COLUMN_NAME": "fullName"
+    },
+    {
+      "COLUMN_NAME": "email"
+    },
+    {
+      "COLUMN_NAME": "instagramFollowers"
+    },
+    {
+      "COLUMN_NAME": "instagramPostsCount"
+    },
+    {
+      "COLUMN_NAME": "instagramAvgLikes"
+    },
+    {
+      "COLUMN_NAME": "instagramAvgComments"
+    },
+    {
+      "COLUMN_NAME": "instagramEngagementRate"
+    },
+    {
+      "COLUMN_NAME": "instagramPostsPerWeek"
+    },
+    {
+      "COLUMN_NAME": "soundcloudFollowers"
+    },
+    {
+      "COLUMN_NAME": "soundcloudTracksCount"
+    },
+    {
+      "COLUMN_NAME": "soundcloudTotalPlays"
+    },
+    {
+      "COLUMN_NAME": "soundcloudAvgLikes"
+    },
+    {
+      "COLUMN_NAME": "soundcloudAvgReposts"
+    },
+    {
+      "COLUMN_NAME": "soundcloudEngagementRate"
+    },
+    {
+      "COLUMN_NAME": "soundcloudUploadsPerMonth"
+    },
+    {
+      "COLUMN_NAME": "talentScore"
+    },
+    {
+      "COLUMN_NAME": "engagementScore"
+    },
+    {
+      "COLUMN_NAME": "growthScore"
+    },
+    {
+      "COLUMN_NAME": "consistencyScore"
+    },
+    {
+      "COLUMN_NAME": "reachScore"
+    },
+    {
+      "COLUMN_NAME": "genreMatchScore"
+    },
+    {
+      "COLUMN_NAME": "primaryGenre"
+    },
+    {
+      "COLUMN_NAME": "secondaryGenres"
+    },
+    {
+      "COLUMN_NAME": "discoveryStatus"
+    },
+    {
+      "COLUMN_NAME": "discoveryDate"
+    },
+    {
+      "COLUMN_NAME": "lastUpdated"
+    },
+    {
+      "COLUMN_NAME": "lastScraped"
+    },
+    {
+      "COLUMN_NAME": "bio"
+    },
+    {
+      "COLUMN_NAME": "profileImageUrl"
+    },
+    {
+      "COLUMN_NAME": "instagramUrl"
+    },
+    {
+      "COLUMN_NAME": "soundcloudUrl"
+    },
+    {
+      "COLUMN_NAME": "aiNotes"
+    }
+  ],
+  "messages": [],
+  "stdout": "COLUMN_NAME\nid\ninstagramUsername\nsoundcloudUsername\nfullName\nemail\ninstagramFollowers\ninstagramPostsCount\ninstagramAvgLikes\ninstagramAvgComments\ninstagramEngagementRate\ninstagramPostsPerWeek\nsoundcloudFollowers\nsoundcloudTracksCount\nsoundcloudTotalPlays\nsoundcloudAvgLikes\nsoundcloudAvgReposts\nsoundcloudEngagementRate\nsoundcloudUploadsPerMonth\ntalentScore\nengagementScore\ngrowthScore\nconsistencyScore\nreachScore\ngenreMatchScore\nprimaryGenre\nsecondaryGenres\ndiscoveryStatus\ndiscoveryDate\nlastUpdated\nlastScraped\nbio\nprofileImageUrl\ninstagramUrl\nsoundcloudUrl\naiNotes\n",
+  "stderr": "",
+  "execution_time_ms": 130
+}

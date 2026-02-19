@@ -1,0 +1,8 @@
+{
+  "query": "INSERT INTO discovered_djs (id) VALUES (UUID()) LIMIT 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute INSERT INTO discovered_djs (id) VALUES (UUID()) LIMIT 1;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1064 (42000) at line 1: You have an error in your SQL syntax; check the manual that corresponds to your TiDB version for the right syntax to use line 1 column 53 near \"LIMIT 1\""
+  ]
+}
