@@ -2419,3 +2419,20 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [ ] Crear dashboard de monitoreo de salud de scrapers en UI
 - [ ] Implementar sistema de proxies residenciales rotatorios (requiere servicio externo)
 - [ ] Documentar configuración completa y riesgos
+
+
+## 107. Dashboard de Monitoreo de Scraping (NUEVO) 📊
+- [x] Crear endpoints tRPC para estadísticas de scraping
+- [x] Crear endpoint para obtener health report completo
+- [x] Crear endpoint para obtener logs recientes
+- [x] Crear endpoint para gestión de cuentas (CRUD)
+- [x] Implementar UI del dashboard con métricas en tiempo real
+- [x] Agregar cards de métricas (total accounts, success rate, banned, rate limited)
+- [x] Agregar tabla de cuentas con estados y acciones
+- [x] Agregar logs recientes con filtros por plataforma
+- [x] Implementar alertas visuales para problemas (ban alerts)
+- [x] Agregar formulario para agregar nuevas cuentas
+- [x] Implementar gestión de cuentas (reactivar, eliminar)
+- [x] Agregar botón de cleanup de logs antiguos
+- [x] Agregar enlace desde AgentsDashboard
+- [ ] Implementar tests del dashboard

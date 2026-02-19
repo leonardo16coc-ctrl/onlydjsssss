@@ -92,11 +92,19 @@ export default function AgentsDashboard() {
   return (
     <div className="container mx-auto py-8 space-y-8">
       {/* Header */}
-      <div>
-        <h1 className="text-4xl font-bold mb-2">🤖 Agents Dashboard</h1>
-        <p className="text-muted-foreground">
-          Control and monitor autonomous agents for DJ discovery and growth automation
-        </p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-4xl font-bold mb-2">🤖 Agents Dashboard</h1>
+          <p className="text-muted-foreground">
+            Control and monitor autonomous agents for DJ discovery and growth automation
+          </p>
+        </div>
+        <Button
+          variant="outline"
+          onClick={() => window.location.href = '/scraper-monitoring'}
+        >
+          📊 Scraper Monitoring
+        </Button>
       </div>
       
       {/* Stats Overview */}

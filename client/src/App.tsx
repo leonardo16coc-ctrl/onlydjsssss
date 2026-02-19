@@ -25,6 +25,7 @@ import Copyright from "./pages/Copyright";
 import Legal from "./pages/Legal";
 import Community from "./pages/Community";
 import AgentsDashboard from "./pages/AgentsDashboard";
+import ScraperMonitoring from "./pages/ScraperMonitoring";
 
 function Router() {
   return (
@@ -43,6 +44,7 @@ function Router() {
       <Route path={"/faq"} component={FAQ} />
       <Route path={"/community"} component={Community} />
       <Route path={"/agents"} component={AgentsDashboard} />
+      <Route path={"/scraper-monitoring"} component={ScraperMonitoring} />
       <Route path={"/dj/:username"} component={DJProfile} />
       <Route path={"/profile/edit"} component={ProfileEdit} />
       <Route path={"/track/edit/:id"} component={EditTrack} />

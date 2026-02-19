@@ -17,6 +17,15 @@ import {
   runAgentCloserCycle
 } from '../agents/closer';
 import { db } from '../agents/db-helper';
+import {
+  getScraperHealthReport,
+  getAllAccounts,
+  addScraperAccount,
+  updateAccountStatus,
+  deleteAccount,
+  getAccountStats,
+  cleanupOldLogs
+} from '../agents/scrapers/account-manager';
 
 export const agentsRouter = router({
   /**
@@ -443,5 +452,185 @@ export const agentsRouter = router({
           message: `Agent Closer failed: ${error.message}`
         });
       }
+    }),
+  
+  // ========================================
+  // SCRAPER MONITORING ENDPOINTS
+  // ========================================
+  
+  /**
+   * Get scraper health report
+   */
+  getScraperHealth: protectedProcedure
+    .query(async ({ ctx }) => {
+      if (ctx.user.role !== 'admin') {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Only admins can access scraper monitoring'
+        });
+      }
+      
+      const health = await getScraperHealthReport();
+      return health;
+    }),
+  
+  /**
+   * Get all scraper accounts
+   */
+  getScraperAccounts: protectedProcedure
+    .input(z.object({
+      platform: z.enum(['instagram', 'soundcloud']).optional()
+    }).optional())
+    .query(async ({ ctx, input }) => {
+      if (ctx.user.role !== 'admin') {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Only admins can access scraper accounts'
+        });
+      }
+      
+      const accounts = await getAllAccounts(input?.platform);
+      return accounts;
+    }),
+  
+  /**
+   * Add new scraper account
+   */
+  addScraperAccount: protectedProcedure
+    .input(z.object({
+      platform: z.enum(['instagram', 'soundcloud']),
+      username: z.string().min(1),
+      password: z.string().optional()
+    }))
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.user.role !== 'admin') {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Only admins can add scraper accounts'
+        });
+      }
+      
+      const accountId = await addScraperAccount(
+        input.platform,
+        input.username,
+        input.password
+      );
+      
+      return { accountId, success: true };
+    }),
+  
+  /**
+   * Update scraper account status
+   */
+  updateScraperAccountStatus: protectedProcedure
+    .input(z.object({
+      accountId: z.number(),
+      status: z.enum(['active', 'banned', 'suspended', 'rate_limited'])
+    }))
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.user.role !== 'admin') {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Only admins can update scraper accounts'
+        });
+      }
+      
+      await updateAccountStatus(input.accountId, input.status);
+      
+      return { success: true };
+    }),
+  
+  /**
+   * Delete scraper account
+   */
+  deleteScraperAccount: protectedProcedure
+    .input(z.object({
+      accountId: z.number()
+    }))
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.user.role !== 'admin') {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Only admins can delete scraper accounts'
+        });
+      }
+      
+      await deleteAccount(input.accountId);
+      
+      return { success: true };
+    }),
+  
+  /**
+   * Get scraper logs
+   */
+  getScraperLogs: protectedProcedure
+    .input(z.object({
+      platform: z.enum(['instagram', 'soundcloud']).optional(),
+      status: z.enum(['success', 'error', 'banned', 'rate_limited']).optional(),
+      limit: z.number().min(1).max(500).default(100)
+    }).optional())
+    .query(async ({ ctx, input }) => {
+      if (ctx.user.role !== 'admin') {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Only admins can access scraper logs'
+        });
+      }
+      
+      let query = 'SELECT * FROM scraper_logs WHERE 1=1';
+      const params: any[] = [];
+      
+      if (input?.platform) {
+        query += ' AND platform = ?';
+        params.push(input.platform);
+      }
+      
+      if (input?.status) {
+        query += ' AND status = ?';
+        params.push(input.status);
+      }
+      
+      query += ' ORDER BY timestamp DESC LIMIT ?';
+      params.push(input?.limit || 100);
+      
+      const logs = await db.query(query, params);
+      
+      return logs;
+    }),
+  
+  /**
+   * Get account statistics
+   */
+  getAccountStats: protectedProcedure
+    .input(z.object({
+      platform: z.enum(['instagram', 'soundcloud']).optional()
+    }).optional())
+    .query(async ({ ctx, input }) => {
+      if (ctx.user.role !== 'admin') {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Only admins can access account stats'
+        });
+      }
+      
+      const stats = await getAccountStats(input?.platform);
+      return stats;
+    }),
+  
+  /**
+   * Cleanup old logs
+   */
+  cleanupScraperLogs: protectedProcedure
+    .mutation(async ({ ctx }) => {
+      if (ctx.user.role !== 'admin') {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Only admins can cleanup logs'
+        });
+      }
+      
+      const deleted = await cleanupOldLogs();
+      
+      return { deleted, success: true };
     })
 });
