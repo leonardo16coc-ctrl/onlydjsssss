@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { Upload as UploadIcon, Sparkles, Loader2, Image as ImageIcon, CheckCircle2, Lock, CreditCard } from "lucide-react";
+import { Upload as UploadIcon, Sparkles, Loader2, Image as ImageIcon, CheckCircle2, Lock, CreditCard, Music, TrendingUp, DollarSign, Zap, ArrowRight } from "lucide-react";
 import { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { trpc } from "@/lib/trpc";
@@ -15,7 +15,7 @@ import { MusicAnalysisDisplay } from "@/components/MusicAnalysisDisplay";
 import AudioPlayer from "@/components/AudioPlayer";
 import WaveformPlayer from "@/components/WaveformPlayer";
 import UploadLimitsCard from "@/components/UploadLimitsCard";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 
 export default function Upload() {
   const { user, isAuthenticated } = useAuth();
@@ -115,119 +115,85 @@ export default function Upload() {
   };
 
   const handleUploadAudio = async () => {
-    if (!audioFile) {
-      toast.error(t('upload.chooseFile'));
-      return;
-    }
-
+    if (!audioFile) return;
+    
     setIsUploadingAudio(true);
     setUploadProgress(0);
-
-    return new Promise<void>((resolve, reject) => {
+    
+    try {
       const formData = new FormData();
-      formData.append("file", audioFile);
-
+      formData.append("audio", audioFile);
+      
       const xhr = new XMLHttpRequest();
       
-      // Set timeout to 5 minutes (300000ms) for large files
-      xhr.timeout = 300000;
-
-      // Track upload progress
-      xhr.upload.addEventListener('progress', (e) => {
+      xhr.upload.addEventListener("progress", (e) => {
         if (e.lengthComputable) {
-          const percentComplete = Math.round((e.loaded / e.total) * 100);
-          setUploadProgress(percentComplete);
+          const progress = Math.round((e.loaded / e.total) * 100);
+          setUploadProgress(progress);
         }
-      });
-
-      // Handle completion
-      xhr.addEventListener('load', () => {
-        setIsUploadingAudio(false);
-        
-        if (xhr.status >= 200 && xhr.status < 300) {
-          try {
-            const data = JSON.parse(xhr.responseText);
-            setUploadedAudio({
-              fileKey: data.fileKey,
-              fileUrl: data.fileUrl,
-            });
-            setAudioUploaded(true);
-            setUploadProgress(100);
-            toast.success(t('upload.uploadSuccess'));
-            
-            // Note: Auto-analysis is now triggered by WaveformPlayer's onAnalysisComplete
-            resolve();
-          } catch (error) {
-            toast.error("Error al procesar la respuesta del servidor");
-            reject(error);
-          }
-        } else {
-          try {
-            const error = JSON.parse(xhr.responseText);
-            toast.error(error.error || "Error al subir el archivo");
-          } catch {
-            toast.error("Error al subir el archivo");
-          }
-          reject(new Error("Upload failed"));
-        }
-      });
-
-      // Handle errors
-      xhr.addEventListener('error', () => {
-        setIsUploadingAudio(false);
-        toast.error("Error de red al subir el archivo");
-        reject(new Error("Network error"));
-      });
-
-      // Handle abort
-      xhr.addEventListener('abort', () => {
-        setIsUploadingAudio(false);
-        toast.error("Subida cancelada");
-        reject(new Error("Upload aborted"));
       });
       
-      // Handle timeout
-      xhr.addEventListener('timeout', () => {
+      xhr.addEventListener("load", () => {
+        if (xhr.status === 200) {
+          const response = JSON.parse(xhr.responseText);
+          setUploadedAudio({
+            fileKey: response.fileKey,
+            fileUrl: response.fileUrl,
+          });
+          setAudioUploaded(true);
+          toast.success("Audio subido exitosamente");
+        } else {
+          throw new Error("Error al subir el audio");
+        }
         setIsUploadingAudio(false);
-        toast.error("Tiempo de espera agotado. El archivo es muy grande o la conexión es lenta.");
-        reject(new Error("Upload timeout"));
+      });
+      
+      xhr.addEventListener("error", () => {
+        toast.error("Error al subir el audio");
+        setIsUploadingAudio(false);
       });
 
-      // Send request
-      xhr.open('POST', '/api/upload/audio');
+      xhr.addEventListener("timeout", () => {
+        toast.error("Tiempo de espera agotado. El archivo es muy grande o la conexión es lenta.");
+        setIsUploadingAudio(false);
+      });
+
+      xhr.timeout = 300000; // 5 minutes timeout
+      
+      xhr.open("POST", "/api/upload/audio");
       xhr.send(formData);
-    });
+      
+    } catch (error: any) {
+      toast.error(error.message || "Error al subir el audio");
+      setIsUploadingAudio(false);
+    }
   };
 
   const handleUploadCover = async () => {
-    if (!coverImage) {
-      toast.error(t('upload.chooseFile'));
-      return;
-    }
-
+    if (!coverImage) return;
+    
     setIsUploadingCover(true);
-
+    
     try {
       const formData = new FormData();
-      formData.append("file", coverImage);
-
+      formData.append("cover", coverImage);
+      
       const response = await fetch("/api/upload/cover", {
         method: "POST",
         body: formData,
       });
-
+      
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Error al subir la imagen");
+        throw new Error("Error al subir la portada");
       }
-
+      
       const data = await response.json();
       setUploadedCover({
         fileKey: data.fileKey,
         fileUrl: data.fileUrl,
       });
       setCoverUploaded(true);
-      toast.success(t('upload.uploadSuccess'));
+      toast.success("Portada subida exitosamente");
     } catch (error: any) {
       toast.error(error.message || "Error al subir la portada");
     } finally {
@@ -237,21 +203,26 @@ export default function Upload() {
 
   const handleAnalyzeAudio = async (audioUrl?: string) => {
     const urlToAnalyze = audioUrl || uploadedAudio?.fileUrl;
+    
     if (!urlToAnalyze) {
-      toast.error(t('upload.uploadAudio'));
+      toast.error("No hay audio para analizar");
       return;
     }
-
+    
     setIsAnalyzing(true);
+    
     try {
-      const result = await analyzeAudio.mutateAsync({ audioFileUrl: urlToAnalyze });
+      const result = await analyzeAudio.mutateAsync({
+        audioFileUrl: urlToAnalyze,
+      });
+      
       setAnalysisResult(result);
       
-      // Auto-fill form fields
+      // Auto-fill fields
       if (result.bpm) setBpm(result.bpm.toString());
       if (result.musicalKey) setMusicalKey(result.musicalKey);
       
-      toast.success(t('upload.analysisComplete'));
+      toast.success("Análisis completado");
     } catch (error: any) {
       toast.error(error.message || "Error al analizar el audio");
     } finally {
@@ -260,16 +231,17 @@ export default function Upload() {
   };
 
   const handleSubmit = async () => {
-    // Validate required fields
-    if (!uploadedAudio) {
-      toast.error(t('upload.uploadAudio'));
-      return;
-    }
+    // Validation
     if (!title || !artist || !genre || !trackType) {
-      toast.error(t('common.error'));
+      toast.error("Por favor completa todos los campos requeridos");
       return;
     }
-
+    
+    if (!uploadedAudio) {
+      toast.error("Por favor sube un archivo de audio");
+      return;
+    }
+    
     try {
       await createTrack.mutateAsync({
         title,
@@ -285,8 +257,8 @@ export default function Upload() {
         energy: analysisResult?.energy,
         mood: analysisResult?.mood,
       });
-
-      toast.success(t('upload.publishSuccess'));
+      
+      toast.success("Track publicado exitosamente!");
       
       // Reset form
       setTitle("");
@@ -313,46 +285,123 @@ export default function Upload() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
       <Navbar />
       
-      <div className="container py-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold mb-2 text-gradient">
-              {t('upload.title')}
+      {/* Hero Section */}
+      <section className="relative overflow-hidden py-16 md:py-20 border-b border-slate-800">
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-purple-500/5 to-pink-500/5"></div>
+        <div className="container relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+              <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Share Your Music
+              </span>
+              <br />
+              <span className="text-white">with the World</span>
             </h1>
-            <p className="text-muted-foreground">
-              {t('upload.subtitle')}
+            <p className="text-lg md:text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
+              Upload your tracks, let AI analyze them, and start earning from every download. Join thousands of DJs monetizing their music.
             </p>
+            
+            {/* Benefits Pills */}
+            <div className="flex flex-wrap gap-3 justify-center">
+              <div className="inline-flex items-center gap-2 bg-slate-800/50 border border-slate-700 rounded-full px-4 py-2">
+                <Sparkles className="w-4 h-4 text-cyan-400" />
+                <span className="text-sm text-slate-300">AI Analysis</span>
+              </div>
+              <div className="inline-flex items-center gap-2 bg-slate-800/50 border border-slate-700 rounded-full px-4 py-2">
+                <DollarSign className="w-4 h-4 text-green-400" />
+                <span className="text-sm text-slate-300">Earn Money</span>
+              </div>
+              <div className="inline-flex items-center gap-2 bg-slate-800/50 border border-slate-700 rounded-full px-4 py-2">
+                <TrendingUp className="w-4 h-4 text-purple-400" />
+                <span className="text-sm text-slate-300">Grow Audience</span>
+              </div>
+            </div>
           </div>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Left Column - File Uploads */}
-            <div className="space-y-6">
+      {/* How It Works - Onboarding */}
+      <section className="py-12 bg-slate-900/50">
+        <div className="container">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-2xl md:text-3xl font-bold text-center mb-10 text-white">
+              How It Works
+            </h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="relative group">
+                <Card className="p-6 bg-slate-900/50 border-slate-800 hover:border-cyan-500/50 transition-all text-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-xl flex items-center justify-center mb-4 mx-auto shadow-lg shadow-cyan-500/20">
+                    <span className="text-xl font-bold text-white">1</span>
+                  </div>
+                  <h3 className="text-lg font-bold mb-2 text-white">Upload Your Track</h3>
+                  <p className="text-sm text-slate-400">Upload MP3 or WAV files up to 100MB. Add cover art to make it stand out.</p>
+                </Card>
+                <div className="hidden md:block absolute top-6 left-[60%] w-[80%] h-0.5 bg-gradient-to-r from-cyan-500/50 to-purple-500/50"></div>
+              </div>
+
+              <div className="relative group">
+                <Card className="p-6 bg-slate-900/50 border-slate-800 hover:border-purple-500/50 transition-all text-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-4 mx-auto shadow-lg shadow-purple-500/20">
+                    <span className="text-xl font-bold text-white">2</span>
+                  </div>
+                  <h3 className="text-lg font-bold mb-2 text-white">AI Analysis</h3>
+                  <p className="text-sm text-slate-400">Our AI automatically detects BPM, key, energy, and structure in seconds.</p>
+                </Card>
+                <div className="hidden md:block absolute top-6 left-[60%] w-[80%] h-0.5 bg-gradient-to-r from-purple-500/50 to-pink-500/50"></div>
+              </div>
+
+              <div className="relative group">
+                <Card className="p-6 bg-slate-900/50 border-slate-800 hover:border-pink-500/50 transition-all text-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-pink-600 rounded-xl flex items-center justify-center mb-4 mx-auto shadow-lg shadow-pink-500/20">
+                    <span className="text-xl font-bold text-white">3</span>
+                  </div>
+                  <h3 className="text-lg font-bold mb-2 text-white">Publish & Earn</h3>
+                  <p className="text-sm text-slate-400">Publish your track and earn from every download. Track earnings in real-time.</p>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Main Upload Form */}
+      <div className="container py-12">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Left Column - Upload Steps */}
+            <div className="lg:col-span-2 space-y-6">
               {/* Audio File Upload */}
-              <Card className="p-6">
-                <h3 className="font-bold text-lg mb-4">{t('upload.audioFile')}</h3>
+              <Card className="p-6 bg-slate-900/50 border-slate-800">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 bg-cyan-500/10 rounded-lg flex items-center justify-center">
+                    <Music className="w-5 h-5 text-cyan-400" />
+                  </div>
+                  <h3 className="font-bold text-lg text-white">{t('upload.audioFile')}</h3>
+                </div>
                 
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="audio-file">
-                      {t('upload.audioFileDesc')}
+                    <Label htmlFor="audio-file" className="text-slate-300">
+                      Upload MP3 or WAV (max 100MB)
                     </Label>
                     <Input
                       id="audio-file"
                       type="file"
                       accept="audio/mpeg,audio/mp3,audio/wav"
                       onChange={handleAudioFileChange}
-                      className="mt-2"
+                      className="mt-2 bg-slate-800 border-slate-700 text-white"
                     />
                   </div>
 
                   {audioFile && !audioUploaded && (
                     <div className="space-y-3">
-                      <div className="p-4 bg-muted rounded-lg">
-                        <p className="text-sm font-medium mb-1">{audioFile.name}</p>
-                        <p className="text-xs text-muted-foreground">
+                      <div className="p-4 bg-slate-800 rounded-lg border border-slate-700">
+                        <p className="text-sm font-medium mb-1 text-white">{audioFile.name}</p>
+                        <p className="text-xs text-slate-400">
                           {(audioFile.size / (1024 * 1024)).toFixed(2)} MB
                         </p>
                       </div>
@@ -360,7 +409,7 @@ export default function Upload() {
                       {/* Audio Preview */}
                       {audioPreviewUrl && (
                         <div>
-                          <Label className="mb-2 block">Pre-escucha</Label>
+                          <Label className="mb-2 block text-slate-300">Preview</Label>
                           <AudioPlayer
                             audioUrl={audioPreviewUrl}
                             trackId={0}
@@ -370,20 +419,20 @@ export default function Upload() {
                         </div>
                       )}
 
-                        <Button
-                          onClick={handleUploadAudio}
-                          disabled={isUploadingAudio}
-                          className="w-full"
-                        >
+                      <Button
+                        onClick={handleUploadAudio}
+                        disabled={isUploadingAudio}
+                        className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700"
+                      >
                         {isUploadingAudio ? (
                           <>
                             <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                            Subiendo... {uploadProgress}%
+                            Uploading... {uploadProgress}%
                           </>
                         ) : (
                           <>
                             <UploadIcon className="h-4 w-4 mr-2" />
-                            Subir Audio
+                            Upload Audio
                           </>
                         )}
                       </Button>
@@ -391,8 +440,8 @@ export default function Upload() {
                       {isUploadingAudio && (
                         <div className="space-y-2">
                           <Progress value={uploadProgress} className="w-full" />
-                          <p className="text-xs text-center text-muted-foreground">
-                            {uploadProgress}% completado
+                          <p className="text-xs text-center text-slate-400">
+                            {uploadProgress}% completed
                           </p>
                         </div>
                       )}
@@ -403,7 +452,7 @@ export default function Upload() {
                     <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
                       <div className="flex items-center gap-2 mb-3">
                         <CheckCircle2 className="h-5 w-5 text-green-500" />
-                        <span className="font-medium text-green-500">Audio subido</span>
+                        <span className="font-medium text-green-500">Audio uploaded successfully</span>
                       </div>
                       
                       {/* Uploaded Audio Waveform */}
@@ -427,26 +476,31 @@ export default function Upload() {
               </Card>
 
               {/* Cover Image Upload */}
-              <Card className="p-6">
-                <h3 className="font-bold text-lg mb-4">{t('upload.coverImage')}</h3>
+              <Card className="p-6 bg-slate-900/50 border-slate-800">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 bg-purple-500/10 rounded-lg flex items-center justify-center">
+                    <ImageIcon className="w-5 h-5 text-purple-400" />
+                  </div>
+                  <h3 className="font-bold text-lg text-white">{t('upload.coverImage')}</h3>
+                </div>
                 
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="cover-image">
-                      Imagen JPG o PNG (máx 10MB)
+                    <Label htmlFor="cover-image" className="text-slate-300">
+                      JPG or PNG (max 10MB)
                     </Label>
                     <Input
                       id="cover-image"
                       type="file"
                       accept="image/*"
                       onChange={handleCoverImageChange}
-                      className="mt-2"
+                      className="mt-2 bg-slate-800 border-slate-700 text-white"
                     />
                   </div>
 
                   {coverPreview && (
                     <div className="space-y-3">
-                      <div className="aspect-square bg-muted rounded-lg overflow-hidden">
+                      <div className="aspect-square bg-slate-800 rounded-lg overflow-hidden border border-slate-700">
                         <img
                           src={coverPreview}
                           alt="Preview"
@@ -458,18 +512,17 @@ export default function Upload() {
                         <Button
                           onClick={handleUploadCover}
                           disabled={isUploadingCover}
-                          className="w-full"
-                          variant="outline"
+                          className="w-full bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700"
                         >
                           {isUploadingCover ? (
                             <>
                               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                              Subiendo...
+                              Uploading...
                             </>
                           ) : (
                             <>
                               <ImageIcon className="h-4 w-4 mr-2" />
-                              Subir Portada
+                              Upload Cover
                             </>
                           )}
                         </Button>
@@ -478,7 +531,7 @@ export default function Upload() {
                       {coverUploaded && (
                         <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-lg flex items-center gap-2">
                           <CheckCircle2 className="h-5 w-5 text-green-500" />
-                          <span className="font-medium text-green-500">Portada subida</span>
+                          <span className="font-medium text-green-500">Cover uploaded</span>
                         </div>
                       )}
                     </div>
@@ -488,19 +541,24 @@ export default function Upload() {
 
               {/* AI Analysis */}
               {audioUploaded && (
-                <Card className="p-6">
-                  <h3 className="font-bold text-lg mb-4">Análisis con IA</h3>
+                <Card className="p-6 bg-gradient-to-br from-pink-500/10 to-pink-500/5 border-pink-500/20">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-8 h-8 bg-pink-500/10 rounded-lg flex items-center justify-center">
+                      <Sparkles className="w-5 h-5 text-pink-400" />
+                    </div>
+                    <h3 className="font-bold text-lg text-white">AI Analysis</h3>
+                  </div>
                   
                   {!analysisResult ? (
                     <Button
                       onClick={() => handleAnalyzeAudio()}
                       disabled={isAnalyzing}
-                      className="w-full btn-neon glow-cyan"
+                      className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700"
                     >
                       {isAnalyzing ? (
                         <>
                           <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          Analizando...
+                          Analyzing...
                         </>
                       ) : (
                         <>
@@ -513,7 +571,7 @@ export default function Upload() {
                     <div className="space-y-4">
                       <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-lg flex items-center gap-2 mb-4">
                         <CheckCircle2 className="h-5 w-5 text-green-500" />
-                        <span className="font-medium text-green-500">Análisis completado</span>
+                        <span className="font-medium text-green-500">Analysis completed</span>
                       </div>
                       
                       <MusicAnalysisDisplay
@@ -530,36 +588,40 @@ export default function Upload() {
               )}
             </div>
 
-            {/* Right Column - Track Info */}
+            {/* Right Column - Track Info & Tips */}
             <div className="space-y-6">
-              <Card className="p-6">
-                <h3 className="font-bold text-lg mb-4">{t('upload.trackInfo')}</h3>
+              {/* Track Info */}
+              <Card className="p-6 bg-slate-900/50 border-slate-800">
+                <h3 className="font-bold text-lg mb-4 text-white">{t('upload.trackInfo')}</h3>
                 
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="title">{t('upload.titleLabel')} *</Label>
+                    <Label htmlFor="title" className="text-slate-300">{t('upload.titleLabel')} *</Label>
                     <Input
                       id="title"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
                       placeholder={t('upload.titlePlaceholder')}
+                      className="bg-slate-800 border-slate-700 text-white"
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="artist">{t('upload.artistLabel')} *</Label>
+                    <Label htmlFor="artist" className="text-slate-300">{t('upload.artistLabel')} *</Label>
                     <Input
                       id="artist"
                       value={artist}
                       onChange={(e) => setArtist(e.target.value)}
-                      placeholder={t('upload.artistPlaceholder')}                    />
+                      placeholder={t('upload.artistPlaceholder')}
+                      className="bg-slate-800 border-slate-700 text-white"
+                    />
                   </div>
 
                   <div>
-                    <Label htmlFor="genre">{t('upload.genreLabel')} *</Label>
+                    <Label htmlFor="genre" className="text-slate-300">{t('upload.genreLabel')} *</Label>
                     <Select value={genre} onValueChange={setGenre}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecciona un género" />
+                      <SelectTrigger className="bg-slate-800 border-slate-700 text-white">
+                        <SelectValue placeholder="Select genre" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="Tech House">Tech House</SelectItem>
@@ -579,10 +641,10 @@ export default function Upload() {
                   </div>
 
                   <div>
-                    <Label htmlFor="trackType">{t('upload.typeLabel')} *</Label>
+                    <Label htmlFor="trackType" className="text-slate-300">{t('upload.typeLabel')} *</Label>
                     <Select value={trackType} onValueChange={setTrackType}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecciona el tipo" />
+                      <SelectTrigger className="bg-slate-800 border-slate-700 text-white">
+                        <SelectValue placeholder="Select type" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="Extended Mix">Extended Mix</SelectItem>
@@ -596,65 +658,104 @@ export default function Upload() {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="bpm">BPM</Label>
-                        <Input
-                          id="bpm"
-                          type="number"
-                          value={bpm}
-                          onChange={(e) => setBpm(e.target.value)}
-                          placeholder="128"
-                        />
+                      <Label htmlFor="bpm" className="text-slate-300">BPM</Label>
+                      <Input
+                        id="bpm"
+                        type="number"
+                        value={bpm}
+                        onChange={(e) => setBpm(e.target.value)}
+                        placeholder="128"
+                        className="bg-slate-800 border-slate-700 text-white"
+                      />
                     </div>
 
                     <div>
-                      <Label htmlFor="key">Clave Musical</Label>
-                        <Input
-                          id="key"
-                          value={musicalKey}
-                          onChange={(e) => setMusicalKey(e.target.value)}
-                          placeholder="Am"
-                        />
+                      <Label htmlFor="key" className="text-slate-300">Key</Label>
+                      <Input
+                        id="key"
+                        value={musicalKey}
+                        onChange={(e) => setMusicalKey(e.target.value)}
+                        placeholder="Am"
+                        className="bg-slate-800 border-slate-700 text-white"
+                      />
                     </div>
                   </div>
                 </div>
               </Card>
 
-              {/* Submit Button */}
+              {/* Pro Tips */}
+              <Card className="p-6 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 border-cyan-500/20">
+                <h3 className="font-bold text-lg mb-4 text-white flex items-center gap-2">
+                  <Zap className="w-5 h-5 text-cyan-400" />
+                  Pro Tips
+                </h3>
+                <ul className="space-y-3 text-sm text-slate-300">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
+                    <span>Use high-quality WAV files for best sound</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
+                    <span>Add eye-catching cover art to stand out</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
+                    <span>Let AI analyze for accurate BPM & key</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
+                    <span>Use descriptive titles for better discovery</span>
+                  </li>
+                </ul>
+              </Card>
+
+              {/* Publish Button */}
               <Button
                 onClick={handleSubmit}
                 disabled={createTrack.isPending || !uploadedAudio}
-                className="w-full btn-neon glow-pink h-14 text-lg"
+                className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 h-14 text-lg shadow-lg shadow-pink-500/20"
                 size="lg"
               >
                 {createTrack.isPending ? (
                   <>
                     <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-                    Publicando...
+                    Publishing...
                   </>
                 ) : (
                   <>
                     <UploadIcon className="h-5 w-5 mr-2" />
                     {t('upload.publish')}
+                    <ArrowRight className="h-5 w-5 ml-2" />
                   </>
                 )}
               </Button>
 
               {isFreeUser && (
-                <div className="text-center space-y-2 mt-4">
-                  <p className="text-sm text-muted-foreground">
-                    🎵 Track publicado con éxito. Suscríbete por $4.99/mes para ver tus estadísticas y ganancias reales.
+                <div className="text-center p-4 bg-slate-800/50 rounded-lg border border-slate-700">
+                  <p className="text-sm text-slate-400 mb-2">
+                    💎 Upgrade to Pro to unlock:
                   </p>
+                  <ul className="text-xs text-slate-500 space-y-1">
+                    <li>• Real-time earnings dashboard</li>
+                    <li>• Advanced analytics</li>
+                    <li>• Priority support</li>
+                  </ul>
+                  <Link href="/membership">
+                    <Button variant="outline" size="sm" className="mt-3 border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10">
+                      Upgrade Now
+                    </Button>
+                  </Link>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Upload Limits Info - Informativo al final */}
+          {/* Upload Limits Info */}
           {isAuthenticated && (
-            <div className="mt-12 pt-8 border-t border-border/30">
+            <div className="mt-12 pt-8 border-t border-slate-800">
               <div className="max-w-2xl mx-auto">
-                <h3 className="text-sm font-medium text-muted-foreground mb-4 text-center">
-                  📋 Información de Límites y Formatos
+                <h3 className="text-sm font-medium text-slate-400 mb-4 text-center">
+                  📋 Limits & Formats
                 </h3>
                 <UploadLimitsCard compact={true} />
               </div>
