@@ -87,27 +87,27 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-6">
             <Link href="/explore" className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
               <Music className="h-4 w-4" />
-              <span>{t('nav.explore')}</span>
+              <span>Discover</span>
             </Link>
             
             <Link href="/dj-mode" className="flex items-center space-x-2 text-foreground hover:text-purple-400 transition-colors">
               <Radio className="h-4 w-4" />
-              <span className="text-glow-purple">{t('nav.djMode')}</span>
+              <span className="text-glow-purple">AI Studio</span>
             </Link>
             
             <Link href="/mainstage" className="flex items-center space-x-2 text-foreground hover:text-accent transition-colors">
               <Sparkles className="h-4 w-4" />
-              <span className="text-glow-pink">{t('nav.mainstage')}</span>
+              <span className="text-glow-pink">Mainstage</span>
             </Link>
             
             <Link href="/rankings" className="flex items-center space-x-2 text-foreground hover:text-secondary transition-colors">
               <Trophy className="h-4 w-4" />
-              <span>{t('nav.rankings')}</span>
+              <span>Network</span>
             </Link>
 
             <Link href="/dashboard" className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
               <LayoutDashboard className="h-4 w-4" />
-              <span>{t('nav.dashboard')}</span>
+              <span>Creator Hub</span>
             </Link>
             
             {isAuthenticated && user?.membershipStatus !== "free" && (
@@ -165,7 +165,7 @@ export default function Navbar() {
                     <Link href="/dashboard">
                       <DropdownMenuItem>
                         <LayoutDashboard className="mr-2 h-4 w-4" />
-                        <span>{t('nav.dashboard')}</span>
+                        <span>Creator Hub</span>
                       </DropdownMenuItem>
                     </Link>
                     <DropdownMenuSeparator />
@@ -205,7 +205,7 @@ export default function Navbar() {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <Music className="h-5 w-5 text-cyan-400" />
-                  <span className="text-lg">{t('nav.explore')}</span>
+                  <span className="text-lg">Discover</span>
                 </Link>
                 
                 <Link 
@@ -214,7 +214,7 @@ export default function Navbar() {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <Radio className="h-5 w-5 text-purple-400" />
-                  <span className="text-lg text-glow-purple">{t('nav.djMode')}</span>
+                  <span className="text-lg text-glow-purple">AI Studio</span>
                 </Link>
                 
                 <Link 
@@ -223,7 +223,7 @@ export default function Navbar() {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <Sparkles className="h-5 w-5 text-pink-400" />
-                  <span className="text-lg text-glow-pink">{t('nav.mainstage')}</span>
+                  <span className="text-lg text-glow-pink">Mainstage</span>
                 </Link>
                 
                 <Link 
@@ -232,7 +232,7 @@ export default function Navbar() {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <Trophy className="h-5 w-5 text-yellow-400" />
-                  <span className="text-lg">{t('nav.rankings')}</span>
+                  <span className="text-lg">Network</span>
                 </Link>
                 
                 <Link 
@@ -241,7 +241,7 @@ export default function Navbar() {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <LayoutDashboard className="h-5 w-5 text-cyan-400" />
-                  <span className="text-lg">{t('nav.dashboard')}</span>
+                  <span className="text-lg">Creator Hub</span>
                 </Link>
                 
                 {isAuthenticated && user?.membershipStatus !== "free" && (

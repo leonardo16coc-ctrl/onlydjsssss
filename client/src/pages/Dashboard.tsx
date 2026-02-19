@@ -55,7 +55,7 @@ export default function Dashboard() {
       <Navbar />
       <div className="container py-8">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-4xl font-bold text-glow-cyan">{t("dashboard.title")}</h1>
+          <h1 className="text-4xl font-bold text-glow-cyan">Creator Hub</h1>
           {!isPremiumUser && (
             <TooltipProvider>
               <Tooltip>

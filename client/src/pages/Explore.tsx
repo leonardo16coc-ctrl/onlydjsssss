@@ -75,7 +75,7 @@ export default function Explore() {
       <Navbar />
       <div className="container py-8">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 text-glow-cyan">{t('explore.title')}</h1>
+          <h1 className="text-4xl font-bold mb-2 text-glow-cyan">Discover</h1>
           <p className="text-muted-foreground">
             {t('explore.subtitle')}
           </p>
