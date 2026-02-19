@@ -7,6 +7,54 @@ import MonetizationSection from "@/components/MonetizationSection";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
 import { AIAnalyzer } from "@/components/AIAnalyzer";
+import TrackCarousel from "@/components/TrackCarousel";
+import { trpc } from "@/lib/trpc";
+
+function FeaturedTracksSection() {
+  const { data: tracks, isLoading } = trpc.tracks.list.useQuery({
+    limit: 12,
+  });
+
+  if (isLoading) {
+    return (
+      <section className="py-16 bg-slate-950 border-b border-slate-800">
+        <div className="container">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold mb-3 text-white">
+              <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Trending Tracks
+              </span>
+            </h2>
+            <p className="text-slate-400">Discover what DJs are uploading right now</p>
+          </div>
+          <div className="flex items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400"></div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!tracks || tracks.length === 0) {
+    return null;
+  }
+
+  return (
+    <section className="py-16 bg-slate-950 border-b border-slate-800">
+      <div className="container">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl md:text-4xl font-bold mb-3 text-white">
+            <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+              Trending Tracks
+            </span>
+          </h2>
+          <p className="text-slate-400">Discover what DJs are uploading right now</p>
+        </div>
+        <TrackCarousel tracks={tracks} />
+      </div>
+    </section>
+  );
+}
 
 export default function Home() {
   const { t } = useTranslation();
@@ -155,6 +203,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Featured Tracks Carousel */}
+      <FeaturedTracksSection />
 
       {/* Social Proof Stats */}
       <section className="py-12 bg-slate-900/50 border-y border-slate-800">
