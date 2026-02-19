@@ -24,6 +24,7 @@ import Privacy from "./pages/Privacy";
 import Copyright from "./pages/Copyright";
 import Legal from "./pages/Legal";
 import Community from "./pages/Community";
+import AgentsDashboard from "./pages/AgentsDashboard";
 
 function Router() {
   return (
@@ -41,6 +42,7 @@ function Router() {
       <Route path={"/wallet"} component={Wallet} />
       <Route path={"/faq"} component={FAQ} />
       <Route path={"/community"} component={Community} />
+      <Route path={"/agents"} component={AgentsDashboard} />
       <Route path={"/dj/:username"} component={DJProfile} />
       <Route path={"/profile/edit"} component={ProfileEdit} />
       <Route path={"/track/edit/:id"} component={EditTrack} />

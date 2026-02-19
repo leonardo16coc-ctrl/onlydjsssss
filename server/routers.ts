@@ -24,6 +24,7 @@ import { walletRouter } from "./routers/wallet.router";
 import { trackingRouter } from "./routers/tracking.router";
 import { aiAnalyzerRouter } from "./routers/ai-analyzer.router";
 import { communityRouter } from "./routers/community.router";
+import { agentsRouter } from "./routers/agents";
 import { getDb } from "./db";
 import { tracks, downloads } from "../drizzle/schema";
 import { eq, and, gte, sql } from "drizzle-orm";
@@ -54,6 +55,7 @@ export const appRouter = router({
   wallet: walletRouter,
   tracking: trackingRouter,
   community: communityRouter,
+  agents: agentsRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

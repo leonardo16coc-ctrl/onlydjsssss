@@ -2306,3 +2306,79 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Corregir etiquetas <a> anidadas en Navbar.tsx
 - [x] Eliminar doble llamada al análisis automático en Upload.tsx
 - [x] Documentar solución
+
+
+## 105. Sistema de Agentes Autónomos para Crecimiento (NUEVO - GAME CHANGER) 🤖
+
+### Arquitectura General
+- [ ] Diseñar arquitectura completa del sistema de agentes
+- [ ] Definir stack tecnológico (Node.js, Bull Queue, Redis)
+- [ ] Diseñar base de datos para agentes y leads
+- [ ] Implementar sistema de colas para procesamiento asíncrono
+- [ ] Configurar sistema de logging y monitoreo
+- [ ] Implementar rate limiting y throttling
+- [ ] Diseñar sistema de estados para leads
+- [ ] Crear dashboard de administración de agentes
+
+### Agent Scout (Descubrimiento de DJs) - ✅ COMPLETADO
+- [x] Investigar APIs de Instagram y SoundCloud
+- [x] Implementar scraping seguro con rate limiting (Puppeteer + delays aleatorios)
+- [x] Crear algoritmo de scoring de talento (5 componentes: engagement 35%, growth 25%, consistency 20%, reach 15%, genre 5%)
+- [x] Implementar análisis de engagement rate (Instagram + SoundCloud)
+- [x] Crear tabla `discovered_djs` en base de datos con 30+ campos
+- [x] Implementar detección de género musical (basado en hashtags y tracks)
+- [x] Crear sistema de filtros (minFollowers, minTalentScore, genre)
+- [x] Implementar deduplicación de DJs (por username)
+- [x] Crear endpoints tRPC para control (runScout, getDiscoveredDJs, getScoutStats)
+- [x] Implementar almacenamiento de métricas históricas (tabla scout_metrics)
+- [x] Crear dashboard de administración (/agents - solo admins)
+- [x] Documentar arquitectura completa (90+ páginas)
+
+### Agent Closer (Automatización de DMs)
+- [ ] Diseñar flujo de automatización de mensajes
+- [ ] Implementar generación de mensajes con IA
+- [ ] Crear sistema de personalización de mensajes
+- [ ] Implementar envío automático de DMs
+- [ ] Crear sistema de follow-up automático
+- [ ] Implementar detección de respuestas
+- [ ] Crear tabla `outreach_campaigns` en base de datos
+- [ ] Implementar estados de lead (contacted, responded, converted, rejected)
+- [ ] Crear sistema de A/B testing de mensajes
+- [ ] Implementar límites de envío para evitar bans
+
+### Agent Monetizer (Optimización de Ingresos)
+- [ ] Definir métricas clave para análisis
+- [ ] Implementar tracking de comportamiento de DJs
+- [ ] Crear algoritmo de detección de oportunidades
+- [ ] Implementar recomendaciones de pricing dinámico
+- [ ] Crear sistema de sugerencias de upsell
+- [ ] Implementar análisis de churn prediction
+- [ ] Crear dashboard de métricas de monetización
+- [ ] Implementar notificaciones automáticas de oportunidades
+- [ ] Crear reportes automáticos de revenue optimization
+
+### Base de Datos
+- [ ] Crear tabla `discovered_djs` (scout data)
+- [ ] Crear tabla `outreach_campaigns` (closer data)
+- [ ] Crear tabla `lead_states` (pipeline tracking)
+- [ ] Crear tabla `agent_metrics` (performance tracking)
+- [ ] Crear tabla `monetization_opportunities` (revenue optimization)
+- [ ] Implementar índices para queries de alto rendimiento
+- [ ] Crear vistas materializadas para analytics
+
+### Seguridad y Compliance
+- [ ] Implementar rate limiting por plataforma
+- [ ] Crear sistema de rotación de IPs/proxies
+- [ ] Implementar GDPR compliance
+- [ ] Crear sistema de opt-out automático
+- [ ] Implementar logs de auditoría
+- [ ] Documentar riesgos legales y mitigaciones
+- [ ] Crear términos de servicio para automatización
+
+### Testing y Monitoreo
+- [ ] Tests unitarios de cada agente
+- [ ] Tests de integración del sistema completo
+- [ ] Implementar monitoreo de salud de agentes
+- [ ] Crear alertas de fallos y anomalías
+- [ ] Implementar métricas de performance
+- [ ] Crear dashboard de monitoreo en tiempo real
