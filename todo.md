@@ -2672,3 +2672,20 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Actualizar rutas en App.tsx
 - [x] Diseño consistente SaaS
 - [x] Guardar checkpoint
+
+
+## 79. Página Terms of Service (NUEVO)
+- [x] Crear página Terms of Service (/terms)
+- [x] Sección Acceptance of Terms
+- [x] Sección User Accounts (registro, responsabilidades)
+- [x] Sección Content Rights & Ownership (copyright, licencias)
+- [x] Sección Payments & Monetization (precios, comisiones, reembolsos)
+- [x] Sección Prohibited Conduct
+- [x] Sección Copyright & DMCA
+- [x] Sección Termination (suspensión de cuentas)
+- [x] Sección Disclaimers & Limitations
+- [x] Sección Dispute Resolution (arbitraje)
+- [x] Sección Changes to Terms
+- [x] Actualizar ruta en App.tsx (ya existía)
+- [x] Diseño consistente SaaS
+- [x] Guardar checkpoint
