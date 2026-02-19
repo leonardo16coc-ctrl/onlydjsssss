@@ -2638,3 +2638,19 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar rutas en App.tsx
 - [x] Diseño consistente con estilo SaaS (gradientes, cards, spacing)
 - [x] Guardar checkpoint
+
+
+## 77. Páginas Blog, FAQ y Careers (NUEVO)
+- [x] Crear página Blog (/blog) con grid de artículos
+- [x] Implementar categorías: Production Tips, Industry News, DJ Tutorials
+- [x] Agregar search y filtros por categoría en Blog
+- [x] Crear 6-8 artículos de ejemplo con contenido relevante
+- [x] Crear página FAQ mejorada (/faq) con accordion UI (ya existía)
+- [x] Implementar categorías colapsables en FAQ (ya existía)
+- [x] Crear página Careers (/careers) con job listings
+- [x] Agregar company culture section en Careers
+- [x] Listar benefits & perks
+- [x] Describir application process
+- [x] Actualizar rutas en App.tsx
+- [x] Diseño consistente SaaS con gradientes
+- [x] Guardar checkpoint

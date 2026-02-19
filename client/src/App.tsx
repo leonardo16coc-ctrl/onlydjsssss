@@ -28,6 +28,8 @@ import AgentsDashboard from "./pages/AgentsDashboard";
 import ScraperMonitoring from "./pages/ScraperMonitoring";
 import About from "./pages/About";
 import Help from "./pages/Help";
+import Blog from "./pages/Blog";
+import Careers from "./pages/Careers";
 
 function Router() {
   return (
@@ -47,6 +49,8 @@ function Router() {
       <Route path={"/community"} component={Community} />
       <Route path={"/about"} component={About} />
       <Route path={"/help"} component={Help} />
+      <Route path={"/blog"} component={Blog} />
+      <Route path={"/careers"} component={Careers} />
       <Route path={"/discover"} component={Explore} />
       <Route path={"/network"} component={Rankings} />
       <Route path={"/agents"} component={AgentsDashboard} />
