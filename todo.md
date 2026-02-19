@@ -2398,3 +2398,24 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Crear dashboard de administración de campañas en /agents
 - [x] Implementar tests unitarios (9 tests pasando)
 - [x] Documentar arquitectura y flujos
+
+
+## 106. Integración de Scraping Controlado con Puppeteer (ALTO RIESGO) ⚠️
+- [x] Investigar Instagram Graph API y limitaciones (NO VIABLE para cold outreach)
+- [x] Investigar SoundCloud API v2 (NO DISPONIBLE públicamente)
+- [x] Documentar riesgos legales y técnicos
+- [x] Instalar dependencias (puppeteer-extra, puppeteer-extra-plugin-stealth, proxy-chain)
+- [x] Crear configuración de scrapers con anti-detección
+- [x] Crear Instagram scraper con Puppeteer (rate limiting extremo)
+- [x] Crear SoundCloud scraper con Puppeteer
+- [x] Implementar rate limiting conservador (10 acciones/hora, 50/día)
+- [x] Implementar delays aleatorios (30-120 segundos)
+- [x] Crear sistema de rotación de user-agents
+- [x] Implementar detección automática de bans
+- [x] Crear sistema de gestión de cuentas desechables (account-manager)
+- [x] Implementar sistema de cookies y sesiones persistentes
+- [x] Crear wrapper para integrar scrapers con Agent Scout
+- [x] Implementar logging detallado de acciones (scraper_logs table)
+- [ ] Crear dashboard de monitoreo de salud de scrapers en UI
+- [ ] Implementar sistema de proxies residenciales rotatorios (requiere servicio externo)
+- [ ] Documentar configuración completa y riesgos
