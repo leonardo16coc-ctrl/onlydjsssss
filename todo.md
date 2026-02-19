@@ -2382,3 +2382,19 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [ ] Crear alertas de fallos y anomalías
 - [ ] Implementar métricas de performance
 - [ ] Crear dashboard de monitoreo en tiempo real
+
+
+### Agent Closer (Automatización de DMs) - ✅ COMPLETADO
+- [x] Diseñar esquema de base de datos (outreach_campaigns, outreach_messages, lead_states, closer_config)
+- [x] Crear tablas en base de datos con SQL
+- [x] Implementar generación de mensajes personalizados con IA (con structured output)
+- [x] Crear prompts para diferentes tipos de mensajes (inicial, follow-up 1, follow-up 2)
+- [x] Implementar sistema de envío de DMs (Instagram + SoundCloud) con simulación
+- [x] Implementar rate limiting y delays aleatorios (50 msg/día, 10 msg/hora)
+- [x] Crear máquina de estados para leads (10 estados diferentes)
+- [x] Implementar secuencia de follow-up automático (día 0, 3, 7)
+- [x] Crear sistema de detección de respuestas (simulado)
+- [x] Implementar endpoints tRPC para control del agente (7 endpoints)
+- [x] Crear dashboard de administración de campañas en /agents
+- [x] Implementar tests unitarios (9 tests pasando)
+- [x] Documentar arquitectura y flujos

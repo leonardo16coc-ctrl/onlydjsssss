@@ -7,6 +7,15 @@ import { z } from 'zod';
 import { publicProcedure, protectedProcedure, router } from '../_core/trpc';
 import { TRPCError } from '@trpc/server';
 import { discoverDJsByGenre, runFullDiscovery } from '../agents/scout';
+import { 
+  createCampaign, 
+  startCampaign, 
+  getCampaignStats, 
+  getAllCampaigns,
+  pauseCampaign,
+  resumeCampaign,
+  runAgentCloserCycle
+} from '../agents/closer';
 import { db } from '../agents/db-helper';
 
 export const agentsRouter = router({
@@ -290,5 +299,149 @@ export const agentsRouter = router({
       );
       
       return { success: true };
+    }),
+  
+  /**
+   * Create outreach campaign
+   */
+  createCampaign: protectedProcedure
+    .input(z.object({
+      name: z.string().min(1),
+      description: z.string().optional(),
+      platform: z.enum(['instagram', 'soundcloud', 'both']),
+      targetGenre: z.string().optional(),
+      minTalentScore: z.number().min(0).max(100).default(60)
+    }))
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.user.role !== 'admin') {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Only admins can create campaigns'
+        });
+      }
+      
+      const campaignId = await createCampaign(input);
+      
+      return { success: true, campaignId };
+    }),
+  
+  /**
+   * Start campaign
+   */
+  startCampaign: protectedProcedure
+    .input(z.object({
+      campaignId: z.number()
+    }))
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.user.role !== 'admin') {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Only admins can start campaigns'
+        });
+      }
+      
+      const result = await startCampaign(input.campaignId);
+      
+      return result;
+    }),
+  
+  /**
+   * Get all campaigns
+   */
+  getCampaigns: protectedProcedure
+    .query(async ({ ctx }) => {
+      if (ctx.user.role !== 'admin') {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Only admins can view campaigns'
+        });
+      }
+      
+      const campaigns = await getAllCampaigns();
+      
+      return campaigns;
+    }),
+  
+  /**
+   * Get campaign statistics
+   */
+  getCampaignStats: protectedProcedure
+    .input(z.object({
+      campaignId: z.number()
+    }))
+    .query(async ({ ctx, input }) => {
+      if (ctx.user.role !== 'admin') {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Only admins can view campaign stats'
+        });
+      }
+      
+      const stats = await getCampaignStats(input.campaignId);
+      
+      return stats;
+    }),
+  
+  /**
+   * Pause campaign
+   */
+  pauseCampaign: protectedProcedure
+    .input(z.object({
+      campaignId: z.number()
+    }))
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.user.role !== 'admin') {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Only admins can pause campaigns'
+        });
+      }
+      
+      await pauseCampaign(input.campaignId);
+      
+      return { success: true };
+    }),
+  
+  /**
+   * Resume campaign
+   */
+  resumeCampaign: protectedProcedure
+    .input(z.object({
+      campaignId: z.number()
+    }))
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.user.role !== 'admin') {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Only admins can resume campaigns'
+        });
+      }
+      
+      await resumeCampaign(input.campaignId);
+      
+      return { success: true };
+    }),
+  
+  /**
+   * Run Agent Closer cycle manually
+   */
+  runCloserCycle: protectedProcedure
+    .mutation(async ({ ctx }) => {
+      if (ctx.user.role !== 'admin') {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Only admins can run Agent Closer'
+        });
+      }
+      
+      try {
+        await runAgentCloserCycle();
+        return { success: true };
+      } catch (error: any) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: `Agent Closer failed: ${error.message}`
+        });
+      }
     })
 });

@@ -9,12 +9,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Play, Users, TrendingUp, Target, CheckCircle, XCircle } from 'lucide-react';
+import { Loader2, Play, Users, TrendingUp, Target, CheckCircle, XCircle, MessageSquare, Send } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AgentsDashboard() {
   const [selectedGenre, setSelectedGenre] = useState('Tech House');
   const [selectedPlatform, setSelectedPlatform] = useState<'instagram' | 'soundcloud' | 'both'>('both');
+  const [showCloser, setShowCloser] = useState(false);
   
   // Queries
   const { data: config, isLoading: configLoading } = trpc.agents.getScoutConfig.useQuery();
@@ -24,6 +25,7 @@ export default function AgentsDashboard() {
     limit: 20,
     minScore: 60
   });
+  const { data: campaigns, refetch: refetchCampaigns } = trpc.agents.getCampaigns.useQuery();
   
   // Mutations
   const runScout = trpc.agents.runScout.useMutation({
@@ -41,6 +43,16 @@ export default function AgentsDashboard() {
     },
     onError: (error) => {
       toast.error(`Full discovery failed: ${error.message}`);
+    }
+  });
+  
+  const runCloserCycle = trpc.agents.runCloserCycle.useMutation({
+    onSuccess: () => {
+      toast.success('Agent Closer cycle completed!');
+      refetchCampaigns();
+    },
+    onError: (error) => {
+      toast.error(`Agent Closer failed: ${error.message}`);
     }
   });
   
@@ -322,6 +334,119 @@ export default function AgentsDashboard() {
             </div>
           )}
         </CardContent>
+      </Card>
+      
+      {/* Agent Closer Section */}
+      <Card className="border-purple-500/20">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <MessageSquare className="w-5 h-5 text-purple-500" />
+                Agent Closer - Outreach Automation
+              </CardTitle>
+              <CardDescription>
+                Automate personalized DM campaigns to discovered DJs
+              </CardDescription>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowCloser(!showCloser)}
+            >
+              {showCloser ? 'Hide' : 'Show'} Closer
+            </Button>
+          </div>
+        </CardHeader>
+        
+        {showCloser && (
+          <CardContent className="space-y-4">
+            {/* Campaigns List */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Active Campaigns</h3>
+              
+              {campaigns && campaigns.length > 0 ? (
+                <div className="space-y-4">
+                  {campaigns.map((campaign: any) => (
+                    <Card key={campaign.id} className="border-purple-500/10">
+                      <CardContent className="pt-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <div>
+                            <h4 className="font-semibold">{campaign.name}</h4>
+                            <p className="text-sm text-muted-foreground">{campaign.description}</p>
+                          </div>
+                          <Badge variant={campaign.status === 'active' ? 'default' : 'secondary'}>
+                            {campaign.status}
+                          </Badge>
+                        </div>
+                        
+                        <div className="grid grid-cols-4 gap-4 text-sm">
+                          <div>
+                            <p className="text-muted-foreground">Targets</p>
+                            <p className="font-semibold">{campaign.totalTargets}</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">Contacted</p>
+                            <p className="font-semibold">{campaign.contacted}</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">Responded</p>
+                            <p className="font-semibold">{campaign.responded}</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">Converted</p>
+                            <p className="font-semibold">{campaign.converted}</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                  <MessageSquare className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                  <p>No campaigns yet. Create your first outreach campaign.</p>
+                </div>
+              )}
+            </div>
+            
+            {/* Quick Actions */}
+            <div className="flex gap-2 pt-4 border-t">
+              <Button
+                onClick={() => runCloserCycle.mutate()}
+                disabled={runCloserCycle.isPending}
+                variant="outline"
+              >
+                {runCloserCycle.isPending ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Running...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4 mr-2" />
+                    Run Follow-up Cycle
+                  </>
+                )}
+              </Button>
+              
+              <Button
+                variant="outline"
+                onClick={() => toast.info('Campaign creation UI coming soon')}
+              >
+                Create New Campaign
+              </Button>
+            </div>
+            
+            {/* Info */}
+            <div className="bg-purple-500/5 border border-purple-500/20 rounded-lg p-4">
+              <p className="text-sm text-muted-foreground">
+                <strong>Note:</strong> Agent Closer uses AI to generate personalized messages and automatically sends follow-ups. 
+                The system respects rate limits (50 messages/day, 10/hour) to avoid platform restrictions.
+              </p>
+            </div>
+          </CardContent>
+        )}
       </Card>
     </div>
   );
