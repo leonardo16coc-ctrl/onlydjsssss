@@ -2570,3 +2570,10 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar links a About, Contact, Terms, Privacy
 - [x] Optimizar tipografía y espaciado para look profesional
 - [x] Implementar micro-interacciones y hover effects
+
+
+## 71. Agregar botón "Upload Track" como CTA principal en Hero (NUEVO)
+- [x] Agregar botón "Upload Track" en hero section junto a "Start Free" y "View Platform"
+- [x] Link al botón hacia /upload (Creator Hub)
+- [x] Diseño destacado como primary CTA
+- [x] Guardar checkpoint
