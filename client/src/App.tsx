@@ -26,6 +26,8 @@ import Legal from "./pages/Legal";
 import Community from "./pages/Community";
 import AgentsDashboard from "./pages/AgentsDashboard";
 import ScraperMonitoring from "./pages/ScraperMonitoring";
+import About from "./pages/About";
+import Help from "./pages/Help";
 
 function Router() {
   return (
@@ -43,6 +45,10 @@ function Router() {
       <Route path={"/wallet"} component={Wallet} />
       <Route path={"/faq"} component={FAQ} />
       <Route path={"/community"} component={Community} />
+      <Route path={"/about"} component={About} />
+      <Route path={"/help"} component={Help} />
+      <Route path={"/discover"} component={Explore} />
+      <Route path={"/network"} component={Rankings} />
       <Route path={"/agents"} component={AgentsDashboard} />
       <Route path={"/scraper-monitoring"} component={ScraperMonitoring} />
       <Route path={"/dj/:username"} component={DJProfile} />

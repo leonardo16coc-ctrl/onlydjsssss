@@ -2623,3 +2623,18 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Posicionar badge en esquina superior izquierda del cover
 - [x] Diseño consistente con estilo SaaS
 - [x] Guardar checkpoint
+
+
+## 76. Páginas Company y Resources adaptadas a SaaS (NUEVO)
+- [x] Crear página About Us (/about) - Historia, misión, visión
+- [ ] Crear página Team (/team) - Equipo fundador y members
+- [ ] Crear página Careers (/careers) - Oportunidades de trabajo
+- [ ] Crear página Press Kit (/press) - Recursos para medios
+- [x] Crear página Help Center (/help) - FAQ organizado por categorías
+- [ ] Crear página Documentation (/docs) - Guías de uso
+- [ ] Crear página Blog (/blog) - Artículos sobre DJing
+- [ ] Crear página API Docs (/api-docs) - Documentación para developers
+- [x] Actualizar Footer con links correctos a todas las páginas
+- [x] Agregar rutas en App.tsx
+- [x] Diseño consistente con estilo SaaS (gradientes, cards, spacing)
+- [x] Guardar checkpoint
