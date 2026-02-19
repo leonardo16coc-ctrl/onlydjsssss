@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card";
-import { Music, TrendingUp } from "lucide-react";
+import { Music, TrendingUp, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 interface Track {
@@ -10,6 +10,7 @@ interface Track {
   bpm?: number | null;
   coverImageUrl?: string | null;
   downloadCount: number;
+  createdAt: Date;
 }
 
 interface TrackCarouselProps {
@@ -55,6 +56,14 @@ export default function TrackCarousel({ tracks }: TrackCarouselProps) {
   // Duplicate tracks for seamless infinite scroll
   const duplicatedTracks = [...tracks, ...tracks];
 
+  // Check if track is new (within 48 hours)
+  const isNewTrack = (createdAt: Date) => {
+    const now = new Date();
+    const trackDate = new Date(createdAt);
+    const hoursDiff = (now.getTime() - trackDate.getTime()) / (1000 * 60 * 60);
+    return hoursDiff <= 48;
+  };
+
   return (
     <div className="relative overflow-hidden py-8">
       <div
@@ -82,8 +91,18 @@ export default function TrackCarousel({ tracks }: TrackCarouselProps) {
                 </div>
               )}
               
+              {/* NEW Badge */}
+              {isNewTrack(track.createdAt) && (
+                <div className="absolute top-2 left-2">
+                  <span className="px-2 py-1 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full text-xs font-bold text-white border border-white/20 shadow-lg animate-pulse flex items-center gap-1">
+                    <Sparkles className="w-3 h-3" />
+                    NEW
+                  </span>
+                </div>
+              )}
+
               {/* Genre Badge */}
-              <div className="absolute top-2 left-2">
+              <div className="absolute top-2 right-2">
                 <span className="px-2 py-1 bg-black/60 backdrop-blur-sm rounded-full text-xs font-medium text-cyan-400 border border-cyan-500/30">
                   {track.genre}
                 </span>
@@ -91,7 +110,7 @@ export default function TrackCarousel({ tracks }: TrackCarouselProps) {
 
               {/* BPM Badge */}
               {track.bpm && (
-                <div className="absolute top-2 right-2">
+                <div className="absolute bottom-2 right-2">
                   <span className="px-2 py-1 bg-black/60 backdrop-blur-sm rounded-full text-xs font-medium text-purple-400 border border-purple-500/30">
                     {track.bpm} BPM
                   </span>

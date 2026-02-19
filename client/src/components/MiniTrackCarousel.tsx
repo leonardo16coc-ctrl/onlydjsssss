@@ -1,4 +1,4 @@
-import { Music, Play } from "lucide-react";
+import { Music, Play, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 interface Track {
@@ -9,6 +9,7 @@ interface Track {
   bpm?: number | null;
   coverImageUrl?: string | null;
   downloadCount: number;
+  createdAt: Date;
 }
 
 interface MiniTrackCarouselProps {
@@ -54,6 +55,14 @@ export default function MiniTrackCarousel({ tracks }: MiniTrackCarouselProps) {
   // Duplicate tracks for seamless infinite scroll
   const duplicatedTracks = [...tracks, ...tracks];
 
+  // Check if track is new (within 48 hours)
+  const isNewTrack = (createdAt: Date) => {
+    const now = new Date();
+    const trackDate = new Date(createdAt);
+    const hoursDiff = (now.getTime() - trackDate.getTime()) / (1000 * 60 * 60);
+    return hoursDiff <= 48;
+  };
+
   return (
     <div 
       className="relative h-full overflow-hidden"
@@ -71,7 +80,7 @@ export default function MiniTrackCarousel({ tracks }: MiniTrackCarouselProps) {
             className="flex items-center gap-3 bg-slate-800/50 border border-slate-700 rounded-lg p-3 hover:border-cyan-500/50 transition-all hover:bg-slate-800/70 cursor-pointer group"
           >
             {/* Cover */}
-            <div className="relative w-12 h-12 flex-shrink-0 rounded overflow-hidden">
+            <div className="relative w-12 h-12 flex-shrink-0 rounded overflow-hidden group/cover">
               {track.coverImageUrl ? (
                 <img
                   src={track.coverImageUrl}
@@ -88,6 +97,16 @@ export default function MiniTrackCarousel({ tracks }: MiniTrackCarouselProps) {
               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                 <Play className="w-4 h-4 text-white fill-white" />
               </div>
+
+              {/* NEW Badge */}
+              {isNewTrack(track.createdAt) && (
+                <div className="absolute -top-1 -left-1 z-10">
+                  <span className="px-1.5 py-0.5 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full text-[10px] font-bold text-white border border-white/20 shadow-lg animate-pulse flex items-center gap-0.5">
+                    <Sparkles className="w-2 h-2" />
+                    NEW
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Info */}

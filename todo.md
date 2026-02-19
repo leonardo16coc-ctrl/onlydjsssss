@@ -2612,3 +2612,14 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Integración con tracks reales de DB
 - [x] Mantener bordes redondeados y sombras del diseño original
 - [x] Guardar checkpoint
+
+
+## 75. Badge "NEW" con animación pulse en tracks recién subidos (NUEVO)
+- [x] Agregar lógica para detectar tracks nuevos (últimas 48 horas)
+- [x] Crear badge "NEW" con gradiente llamativo
+- [x] Implementar animación pulse continua
+- [x] Agregar badge en TrackCarousel (trending section)
+- [x] Agregar badge en MiniTrackCarousel (hero section)
+- [x] Posicionar badge en esquina superior izquierda del cover
+- [x] Diseño consistente con estilo SaaS
+- [x] Guardar checkpoint
