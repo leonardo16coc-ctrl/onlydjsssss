@@ -6,7 +6,7 @@
 
 // Proxy manager uses process.env directly for configuration
 
-export type ProxyProvider = 'brightdata' | 'smartproxy' | 'oxylabs' | 'none';
+export type ProxyProvider = 'brightdata' | 'smartproxy' | 'oxylabs' | 'geonode' | 'none';
 
 export interface ProxyConfig {
   provider: ProxyProvider;
@@ -60,6 +60,18 @@ export interface ProxyStats {
  *      OXYLABS_PASSWORD=<password>
  *    - Proxy format: pr.oxylabs.io:7777
  *    - Cost: ~$300/month for 20GB
+ * 
+ * 4. GEONODE (RECOMMENDED - MOST AFFORDABLE) ⭐
+ *    - Sign up at https://geonode.com
+ *    - Get credentials from dashboard
+ *    - Set environment variables:
+ *      GEONODE_USERNAME=<username>
+ *      GEONODE_PASSWORD=<password>
+ *    - Proxy format: proxy.geonode.io:9000
+ *    - Cost: $50/month for 50GB (Starter plan) - 10x cheaper than Smartproxy!
+ *    - Promotion: New users get DOUBLE bandwidth on first purchase
+ *    - Quality: 99% success rate, 500ms avg latency, 200+ countries
+ *    - Bandwidth rollover: Unused GB carries over while subscription active
  */
 
 class ProxyManager {
@@ -73,7 +85,7 @@ class ProxyManager {
   }
   
   private initializeStats() {
-    const providers: ProxyProvider[] = ['brightdata', 'smartproxy', 'oxylabs', 'none'];
+    const providers: ProxyProvider[] = ['brightdata', 'smartproxy', 'oxylabs', 'geonode', 'none'];
     providers.forEach(provider => {
       this.stats.set(provider, {
         provider,
@@ -90,10 +102,10 @@ class ProxyManager {
    * Select the best available proxy provider based on configuration
    */
   private selectBestProvider() {
-    // Check Bright Data
-    if (process.env.BRIGHTDATA_USERNAME && process.env.BRIGHTDATA_PASSWORD) {
-      this.currentProvider = 'brightdata';
-      console.log('[ProxyManager] Using Bright Data proxies');
+    // Check Geonode first (most affordable, recommended)
+    if (process.env.GEONODE_USERNAME && process.env.GEONODE_PASSWORD) {
+      this.currentProvider = 'geonode';
+      console.log('[ProxyManager] ⭐ Using Geonode proxies (most affordable option)');
       return;
     }
     
@@ -108,6 +120,13 @@ class ProxyManager {
     if (process.env.OXYLABS_USERNAME && process.env.OXYLABS_PASSWORD) {
       this.currentProvider = 'oxylabs';
       console.log('[ProxyManager] Using Oxylabs proxies');
+      return;
+    }
+    
+    // Check Bright Data (most expensive, but highest quality)
+    if (process.env.BRIGHTDATA_USERNAME && process.env.BRIGHTDATA_PASSWORD) {
+      this.currentProvider = 'brightdata';
+      console.log('[ProxyManager] Using Bright Data proxies');
       return;
     }
     
@@ -169,6 +188,16 @@ class ProxyManager {
           sessionId: this.generateSessionId()
         };
       
+      case 'geonode':
+        return {
+          provider: 'geonode',
+          host: 'proxy.geonode.io',
+          port: 9000,
+          username: process.env.GEONODE_USERNAME!,
+          password: process.env.GEONODE_PASSWORD!,
+          sessionId: this.generateSessionId()
+        };
+      
       default:
         throw new Error(`Unknown provider: ${provider}`);
     }
@@ -214,6 +243,7 @@ class ProxyManager {
     switch (config.provider) {
       case 'brightdata':
       case 'smartproxy':
+      case 'geonode':
         username = `${username}-session-${config.sessionId}`;
         break;
       case 'oxylabs':
