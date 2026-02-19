@@ -30,6 +30,9 @@ import About from "./pages/About";
 import Help from "./pages/Help";
 import Blog from "./pages/Blog";
 import Careers from "./pages/Careers";
+import Contact from "./pages/Contact";
+import CookiePolicy from "./pages/CookiePolicy";
+import APIDocs from "./pages/APIDocs";
 
 function Router() {
   return (
@@ -51,6 +54,9 @@ function Router() {
       <Route path={"/help"} component={Help} />
       <Route path={"/blog"} component={Blog} />
       <Route path={"/careers"} component={Careers} />
+      <Route path={"/contact"} component={Contact} />
+      <Route path={"/cookies"} component={CookiePolicy} />
+      <Route path={"/api-docs"} component={APIDocs} />
       <Route path={"/discover"} component={Explore} />
       <Route path={"/network"} component={Rankings} />
       <Route path={"/agents"} component={AgentsDashboard} />
