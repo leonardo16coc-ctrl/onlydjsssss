@@ -6,40 +6,45 @@ import { eq } from "drizzle-orm";
 /**
  * Sellfy Webhook Handler
  * 
- * Handles subscription events from Sellfy:
- * - order.paid: New subscription created
- * - subscription.updated: Subscription status changed
- * - subscription.cancelled: Subscription cancelled
+ * Handles subscription events from Sellfy according to official documentation:
+ * https://docs.sellfy.com/article/127-webhooks
  * 
- * Sellfy webhook documentation: https://sellfy.com/developers/#webhooks
+ * Events:
+ * - "Subscription product bought": New subscription or renewal
+ * - "Subscription product canceled": Subscription cancelled by customer
  */
 
-interface SellfyWebhookPayload {
-  event: string;
-  data: {
-    order_id: string;
-    product_id: string;
-    customer_email: string;
-    customer_name?: string;
-    subscription?: {
-      id: string;
-      status: "active" | "cancelled" | "expired" | "pending";
-      next_billing_date?: string;
-    };
-    total: string;
-    currency: string;
+interface SellfySubscriptionPayload {
+  id: string; // Unique Subscription ID
+  payer_email: string;
+  plan_name: string;
+  plan_amount: number; // cents
+  interval: "week" | "month" | "year";
+  product: {
+    id: string;
+    key: string;
+    name: string;
   };
+  activated_at: string; // ISO 8601 format
+  current_period_started_at: string; // ISO 8601 format
+  current_period_ends_at: string; // ISO 8601 format
 }
 
 export async function handleSellfyWebhook(req: Request, res: Response) {
   try {
-    const payload = req.body as SellfyWebhookPayload;
+    // Sellfy sends event type in custom header
+    const eventType = req.headers['x-sellfy-event'] as string;
+    const payload = req.body as SellfySubscriptionPayload;
     
-    console.log("[Sellfy Webhook] Received event:", payload.event);
+    console.log("[Sellfy Webhook] Received event:", eventType);
     console.log("[Sellfy Webhook] Payload:", JSON.stringify(payload, null, 2));
 
-    const { event, data } = payload;
-    const customerEmail = data.customer_email;
+    if (!eventType) {
+      console.error("[Sellfy Webhook] Missing event type header");
+      return res.status(400).json({ error: "Missing event type" });
+    }
+
+    const customerEmail = payload.payer_email;
 
     // Find user by email
     const db = await getDb();
@@ -56,66 +61,49 @@ export async function handleSellfyWebhook(req: Request, res: Response) {
 
     if (!user) {
       console.error("[Sellfy Webhook] User not found for email:", customerEmail);
-      return res.status(404).json({ error: "User not found" });
+      // Return 200 anyway to avoid Sellfy retrying
+      return res.status(200).json({ 
+        received: true, 
+        note: "User not found but webhook acknowledged" 
+      });
     }
 
     // Handle different webhook events
-    switch (event) {
-      case "order.paid":
-        // New subscription created
-        if (data.subscription) {
-          await db
-            .update(users)
-            .set({
-              sellfyCustomerId: customerEmail, // Sellfy uses email as customer ID
-              sellfySubscriptionId: data.subscription.id,
-              sellfySubscriptionStatus: data.subscription.status,
-              membershipStatus: "member",
-              membershipExpiresAt: data.subscription.next_billing_date 
-                ? new Date(data.subscription.next_billing_date) 
-                : null,
-            })
-            .where(eq(users.id, user.id));
+    switch (eventType) {
+      case "Subscription product bought":
+        // New subscription or renewal
+        await db
+          .update(users)
+          .set({
+            sellfyCustomerId: customerEmail,
+            sellfySubscriptionId: payload.id,
+            sellfySubscriptionStatus: "active",
+            membershipStatus: "member",
+            membershipExpiresAt: new Date(payload.current_period_ends_at),
+          })
+          .where(eq(users.id, user.id));
 
-          console.log("[Sellfy Webhook] Subscription activated for user:", user.id);
-        }
+        console.log("[Sellfy Webhook] Subscription activated/renewed for user:", user.id);
+        console.log("[Sellfy Webhook] Next billing:", payload.current_period_ends_at);
         break;
 
-      case "subscription.updated":
-        // Subscription status changed
-        if (data.subscription) {
-          const membershipStatus = data.subscription.status === "active" ? "member" : "free";
-          
-          await db
-            .update(users)
-            .set({
-              sellfySubscriptionStatus: data.subscription.status,
-              membershipStatus,
-              membershipExpiresAt: data.subscription.next_billing_date 
-                ? new Date(data.subscription.next_billing_date) 
-                : null,
-            })
-            .where(eq(users.id, user.id));
-
-          console.log("[Sellfy Webhook] Subscription updated for user:", user.id, "Status:", data.subscription.status);
-        }
-        break;
-
-      case "subscription.cancelled":
+      case "Subscription product canceled":
         // Subscription cancelled
         await db
           .update(users)
           .set({
             sellfySubscriptionStatus: "cancelled",
             membershipStatus: "free",
+            // Keep membershipExpiresAt to show when access ends
           })
           .where(eq(users.id, user.id));
 
         console.log("[Sellfy Webhook] Subscription cancelled for user:", user.id);
+        console.log("[Sellfy Webhook] Access ends at:", user.membershipExpiresAt);
         break;
 
       default:
-        console.log("[Sellfy Webhook] Unhandled event type:", event);
+        console.log("[Sellfy Webhook] Unhandled event type:", eventType);
     }
 
     // Always return 200 to acknowledge receipt
@@ -123,6 +111,10 @@ export async function handleSellfyWebhook(req: Request, res: Response) {
 
   } catch (error) {
     console.error("[Sellfy Webhook] Error processing webhook:", error);
-    return res.status(500).json({ error: "Internal server error" });
+    // Return 200 to avoid Sellfy retrying on our internal errors
+    return res.status(200).json({ 
+      received: true, 
+      error: "Internal error but webhook acknowledged" 
+    });
   }
 }

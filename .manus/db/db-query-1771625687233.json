@@ -1,0 +1,20 @@
+{
+  "query": "SELECT id, name, email, membershipStatus, sellfyCustomerId, sellfySubscriptionId, sellfySubscriptionStatus, membershipExpiresAt \nFROM users \nWHERE email = 'testuser@onlydjs.com';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute SELECT id, name, email, membershipStatus, sellfyCustomerId, sellfySubscriptionId, sellfySubscriptionStatus, membershipExpiresAt \nFROM users \nWHERE email = 'testuser@onlydjs.com';",
+  "rows": [
+    {
+      "id": "6090039",
+      "name": "Test User Sellfy",
+      "email": "testuser@onlydjs.com",
+      "membershipStatus": "member",
+      "sellfyCustomerId": "testuser@onlydjs.com",
+      "sellfySubscriptionId": "sub-test-12345",
+      "sellfySubscriptionStatus": "active",
+      "membershipExpiresAt": "2026-03-20 22:15:00"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\temail\tmembershipStatus\tsellfyCustomerId\tsellfySubscriptionId\tsellfySubscriptionStatus\tmembershipExpiresAt\n6090039\tTest User Sellfy\ttestuser@onlydjs.com\tmember\ttestuser@onlydjs.com\tsub-test-12345\tactive\t2026-03-20 22:15:00\n",
+  "stderr": "",
+  "execution_time_ms": 441
+}

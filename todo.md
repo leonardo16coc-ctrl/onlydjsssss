@@ -2780,3 +2780,15 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [ ] Agregar botón "Manage Subscription" en user dashboard
 - [ ] Testing completo del flujo de pago
 - [ ] Guardar checkpoint
+
+
+## 88. Actualizar Webhook Sellfy según Documentación Oficial (NUEVO)
+- [x] Revisar documentación oficial de webhooks de Sellfy
+- [x] Actualizar estructura de payload en sellfy-webhook.ts
+- [x] Usar eventos correctos: "Subscription product bought" y "Subscription product canceled"
+- [x] Adaptar campos del payload: id, payer_email, plan_name, plan_amount, interval, product, activated_at, current_period_ends_at
+- [x] Configurar webhook en dashboard de Sellfy con guía paso a paso
+- [x] Probar webhook con evento de prueba desde Sellfy (200 OK)
+- [x] Crear usuario de prueba y simular webhook completo
+- [x] Verificar que actualización de membresía funcione correctamente (FREE → MEMBER)
+- [x] Guardar checkpoint
