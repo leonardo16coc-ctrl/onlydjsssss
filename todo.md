@@ -2762,3 +2762,21 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [ ] Actualizar componentes para usar useTranslation()
 - [ ] Probar cambio de idioma en todas las páginas
 - [ ] Guardar checkpoint
+
+
+## 87. Integración Sellfy para Membresías (NUEVO)
+- [x] Solicitar API key de Sellfy al usuario
+- [x] Configurar variables de entorno: SELLFY_API_KEY, SELLFY_STORE_URL
+- [x] Crear producto de membresía Pro ($4.99/month) en Sellfy dashboard
+- [x] Obtener checkout URL del producto (https://onlydjs.sellfy.store/p/subscription/)
+- [x] Actualizar página Pricing con botón de checkout Sellfy
+- [x] Actualizar botón Upgrade to Pro en Home con link Sellfy
+- [x] Crear endpoint webhook /api/sellfy/webhook
+- [x] Manejar eventos: order.paid, subscription.updated, subscription.cancelled
+- [x] Actualizar tabla users con sellfy_customer_id, subscription_id, subscription_status
+- [ ] Crear helper functions para verificar estado de membresía
+- [ ] Implementar middleware de acceso Pro en features premium
+- [ ] Crear página /subscription con gestión de membresía
+- [ ] Agregar botón "Manage Subscription" en user dashboard
+- [ ] Testing completo del flujo de pago
+- [ ] Guardar checkpoint

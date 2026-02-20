@@ -35,6 +35,12 @@ async function startServer() {
     const { handleStripeWebhook } = await import("../webhooks/stripe");
     return handleStripeWebhook(req, res);
   });
+  
+  // Sellfy webhook endpoint
+  app.post("/api/sellfy/webhook", express.json(), async (req, res) => {
+    const { handleSellfyWebhook } = await import("../sellfy-webhook");
+    return handleSellfyWebhook(req, res);
+  });
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "150mb" }));
   app.use(express.urlencoded({ limit: "150mb", extended: true }));

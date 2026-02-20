@@ -57,8 +57,9 @@ export default function Pricing() {
         { name: "Priority support", included: true },
       ],
       cta: "Upgrade to Pro",
-      ctaLink: "/subscribe",
+      ctaLink: "https://onlydjs.sellfy.store/p/subscription/",
       popular: true,
+      external: true,
     },
   ];
 
@@ -148,17 +149,31 @@ export default function Pricing() {
                     <span className="text-slate-400 ml-2">/ {plan.period}</span>
                   </div>
 
-                  <Link href={plan.ctaLink}>
-                    <button
-                      className={`w-full px-8 py-4 rounded-xl font-semibold transition-all hover:scale-105 shadow-lg ${
-                        plan.popular
-                          ? "bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
-                          : "bg-slate-800 hover:bg-slate-700 text-white border border-slate-700"
-                      }`}
-                    >
-                      {plan.cta}
-                    </button>
-                  </Link>
+                  {plan.external ? (
+                    <a href={plan.ctaLink} target="_blank" rel="noopener noreferrer">
+                      <button
+                        className={`w-full px-8 py-4 rounded-xl font-semibold transition-all hover:scale-105 shadow-lg ${
+                          plan.popular
+                            ? "bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
+                            : "bg-slate-800 hover:bg-slate-700 text-white border border-slate-700"
+                        }`}
+                      >
+                        {plan.cta}
+                      </button>
+                    </a>
+                  ) : (
+                    <Link href={plan.ctaLink}>
+                      <button
+                        className={`w-full px-8 py-4 rounded-xl font-semibold transition-all hover:scale-105 shadow-lg ${
+                          plan.popular
+                            ? "bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
+                            : "bg-slate-800 hover:bg-slate-700 text-white border border-slate-700"
+                        }`}
+                      >
+                        {plan.cta}
+                      </button>
+                    </Link>
+                  )}
                 </div>
 
                 {/* Features */}

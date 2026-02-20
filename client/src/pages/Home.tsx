@@ -413,11 +413,11 @@ export default function Home() {
                     <span className="text-slate-300">Priority support</span>
                   </li>
                 </ul>
-                <Link href="/membership">
+                <a href="https://onlydjs.sellfy.store/p/subscription/" target="_blank" rel="noopener noreferrer">
                   <Button className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 text-white shadow-lg shadow-cyan-500/20">
                     Upgrade to Pro
                   </Button>
-                </Link>
+                </a>
               </Card>
             </div>
           </div>
