@@ -2700,3 +2700,32 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Verificar Footer con Terms, Privacy Policy, Refund Policy, Contact (completo)
 - [x] Sitio 100% compliant con requerimientos Stripe SaaS
 - [x] Guardar checkpoint final
+
+
+## 82. Migración a Cuenta Stripe Personal del Usuario (NUEVO)
+- [ ] Solicitar API keys de Stripe del usuario (Publishable Key y Secret Key)
+- [ ] Solicitar Webhook Secret de Stripe
+- [ ] Actualizar STRIPE_SECRET_KEY con la key del usuario
+- [ ] Actualizar VITE_STRIPE_PUBLISHABLE_KEY con la publishable key del usuario
+- [ ] Actualizar STRIPE_WEBHOOK_SECRET con el webhook secret del usuario
+- [ ] Verificar que el código existente funcione con las nuevas credenciales
+- [ ] Crear productos en el dashboard de Stripe del usuario (Pro Plan $4.99/month)
+- [ ] Configurar webhook en Stripe apuntando a /api/stripe/webhook
+- [ ] Probar checkout flow completo con nueva cuenta
+- [ ] Probar webhooks de subscription_created, payment_succeeded
+- [ ] Documentar pasos para el usuario
+- [ ] Guardar checkpoint
+
+
+## 83. Página Pricing Dedicada con Diseño SaaS (NUEVO)
+- [x] Crear página Pricing.tsx (/pricing)
+- [x] Hero section con título impactante
+- [x] Comparación de planes Free vs Pro ($4.99/month)
+- [x] Tabla de features detallada (10 features por plan)
+- [x] CTAs destacados para cada plan
+- [x] FAQ de pricing al final (6 preguntas)
+- [x] Agregar pestaña "Pricing" en Navbar principal (desktop + mobile)
+- [x] Actualizar ruta en App.tsx
+- [x] Diseño consistente con gradientes cyan-purple-pink
+- [x] Responsive design completo
+- [x] Guardar checkpoint

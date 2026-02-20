@@ -109,6 +109,11 @@ export default function Navbar() {
               <LayoutDashboard className="h-4 w-4" />
               <span>Creator Hub</span>
             </Link>
+
+            <Link href="/pricing" className="flex items-center space-x-2 text-foreground hover:text-cyan-400 transition-colors">
+              <CreditCard className="h-4 w-4" />
+              <span className="text-glow-cyan">Pricing</span>
+            </Link>
             
             {isAuthenticated && user?.membershipStatus !== "free" && (
               <Link href="/upload" className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
@@ -242,6 +247,15 @@ export default function Navbar() {
                 >
                   <LayoutDashboard className="h-5 w-5 text-cyan-400" />
                   <span className="text-lg">Creator Hub</span>
+                </Link>
+
+                <Link 
+                  href="/pricing"
+                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <CreditCard className="h-5 w-5 text-cyan-400" />
+                  <span className="text-lg text-glow-cyan">Pricing</span>
                 </Link>
                 
                 {isAuthenticated && user?.membershipStatus !== "free" && (

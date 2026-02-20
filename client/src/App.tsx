@@ -33,6 +33,7 @@ import Careers from "./pages/Careers";
 import Contact from "./pages/Contact";
 import CookiePolicy from "./pages/CookiePolicy";
 import APIDocs from "./pages/APIDocs";
+import Pricing from "./pages/Pricing";
 
 function Router() {
   return (
@@ -46,6 +47,7 @@ function Router() {
       <Route path={"/dashboard"} component={Dashboard} />
       <Route path={"/upload"} component={Upload} />
       <Route path={"/membership"} component={Membership} />
+      <Route path={"/pricing"} component={Pricing} />
       <Route path={"/subscription"} component={Subscription} />
       <Route path={"/wallet"} component={Wallet} />
       <Route path={"/faq"} component={FAQ} />
