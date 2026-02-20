@@ -2750,3 +2750,15 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Sistema funcionando sin errores
 - [x] Verificar persistencia de idioma seleccionado (localStorage)
 - [x] Guardar checkpoint
+
+
+## 86. Traducción de Páginas About, Help, Blog, Careers, Contact (NUEVO)
+- [ ] Extraer textos traducibles de About.tsx
+- [ ] Agregar traducciones de About en los 5 idiomas (en, es, pt-BR, fr, de)
+- [ ] Extraer textos de Help.tsx y agregar traducciones
+- [ ] Extraer textos de Blog.tsx y agregar traducciones
+- [ ] Extraer textos de Careers.tsx y agregar traducciones
+- [ ] Extraer textos de Contact.tsx y agregar traducciones
+- [ ] Actualizar componentes para usar useTranslation()
+- [ ] Probar cambio de idioma en todas las páginas
+- [ ] Guardar checkpoint

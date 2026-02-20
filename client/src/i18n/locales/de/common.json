@@ -714,5 +714,58 @@
     "ctaButton": "Auf ONLYDJS hochladen",
     "analyzeAnother": "Einen Anderen Track Analysieren",
     "footer": "100% Kostenlos • Keine Registrierung • ONLYDJS Analysator"
+  },
+  "about": {
+    "title": "Über ONLYDJS",
+    "subtitle": "Wir bauen das Betriebssystem für die nächste Generation von DJs — ermöglichen Kreativen, ihre Musik zu teilen, ihr Publikum zu vergrößern und mit ihrem Handwerk zu verdienen.",
+    "mission": {
+      "title": "Unsere Mission",
+      "description": "Musikverteilung demokratisieren und DJs weltweit mit KI-gestützten Tools, nahtloser Monetarisierung und einer florierenden Community stärken, wo Talent auf Gelegenheit trifft."
+    },
+    "vision": {
+      "title": "Unsere Vision",
+      "description": "Eine Welt, in der jeder DJ die Werkzeuge, Plattform und Unterstützung hat, um seine Leidenschaft in eine nachhaltige Karriere zu verwandeln — keine Gatekeeper, nur pure Kreativität und faire Vergütung."
+    },
+    "story": {
+      "title": "Unsere Geschichte",
+      "paragraph1": "ONLYDJS entstand aus einer einfachen Beobachtung: DJs sind das Herzstück der Musikkultur, doch sie stehen vor unzähligen Barrieren — von teuren Vertriebsplattformen bis zu komplexen Lizenzen, von begrenzter Entdeckung bis zu unfairen Umsatzbeteiligungen.",
+      "paragraph2": "Wir fragten uns:",
+      "question": "Was wäre, wenn es eine Plattform gäbe, die speziell für DJs entwickelt wurde?",
+      "paragraph3": "Ein Ort, an dem das Hochladen eines Tracks so einfach ist wie das Posten in sozialen Medien. Wo KI Ihre Musik analysiert und Ihnen hilft, perfekte Sets zu erstellen. Wo Sie den Großteil dessen behalten, was Sie verdienen.",
+      "paragraph4": "Heute bedient ONLYDJS über",
+      "stat1": "10.000+ DJs",
+      "stat2": "500K+ Tracks",
+      "stat3": "500K$ ausgezahlt",
+      "paragraph5": "weltweit, mit",
+      "paragraph6": "hochgeladen und",
+      "paragraph7": "direkt an Kreative. Wir fangen gerade erst an."
+    },
+    "values": {
+      "title": "Unsere Werte",
+      "subtitle": "Die Prinzipien, die alles leiten, was wir tun",
+      "creatorFirst": {
+        "title": "Kreative Zuerst",
+        "description": "Jede Entscheidung, die wir treffen, priorisiert die DJ-Community und ihren Erfolg."
+      },
+      "innovation": {
+        "title": "Innovation",
+        "description": "Wir nutzen modernste KI, um echte Probleme für DJs zu lösen."
+      },
+      "transparency": {
+        "title": "Transparenz",
+        "description": "Keine versteckten Gebühren, keine verwirrenden Bedingungen — nur ehrliche, faire Preise."
+      },
+      "community": {
+        "title": "Gemeinschaft",
+        "description": "Wir bauen mehr als eine Plattform — wir bauen eine Bewegung."
+      }
+    },
+    "stats": {
+      "title": "ONLYDJS in Zahlen",
+      "activeDJs": "Aktive DJs",
+      "tracksUploaded": "Hochgeladene Tracks",
+      "totalDownloads": "Gesamte Downloads",
+      "paidToCreators": "An Kreative Ausgezahlt"
+    }
   }
 }

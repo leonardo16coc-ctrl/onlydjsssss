@@ -714,5 +714,58 @@
     "ctaButton": "Upload to ONLYDJS",
     "analyzeAnother": "Analyze Another Track",
     "footer": "100% Free • No Registration Required • ONLYDJS Analyzer"
+  },
+  "about": {
+    "title": "About ONLYDJS",
+    "subtitle": "We're building the operating system for the next generation of DJs — empowering creators to share their music, grow their audience, and earn from their craft.",
+    "mission": {
+      "title": "Our Mission",
+      "description": "To democratize music distribution and empower DJs worldwide with AI-powered tools, seamless monetization, and a thriving community where talent meets opportunity."
+    },
+    "vision": {
+      "title": "Our Vision",
+      "description": "A world where every DJ has the tools, platform, and support to turn their passion into a sustainable career — no gatekeepers, just pure creativity and fair compensation."
+    },
+    "story": {
+      "title": "Our Story",
+      "paragraph1": "ONLYDJS was born from a simple observation: DJs are the heartbeat of music culture, yet they face countless barriers — from expensive distribution platforms to complex licensing, from limited discovery to unfair revenue splits.",
+      "paragraph2": "We asked ourselves:",
+      "question": "What if there was a platform built specifically for DJs?",
+      "paragraph3": "A place where uploading a track is as easy as posting on social media. Where AI analyzes your music and helps you create perfect sets. Where you keep the majority of what you earn.",
+      "paragraph4": "Today, ONLYDJS serves over",
+      "stat1": "10,000+ DJs",
+      "stat2": "500K+ tracks",
+      "stat3": "$500K+ paid",
+      "paragraph5": "worldwide, with",
+      "paragraph6": "uploaded and",
+      "paragraph7": "directly to creators. We're just getting started."
+    },
+    "values": {
+      "title": "Our Values",
+      "subtitle": "The principles that guide everything we do",
+      "creatorFirst": {
+        "title": "Creator First",
+        "description": "Every decision we make prioritizes the DJ community and their success."
+      },
+      "innovation": {
+        "title": "Innovation",
+        "description": "We leverage cutting-edge AI to solve real problems for DJs."
+      },
+      "transparency": {
+        "title": "Transparency",
+        "description": "No hidden fees, no confusing terms — just honest, fair pricing."
+      },
+      "community": {
+        "title": "Community",
+        "description": "We're building more than a platform — we're building a movement."
+      }
+    },
+    "stats": {
+      "title": "ONLYDJS by the Numbers",
+      "activeDJs": "Active DJs",
+      "tracksUploaded": "Tracks Uploaded",
+      "totalDownloads": "Total Downloads",
+      "paidToCreators": "Paid to Creators"
+    }
   }
 }
