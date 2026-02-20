@@ -12,21 +12,16 @@ export default function Membership() {
   const { t } = useTranslation();
   const createCheckout = trpc.membership.createCheckout.useMutation();
 
-  const handleSubscribe = async () => {
+  const handleSubscribe = () => {
     if (!isAuthenticated) {
       toast.error(t('membership.mustLoginFirst'));
       return;
     }
 
-    try {
-      const { checkoutUrl } = await createCheckout.mutateAsync();
-      if (checkoutUrl) {
-        window.open(checkoutUrl, "_blank");
-        toast.info(t('membership.redirectingToStripe'));
-      }
-    } catch (error) {
-      toast.error(t('membership.paymentError'));
-    }
+    // Open Sellfy subscription page
+    const sellfyUrl = "https://onlydjs.sellfy.store/p/subscription/";
+    window.open(sellfyUrl, "_blank");
+    toast.info("Redirigiendo a la página de suscripción...");
   };
 
   const features = [

@@ -2792,3 +2792,11 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Crear usuario de prueba y simular webhook completo
 - [x] Verificar que actualización de membresía funcione correctamente (FREE → MEMBER)
 - [x] Guardar checkpoint
+
+
+## 89. Corregir Botón Subscribe en Navbar (BUG)
+- [x] Revisar código del botón Subscribe en Navbar.tsx
+- [x] Verificar que el link de Sellfy esté correcto
+- [x] Actualizar onClick handler en Membership.tsx para abrir Sellfy
+- [x] Probar en navegador que redirija a Sellfy (FUNCIONA)
+- [x] Guardar checkpoint
