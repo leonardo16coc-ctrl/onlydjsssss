@@ -55,6 +55,7 @@ export default function Footer() {
       links: [
         { label: "Terms of Service", href: "/terms" },
         { label: "Privacy Policy", href: "/privacy" },
+        { label: "Refund Policy", href: "/refund" },
         { label: "Copyright / DMCA", href: "/copyright" },
         { label: "Cookie Policy", href: "/cookies" },
       ],

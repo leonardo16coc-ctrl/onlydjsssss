@@ -2729,3 +2729,14 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Diseño consistente con gradientes cyan-purple-pink
 - [x] Responsive design completo
 - [x] Guardar checkpoint
+
+
+## 84. Verificación Paddle SaaS Compliance (NUEVO)
+- [x] Verificar que /pricing existe y funciona correctamente
+- [x] Verificar que /terms existe con contenido completo
+- [x] Verificar que /privacy existe con contenido completo
+- [x] Crear página /refund con Refund Policy completa
+- [x] Verificar que Footer tiene links a todas las páginas legales
+- [x] Asegurar que links son absolutos y funcionan
+- [x] Probar todas las URLs requeridas por Paddle
+- [x] Guardar checkpoint

@@ -34,6 +34,7 @@ import Contact from "./pages/Contact";
 import CookiePolicy from "./pages/CookiePolicy";
 import APIDocs from "./pages/APIDocs";
 import Pricing from "./pages/Pricing";
+import Refund from "./pages/Refund";
 
 function Router() {
   return (
@@ -69,6 +70,7 @@ function Router() {
       <Route path={"/legal"} component={Legal} />
       <Route path={"/terms"} component={Terms} />
       <Route path={"/privacy"} component={Privacy} />
+      <Route path={"/refund"} component={Refund} />
       <Route path={"/copyright"} component={Copyright} />
       <Route path={"/404"} component={NotFound} />
       <Route component={NotFound} />
