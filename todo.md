@@ -2800,3 +2800,9 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Actualizar onClick handler en Membership.tsx para abrir Sellfy
 - [x] Probar en navegador que redirija a Sellfy (FUNCIONA)
 - [x] Guardar checkpoint
+
+
+## 90. Actualizar Footer - Cambiar Stripe a Sellfy
+- [x] Actualizar texto en Membership.tsx: "Stripe" → "Sellfy"
+- [x] Verificar cambios en navegador (CONFIRMADO)
+- [x] Guardar checkpoint

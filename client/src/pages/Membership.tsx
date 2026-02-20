@@ -270,7 +270,7 @@ export default function Membership() {
             ¿Preguntas? Contáctanos en support@onlydjs.com
           </p>
           <p className="text-xs text-muted-foreground">
-            Cancela cuando quieras · Sin compromisos · Pago seguro con Stripe
+            Cancela cuando quieras · Sin compromisos · Pago seguro con Sellfy
           </p>
         </div>
       </div>
