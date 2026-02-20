@@ -2740,3 +2740,13 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Asegurar que links son absolutos y funcionan
 - [x] Probar todas las URLs requeridas por Paddle
 - [x] Guardar checkpoint
+
+
+## 85. Verificación Sistema de Internacionalización (i18n) (NUEVO)
+- [x] Revisar configuración de i18n en el proyecto (react-i18next configurado)
+- [x] Verificar archivos de traducción existentes (5 idiomas completos)
+- [x] Probar selector de idioma en Navbar (desktop + mobile)
+- [x] Verificar que todas las páginas se traduzcan correctamente
+- [x] Sistema funcionando sin errores
+- [x] Verificar persistencia de idioma seleccionado (localStorage)
+- [x] Guardar checkpoint
