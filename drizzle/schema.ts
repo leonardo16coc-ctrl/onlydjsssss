@@ -829,3 +829,49 @@ export const postComments = mysqlTable("post_comments", {
 
 export type PostComment = typeof postComments.$inferSelect;
 export type InsertPostComment = typeof postComments.$inferInsert;
+
+/**
+ * DJ Leads - Potential DJs discovered by scout agents
+ */
+export const djLeads = mysqlTable("dj_leads", {
+  id: int("id").autoincrement().primaryKey(),
+  // Basic info
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 320 }),
+  // Social profiles
+  soundcloudUrl: text("soundcloudUrl"),
+  beatportUrl: text("beatportUrl"),
+  instagramUrl: text("instagramUrl"),
+  spotifyUrl: text("spotifyUrl"),
+  // Metrics
+  followers: int("followers").default(0),
+  totalTracks: int("totalTracks").default(0),
+  avgPlays: int("avgPlays").default(0),
+  // Classification
+  primaryGenre: varchar("primaryGenre", { length: 100 }),
+  subgenres: text("subgenres"), // JSON array
+  country: varchar("country", { length: 100 }),
+  city: varchar("city", { length: 100 }),
+  // Lead status
+  status: mysqlEnum("status", ["new", "contacted", "responded", "registered", "uploaded", "rejected"]).default("new").notNull(),
+  source: varchar("source", { length: 100 }).notNull(), // "soundcloud", "beatport", "instagram", "manual"
+  priority: mysqlEnum("priority", ["low", "medium", "high", "urgent"]).default("medium").notNull(),
+  // Contact history
+  lastContactedAt: timestamp("lastContactedAt"),
+  contactCount: int("contactCount").default(0).notNull(),
+  notes: text("notes"),
+  // Invitation
+  invitationCode: varchar("invitationCode", { length: 50 }).unique(),
+  invitationSentAt: timestamp("invitationSentAt"),
+  // Timestamps
+  discoveredAt: timestamp("discoveredAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  statusIdx: index("dj_leads_status_idx").on(table.status),
+  sourceIdx: index("dj_leads_source_idx").on(table.source),
+  priorityIdx: index("dj_leads_priority_idx").on(table.priority),
+  emailIdx: index("dj_leads_email_idx").on(table.email),
+}));
+
+export type DjLead = typeof djLeads.$inferSelect;
+export type InsertDjLead = typeof djLeads.$inferInsert;

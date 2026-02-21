@@ -2806,3 +2806,42 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Actualizar texto en Membership.tsx: "Stripe" → "Sellfy"
 - [x] Verificar cambios en navegador (CONFIRMADO)
 - [x] Guardar checkpoint
+
+
+## 91. Sistema de Agentes Scout con Geonode (NUEVO)
+- [ ] Crear tabla dj_leads en schema.ts (nombre, email, socials, género, followers, status, source)
+- [ ] Aplicar migración con db:push
+- [ ] Crear script scout en /server/scouts/soundcloud-scout.ts usando Geonode proxies
+- [ ] Crear script scout en /server/scouts/beatport-scout.ts usando Geonode proxies
+- [ ] Crear helpers de base de datos en db.ts para dj_leads
+- [ ] Crear tRPC procedures para gestionar leads (list, update status, send invitation)
+- [ ] Crear página /admin/recruitment con dashboard de leads
+- [ ] Crear sistema de emails de invitación automatizados
+- [ ] Probar scripts scout con búsqueda real
+- [ ] Guardar checkpoint
+
+
+## 92. Agente de Contacto Automático (NUEVO)
+- [ ] Ejecutar scout de SoundCloud para buscar DJs reales
+- [ ] Crear agente de contacto en /server/scouts/contact-agent.ts
+- [ ] Crear templates de mensajes personalizados por género
+- [ ] Implementar sistema de envío automático (Instagram DM + Email)
+- [ ] Crear tRPC procedures para gestionar campañas de contacto
+- [ ] Crear dashboard de reclutamiento en /admin/recruitment
+- [ ] Implementar tracking de respuestas y conversiones
+- [ ] Probar sistema completo end-to-end
+- [ ] Guardar checkpoint
+
+
+## 91. Sistema de Reclutamiento de DJs con IA (NUEVO)
+- [x] Crear tabla discovered_djs en base de datos con métricas completas
+- [x] Crear helpers de base de datos para discoveredDjs
+- [x] Crear tRPC procedures (addLead, getLeads, generateMessage, updateStatus)
+- [x] Crear agente de IA que genere mensajes personalizados por DJ
+- [x] Crear dashboard de reclutamiento (/recruitment) con formulario y lista
+- [x] Sistema de generación de mensajes para Instagram DM y Email
+- [x] Tracking de estados (discovered, contacted, responded, converted)
+- [x] Botones Copy y Mark as Sent para workflow manual
+- [x] Estadísticas de conversión en dashboard
+- [x] Probar sistema completo (15 DJs, generación de mensajes funciona)
+- [x] Guardar checkpoint

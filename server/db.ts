@@ -685,3 +685,84 @@ export async function updateDeviceFingerprint(hash: string, data: Partial<Device
 
 // Import missing operator
 import { getDownloadLimits } from "./stripe-products";
+
+
+// ============= RECRUITMENT FUNCTIONS =============
+
+import { discoveredDjs, InsertDiscoveredDj, outreachCampaigns, InsertOutreachCampaign } from "../drizzle/schema-agents";
+
+/**
+ * Add a new DJ lead manually
+ */
+export async function addDjLead(lead: InsertDiscoveredDj) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const [inserted] = await db.insert(discoveredDjs).values(lead);
+  return inserted;
+}
+
+/**
+ * Get all DJ leads with optional filtering
+ */
+export async function getDjLeads(status?: string) {
+  const db = await getDb();
+  if (!db) return [];
+
+  if (status) {
+    return await db
+      .select()
+      .from(discoveredDjs)
+      .where(eq(discoveredDjs.discoveryStatus, status as any))
+      .orderBy(desc(discoveredDjs.discoveryDate));
+  }
+
+  return await db
+    .select()
+    .from(discoveredDjs)
+    .orderBy(desc(discoveredDjs.discoveryDate));
+}
+
+/**
+ * Update DJ lead status
+ */
+export async function updateDjLeadStatus(djId: number, status: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db
+    .update(discoveredDjs)
+    .set({ 
+      discoveryStatus: status as any,
+      lastUpdated: new Date()
+    })
+    .where(eq(discoveredDjs.id, djId));
+}
+
+/**
+ * Create outreach campaign
+ */
+export async function createOutreachCampaign(campaign: InsertOutreachCampaign) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  // Remove id if present (auto-increment)
+  const { id, ...campaignData } = campaign as any;
+  
+  await db.insert(outreachCampaigns).values(campaignData);
+  return { success: true };
+}
+
+/**
+ * Get outreach campaigns for a DJ
+ */
+export async function getOutreachCampaigns(djId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return await db
+    .select()
+    .from(outreachCampaigns)
+    .where(eq(outreachCampaigns.djId, djId))
+    .orderBy(desc(outreachCampaigns.createdAt));
+}
