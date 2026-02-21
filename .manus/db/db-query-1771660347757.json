@@ -1,0 +1,58 @@
+{
+  "query": "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'email_campaigns' ORDER BY ORDINAL_POSITION;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'email_campaigns' ORDER BY ORDINAL_POSITION;",
+  "rows": [
+    {
+      "COLUMN_NAME": "id"
+    },
+    {
+      "COLUMN_NAME": "dj_id"
+    },
+    {
+      "COLUMN_NAME": "email_to"
+    },
+    {
+      "COLUMN_NAME": "subject"
+    },
+    {
+      "COLUMN_NAME": "message_text"
+    },
+    {
+      "COLUMN_NAME": "platform"
+    },
+    {
+      "COLUMN_NAME": "status"
+    },
+    {
+      "COLUMN_NAME": "resend_id"
+    },
+    {
+      "COLUMN_NAME": "sent_at"
+    },
+    {
+      "COLUMN_NAME": "opened_at"
+    },
+    {
+      "COLUMN_NAME": "clicked_at"
+    },
+    {
+      "COLUMN_NAME": "replied_at"
+    },
+    {
+      "COLUMN_NAME": "error_message"
+    },
+    {
+      "COLUMN_NAME": "created_at"
+    },
+    {
+      "COLUMN_NAME": "updated_at"
+    },
+    {
+      "COLUMN_NAME": "is_follow_up"
+    }
+  ],
+  "messages": [],
+  "stdout": "COLUMN_NAME\nid\ndj_id\nemail_to\nsubject\nmessage_text\nplatform\nstatus\nresend_id\nsent_at\nopened_at\nclicked_at\nreplied_at\nerror_message\ncreated_at\nupdated_at\nis_follow_up\n",
+  "stderr": "",
+  "execution_time_ms": 386
+}

@@ -18,6 +18,8 @@ export function Recruitment() {
   // Queries
   const { data: leads, refetch: refetchLeads } = trpc.recruitment.getLeads.useQuery({});
   const { data: stats } = trpc.recruitment.getStats.useQuery();
+  const { data: followUpStats } = trpc.followUp.getStats.useQuery();
+  const { data: followUpNeeded } = trpc.followUp.getNeedingFollowUp.useQuery();
 
   // Mutations
   const addLead = trpc.recruitment.addLead.useMutation({
@@ -168,7 +170,7 @@ export function Recruitment() {
 
       {/* Stats */}
       {stats && (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4 mb-8">
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">Total Leads</CardTitle>
@@ -216,6 +218,16 @@ export function Recruitment() {
             <CardContent>
               <div className="text-2xl font-bold">
                 {stats.total > 0 ? ((stats.converted / stats.total) * 100).toFixed(1) : 0}%
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="border-orange-500/50 bg-orange-500/5">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-orange-600">Follow-ups Needed</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-orange-600">
+                {followUpNeeded?.count || 0}
               </div>
             </CardContent>
           </Card>

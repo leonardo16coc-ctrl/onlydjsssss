@@ -6,10 +6,15 @@
 
 import cron from "node-cron";
 import { runMultiPlatformScout } from "../scouts/multi-platform-scout";
+import { sendFollowUpEmails } from "../email/follow-up-system";
 
 let isRunning = false;
 let lastRun: Date | null = null;
 let lastResult: any = null;
+
+let isFollowUpRunning = false;
+let lastFollowUpRun: Date | null = null;
+let lastFollowUpResult: any = null;
 
 /**
  * Execute the scout with error handling and logging
@@ -61,6 +66,13 @@ export function initializeScheduler() {
     executeScout();
   });
 
+  // Schedule follow-up emails: Daily at 10 AM
+  cron.schedule("0 10 * * *", () => {
+    executeFollowUp();
+  });
+
+  console.log("✅ Scout scheduler: Every 6 hours (12 AM, 6 AM, 12 PM, 6 PM)");
+  console.log("✅ Follow-up scheduler: Daily at 10 AM");
   console.log("✅ Scheduler is active and running\n");
 
   // Optional: Run immediately on startup (comment out if not desired)
@@ -75,10 +87,18 @@ export function initializeScheduler() {
  */
 export function getSchedulerStatus() {
   return {
-    isRunning,
-    lastRun: lastRun?.toISOString() || null,
-    lastResult,
-    nextRun: getNextRunTime(),
+    scout: {
+      isRunning,
+      lastRun: lastRun?.toISOString() || null,
+      lastResult,
+      nextRun: getNextRunTime(),
+    },
+    followUp: {
+      isRunning: isFollowUpRunning,
+      lastRun: lastFollowUpRun?.toISOString() || null,
+      lastResult: lastFollowUpResult,
+      nextRun: getNextFollowUpRunTime(),
+    },
   };
 }
 
@@ -116,4 +136,66 @@ export async function manualTrigger() {
   console.log("🔧 Manual scout trigger requested");
   await executeScout();
   return lastResult;
+}
+
+/**
+ * Execute follow-up emails with error handling
+ */
+async function executeFollowUp() {
+  if (isFollowUpRunning) {
+    console.log("[Scheduler] Follow-up already running, skipping...");
+    return;
+  }
+
+  isFollowUpRunning = true;
+  lastFollowUpRun = new Date();
+  
+  console.log("\n╔═══════════════════════════════════════╗");
+  console.log("║  SCHEDULED FOLLOW-UP EXECUTION        ║");
+  console.log("╚═══════════════════════════════════════╝");
+  console.log(`🕐 Started at: ${lastFollowUpRun.toLocaleString()}\n`);
+
+  try {
+    const result = await sendFollowUpEmails();
+    lastFollowUpResult = { success: true, ...result };
+    
+    console.log("\n✅ Scheduled follow-up completed successfully");
+    console.log(`📧 Sent: ${result.sent} emails`);
+    console.log(`❌ Failed: ${result.failed} emails`);
+  } catch (error: any) {
+    console.error("\n❌ Scheduled follow-up failed:", error.message);
+    lastFollowUpResult = { success: false, error: error.message };
+  } finally {
+    isFollowUpRunning = false;
+    console.log(`🕐 Finished at: ${new Date().toLocaleString()}\n`);
+  }
+}
+
+/**
+ * Calculate next follow-up run time (daily at 10 AM)
+ */
+function getNextFollowUpRunTime(): string | null {
+  const now = new Date();
+  const next = new Date(now);
+  next.setHours(10, 0, 0, 0);
+  
+  if (next <= now) {
+    // If 10 AM already passed today, schedule for tomorrow
+    next.setDate(next.getDate() + 1);
+  }
+  
+  return next.toISOString();
+}
+
+/**
+ * Manually trigger follow-up (for testing/admin)
+ */
+export async function manualFollowUpTrigger() {
+  if (isFollowUpRunning) {
+    throw new Error("Follow-up is already running");
+  }
+  
+  console.log("🔧 Manual follow-up trigger requested");
+  await executeFollowUp();
+  return lastFollowUpResult;
 }

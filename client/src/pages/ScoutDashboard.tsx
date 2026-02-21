@@ -73,9 +73,9 @@ export default function ScoutDashboard() {
             </Button>
             <Button
               onClick={handleRunScout}
-              disabled={runScout.isPending || schedulerStatus?.isRunning}
+              disabled={runScout.isPending || schedulerStatus?.scout?.isRunning}
             >
-              {runScout.isPending || schedulerStatus?.isRunning ? (
+              {runScout.isPending || schedulerStatus?.scout?.isRunning ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                   Running...
@@ -118,7 +118,7 @@ export default function ScoutDashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-lg font-bold text-white">
-                {formatNextRun(schedulerStatus?.nextRun || null)}
+                {formatNextRun(schedulerStatus?.scout?.nextRun || null)}
               </div>
               <p className="text-xs text-slate-500 mt-1">Scheduled execution</p>
             </CardContent>
@@ -129,11 +129,11 @@ export default function ScoutDashboard() {
               <CardTitle className="text-sm font-medium text-slate-400">Status</CardTitle>
             </CardHeader>
             <CardContent>
-              <Badge variant={schedulerStatus?.isRunning ? "default" : "secondary"}>
-                {schedulerStatus?.isRunning ? "🟢 Running" : "⚪ Idle"}
+              <Badge variant={schedulerStatus?.scout?.isRunning ? "default" : "secondary"}>
+                {schedulerStatus?.scout?.isRunning ? "🟢 Running" : "⚪ Idle"}
               </Badge>
               <p className="text-xs text-slate-500 mt-2">
-                Last: {schedulerStatus?.lastRun ? new Date(schedulerStatus.lastRun).toLocaleTimeString() : "Never"}
+                Last: {schedulerStatus?.scout?.lastRun ? new Date(schedulerStatus.scout.lastRun).toLocaleTimeString() : "Never"}
               </p>
             </CardContent>
           </Card>

@@ -2924,3 +2924,15 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Probar con email de prueba (EXITOSO - Email ID: 92a48301)
 - [x] Template HTML profesional con gradientes y responsive design
 - [x] Guardar checkpoint
+
+
+## 98. Sistema de Follow-Up Automatizado (NUEVO)
+- [ ] Crear templates de follow-up personalizados por género musical
+- [ ] Crear función detectFollowUpNeeded() que identifique DJs sin respuesta después de 7 días
+- [ ] Crear función sendFollowUpEmails() con lógica de envío
+- [ ] Integrar follow-up en scheduler 24/7 (ejecutar diariamente)
+- [ ] Crear tRPC procedure followUp.sendNow para ejecución manual
+- [ ] Actualizar Scout Dashboard con métricas de follow-up
+- [ ] Actualizar Recruitment Dashboard con indicador de "Follow-up sent"
+- [ ] Probar sistema con DJs de prueba
+- [ ] Guardar checkpoint
