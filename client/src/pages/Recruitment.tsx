@@ -8,7 +8,7 @@ import { Textarea } from "../components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Badge } from "../components/ui/badge";
 import { toast } from "sonner";
-import { Copy, Mail, MessageCircle, TrendingUp, Users, CheckCircle2, XCircle } from "lucide-react";
+import { Copy, Mail, MessageCircle, TrendingUp, Users, CheckCircle2, XCircle, Send } from "lucide-react";
 
 export function Recruitment() {
   const [showAddForm, setShowAddForm] = useState(false);
@@ -47,6 +47,32 @@ export function Recruitment() {
       refetchLeads();
     },
   });
+
+  const sendBulkEmails = trpc.emailCampaigns.sendBulk.useMutation({
+    onSuccess: (data) => {
+      toast.success(`Emails sent successfully to ${data.sentCount} DJs!`);
+      refetchLeads();
+    },
+    onError: (error) => {
+      toast.error(`Failed to send emails: ${error.message}`);
+    },
+  });
+
+  const handleSendBulkEmails = () => {
+    const djsWithEmail = (leads || []).filter((lead: any) => lead.email && lead.discoveryStatus === "discovered");
+    
+    if (djsWithEmail.length === 0) {
+      toast.error("No DJs with email found");
+      return;
+    }
+    
+    if (confirm(`Send emails to ${djsWithEmail.length} DJs?`)) {
+      sendBulkEmails.mutate({
+        djIds: djsWithEmail.map((dj: any) => dj.id),
+        platform: "email",
+      });
+    }
+  };
 
   const markSent = trpc.recruitment.markMessageSent.useMutation({
     onSuccess: () => {
@@ -113,11 +139,31 @@ export function Recruitment() {
 
   return (
     <div className="container py-8">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">DJ Recruitment Dashboard</h1>
-        <p className="text-muted-foreground">
-          Manage DJ leads, generate personalized outreach messages, and track conversions
-        </p>
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <h1 className="text-4xl font-bold mb-2">DJ Recruitment Dashboard</h1>
+          <p className="text-muted-foreground">
+            Manage DJ leads, generate personalized outreach messages, and track conversions
+          </p>
+        </div>
+        <Button
+          onClick={handleSendBulkEmails}
+          disabled={sendBulkEmails.isPending}
+          size="lg"
+          className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+        >
+          {sendBulkEmails.isPending ? (
+            <>
+              <Mail className="w-4 h-4 mr-2 animate-spin" />
+              Sending...
+            </>
+          ) : (
+            <>
+              <Send className="w-4 h-4 mr-2" />
+              Send Bulk Emails
+            </>
+          )}
+        </Button>
       </div>
 
       {/* Stats */}
