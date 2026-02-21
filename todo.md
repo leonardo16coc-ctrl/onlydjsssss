@@ -2936,3 +2936,18 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [ ] Actualizar Recruitment Dashboard con indicador de "Follow-up sent"
 - [ ] Probar sistema con DJs de prueba
 - [ ] Guardar checkpoint
+
+
+## 50. Email Analytics Dashboard (NUEVO)
+- [x] Agregar columnas de tracking a email_campaigns (opened_at, clicked_at, replied_at)
+- [x] Migrar schema con nuevas columnas
+- [x] Crear webhook endpoint /api/resend/webhook para eventos
+- [x] Implementar handlers para email.opened, email.clicked, email.replied
+- [x] Crear tRPC procedures para métricas de email analytics
+- [x] Implementar página /email-analytics con dashboard visual
+- [x] Gráficas de open rates y click rates con Recharts
+- [x] Métricas de conversión (discovered → contacted → responded → converted)
+- [x] Filtros por fecha, plataforma, género
+- [x] Tabla de emails recientes con estados
+- [x] Agregar navegación a Email Analytics en navbar
+- [x] Tests de webhook y analytics

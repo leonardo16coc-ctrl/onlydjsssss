@@ -65,6 +65,13 @@ export default function ScoutDashboard() {
           </div>
           <div className="flex gap-3">
             <Button
+              variant="outline"
+              onClick={() => window.location.href = "/email-analytics"}
+              className="border-cyan-500/30 hover:bg-cyan-500/10"
+            >
+              📊 Email Analytics
+            </Button>
+            <Button
               variant={autoRefresh ? "default" : "outline"}
               onClick={() => setAutoRefresh(!autoRefresh)}
             >

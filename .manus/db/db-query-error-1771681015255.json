@@ -1,0 +1,8 @@
+{
+  "query": "\nALTER TABLE email_campaigns \nADD COLUMN opened_at TIMESTAMP NULL,\nADD COLUMN clicked_at TIMESTAMP NULL,\nADD COLUMN replied_at TIMESTAMP NULL,\nADD COLUMN bounce_at TIMESTAMP NULL,\nADD COLUMN complaint_at TIMESTAMP NULL;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute \nALTER TABLE email_campaigns \nADD COLUMN opened_at TIMESTAMP NULL,\nADD COLUMN clicked_at TIMESTAMP NULL,\nADD COLUMN replied_at TIMESTAMP NULL,\nADD COLUMN bounce_at TIMESTAMP NULL,\nADD COLUMN complaint_at TIMESTAMP NULL;\n",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1060 (42S21) at line 2: Duplicate column name 'opened_at'"
+  ]
+}
