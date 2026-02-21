@@ -766,3 +766,25 @@ export async function getOutreachCampaigns(djId: number) {
     .where(eq(outreachCampaigns.djId, djId))
     .orderBy(desc(outreachCampaigns.createdAt));
 }
+
+
+/**
+ * Get discovered DJ by URL (to avoid duplicates)
+ */
+export async function getDiscoveredDJByUrl(url: string) {
+  const db = await getDb();
+  if (!db) return null;
+
+  const [dj] = await db
+    .select()
+    .from(discoveredDjs)
+    .where(
+      or(
+        eq(discoveredDjs.soundcloudUsername, url),
+        eq(discoveredDjs.instagramUsername, url)
+      )
+    )
+    .limit(1);
+
+  return dj || null;
+}

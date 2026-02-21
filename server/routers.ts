@@ -26,6 +26,8 @@ import { aiAnalyzerRouter } from "./routers/ai-analyzer.router";
 import { communityRouter } from "./routers/community.router";
 import { agentsRouter } from "./routers/agents";
 import { recruitmentRouter } from "./routers/recruitment";
+import { dailyQueueRouter } from "./routers/daily-queue";
+import { scoutControlRouter } from "./routers/scout-control";
 import { getDb } from "./db";
 import { tracks, downloads } from "../drizzle/schema";
 import { eq, and, gte, sql } from "drizzle-orm";
@@ -58,6 +60,8 @@ export const appRouter = router({
   community: communityRouter,
   agents: agentsRouter,
   recruitment: recruitmentRouter,
+  dailyQueue: dailyQueueRouter,
+  scoutControl: scoutControlRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

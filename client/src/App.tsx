@@ -36,6 +36,7 @@ import APIDocs from "./pages/APIDocs";
 import Pricing from "./pages/Pricing";
 import Refund from "./pages/Refund";
 import { Recruitment } from "./pages/Recruitment";
+import Welcome from "./pages/Welcome";
 
 function Router() {
   return (
@@ -48,6 +49,7 @@ function Router() {
       <Route path={"/rankings"} component={Rankings} />
       <Route path={"/dashboard"} component={Dashboard} />
       <Route path={"/upload"} component={Upload} />
+      <Route path={"/welcome"} component={Welcome} />
       <Route path={"/membership"} component={Membership} />
       <Route path={"/pricing"} component={Pricing} />
       <Route path={"/subscription"} component={Subscription} />

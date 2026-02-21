@@ -2845,3 +2845,43 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Estadísticas de conversión en dashboard
 - [x] Probar sistema completo (15 DJs, generación de mensajes funciona)
 - [x] Guardar checkpoint
+
+
+## 92. Página de Onboarding para DJs Nuevos (NUEVO)
+- [x] Crear página /welcome con diseño atractivo
+- [x] Sección 1: Bienvenida personalizada con nombre del DJ
+- [x] Sección 2: Cómo subir tracks (paso a paso)
+- [x] Sección 3: Cómo funciona la monetización
+- [x] Sección 4: Beneficios de membresía Pro
+- [x] CTA principal: "Subir mi primer track"
+- [x] Agregar ruta en App.tsx
+- [x] Guardar checkpoint
+
+## 93. Sistema de Scraping Automatizado Diario (NUEVO)
+- [ ] Crear script de scraping con límite de 5-10 DJs/día
+- [ ] Implementar búsqueda en SoundCloud con Geonode proxies
+- [ ] Implementar búsqueda en Instagram (opcional)
+- [ ] Guardar DJs descubiertos en tabla discovered_djs
+- [ ] Calcular talent score automáticamente
+- [ ] Evitar duplicados verificando URLs
+- [ ] Rate limiting entre requests (30-60 segundos)
+- [ ] Logging de actividad de scraping
+- [ ] Crear cron job para ejecutar diariamente
+- [ ] Probar script manualmente
+- [ ] Guardar checkpoint
+
+
+## 94. Sistema de Scraping Multi-Plataforma 24/7 (NUEVO)
+- [x] Crear scraper de SoundCloud (sin login)
+- [x] Crear scraper de Mixcloud (sin login)
+- [x] Crear scraper de Instagram (limitado sin login)
+- [x] Facebook marcado como skip (requiere login obligatorio)
+- [x] Integrar todos los scrapers en sistema unificado
+- [x] Límite: 32 DJs por ejecución (8 por plataforma)
+- [x] Implementar rotación de plataformas
+- [x] Delays aleatorios 60-180 segundos
+- [x] Configurar cron job para ejecución cada 6 horas (4x/día = 128 DJs/día)
+- [x] Script setup-24-7-cron.sh creado
+- [ ] Probar sistema completo
+- [ ] Activar cron job en producción
+- [ ] Guardar checkpoint
