@@ -72,6 +72,13 @@ export default function ScoutDashboard() {
               📊 Email Analytics
             </Button>
             <Button
+              variant="outline"
+              onClick={() => window.location.href = "/ab-testing"}
+              className="border-purple-500/30 hover:bg-purple-500/10"
+            >
+              🧪 A/B Testing
+            </Button>
+            <Button
               variant={autoRefresh ? "default" : "outline"}
               onClick={() => setAutoRefresh(!autoRefresh)}
             >

@@ -8,6 +8,7 @@ export interface SendEmailParams {
   subject: string;
   html: string;
   text?: string;
+  abTestVariantId?: number;
 }
 
 export interface SendBulkEmailsParams {

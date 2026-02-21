@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS ab_tests (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  name VARCHAR(255) NOT NULL,\n  description TEXT,\n  status ENUM('active', 'paused', 'completed') DEFAULT 'active',\n  winner_variant_id INT NULL,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  completed_at TIMESTAMP NULL,\n  INDEX idx_status (status),\n  INDEX idx_created_at (created_at)\n)",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute CREATE TABLE IF NOT EXISTS ab_tests (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  name VARCHAR(255) NOT NULL,\n  description TEXT,\n  status ENUM('active', 'paused', 'completed') DEFAULT 'active',\n  winner_variant_id INT NULL,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  completed_at TIMESTAMP NULL,\n  INDEX idx_status (status),\n  INDEX idx_created_at (created_at)\n)",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 512
+}

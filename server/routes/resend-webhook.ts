@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { getDb } from "../db";
 import { sql } from "drizzle-orm";
+import { updateVariantOpened } from "../ab-testing/variant-assigner";
 
 /**
  * Resend Webhook Handler
@@ -31,6 +32,14 @@ export async function handleResendWebhook(req: Request, res: Response) {
     // Handle different event types
     switch (event.type) {
       case "email.opened":
+        // Get campaign info to update A/B test metrics
+        const campaign = await db.execute(sql`
+          SELECT ab_test_variant_id 
+          FROM email_campaigns 
+          WHERE resend_id = ${emailId}
+            AND opened_at IS NULL
+        `);
+        
         await db.execute(sql`
           UPDATE email_campaigns 
           SET opened_at = ${new Date().toISOString()},
@@ -38,6 +47,16 @@ export async function handleResendWebhook(req: Request, res: Response) {
           WHERE resend_id = ${emailId}
             AND opened_at IS NULL
         `);
+        
+        // Update A/B test variant metrics if applicable
+        if (campaign && (campaign as any[]).length > 0) {
+          const variantId = (campaign as any[])[0].ab_test_variant_id;
+          if (variantId) {
+            await updateVariantOpened(variantId);
+            console.log(`[Resend Webhook] ✅ Updated A/B test variant ${variantId}`);
+          }
+        }
+        
         console.log(`[Resend Webhook] ✅ Email opened: ${emailId}`);
         break;
 

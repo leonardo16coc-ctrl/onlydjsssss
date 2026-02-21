@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS ab_test_variants (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  ab_test_id INT NOT NULL,\n  variant_name VARCHAR(50) NOT NULL,\n  subject_line TEXT NOT NULL,\n  emails_sent INT DEFAULT 0,\n  emails_opened INT DEFAULT 0,\n  open_rate DECIMAL(5,2) DEFAULT 0.00,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  FOREIGN KEY (ab_test_id) REFERENCES ab_tests(id) ON DELETE CASCADE,\n  INDEX idx_ab_test_id (ab_test_id),\n  INDEX idx_open_rate (open_rate)\n)",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute CREATE TABLE IF NOT EXISTS ab_test_variants (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  ab_test_id INT NOT NULL,\n  variant_name VARCHAR(50) NOT NULL,\n  subject_line TEXT NOT NULL,\n  emails_sent INT DEFAULT 0,\n  emails_opened INT DEFAULT 0,\n  open_rate DECIMAL(5,2) DEFAULT 0.00,\n  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  FOREIGN KEY (ab_test_id) REFERENCES ab_tests(id) ON DELETE CASCADE,\n  INDEX idx_ab_test_id (ab_test_id),\n  INDEX idx_open_rate (open_rate)\n)",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 601
+}

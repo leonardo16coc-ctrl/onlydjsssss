@@ -3,6 +3,7 @@ import { z } from "zod";
 import { getDb } from "../db";
 import { sql } from "drizzle-orm";
 import { sendEmail, sendBulkEmails, generateDJOutreachEmail } from "../email/resend";
+import { getActiveABTest, getRandomVariant, incrementVariantSent } from "../ab-testing/variant-assigner";
 
 export const emailCampaignsRouter = router({
   /**
@@ -58,7 +59,20 @@ ONLYDJS es la plataforma definitiva para DJs profesionales donde puedes:
         platform: input.platform,
       });
       
-      const subject = "Invitación exclusiva a ONLYDJS - Plataforma para DJs";
+      // Check for active A/B test and get variant
+      let subject = "Invitación exclusiva a ONLYDJS - Plataforma para DJs";
+      let abTestVariantId: number | null = null;
+      
+      const activeTest = await getActiveABTest();
+      if (activeTest) {
+        const variant = await getRandomVariant(activeTest.id);
+        if (variant) {
+          subject = variant.subject_line;
+          abTestVariantId = variant.id;
+          await incrementVariantSent(variant.id);
+          console.log(`[Email Campaign] Using A/B test variant "${variant.variant_name}": ${subject}`);
+        }
+      }
       
       // Send email
       const result = await sendEmail({
@@ -66,12 +80,13 @@ ONLYDJS es la plataforma definitiva para DJs profesionales donde puedes:
         subject,
         html,
         text,
+        abTestVariantId: abTestVariantId || undefined,
       });
       
       // Save to database
       await db.execute(
-        sql`INSERT INTO email_campaigns (dj_id, email_to, subject, message_text, platform, status, resend_id, sent_at, error_message)
-            VALUES (${input.djId}, ${djEmail}, ${subject}, ${message}, ${input.platform}, ${result.success ? "sent" : "failed"}, ${result.id || null}, ${result.success ? new Date() : null}, ${result.error || null})`
+        sql`INSERT INTO email_campaigns (dj_id, email_to, subject, message_text, platform, status, resend_id, sent_at, error_message, ab_test_variant_id)
+            VALUES (${input.djId}, ${djEmail}, ${subject}, ${message}, ${input.platform}, ${result.success ? "sent" : "failed"}, ${result.id || null}, ${result.success ? new Date() : null}, ${result.error || null}, ${abTestVariantId})`
       );
       
       return {

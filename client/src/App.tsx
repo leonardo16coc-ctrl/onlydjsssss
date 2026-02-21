@@ -39,6 +39,7 @@ import { Recruitment } from "./pages/Recruitment";
 import ScoutDashboard from "./pages/ScoutDashboard";
 import Welcome from "./pages/Welcome";
 import EmailAnalytics from "./pages/EmailAnalytics";
+import ABTesting from "./pages/ABTesting";
 
 function Router() {
   return (
@@ -72,6 +73,7 @@ function Router() {
       <Route path={"/recruitment"} component={Recruitment} />
       <Route path={"/scout-dashboard"} component={ScoutDashboard} />
       <Route path={"/email-analytics"} component={EmailAnalytics} />
+      <Route path={"/ab-testing"} component={ABTesting} />
       <Route path={"/dj/:username"} component={DJProfile} />
       <Route path={"/profile/edit"} component={ProfileEdit} />
       <Route path={"/track/edit/:id"} component={EditTrack} />

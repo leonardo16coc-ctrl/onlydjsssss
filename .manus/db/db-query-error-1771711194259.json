@@ -1,0 +1,8 @@
+{
+  "query": "ALTER TABLE email_campaigns \nADD COLUMN ab_test_variant_id INT NULL,\nADD INDEX idx_ab_test_variant (ab_test_variant_id)",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute ALTER TABLE email_campaigns \nADD COLUMN ab_test_variant_id INT NULL,\nADD INDEX idx_ab_test_variant (ab_test_variant_id)",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1072 (42000) at line 1: column does not exist: ab_test_variant_id"
+  ]
+}

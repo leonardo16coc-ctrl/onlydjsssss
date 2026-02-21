@@ -2951,3 +2951,32 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Tabla de emails recientes con estados
 - [x] Agregar navegación a Email Analytics en navbar
 - [x] Tests de webhook y analytics
+
+
+
+## 99. Sistema de A/B Testing para Subject Lines ✅
+- [x] Crear tabla `ab_tests` para almacenar experimentos
+- [x] Crear tabla `ab_test_variants` para variantes de subject lines
+- [x] Agregar columna `ab_test_variant_id` a `email_campaigns`
+- [x] Migrar schema con nuevas tablas
+- [x] Implementar sistema de asignación aleatoria de variantes con balanceo de carga
+- [x] Cálculo automático de open_rate y análisis estadístico (chi-squared)
+- [x] Crear tRPC router `abTesting` con 6 procedures completos
+- [x] Procedure: createTest (crear nuevo A/B test con 2-5 variantes)
+- [x] Procedure: getTests (listar todos los tests con métricas)
+- [x] Procedure: getTestResults (resultados detallados + significancia estadística)
+- [x] Procedure: declareWinner (marcar variante ganadora y completar test)
+- [x] Procedure: updateTestStatus (pausar/reactivar tests)
+- [x] Procedure: getOverallStats (estadísticas agregadas)
+- [x] Crear página `/ab-testing` con dashboard completo
+- [x] Gráficas comparativas de open rates por variante (Recharts)
+- [x] Tabla de tests activos y completados con estados
+- [x] Formulario para crear nuevos A/B tests con múltiples variantes
+- [x] Visualización de recomendaciones estadísticas
+- [x] Integrar A/B testing en sistema de email campaigns automáticamente
+- [x] Modificar email sender para seleccionar variantes aleatoriamente
+- [x] Actualizar webhook de Resend para incrementar métricas de variantes
+- [x] Tests unitarios para A/B testing router (10 tests)
+- [x] Agregar navegación a A/B Testing en Scout Dashboard
+- [x] Documentar sistema completo
+- [x] Guardar checkpoint
