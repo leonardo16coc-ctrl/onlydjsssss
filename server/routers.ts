@@ -28,6 +28,7 @@ import { agentsRouter } from "./routers/agents";
 import { recruitmentRouter } from "./routers/recruitment";
 import { dailyQueueRouter } from "./routers/daily-queue";
 import { scoutControlRouter } from "./routers/scout-control";
+import { scoutStatsRouter } from "./routers/scout-stats";
 import { getDb } from "./db";
 import { tracks, downloads } from "../drizzle/schema";
 import { eq, and, gte, sql } from "drizzle-orm";
@@ -62,6 +63,7 @@ export const appRouter = router({
   recruitment: recruitmentRouter,
   dailyQueue: dailyQueueRouter,
   scoutControl: scoutControlRouter,
+  scoutStats: scoutStatsRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

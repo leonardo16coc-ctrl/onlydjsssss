@@ -36,6 +36,7 @@ import APIDocs from "./pages/APIDocs";
 import Pricing from "./pages/Pricing";
 import Refund from "./pages/Refund";
 import { Recruitment } from "./pages/Recruitment";
+import ScoutDashboard from "./pages/ScoutDashboard";
 import Welcome from "./pages/Welcome";
 
 function Router() {
@@ -68,6 +69,7 @@ function Router() {
       <Route path={"/agents"} component={AgentsDashboard} />
       <Route path={"/scraper-monitoring"} component={ScraperMonitoring} />
       <Route path={"/recruitment"} component={Recruitment} />
+      <Route path={"/scout-dashboard"} component={ScoutDashboard} />
       <Route path={"/dj/:username"} component={DJProfile} />
       <Route path={"/profile/edit"} component={ProfileEdit} />
       <Route path={"/track/edit/:id"} component={EditTrack} />

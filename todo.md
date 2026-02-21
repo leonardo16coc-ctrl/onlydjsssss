@@ -2896,3 +2896,17 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Verificar que funcione en producción (ACTIVO)
 - [x] APIs: getSchedulerStatus, manualTrigger
 - [x] Guardar checkpoint
+
+
+## 96. Dashboard de Monitoreo del Scout (NUEVO)
+- [x] Crear tRPC procedures para estadísticas (getOverallStats, getByPlatform, getRecentDJs, getDailyStats, getTopGenres)
+- [x] Crear página /scout-dashboard con UI moderna (dark theme con gradientes)
+- [x] Mostrar próxima ejecución programada (Next Run card)
+- [x] Mostrar últimos DJs descubiertos (tabla con 20 más recientes)
+- [x] Gráfica de DJs por plataforma (pie chart con Recharts)
+- [x] Gráfica de DJs por día (line chart últimos 7 días)
+- [x] Botón "Run Scout Now" con loading state y confirmación
+- [x] Auto-refresh cada 30 segundos (toggle ON/OFF)
+- [x] Top géneros grid con contadores
+- [x] Probar dashboard (FUNCIONA - 17 DJs, 2 hoy)
+- [x] Guardar checkpoint
