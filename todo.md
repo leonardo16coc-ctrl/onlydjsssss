@@ -3012,3 +3012,11 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Actualizar textos en español (es/common.json): "1 track" → "10 tracks" (2 lugares)
 - [x] Verificar visualmente en FAQ que muestre "10 tracks per month"
 - [x] Guardar checkpoint
+
+
+## 103. URGENTE: Corregir Mensaje "límite de 1 upload por mes" ✅
+- [x] Buscar mensaje "Has alcanzado tu límite de 1 upload por mes" en componentes
+- [x] Encontrado en server/routers.ts línea 186
+- [x] Actualizar mensaje a "Has alcanzado tu límite de 10 uploads por mes"
+- [x] Actualizar validación de count >= 1 a count >= 10
+- [x] Guardar checkpoint

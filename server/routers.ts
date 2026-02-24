@@ -180,10 +180,10 @@ export const appRouter = router({
             );
           
           const count = Number(uploadsThisMonth[0]?.count || 0);
-          if (count >= 1) {
+          if (count >= 10) {
             throw new TRPCError({
               code: "FORBIDDEN",
-              message: "Has alcanzado tu límite de 1 upload por mes. Suscríbete por $4.99/mes para uploads ilimitados.",
+              message: "Has alcanzado tu límite de 10 uploads por mes. Suscríbete por $4.99/mes para uploads ilimitados.",
             });
           }
         }
