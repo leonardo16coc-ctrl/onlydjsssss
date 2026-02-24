@@ -3043,3 +3043,22 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Actualizar URL base en index.html a www.onlydjss.com
 - [x] Sistema de copia al portapapeles ya existía en ShareTrackButtons
 - [x] Guardar checkpoint
+
+
+## 106. Sistema de Playlists con URLs Compartibles ✅
+- [x] Crear tabla playlists en base de datos
+- [x] Crear tabla playlist_tracks (relación many-to-many)
+- [x] Crear tRPC procedures para crear playlist
+- [x] Crear tRPC procedures para agregar/remover tracks
+- [x] Crear tRPC procedures para obtener playlists del usuario
+- [x] Crear tRPC procedures para obtener playlist por ID (pública)
+- [x] Crear funciones helper en server/db.ts
+- [x] Crear página /my-playlists para gestionar playlists
+- [x] Crear página /playlist/:id para ver y reproducir
+- [x] Agregar botón "Add to Playlist" en TrackDetail
+- [x] Componente AddToPlaylistButton con modal
+- [x] Sistema de reproducción de tracks en playlist
+- [x] Botones de compartir en PlaylistDetail
+- [x] Open Graph meta tags para playlists
+- [x] URLs compartibles www.onlydjss.com/playlist/[id]
+- [x] Guardar checkpoint

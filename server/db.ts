@@ -788,3 +788,176 @@ export async function getDiscoveredDJByUrl(url: string) {
 
   return dj || null;
 }
+
+
+
+
+export async function getPlaylistById(playlistId: number) {
+  const db = await getDb();
+  if (!db) return null;
+
+  const [playlist] = await db
+    .select()
+    .from(playlists)
+    .where(eq(playlists.id, playlistId))
+    .limit(1);
+
+  if (!playlist) return null;
+
+  // Get tracks in playlist
+  const playlistTracksData = await db
+    .select({
+      track: tracks,
+      position: playlistTracks.position,
+      addedAt: playlistTracks.addedAt,
+    })
+    .from(playlistTracks)
+    .innerJoin(tracks, eq(playlistTracks.trackId, tracks.id))
+    .where(eq(playlistTracks.playlistId, playlistId))
+    .orderBy(playlistTracks.position);
+
+  return {
+    ...playlist,
+    tracks: playlistTracksData.map((pt) => ({
+      ...pt.track,
+      position: pt.position,
+      addedAt: pt.addedAt,
+    })),
+  };
+}
+
+export async function addTrackToPlaylist(
+  playlistId: number,
+  trackId: number,
+  userId: number
+): Promise<boolean> {
+  const db = await getDb();
+  if (!db) return false;
+
+  // Verify ownership
+  const [playlist] = await db
+    .select()
+    .from(playlists)
+    .where(and(eq(playlists.id, playlistId), eq(playlists.userId, userId)))
+    .limit(1);
+
+  if (!playlist) return false;
+
+  // Get max position
+  const [maxPosResult] = await db
+    .select({ maxPosition: sql<number>`COALESCE(MAX(${playlistTracks.position}), -1)` })
+    .from(playlistTracks)
+    .where(eq(playlistTracks.playlistId, playlistId));
+
+  const nextPosition = (maxPosResult?.maxPosition || -1) + 1;
+
+  try {
+    await db.insert(playlistTracks).values({
+      playlistId,
+      trackId,
+      position: nextPosition,
+    });
+
+    // Update track count
+    await db
+      .update(playlists)
+      .set({ 
+        trackCount: sql`${playlists.trackCount} + 1`,
+        updatedAt: new Date()
+      })
+      .where(eq(playlists.id, playlistId));
+
+    return true;
+  } catch (error) {
+    console.error("Error adding track to playlist:", error);
+    return false;
+  }
+}
+
+export async function removeTrackFromPlaylist(
+  playlistId: number,
+  trackId: number,
+  userId: number
+): Promise<boolean> {
+  const db = await getDb();
+  if (!db) return false;
+
+  // Verify ownership
+  const [playlist] = await db
+    .select()
+    .from(playlists)
+    .where(and(eq(playlists.id, playlistId), eq(playlists.userId, userId)))
+    .limit(1);
+
+  if (!playlist) return false;
+
+  await db
+    .delete(playlistTracks)
+    .where(
+      and(
+        eq(playlistTracks.playlistId, playlistId),
+        eq(playlistTracks.trackId, trackId)
+      )
+    );
+
+  // Update track count
+  await db
+    .update(playlists)
+    .set({ 
+      trackCount: sql`${playlists.trackCount} - 1`,
+      updatedAt: new Date()
+    })
+    .where(eq(playlists.id, playlistId));
+
+  return true;
+}
+
+export async function updatePlaylist(
+  playlistId: number,
+  userId: number,
+  data: Partial<InsertPlaylist>
+): Promise<boolean> {
+  const db = await getDb();
+  if (!db) return false;
+
+  // Verify ownership
+  const [playlist] = await db
+    .select()
+    .from(playlists)
+    .where(and(eq(playlists.id, playlistId), eq(playlists.userId, userId)))
+    .limit(1);
+
+  if (!playlist) return false;
+
+  await db
+    .update(playlists)
+    .set({ ...data, updatedAt: new Date() })
+    .where(eq(playlists.id, playlistId));
+
+  return true;
+}
+
+export async function deletePlaylist(
+  playlistId: number,
+  userId: number
+): Promise<boolean> {
+  const db = await getDb();
+  if (!db) return false;
+
+  // Verify ownership
+  const [playlist] = await db
+    .select()
+    .from(playlists)
+    .where(and(eq(playlists.id, playlistId), eq(playlists.userId, userId)))
+    .limit(1);
+
+  if (!playlist) return false;
+
+  // Delete playlist tracks first
+  await db.delete(playlistTracks).where(eq(playlistTracks.playlistId, playlistId));
+
+  // Delete playlist
+  await db.delete(playlists).where(eq(playlists.id, playlistId));
+
+  return true;
+}

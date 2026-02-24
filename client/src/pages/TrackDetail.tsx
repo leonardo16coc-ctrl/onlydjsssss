@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import AudioPlayer from "@/components/AudioPlayer";
 import ShareTrackButtons from "@/components/ShareTrackButtons";
 import DownloadButton from "@/components/DownloadButton";
+import AddToPlaylistButton from "@/components/AddToPlaylistButton";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { 
   Play, 
@@ -221,6 +222,11 @@ export default function TrackDetail() {
                 trackId={track.id} 
                 trackTitle={track.title}
                 artist={track.artist}
+              />
+
+              <AddToPlaylistButton
+                trackId={track.id}
+                trackTitle={track.title}
               />
 
               <ShareTrackButtons

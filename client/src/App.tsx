@@ -41,6 +41,8 @@ import Welcome from "./pages/Welcome";
 import EmailAnalytics from "./pages/EmailAnalytics";
 import ABTesting from "./pages/ABTesting";
 import TrackDetail from "./pages/TrackDetail";
+import MyPlaylists from "./pages/MyPlaylists";
+import PlaylistDetail from "./pages/PlaylistDetail";
 
 function Router() {
   return (
@@ -78,6 +80,8 @@ function Router() {
       <Route path={"/dj/:username"} component={DJProfile} />
       <Route path={"/profile/edit"} component={ProfileEdit} />
       <Route path={"/track/:id"} component={TrackDetail} />
+      <Route path={"/my-playlists"} component={MyPlaylists} />
+      <Route path={"/playlist/:id"} component={PlaylistDetail} />
       <Route path={"/track/edit/:id"} component={EditTrack} />
       <Route path={"/legal"} component={Legal} />
       <Route path={"/terms"} component={Terms} />
