@@ -40,6 +40,7 @@ import ScoutDashboard from "./pages/ScoutDashboard";
 import Welcome from "./pages/Welcome";
 import EmailAnalytics from "./pages/EmailAnalytics";
 import ABTesting from "./pages/ABTesting";
+import TrackDetail from "./pages/TrackDetail";
 
 function Router() {
   return (
@@ -76,6 +77,7 @@ function Router() {
       <Route path={"/ab-testing"} component={ABTesting} />
       <Route path={"/dj/:username"} component={DJProfile} />
       <Route path={"/profile/edit"} component={ProfileEdit} />
+      <Route path={"/track/:id"} component={TrackDetail} />
       <Route path={"/track/edit/:id"} component={EditTrack} />
       <Route path={"/legal"} component={Legal} />
       <Route path={"/terms"} component={Terms} />

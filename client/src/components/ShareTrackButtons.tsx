@@ -17,8 +17,8 @@ interface ShareTrackButtonsProps {
 export default function ShareTrackButtons({ trackId, trackTitle, artistName }: ShareTrackButtonsProps) {
   const [copied, setCopied] = useState(false);
 
-  // Construir URL del track
-  const trackUrl = `${window.location.origin}/track/${trackId}`;
+  // Construir URL del track con dominio personalizado
+  const trackUrl = `https://www.onlydjss.com/track/${trackId}`;
   
   // Texto para compartir
   const shareText = `🎧 Check out "${trackTitle}" by ${artistName} on ONLYDJS`;
