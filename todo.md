@@ -3062,3 +3062,25 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Open Graph meta tags para playlists
 - [x] URLs compartibles www.onlydjss.com/playlist/[id]
 - [x] Guardar checkpoint
+
+
+## 107. Smart Playlists - Generación Automática por Criterios (EN PROGRESO)
+- [x] Actualizar tabla playlists agregando columna is_smart y rules (JSON)
+- [x] Crear tipos TypeScript para reglas de smart playlists (SmartPlaylistRules)
+- [x] tRPC procedure para crear smart playlist con reglas
+- [x] tRPC procedure para generar tracks dinámicamente según reglas (simplificado)
+- [x] tRPC procedure para preview de tracks antes de crear
+- [x] tRPC procedure para actualizar reglas de smart playlist
+- [ ] Implementar query builder completo que construya SQL dinámicamente
+- [ ] Sistema de filtrado por género (Tech House, Deep House, Techno, etc.)
+- [ ] Sistema de filtrado por rango de BPM (ej: 128-132)
+- [ ] Sistema de filtrado por key/tonalidad
+- [ ] Sistema de filtrado por fecha (últimos 7 días, 30 días, etc.)
+- [ ] Sistema de filtrado por popularidad (plays, downloads)
+- [ ] Crear página /smart-playlists con builder de reglas visual
+- [ ] UI para agregar/remover criterios de filtrado
+- [ ] Templates predefinidos (Top 50 Tech House, BPM 128-132, etc.)
+- [ ] Sistema de actualización automática cuando se suben nuevos tracks
+- [ ] Badge "Smart Playlist" en UI para diferenciar de playlists manuales
+- [ ] Tests unitarios del sistema de reglas
+- [ ] Guardar checkpoint
