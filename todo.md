@@ -3020,3 +3020,12 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Actualizar mensaje a "Has alcanzado tu límite de 10 uploads por mes"
 - [x] Actualizar validación de count >= 1 a count >= 10
 - [x] Guardar checkpoint
+
+
+## 104. Eliminar Restricciones de Preview - Reproducción Completa para Todos ✅
+- [x] Buscar componentes AudioPlayer y WaveformPlayer con restricciones
+- [x] Eliminar lógica de preview limitado (1 minuto) en AudioPlayer.tsx
+- [x] Eliminar mensajes "Suscríbete para escuchar completo"
+- [x] Eliminar validaciones de membershipStatus en players
+- [x] WaveformPlayer no tenía restricciones
+- [x] Guardar checkpoint

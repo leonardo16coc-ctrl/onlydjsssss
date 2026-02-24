@@ -26,9 +26,9 @@ export default function AudioPlayer({ audioUrl, trackId, trackTitle, compact = f
   const audioRef = useRef<HTMLAudioElement>(null);
   const [, setLocation] = useLocation();
 
-  // Preview limit: 1 minute (60 seconds) for free users
-  const previewLimit = user?.membershipStatus === "member" ? Infinity : 60;
-  const isPreviewLimited = user?.membershipStatus !== "member";
+  // No preview limits - all users can listen to full tracks
+  const previewLimit = Infinity;
+  const isPreviewLimited = false;
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -41,36 +41,7 @@ export default function AudioPlayer({ audioUrl, trackId, trackTitle, compact = f
     const handleTimeUpdate = () => {
       setCurrentTime(audio.currentTime);
 
-      // Stop at preview limit for free users
-      if (isPreviewLimited && audio.currentTime >= previewLimit) {
-        audio.pause();
-        setIsPlaying(false);
-        audio.currentTime = 0;
-        setCurrentTime(0);
-        
-        // Show notification only once per play session
-        if (!hasShownLimitNotification) {
-          setHasShownLimitNotification(true);
-          
-          // Play notification sound
-          const notificationSound = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUKni8LZjHAU5k9nyz3osBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBSh+zPLaizsKGGS46+mmUhQMTKXh8bllHgU2jdXzxnkpBQ==');
-          notificationSound.volume = 0.3;
-          notificationSound.play().catch(() => {});
-          
-          // Show toast notification
-          toast.info(
-            t('player.previewEnded'),
-            {
-              description: t('player.previewEndedDesc'),
-              duration: 8000,
-              action: {
-                label: t('player.subscribe'),
-                onClick: () => setLocation("/membership"),
-              },
-            }
-          );
-        }
-      }
+      // No preview limits - removed restriction logic
     };
 
     const handleEnded = () => {
