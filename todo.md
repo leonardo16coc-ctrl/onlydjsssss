@@ -3004,3 +3004,11 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Ejecutar tests y verificar que todos pasen (13/13 ✓)
 - [x] UI se actualiza automáticamente (obtiene límites del backend)
 - [x] Guardar checkpoint
+
+
+## 102. Corregir Textos Hardcodeados de "1 subida por mes" ✅
+- [x] Buscar todos los textos con "1 subida" o "1 upload" en archivos i18n
+- [x] Actualizar texto en inglés (en/common.json): "1 track" → "10 tracks"
+- [x] Actualizar textos en español (es/common.json): "1 track" → "10 tracks" (2 lugares)
+- [x] Verificar visualmente en FAQ que muestre "10 tracks per month"
+- [x] Guardar checkpoint
