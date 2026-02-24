@@ -42,7 +42,7 @@ describe("Uploads Router", () => {
       const result = await caller.uploads.getUploadLimits();
 
       expect(result.membershipStatus).toBe("free");
-      expect(result.limits.maxUploadsPerMonth).toBe(5);
+      expect(result.limits.maxUploadsPerMonth).toBe(10);
       expect(result.limits.maxFileSizeMB).toBe(100);
       expect(result.limits.supportedFormats).toEqual(["MP3", "WAV"]);
     });
@@ -52,7 +52,7 @@ describe("Uploads Router", () => {
       const result = await caller.uploads.getUploadLimits();
 
       expect(result.membershipStatus).toBe("member");
-      expect(result.limits.maxUploadsPerMonth).toBe(50);
+      expect(result.limits.maxUploadsPerMonth).toBe(-1); // Unlimited
       expect(result.limits.maxFileSizeMB).toBe(100);
       expect(result.limits.supportedFormats).toContain("MP3");
       expect(result.limits.supportedFormats).toContain("WAV");

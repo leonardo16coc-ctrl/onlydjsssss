@@ -2994,3 +2994,13 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Verificar configuración de multer (límites de tamaño)
 - [x] Probar que página de Upload cargue correctamente
 - [x] Guardar checkpoint con sistema funcionando
+
+
+## 101. Aumentar Límite de Subidas Gratuitas ✅
+- [x] Buscar configuración de límites de subida en uploads.router.ts
+- [x] Cambiar límite de 1 a 10 tracks por mes para usuarios free
+- [x] Agregar tier "verified" con uploads ilimitados
+- [x] Actualizar tests para reflejar nuevos límites
+- [x] Ejecutar tests y verificar que todos pasen (13/13 ✓)
+- [x] UI se actualiza automáticamente (obtiene límites del backend)
+- [x] Guardar checkpoint
