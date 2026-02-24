@@ -122,7 +122,7 @@ export default function Upload() {
     
     try {
       const formData = new FormData();
-      formData.append("audio", audioFile);
+      formData.append("file", audioFile);
       
       const xhr = new XMLHttpRequest();
       
@@ -176,7 +176,7 @@ export default function Upload() {
     
     try {
       const formData = new FormData();
-      formData.append("cover", coverImage);
+      formData.append("file", coverImage);
       
       const response = await fetch("/api/upload/cover", {
         method: "POST",
