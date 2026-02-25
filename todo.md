@@ -3084,3 +3084,15 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [ ] Badge "Smart Playlist" en UI para diferenciar de playlists manuales
 - [ ] Tests unitarios del sistema de reglas
 - [ ] Guardar checkpoint
+
+
+## 108. Ajustar Subida de Archivos WAV ✅
+- [x] Diagnosticar problemas actuales con subida de WAV
+- [x] Revisar logs de errores durante subida de WAV
+- [x] Aumentar límite de tamaño en backend de 100MB a 200MB
+- [x] Aumentar límite de tamaño en frontend de 100MB a 200MB
+- [x] Verificar MIME types aceptados (audio/wav, audio/x-wav, audio/wave) - OK
+- [x] Verificar configuración de multer (1000MB) - OK
+- [x] Revisar validación de archivos en backend - OK
+- [x] Revisar validación de archivos en frontend - OK
+- [x] Guardar checkpoint

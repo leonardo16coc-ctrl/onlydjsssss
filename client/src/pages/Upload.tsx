@@ -70,8 +70,8 @@ export default function Upload() {
         return;
       }
       
-      // Validate file size (100MB max)
-      if (file.size > 100 * 1024 * 1024) {
+      // Validate file size (200MB max)
+      if (file.size > 200 * 1024 * 1024) {
         toast.error(t('upload.fileTooLarge'));
         return;
       }
