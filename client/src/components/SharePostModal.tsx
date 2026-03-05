@@ -6,12 +6,45 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import { Download, Instagram, Twitter, Copy, Loader2, CheckCircle2, Zap } from "lucide-react";
 
 const ODJS_LOGO_URL =
   "https://d2xsxph8kpxj0f.cloudfront.net/310519663313258514/ZSqS9M2EFeWUjrPvMV6QuC/odjs-thumbnail-1200x630_fdb7b444.png";
+
+// ── Background themes ──────────────────────────────────────────────────────
+type BgTheme = "dark" | "purple" | "cyan" | "gold";
+
+const BG_THEMES: Record<BgTheme, { label: string; color: string; bg: string; accent: string; textColor: string }> = {
+  dark: {
+    label: "Dark",
+    color: "#07070f",
+    bg: "linear-gradient(135deg, #07070f 0%, #0d0d2a 50%, #07070f 100%)",
+    accent: "#06b6d4",
+    textColor: "#e2e8f0",
+  },
+  purple: {
+    label: "Purple",
+    color: "#1a0a2e",
+    bg: "linear-gradient(135deg, #0f0520 0%, #1a0a2e 40%, #2d1060 70%, #1a0a2e 100%)",
+    accent: "#a855f7",
+    textColor: "#f3e8ff",
+  },
+  cyan: {
+    label: "Cyan",
+    color: "#001a2e",
+    bg: "linear-gradient(135deg, #001020 0%, #001a2e 40%, #003a5c 70%, #001a2e 100%)",
+    accent: "#06b6d4",
+    textColor: "#e0f7ff",
+  },
+  gold: {
+    label: "Gold",
+    color: "#1a1200",
+    bg: "linear-gradient(135deg, #0f0a00 0%, #1a1200 40%, #2e2000 70%, #1a1200 100%)",
+    accent: "#f59e0b",
+    textColor: "#fef3c7",
+  },
+};
 
 function getAvatar(u: any) {
   return u?.profileImageUrl || u?.avatarUrl || "";
@@ -29,89 +62,67 @@ function formatExactTime(ts: number) {
 function formatFullDate(ts: number) {
   try {
     return new Date(ts).toLocaleDateString([], {
-      weekday: "short",
-      month: "short",
-      day: "numeric",
-      year: "numeric",
+      weekday: "short", month: "short", day: "numeric", year: "numeric",
     });
   } catch {
     return "";
   }
 }
 
-// ── Tarjeta visual que se captura como imagen ──────────────────────────────
-function ShareCardSquare({ post }: { post: any }) {
+// ── Tarjeta Square (1:1) ───────────────────────────────────────────────────
+function ShareCardSquare({ post, theme }: { post: any; theme: BgTheme }) {
+  const t = BG_THEMES[theme];
   return (
     <div
       id="share-card-square"
       style={{
-        width: 540,
-        height: 540,
-        background: "linear-gradient(135deg, #07070f 0%, #0d0d2a 50%, #07070f 100%)",
-        borderRadius: 24,
-        padding: 36,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        position: "relative",
-        overflow: "hidden",
+        width: 540, height: 540,
+        background: t.bg,
+        borderRadius: 24, padding: 36,
+        display: "flex", flexDirection: "column", justifyContent: "space-between",
+        position: "relative", overflow: "hidden",
         fontFamily: "'Inter', 'Segoe UI', sans-serif",
       }}
     >
-      {/* Background glow effects */}
+      {/* Subtle glow orbs */}
       <div style={{
-        position: "absolute", top: -80, left: -80,
-        width: 300, height: 300,
-        borderRadius: "50%",
-        background: "radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%)",
-        pointerEvents: "none",
+        position: "absolute", top: -80, left: -80, width: 300, height: 300, borderRadius: "50%",
+        background: `radial-gradient(circle, ${t.accent}22 0%, transparent 70%)`, pointerEvents: "none",
       }} />
       <div style={{
-        position: "absolute", bottom: -60, right: -60,
-        width: 280, height: 280,
-        borderRadius: "50%",
-        background: "radial-gradient(circle, rgba(168,85,247,0.12) 0%, transparent 70%)",
-        pointerEvents: "none",
+        position: "absolute", bottom: -60, right: -60, width: 280, height: 280, borderRadius: "50%",
+        background: `radial-gradient(circle, ${t.accent}18 0%, transparent 70%)`, pointerEvents: "none",
       }} />
 
-      {/* Top: ODJS Social header */}
+      {/* Top header */}
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
-        <img
-          src={ODJS_LOGO_URL}
-          alt="ODJS"
-          style={{
-            width: 64, height: 64, borderRadius: "50%", objectFit: "cover",
-            border: "2px solid rgba(255,255,255,0.15)",
-          }}
+        <img src={ODJS_LOGO_URL} alt="ODJS"
+          style={{ width: 64, height: 64, borderRadius: "50%", objectFit: "cover", border: "2px solid rgba(255,255,255,0.15)" }}
           crossOrigin="anonymous"
         />
         <div>
-          <div style={{ color: "#06b6d4", fontWeight: 800, fontSize: 14, letterSpacing: 1.5 }}>ODJS SOCIAL</div>
+          <div style={{ color: t.accent, fontWeight: 800, fontSize: 14, letterSpacing: 1.5 }}>ODJS SOCIAL</div>
           <div style={{ color: "#64748b", fontSize: 10 }}>onlydjss.com</div>
         </div>
         <div style={{
           marginLeft: "auto",
-          background: "linear-gradient(90deg, rgba(6,182,212,0.15), rgba(168,85,247,0.15))",
-          border: "1px solid rgba(6,182,212,0.3)",
-          borderRadius: 20,
-          padding: "4px 12px",
-          color: "#06b6d4",
-          fontSize: 10,
-          fontWeight: 700,
-          letterSpacing: 1,
+          background: `${t.accent}22`,
+          border: `1px solid ${t.accent}44`,
+          borderRadius: 20, padding: "4px 12px",
+          color: t.accent, fontSize: 10, fontWeight: 700, letterSpacing: 1,
         }}>
           ⚡ ONLYDJS PLATFORM
         </div>
       </div>
 
       {/* Divider */}
-      <div style={{ height: 1, background: "linear-gradient(90deg, rgba(6,182,212,0.3), rgba(168,85,247,0.3), transparent)", marginBottom: 20 }} />
+      <div style={{ height: 1, background: `linear-gradient(90deg, ${t.accent}44, ${t.accent}22, transparent)`, marginBottom: 20 }} />
 
       {/* DJ Info */}
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18 }}>
         <div style={{
           width: 52, height: 52, borderRadius: "50%",
-          border: "2px solid rgba(6,182,212,0.5)",
+          border: `2px solid ${t.accent}66`,
           overflow: "hidden", flexShrink: 0,
           background: "linear-gradient(135deg, #06b6d4, #a855f7)",
           display: "flex", alignItems: "center", justifyContent: "center",
@@ -119,17 +130,13 @@ function ShareCardSquare({ post }: { post: any }) {
           {getAvatar(post) ? (
             <img src={getAvatar(post)} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} crossOrigin="anonymous" />
           ) : (
-            <span style={{ color: "white", fontWeight: 800, fontSize: 20 }}>
-              {getDisplayName(post).charAt(0).toUpperCase()}
-            </span>
+            <span style={{ color: "white", fontWeight: 800, fontSize: 20 }}>{getDisplayName(post).charAt(0).toUpperCase()}</span>
           )}
         </div>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <span style={{ color: "white", fontWeight: 700, fontSize: 16 }}>{getDisplayName(post)}</span>
-            {post.isVerified && (
-              <span style={{ color: "#06b6d4", fontSize: 14 }}>✓</span>
-            )}
+            <span style={{ color: t.textColor, fontWeight: 700, fontSize: 16 }}>{getDisplayName(post)}</span>
+            {post.isVerified && <span style={{ color: t.accent, fontSize: 14 }}>✓</span>}
           </div>
           <div style={{ color: "#64748b", fontSize: 12 }}>@{post.username}</div>
         </div>
@@ -141,14 +148,8 @@ function ShareCardSquare({ post }: { post: any }) {
 
       {/* Post content */}
       <div style={{
-        flex: 1,
-        color: "#e2e8f0",
-        fontSize: 17,
-        lineHeight: 1.65,
-        fontWeight: 400,
-        wordBreak: "break-word",
-        overflow: "hidden",
-        marginBottom: 18,
+        flex: 1, color: t.textColor, fontSize: 17, lineHeight: 1.65,
+        fontWeight: 400, wordBreak: "break-word", overflow: "hidden", marginBottom: 18,
       }}>
         {post.content?.length > 280 ? post.content.slice(0, 277) + "..." : post.content}
       </div>
@@ -157,43 +158,33 @@ function ShareCardSquare({ post }: { post: any }) {
       {post.hashtags && (
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 18 }}>
           {post.hashtags.split(/[\s,]+/).filter(Boolean).slice(0, 5).map((tag: string, i: number) => (
-            <span key={i} style={{ color: "#06b6d4", fontSize: 13, fontWeight: 600 }}>
+            <span key={i} style={{ color: t.accent, fontSize: 13, fontWeight: 600 }}>
               {tag.startsWith("#") ? tag : `#${tag}`}
             </span>
           ))}
         </div>
       )}
 
-      {/* Stats row */}
-      <div style={{
-        display: "flex", gap: 20, marginBottom: 18,
-        color: "#64748b", fontSize: 13,
-      }}>
+      {/* Stats */}
+      <div style={{ display: "flex", gap: 20, marginBottom: 18, color: "#64748b", fontSize: 13 }}>
         <span>💬 {post.commentCount || 0}</span>
         <span>🔁 {post.repostCount || 0}</span>
         <span>❤️ {post.likeCount || 0}</span>
       </div>
 
-      {/* Bottom: ODJS Logo watermark */}
+      {/* Footer watermark */}
       <div style={{
         display: "flex", alignItems: "center", justifyContent: "space-between",
         borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: 16,
       }}>
-        <div style={{ color: "#334155", fontSize: 11 }}>
-          onlydjss.com/@{post.username}
-        </div>
+        <div style={{ color: "#334155", fontSize: 11 }}>onlydjss.com/@{post.username}</div>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <img
-            src={ODJS_LOGO_URL}
-            alt="ODJS"
-            style={{
-              width: 72, height: 72, borderRadius: "50%", objectFit: "cover",
-              border: "2px solid rgba(255,255,255,0.15)",
-            }}
+          <img src={ODJS_LOGO_URL} alt="ODJS"
+            style={{ width: 72, height: 72, borderRadius: "50%", objectFit: "cover", border: "2px solid rgba(255,255,255,0.15)" }}
             crossOrigin="anonymous"
           />
-          <div style={{ textAlign: "left" }}>
-            <div style={{ color: "#e2e8f0", fontWeight: 900, fontSize: 13, letterSpacing: 1.5 }}>ONLYDJS</div>
+          <div>
+            <div style={{ color: t.textColor, fontWeight: 900, fontSize: 13, letterSpacing: 1.5 }}>ONLYDJS</div>
             <div style={{ color: "#64748b", fontSize: 10, letterSpacing: 1 }}>PLATFORM</div>
           </div>
         </div>
@@ -202,63 +193,48 @@ function ShareCardSquare({ post }: { post: any }) {
   );
 }
 
-// ── Tarjeta Stories (9:16) ─────────────────────────────────────────────────
-function ShareCardStory({ post }: { post: any }) {
+// ── Tarjeta Story (9:16) ───────────────────────────────────────────────────
+function ShareCardStory({ post, theme }: { post: any; theme: BgTheme }) {
+  const t = BG_THEMES[theme];
   return (
     <div
       id="share-card-story"
       style={{
-        width: 360,
-        height: 640,
-        background: "linear-gradient(160deg, #07070f 0%, #0d0d2a 40%, #120820 70%, #07070f 100%)",
-        borderRadius: 24,
-        padding: 32,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        position: "relative",
-        overflow: "hidden",
+        width: 360, height: 640,
+        background: t.bg,
+        borderRadius: 24, padding: 32,
+        display: "flex", flexDirection: "column", justifyContent: "space-between",
+        position: "relative", overflow: "hidden",
         fontFamily: "'Inter', 'Segoe UI', sans-serif",
       }}
     >
-      {/* Glow effects */}
       <div style={{
-        position: "absolute", top: -100, left: -100,
-        width: 350, height: 350, borderRadius: "50%",
-        background: "radial-gradient(circle, rgba(6,182,212,0.15) 0%, transparent 70%)",
-        pointerEvents: "none",
+        position: "absolute", top: -100, left: -100, width: 350, height: 350, borderRadius: "50%",
+        background: `radial-gradient(circle, ${t.accent}22 0%, transparent 70%)`, pointerEvents: "none",
       }} />
       <div style={{
-        position: "absolute", bottom: -80, right: -80,
-        width: 300, height: 300, borderRadius: "50%",
-        background: "radial-gradient(circle, rgba(168,85,247,0.15) 0%, transparent 70%)",
-        pointerEvents: "none",
+        position: "absolute", bottom: -80, right: -80, width: 300, height: 300, borderRadius: "50%",
+        background: `radial-gradient(circle, ${t.accent}18 0%, transparent 70%)`, pointerEvents: "none",
       }} />
 
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-        <img
-          src={ODJS_LOGO_URL}
-          alt="ODJS"
-          style={{
-            width: 72, height: 72, borderRadius: "50%", objectFit: "cover",
-            border: "2px solid rgba(255,255,255,0.15)",
-          }}
+        <img src={ODJS_LOGO_URL} alt="ODJS"
+          style={{ width: 72, height: 72, borderRadius: "50%", objectFit: "cover", border: "2px solid rgba(255,255,255,0.15)" }}
           crossOrigin="anonymous"
         />
         <div>
-          <div style={{ color: "#06b6d4", fontWeight: 800, fontSize: 15, letterSpacing: 1.5 }}>ODJS SOCIAL</div>
+          <div style={{ color: t.accent, fontWeight: 800, fontSize: 15, letterSpacing: 1.5 }}>ODJS SOCIAL</div>
           <div style={{ color: "#64748b", fontSize: 11 }}>onlydjss.com</div>
         </div>
       </div>
 
-      {/* Center: DJ + content */}
+      {/* Center */}
       <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "24px 0" }}>
-        {/* Avatar large */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: 24 }}>
           <div style={{
             width: 80, height: 80, borderRadius: "50%",
-            border: "3px solid rgba(6,182,212,0.6)",
+            border: `3px solid ${t.accent}88`,
             overflow: "hidden",
             background: "linear-gradient(135deg, #06b6d4, #a855f7)",
             display: "flex", alignItems: "center", justifyContent: "center",
@@ -271,8 +247,8 @@ function ShareCardStory({ post }: { post: any }) {
             )}
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <span style={{ color: "white", fontWeight: 700, fontSize: 18 }}>{getDisplayName(post)}</span>
-            {post.isVerified && <span style={{ color: "#06b6d4" }}>✓</span>}
+            <span style={{ color: t.textColor, fontWeight: 700, fontSize: 18 }}>{getDisplayName(post)}</span>
+            {post.isVerified && <span style={{ color: t.accent }}>✓</span>}
           </div>
           <div style={{ color: "#64748b", fontSize: 13 }}>@{post.username}</div>
           <div style={{ color: "#94a3b8", fontSize: 12, marginTop: 4 }}>
@@ -280,30 +256,22 @@ function ShareCardStory({ post }: { post: any }) {
           </div>
         </div>
 
-        {/* Divider */}
-        <div style={{ height: 1, background: "linear-gradient(90deg, transparent, rgba(6,182,212,0.4), rgba(168,85,247,0.4), transparent)", marginBottom: 24 }} />
+        <div style={{ height: 1, background: `linear-gradient(90deg, transparent, ${t.accent}44, ${t.accent}22, transparent)`, marginBottom: 24 }} />
 
-        {/* Content */}
-        <div style={{
-          color: "#e2e8f0", fontSize: 16, lineHeight: 1.7,
-          textAlign: "center", wordBreak: "break-word",
-          marginBottom: 16,
-        }}>
+        <div style={{ color: t.textColor, fontSize: 16, lineHeight: 1.7, textAlign: "center", wordBreak: "break-word", marginBottom: 16 }}>
           {post.content?.length > 200 ? post.content.slice(0, 197) + "..." : post.content}
         </div>
 
-        {/* Hashtags */}
         {post.hashtags && (
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center", marginBottom: 16 }}>
             {post.hashtags.split(/[\s,]+/).filter(Boolean).slice(0, 4).map((tag: string, i: number) => (
-              <span key={i} style={{ color: "#06b6d4", fontSize: 13, fontWeight: 600 }}>
+              <span key={i} style={{ color: t.accent, fontSize: 13, fontWeight: 600 }}>
                 {tag.startsWith("#") ? tag : `#${tag}`}
               </span>
             ))}
           </div>
         )}
 
-        {/* Stats */}
         <div style={{ display: "flex", gap: 20, justifyContent: "center", color: "#64748b", fontSize: 13 }}>
           <span>💬 {post.commentCount || 0}</span>
           <span>🔁 {post.repostCount || 0}</span>
@@ -311,22 +279,17 @@ function ShareCardStory({ post }: { post: any }) {
         </div>
       </div>
 
-      {/* Footer: ODJS logo */}
+      {/* Footer */}
       <div style={{
         display: "flex", alignItems: "center", justifyContent: "center", gap: 12,
         borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: 16,
       }}>
-        <img
-          src={ODJS_LOGO_URL}
-          alt="ODJS"
-          style={{
-            width: 80, height: 80, borderRadius: "50%", objectFit: "cover",
-            border: "2px solid rgba(255,255,255,0.15)",
-          }}
+        <img src={ODJS_LOGO_URL} alt="ODJS"
+          style={{ width: 80, height: 80, borderRadius: "50%", objectFit: "cover", border: "2px solid rgba(255,255,255,0.15)" }}
           crossOrigin="anonymous"
         />
         <div>
-          <div style={{ color: "#e2e8f0", fontWeight: 900, fontSize: 14, letterSpacing: 1.5 }}>ONLYDJS PLATFORM</div>
+          <div style={{ color: t.textColor, fontWeight: 900, fontSize: 14, letterSpacing: 1.5 }}>ONLYDJS PLATFORM</div>
           <div style={{ color: "#64748b", fontSize: 11, textAlign: "center" }}>onlydjss.com</div>
         </div>
       </div>
@@ -343,6 +306,7 @@ interface SharePostModalProps {
 
 export function SharePostModal({ post, open, onClose }: SharePostModalProps) {
   const [format, setFormat] = useState<"square" | "story">("square");
+  const [theme, setTheme] = useState<BgTheme>("dark");
   const [generating, setGenerating] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -355,11 +319,7 @@ export function SharePostModal({ post, open, onClose }: SharePostModalProps) {
       if (!el) { toast.error("Card not found"); return; }
 
       const canvas = await html2canvas(el, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: null,
-        logging: false,
+        scale: 2, useCORS: true, allowTaint: true, backgroundColor: null, logging: false,
       });
 
       const link = document.createElement("a");
@@ -403,7 +363,7 @@ export function SharePostModal({ post, open, onClose }: SharePostModalProps) {
 
         <div className="p-6">
           {/* Format selector */}
-          <div className="flex gap-2 mb-6">
+          <div className="flex gap-2 mb-4">
             <button
               onClick={() => setFormat("square")}
               className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all border ${
@@ -428,13 +388,38 @@ export function SharePostModal({ post, open, onClose }: SharePostModalProps) {
             </button>
           </div>
 
+          {/* Background theme selector */}
+          <div className="mb-4">
+            <p className="text-slate-400 text-xs mb-2 font-medium tracking-wide">Card Background</p>
+            <div className="flex gap-2">
+              {(Object.entries(BG_THEMES) as [BgTheme, typeof BG_THEMES[BgTheme]][]).map(([key, val]) => (
+                <button
+                  key={key}
+                  onClick={() => setTheme(key)}
+                  className={`flex-1 py-2 rounded-xl text-xs font-semibold transition-all border ${
+                    theme === key
+                      ? "border-white/40 text-white"
+                      : "border-white/10 text-slate-500 hover:border-white/20 hover:text-slate-300"
+                  }`}
+                  style={{
+                    background: val.bg,
+                    outline: theme === key ? `2px solid ${val.accent}` : "none",
+                    outlineOffset: 1,
+                  }}
+                >
+                  <span style={{ color: val.accent }}>■</span> {val.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Card preview */}
           <div className="flex justify-center mb-6 overflow-hidden">
             <div className="transform scale-[0.55] origin-top" style={{ height: format === "square" ? 297 : 352 }}>
               {format === "square" ? (
-                <ShareCardSquare post={post} />
+                <ShareCardSquare post={post} theme={theme} />
               ) : (
-                <ShareCardStory post={post} />
+                <ShareCardStory post={post} theme={theme} />
               )}
             </div>
           </div>
@@ -464,9 +449,7 @@ export function SharePostModal({ post, open, onClose }: SharePostModalProps) {
 
           <div className="grid grid-cols-2 gap-3">
             <Button
-              onClick={() => {
-                toast("Download the image first, then upload to Instagram Stories or Feed");
-              }}
+              onClick={() => toast("Download the image first, then upload to Instagram Stories or Feed")}
               variant="outline"
               className="border-pink-500/40 text-pink-400 hover:bg-pink-500/10 rounded-xl h-11 bg-transparent"
             >
