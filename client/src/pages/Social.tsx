@@ -31,12 +31,37 @@ function getDisplayName(u: any) {
 }
 
 // ── ODJS Logo Badge ────────────────────────────────────────────────────────
-function OdjsBadge() {
+const ODJS_LOGO_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663313258514/ZSqS9M2EFeWUjrPvMV6QuC/odjs-logo_6f8aebf9.jpg";
+
+function OdjsBadge({ size = "sm" }: { size?: "sm" | "md" }) {
+  if (size === "md") {
+    return (
+      <div className="flex items-center gap-1.5">
+        <img src={ODJS_LOGO_URL} alt="ODJS" className="w-8 h-8 rounded-full object-cover border border-cyan-500/30" />
+        <span className="text-[9px] font-bold text-slate-400 leading-tight">ONLYDJS<br/>PLATFORM</span>
+      </div>
+    );
+  }
   return (
     <span className="inline-flex items-center gap-1 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 rounded-full px-2 py-0.5 text-[10px] font-bold text-cyan-400 tracking-wider">
       <Zap className="w-2.5 h-2.5" />ODJS
     </span>
   );
+}
+
+// Format exact time HH:MM AM/PM
+function formatExactTime(ts: number) {
+  try {
+    return new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  } catch { return ""; }
+}
+
+// Format full date for share watermark
+function formatShareDate(ts: number) {
+  try {
+    const d = new Date(ts);
+    return d.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }) + ' · ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  } catch { return ""; }
 }
 
 // ── Post Composer ──────────────────────────────────────────────────────────
@@ -162,11 +187,14 @@ function PostCard({ post, likedIds, repostedIds, savedIds, onInteraction }: {
   };
 
   return (
-    <div className="bg-[#0d0d1a] border border-white/5 hover:border-cyan-500/20 rounded-2xl p-4 transition-all duration-200 group">
-      <div className="flex gap-3">
+    <div className="relative bg-[#0a0a18] border border-white/5 hover:border-cyan-500/20 rounded-2xl p-4 transition-all duration-200 group overflow-hidden">
+      {/* Subtle starfield background */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(6,182,212,0.06) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(168,85,247,0.06) 0%, transparent 50%)'}} />
+
+      <div className="flex gap-3 relative">
         {/* Avatar */}
         <Link href={`/${post.username}`}>
-          <Avatar className="w-10 h-10 ring-2 ring-cyan-500/20 hover:ring-cyan-500/50 transition-all cursor-pointer flex-shrink-0">
+          <Avatar className="w-11 h-11 ring-2 ring-cyan-500/20 hover:ring-cyan-500/50 transition-all cursor-pointer flex-shrink-0">
             <AvatarImage src={getAvatar(post)} />
             <AvatarFallback className="bg-gradient-to-br from-cyan-500 to-purple-600 text-white text-sm font-bold">
               {getDisplayName(post).charAt(0).toUpperCase()}
@@ -176,36 +204,39 @@ function PostCard({ post, likedIds, repostedIds, savedIds, onInteraction }: {
 
         <div className="flex-1 min-w-0">
           {/* Header */}
-          <div className="flex items-center justify-between mb-1">
-            <div className="flex items-center gap-2 flex-wrap">
-              <Link href={`/${post.username}`} className="font-semibold text-white hover:text-cyan-400 transition-colors text-sm">
-                {getDisplayName(post)}
-              </Link>
-              {post.isVerified && <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />}
-              <span className="text-slate-500 text-xs">@{post.username}</span>
-              <OdjsBadge />
-              {post.postType && post.postType !== "text" && (
-                <span className={`text-[10px] font-semibold border rounded-full px-2 py-0.5 ${postTypeColors[post.postType]}`}>
-                  {post.postType.replace("_", " ").toUpperCase()}
-                </span>
-              )}
+          <div className="flex items-start justify-between mb-1">
+            <div className="flex flex-col">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <Link href={`/${post.username}`} className="font-bold text-white hover:text-cyan-400 transition-colors text-sm">
+                  {getDisplayName(post)}
+                </Link>
+                {post.isVerified && <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />}
+                <span className="text-slate-500 text-xs">@{post.username}</span>
+                {post.postType && post.postType !== "text" && (
+                  <span className={`text-[10px] font-semibold border rounded-full px-2 py-0.5 ${postTypeColors[post.postType]}`}>
+                    {post.postType.replace("_", " ").toUpperCase()}
+                  </span>
+                )}
+              </div>
+              {/* Exact time below name like in reference */}
+              <div className="flex items-center gap-1 mt-0.5">
+                <MessageCircle className="w-3 h-3 text-slate-600" />
+                <span className="text-slate-500 text-[11px]">{formatExactTime(post.createdAt)}</span>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-slate-600 text-xs">{timeAgo(post.createdAt)}</span>
-              <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-slate-600 hover:text-white opacity-0 group-hover:opacity-100">
-                <MoreHorizontal className="w-3.5 h-3.5" />
-              </Button>
-            </div>
+            <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-slate-600 hover:text-white opacity-0 group-hover:opacity-100 flex-shrink-0">
+              <MoreHorizontal className="w-3.5 h-3.5" />
+            </Button>
           </div>
 
           {/* Content */}
-          <p className="text-slate-200 text-sm leading-relaxed mb-2 whitespace-pre-wrap">{post.content}</p>
+          <p className="text-slate-200 text-sm leading-relaxed mb-2 whitespace-pre-wrap mt-2">{post.content}</p>
 
           {/* Hashtags */}
           {post.hashtags && (
             <div className="flex flex-wrap gap-1 mb-3">
               {post.hashtags.split(/[\s,]+/).filter(Boolean).map((tag: string, i: number) => (
-                <span key={i} className="text-cyan-400 text-xs hover:text-cyan-300 cursor-pointer">
+                <span key={i} className="text-cyan-400 text-xs hover:text-cyan-300 cursor-pointer font-medium">
                   {tag.startsWith("#") ? tag : `#${tag}`}
                 </span>
               ))}
@@ -220,15 +251,8 @@ function PostCard({ post, likedIds, repostedIds, savedIds, onInteraction }: {
             <audio controls src={post.mediaUrl} className="w-full mb-3 h-10" />
           )}
 
-          {/* Actions */}
-          <div className="flex items-center gap-1 mt-2">
-            <button
-              onClick={() => handleAction(() => likeMut.mutate({ postId: post.id }))}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${liked ? "bg-pink-500/20 text-pink-400" : "text-slate-500 hover:bg-pink-500/10 hover:text-pink-400"}`}
-            >
-              <Heart className={`w-3.5 h-3.5 ${liked ? "fill-current" : ""}`} />
-              {post.likeCount || 0}
-            </button>
+          {/* Actions row + ODJS logo badge on right */}
+          <div className="flex items-center gap-1 mt-3 pt-2 border-t border-white/5">
             <button
               onClick={() => setShowComments(!showComments)}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-cyan-500/10 hover:text-cyan-400 transition-all"
@@ -244,11 +268,27 @@ function PostCard({ post, likedIds, repostedIds, savedIds, onInteraction }: {
               {post.repostCount || 0}
             </button>
             <button
+              onClick={() => handleAction(() => likeMut.mutate({ postId: post.id }))}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${liked ? "bg-pink-500/20 text-pink-400" : "text-slate-500 hover:bg-pink-500/10 hover:text-pink-400"}`}
+            >
+              <Heart className={`w-3.5 h-3.5 ${liked ? "fill-current" : ""}`} />
+              {post.likeCount || 0}
+            </button>
+            <button
               onClick={() => handleAction(() => saveMut.mutate({ postId: post.id }))}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ml-auto ${saved ? "bg-yellow-500/20 text-yellow-400" : "text-slate-500 hover:bg-yellow-500/10 hover:text-yellow-400"}`}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${saved ? "bg-yellow-500/20 text-yellow-400" : "text-slate-500 hover:bg-yellow-500/10 hover:text-yellow-400"}`}
             >
               <Bookmark className={`w-3.5 h-3.5 ${saved ? "fill-current" : ""}`} />
             </button>
+            {/* ODJS Logo watermark — bottom right, like in the reference design */}
+            <div className="ml-auto flex items-center gap-1.5 opacity-70 hover:opacity-100 transition-opacity" title={`Posted on ONLYDJS · ${formatShareDate(post.createdAt)}`}>
+              <img
+                src={ODJS_LOGO_URL}
+                alt="ODJS"
+                className="w-9 h-9 rounded-full object-cover border border-cyan-500/30 shadow-md shadow-cyan-500/20"
+              />
+              <span className="text-[8px] font-bold text-slate-500 leading-tight hidden sm:block">ONLYDJS<br/>PLATFORM</span>
+            </div>
           </div>
 
           {/* Comments */}
