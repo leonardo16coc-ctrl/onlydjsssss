@@ -75,15 +75,19 @@ function ShareCardSquare({ post }: { post: any }) {
       }} />
 
       {/* Top: ODJS Social header */}
-      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
         <img
           src={ODJS_LOGO_URL}
           alt="ODJS"
-          style={{ width: 36, height: 36, borderRadius: "50%", objectFit: "cover", border: "2px solid rgba(6,182,212,0.5)" }}
+          style={{
+            width: 52, height: 52, borderRadius: "50%", objectFit: "cover",
+            border: "2px solid rgba(6,182,212,0.7)",
+            boxShadow: "0 0 12px rgba(6,182,212,0.5), 0 0 24px rgba(168,85,247,0.3)"
+          }}
           crossOrigin="anonymous"
         />
         <div>
-          <div style={{ color: "#06b6d4", fontWeight: 800, fontSize: 13, letterSpacing: 1 }}>ODJS SOCIAL</div>
+          <div style={{ color: "#06b6d4", fontWeight: 800, fontSize: 14, letterSpacing: 1.5 }}>ODJS SOCIAL</div>
           <div style={{ color: "#64748b", fontSize: 10 }}>onlydjss.com</div>
         </div>
         <div style={{
@@ -91,7 +95,7 @@ function ShareCardSquare({ post }: { post: any }) {
           background: "linear-gradient(90deg, rgba(6,182,212,0.15), rgba(168,85,247,0.15))",
           border: "1px solid rgba(6,182,212,0.3)",
           borderRadius: 20,
-          padding: "3px 10px",
+          padding: "4px 12px",
           color: "#06b6d4",
           fontSize: 10,
           fontWeight: 700,
@@ -179,16 +183,20 @@ function ShareCardSquare({ post }: { post: any }) {
         <div style={{ color: "#334155", fontSize: 11 }}>
           onlydjss.com/@{post.username}
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <img
             src={ODJS_LOGO_URL}
             alt="ODJS"
-            style={{ width: 44, height: 44, borderRadius: "50%", objectFit: "cover", border: "2px solid rgba(6,182,212,0.4)" }}
+            style={{
+              width: 56, height: 56, borderRadius: "50%", objectFit: "cover",
+              border: "2px solid rgba(6,182,212,0.6)",
+              boxShadow: "0 0 14px rgba(6,182,212,0.5), 0 0 28px rgba(168,85,247,0.3)"
+            }}
             crossOrigin="anonymous"
           />
           <div style={{ textAlign: "left" }}>
-            <div style={{ color: "#94a3b8", fontWeight: 800, fontSize: 11, letterSpacing: 0.5 }}>ONLYDJS</div>
-            <div style={{ color: "#475569", fontSize: 9 }}>PLATFORM</div>
+            <div style={{ color: "#e2e8f0", fontWeight: 900, fontSize: 13, letterSpacing: 1.5 }}>ONLYDJS</div>
+            <div style={{ color: "#64748b", fontSize: 10, letterSpacing: 1 }}>PLATFORM</div>
           </div>
         </div>
       </div>
@@ -230,11 +238,20 @@ function ShareCardStory({ post }: { post: any }) {
       }} />
 
       {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-        <img src={ODJS_LOGO_URL} alt="ODJS" style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover", border: "2px solid rgba(6,182,212,0.5)" }} crossOrigin="anonymous" />
+      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <img
+          src={ODJS_LOGO_URL}
+          alt="ODJS"
+          style={{
+            width: 56, height: 56, borderRadius: "50%", objectFit: "cover",
+            border: "2px solid rgba(6,182,212,0.7)",
+            boxShadow: "0 0 14px rgba(6,182,212,0.5), 0 0 28px rgba(168,85,247,0.3)"
+          }}
+          crossOrigin="anonymous"
+        />
         <div>
-          <div style={{ color: "#06b6d4", fontWeight: 800, fontSize: 14, letterSpacing: 1 }}>ODJS SOCIAL</div>
-          <div style={{ color: "#64748b", fontSize: 10 }}>onlydjss.com</div>
+          <div style={{ color: "#06b6d4", fontWeight: 800, fontSize: 15, letterSpacing: 1.5 }}>ODJS SOCIAL</div>
+          <div style={{ color: "#64748b", fontSize: 11 }}>onlydjss.com</div>
         </div>
       </div>
 
@@ -299,13 +316,22 @@ function ShareCardStory({ post }: { post: any }) {
 
       {/* Footer: ODJS logo */}
       <div style={{
-        display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+        display: "flex", alignItems: "center", justifyContent: "center", gap: 12,
         borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: 16,
       }}>
-        <img src={ODJS_LOGO_URL} alt="ODJS" style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover", border: "2px solid rgba(6,182,212,0.4)" }} crossOrigin="anonymous" />
+        <img
+          src={ODJS_LOGO_URL}
+          alt="ODJS"
+          style={{
+            width: 60, height: 60, borderRadius: "50%", objectFit: "cover",
+            border: "2px solid rgba(6,182,212,0.7)",
+            boxShadow: "0 0 16px rgba(6,182,212,0.5), 0 0 32px rgba(168,85,247,0.3)"
+          }}
+          crossOrigin="anonymous"
+        />
         <div>
-          <div style={{ color: "#94a3b8", fontWeight: 800, fontSize: 12, letterSpacing: 0.5 }}>ONLYDJS PLATFORM</div>
-          <div style={{ color: "#475569", fontSize: 10, textAlign: "center" }}>onlydjss.com</div>
+          <div style={{ color: "#e2e8f0", fontWeight: 900, fontSize: 14, letterSpacing: 1.5 }}>ONLYDJS PLATFORM</div>
+          <div style={{ color: "#64748b", fontSize: 11, textAlign: "center" }}>onlydjss.com</div>
         </div>
       </div>
     </div>
