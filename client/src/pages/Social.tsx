@@ -88,7 +88,7 @@ function PostComposer({ onPosted }: { onPosted: () => void }) {
   if (!user) return null;
 
   return (
-    <div className="bg-[#0d0d1a] border border-cyan-500/20 rounded-2xl p-4 mb-4">
+    <div className="bg-white border border-gray-200 rounded-2xl p-4 mb-4 shadow-sm">
       <div className="flex gap-3">
         <Avatar className="w-10 h-10 ring-2 ring-cyan-500/30 flex-shrink-0">
           <AvatarImage src={getAvatar(user)} />
@@ -101,7 +101,7 @@ function PostComposer({ onPosted }: { onPosted: () => void }) {
             placeholder="What are you sharing today DJ?"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="bg-transparent border-none resize-none text-white placeholder:text-slate-500 text-base p-0 focus-visible:ring-0 min-h-[80px]"
+            className="bg-transparent border-none resize-none text-gray-900 placeholder:text-gray-400 text-base p-0 focus-visible:ring-0 min-h-[80px]"
             maxLength={500}
           />
           {showHashtag && (
@@ -110,10 +110,10 @@ function PostComposer({ onPosted }: { onPosted: () => void }) {
               placeholder="#techhouse #edm #newdrop"
               value={hashtags}
               onChange={(e) => setHashtags(e.target.value)}
-              className="w-full bg-transparent border-none text-cyan-400 placeholder:text-slate-600 text-sm p-0 outline-none mt-1"
+              className="w-full bg-transparent border-none text-cyan-600 placeholder:text-gray-400 text-sm p-0 outline-none mt-1"
             />
           )}
-          <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/5">
+          <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
             <div className="flex items-center gap-1">
               <Button variant="ghost" size="sm" className="text-cyan-400 hover:bg-cyan-500/10 h-8 px-2" onClick={() => toast("Image upload coming soon")}>
                 <Image className="w-4 h-4" />
@@ -129,7 +129,7 @@ function PostComposer({ onPosted }: { onPosted: () => void }) {
               </Button>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-600">{content.length}/500</span>
+              <span className="text-xs text-gray-400">{content.length}/500</span>
               <Button
                 size="sm"
                 disabled={!content.trim() || createPost.isPending}
@@ -189,9 +189,9 @@ function PostCard({ post, likedIds, repostedIds, savedIds, onInteraction }: {
   };
 
   return (
-    <div className="relative bg-[#0a0a18] border border-white/5 hover:border-cyan-500/20 rounded-2xl p-4 transition-all duration-200 group overflow-hidden">
+    <div className="relative bg-white border border-gray-200 hover:border-cyan-300 rounded-2xl p-4 transition-all duration-200 group overflow-hidden shadow-sm hover:shadow-md">
       {/* Subtle starfield background */}
-      <div className="absolute inset-0 opacity-20 pointer-events-none" style={{backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(6,182,212,0.06) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(168,85,247,0.06) 0%, transparent 50%)'}} />
+
 
       <div className="flex gap-3 relative">
         {/* Avatar */}
@@ -209,11 +209,11 @@ function PostCard({ post, likedIds, repostedIds, savedIds, onInteraction }: {
           <div className="flex items-start justify-between mb-1">
             <div className="flex flex-col">
               <div className="flex items-center gap-1.5 flex-wrap">
-                <Link href={`/${post.username}`} className="font-bold text-white hover:text-cyan-400 transition-colors text-sm">
+                <Link href={`/${post.username}`} className="font-bold text-gray-900 hover:text-cyan-600 transition-colors text-sm">
                   {getDisplayName(post)}
                 </Link>
-                {post.isVerified && <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />}
-                <span className="text-slate-500 text-xs">@{post.username}</span>
+                {post.isVerified && <CheckCircle2 className="w-3.5 h-3.5 text-cyan-500 flex-shrink-0" />}
+                <span className="text-gray-400 text-xs">@{post.username}</span>
                 {post.postType && post.postType !== "text" && (
                   <span className={`text-[10px] font-semibold border rounded-full px-2 py-0.5 ${postTypeColors[post.postType]}`}>
                     {post.postType.replace("_", " ").toUpperCase()}
@@ -222,23 +222,23 @@ function PostCard({ post, likedIds, repostedIds, savedIds, onInteraction }: {
               </div>
               {/* Exact time below name like in reference */}
               <div className="flex items-center gap-1 mt-0.5">
-                <MessageCircle className="w-3 h-3 text-slate-600" />
-                <span className="text-slate-500 text-[11px]">{formatExactTime(post.createdAt)}</span>
+                <MessageCircle className="w-3 h-3 text-gray-400" />
+                <span className="text-gray-400 text-[11px]">{formatExactTime(post.createdAt)}</span>
               </div>
             </div>
-            <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-slate-600 hover:text-white opacity-0 group-hover:opacity-100 flex-shrink-0">
+            <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-gray-400 hover:text-gray-700 opacity-0 group-hover:opacity-100 flex-shrink-0">
               <MoreHorizontal className="w-3.5 h-3.5" />
             </Button>
           </div>
 
           {/* Content */}
-          <p className="text-slate-200 text-sm leading-relaxed mb-2 whitespace-pre-wrap mt-2">{post.content}</p>
+          <p className="text-gray-800 text-sm leading-relaxed mb-2 whitespace-pre-wrap mt-2">{post.content}</p>
 
           {/* Hashtags */}
           {post.hashtags && (
             <div className="flex flex-wrap gap-1 mb-3">
               {post.hashtags.split(/[\s,]+/).filter(Boolean).map((tag: string, i: number) => (
-                <span key={i} className="text-cyan-400 text-xs hover:text-cyan-300 cursor-pointer font-medium">
+                <span key={i} className="text-cyan-600 text-xs hover:text-cyan-700 cursor-pointer font-medium">
                   {tag.startsWith("#") ? tag : `#${tag}`}
                 </span>
               ))}
@@ -254,38 +254,38 @@ function PostCard({ post, likedIds, repostedIds, savedIds, onInteraction }: {
           )}
 
           {/* Actions row + ODJS logo badge on right */}
-          <div className="flex items-center gap-1 mt-3 pt-2 border-t border-white/5">
+          <div className="flex items-center gap-1 mt-3 pt-2 border-t border-gray-100">
             <button
               onClick={() => setShowComments(!showComments)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-cyan-500/10 hover:text-cyan-400 transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-gray-500 hover:bg-cyan-50 hover:text-cyan-600 transition-all"
             >
               <MessageSquare className="w-3.5 h-3.5" />
               {post.commentCount || 0}
             </button>
             <button
               onClick={() => handleAction(() => repostMut.mutate({ postId: post.id }))}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${reposted ? "bg-green-500/20 text-green-400" : "text-slate-500 hover:bg-green-500/10 hover:text-green-400"}`}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${reposted ? "bg-green-100 text-green-600" : "text-gray-500 hover:bg-green-50 hover:text-green-600"}`}
             >
               <Repeat2 className="w-3.5 h-3.5" />
               {post.repostCount || 0}
             </button>
             <button
               onClick={() => handleAction(() => likeMut.mutate({ postId: post.id }))}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${liked ? "bg-pink-500/20 text-pink-400" : "text-slate-500 hover:bg-pink-500/10 hover:text-pink-400"}`}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${liked ? "bg-pink-100 text-pink-600" : "text-gray-500 hover:bg-pink-50 hover:text-pink-600"}`}
             >
               <Heart className={`w-3.5 h-3.5 ${liked ? "fill-current" : ""}`} />
               {post.likeCount || 0}
             </button>
             <button
               onClick={() => handleAction(() => saveMut.mutate({ postId: post.id }))}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${saved ? "bg-yellow-500/20 text-yellow-400" : "text-slate-500 hover:bg-yellow-500/10 hover:text-yellow-400"}`}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${saved ? "bg-yellow-100 text-yellow-600" : "text-gray-500 hover:bg-yellow-50 hover:text-yellow-600"}`}
             >
               <Bookmark className={`w-3.5 h-3.5 ${saved ? "fill-current" : ""}`} />
             </button>
             {/* Share button */}
             <button
               onClick={() => setShowShare(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-cyan-500/10 hover:text-cyan-400 transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-gray-500 hover:bg-cyan-50 hover:text-cyan-600 transition-all"
               title="Share on social media"
             >
               <Share2 className="w-3.5 h-3.5" />
@@ -307,7 +307,7 @@ function PostCard({ post, likedIds, repostedIds, savedIds, onInteraction }: {
 
           {/* Comments */}
           {showComments && (
-            <div className="mt-3 pt-3 border-t border-white/5">
+            <div className="mt-3 pt-3 border-t border-gray-100">
               {commentsData?.comments.map((c: any) => (
                 <div key={c.id} className="flex gap-2 mb-2">
                   <Avatar className="w-7 h-7 flex-shrink-0">
@@ -316,9 +316,9 @@ function PostCard({ post, likedIds, repostedIds, savedIds, onInteraction }: {
                       {getDisplayName(c).charAt(0)}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="flex-1 bg-white/5 rounded-xl px-3 py-2">
-                    <span className="text-cyan-400 text-xs font-semibold mr-2">@{c.username}</span>
-                    <span className="text-slate-300 text-xs">{c.content}</span>
+                  <div className="flex-1 bg-gray-50 rounded-xl px-3 py-2">
+                    <span className="text-cyan-600 text-xs font-semibold mr-2">@{c.username}</span>
+                    <span className="text-gray-700 text-xs">{c.content}</span>
                   </div>
                 </div>
               ))}
@@ -335,7 +335,7 @@ function PostCard({ post, likedIds, repostedIds, savedIds, onInteraction }: {
                       value={commentText}
                       onChange={(e) => setCommentText(e.target.value)}
                       placeholder="Add a comment..."
-                      className="flex-1 bg-white/5 border border-white/10 rounded-full px-3 py-1.5 text-xs text-white placeholder:text-slate-500 outline-none focus:border-cyan-500/50"
+                      className="flex-1 bg-gray-50 border border-gray-200 rounded-full px-3 py-1.5 text-xs text-gray-900 placeholder:text-gray-400 outline-none focus:border-cyan-400"
                       onKeyDown={(e) => {
                         if (e.key === "Enter" && commentText.trim()) {
                           commentMut.mutate({ postId: post.id, content: commentText });
@@ -346,7 +346,7 @@ function PostCard({ post, likedIds, repostedIds, savedIds, onInteraction }: {
                       size="sm"
                       disabled={!commentText.trim()}
                       onClick={() => commentMut.mutate({ postId: post.id, content: commentText })}
-                      className="h-7 px-3 rounded-full bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 text-xs"
+                      className="h-7 px-3 rounded-full bg-cyan-100 hover:bg-cyan-200 text-cyan-700 text-xs"
                     >
                       <Send className="w-3 h-3" />
                     </Button>
@@ -386,7 +386,7 @@ function SocialSidebar() {
   ];
 
   return (
-    <aside className="w-64 flex-shrink-0 hidden lg:flex flex-col gap-2 sticky top-20 self-start">
+    <aside className="w-64 flex-shrink-0 hidden lg:flex flex-col gap-2 sticky top-20 self-start bg-white rounded-2xl shadow-sm border border-gray-100 p-2">
       {/* Brand — ODJS Logo */}
       <div className="flex flex-col items-center px-3 py-5 mb-2">
         <div className="relative mb-2">
@@ -396,20 +396,20 @@ function SocialSidebar() {
             className="w-20 h-20 rounded-full object-cover"
           />
         </div>
-        <p className="font-black text-white text-base tracking-widest leading-none">ODJS</p>
-        <p className="text-slate-500 text-[10px] tracking-wider mt-0.5">DJ COMMUNITY</p>
+        <p className="font-black text-gray-900 text-base tracking-widest leading-none">ODJS</p>
+        <p className="text-gray-400 text-[10px] tracking-wider mt-0.5">DJ COMMUNITY</p>
       </div>
 
       {navItems.map((item) => (
         <button
           key={item.label}
           onClick={() => navigate(item.href)}
-          className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-all text-sm font-medium text-left"
+          className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-all text-sm font-medium text-left"
         >
           <item.icon className="w-5 h-5 flex-shrink-0" />
           <span>{item.label}</span>
           {item.badge && (
-            <Badge className="ml-auto text-[10px] bg-purple-500/20 text-purple-300 border-purple-500/30 px-1.5 py-0">
+            <Badge className="ml-auto text-[10px] bg-purple-100 text-purple-600 border-purple-200 px-1.5 py-0">
               {item.badge}
             </Badge>
           )}
@@ -422,7 +422,7 @@ function SocialSidebar() {
             if (!user) { toast("Sign in to post"); return; }
             document.getElementById("post-composer-textarea")?.focus();
           }}
-          className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-bold rounded-full py-3 shadow-lg shadow-cyan-500/20"
+          className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-bold rounded-full py-3 shadow-md"
         >
           <Plus className="w-4 h-4 mr-2" />
           Create Post
@@ -439,18 +439,18 @@ function TrendingSidebar() {
 
   return (
     <aside className="w-72 flex-shrink-0 hidden xl:flex flex-col gap-4 sticky top-20 self-start">
-      <div className="bg-[#0d0d1a] border border-white/5 rounded-2xl p-4">
-        <h3 className="font-bold text-white text-sm mb-3 flex items-center gap-2">
-          <TrendingUp className="w-4 h-4 text-cyan-400" />
+      <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+        <h3 className="font-bold text-gray-900 text-sm mb-3 flex items-center gap-2">
+          <TrendingUp className="w-4 h-4 text-cyan-500" />
           Trending DJs
         </h3>
         {djs.length === 0 && (
-          <p className="text-slate-500 text-xs">No DJs yet. Be the first!</p>
+          <p className="text-gray-400 text-xs">No DJs yet. Be the first!</p>
         )}
         {djs.map((dj: any, i: number) => (
           <Link key={dj.id} href={`/${dj.username}`}>
-            <div className="flex items-center gap-3 py-2 hover:bg-white/5 rounded-xl px-2 -mx-2 transition-colors cursor-pointer">
-              <span className="text-slate-600 text-xs font-bold w-4">{i + 1}</span>
+              <div className="flex items-center gap-3 py-2 hover:bg-gray-50 rounded-xl px-2 -mx-2 transition-colors cursor-pointer">
+              <span className="text-gray-400 text-xs font-bold w-4">{i + 1}</span>
               <Avatar className="w-8 h-8 flex-shrink-0">
                 <AvatarImage src={getAvatar(dj)} />
                 <AvatarFallback className="bg-gradient-to-br from-cyan-500 to-purple-600 text-white text-xs">
@@ -458,28 +458,28 @@ function TrendingSidebar() {
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">
-                <p className="text-white text-xs font-semibold truncate">{getDisplayName(dj)}</p>
-                <p className="text-slate-500 text-xs">@{dj.username}</p>
+                <p className="text-gray-900 text-xs font-semibold truncate">{getDisplayName(dj)}</p>
+                <p className="text-gray-400 text-xs">@{dj.username}</p>
               </div>
-              {dj.isVerified && <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />}
+              {dj.isVerified && <CheckCircle2 className="w-3.5 h-3.5 text-cyan-500 flex-shrink-0" />}
             </div>
           </Link>
         ))}
         <Link href="/social/ranking">
-          <Button variant="ghost" size="sm" className="w-full mt-2 text-cyan-400 hover:bg-cyan-500/10 text-xs rounded-full">
+          <Button variant="ghost" size="sm" className="w-full mt-2 text-cyan-600 hover:bg-cyan-50 text-xs rounded-full">
             View Full Ranking
           </Button>
         </Link>
       </div>
 
-      <div className="bg-[#0d0d1a] border border-white/5 rounded-2xl p-4">
-        <h3 className="font-bold text-white text-sm mb-2 flex items-center gap-2">
-          <Flame className="w-4 h-4 text-orange-400" />
+      <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+        <h3 className="font-bold text-gray-900 text-sm mb-2 flex items-center gap-2">
+          <Flame className="w-4 h-4 text-orange-500" />
           Drop Radar
         </h3>
-        <p className="text-slate-500 text-xs mb-3">Vote for the hottest upcoming tracks</p>
+        <p className="text-gray-400 text-xs mb-3">Vote for the hottest upcoming tracks</p>
         <Link href="/social/drops">
-          <Button size="sm" className="w-full bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 text-orange-300 hover:from-orange-500/30 hover:to-red-500/30 rounded-full text-xs">
+          <Button size="sm" className="w-full bg-orange-50 border border-orange-200 text-orange-600 hover:bg-orange-100 rounded-full text-xs">
             <Flame className="w-3.5 h-3.5 mr-1" />
             Explore Drops
           </Button>
@@ -519,7 +519,7 @@ export default function Social() {
   };
 
   return (
-    <div className="min-h-screen bg-[#07070f]">
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 pt-6 pb-16">
         <div className="flex gap-6">
@@ -537,7 +537,7 @@ export default function Social() {
                   className="w-24 h-24 rounded-full object-cover"
                 />
               </div>
-              <p className="text-slate-400 text-xs tracking-widest font-semibold uppercase mt-1">ODJS Community Feed</p>
+              <p className="text-gray-500 text-xs tracking-widest font-semibold uppercase mt-1">ODJS Community Feed</p>
               <div className="flex items-center gap-2 mt-2">
                 <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-[10px]">
                   ● LIVE
@@ -553,8 +553,8 @@ export default function Social() {
               <PostComposer key={feedKey} onPosted={() => { setFeedKey(k => k + 1); refetch(); }} />
             )}
             {!user && (
-              <div className="bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 rounded-2xl p-4 mb-4 text-center">
-                <p className="text-slate-300 text-sm mb-3">Join the DJ community — share your music and connect with creators worldwide</p>
+              <div className="bg-gradient-to-r from-cyan-50 to-purple-50 border border-cyan-200 rounded-2xl p-4 mb-4 text-center">
+                <p className="text-gray-700 text-sm mb-3">Join the DJ community — share your music and connect with creators worldwide</p>
                 <Button
                   onClick={() => window.location.href = "/api/oauth/login"}
                   className="bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-semibold rounded-full px-6"
@@ -576,16 +576,16 @@ export default function Social() {
                       className="w-16 h-16 rounded-full object-cover"
                     />
                   </div>
-                  <p className="text-slate-500 text-xs mt-3 tracking-widest">Loading feed...</p>
+                  <p className="text-gray-400 text-xs mt-3 tracking-widest">Loading feed...</p>
                 </div>
                 {[1, 2, 3].map(i => (
-                  <div key={i} className="bg-[#0d0d1a] border border-white/5 rounded-2xl p-4 animate-pulse">
+                  <div key={i} className="bg-white border border-gray-200 rounded-2xl p-4 animate-pulse shadow-sm">
                     <div className="flex gap-3">
-                      <div className="w-10 h-10 rounded-full bg-white/5" />
+                      <div className="w-10 h-10 rounded-full bg-gray-200" />
                       <div className="flex-1">
-                        <div className="h-3 bg-white/5 rounded w-32 mb-2" />
-                        <div className="h-4 bg-white/5 rounded w-full mb-1" />
-                        <div className="h-4 bg-white/5 rounded w-3/4" />
+                        <div className="h-3 bg-gray-200 rounded w-32 mb-2" />
+                        <div className="h-4 bg-gray-200 rounded w-full mb-1" />
+                        <div className="h-4 bg-gray-200 rounded w-3/4" />
                       </div>
                     </div>
                   </div>
@@ -598,8 +598,8 @@ export default function Social() {
                 <div className="inline-block mb-4">
                   <img src={ODJS_LOGO_URL} alt="ODJS" className="w-16 h-16 rounded-full object-cover mx-auto" />
                 </div>
-                <h3 className="text-white font-semibold mb-2">No posts yet</h3>
-                <p className="text-slate-500 text-sm">Be the first DJ to share something!</p>
+                <h3 className="text-gray-900 font-semibold mb-2">No posts yet</h3>
+                <p className="text-gray-500 text-sm">Be the first DJ to share something!</p>
               </div>
             )}
 
