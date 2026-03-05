@@ -154,7 +154,7 @@ function ProfileCardSquare({ profile }: { profile: any }) {
             alignItems: "center",
             justifyContent: "center",
             marginBottom: 16,
-            boxShadow: "0 0 30px rgba(6,182,212,0.25)",
+            
           }}
         >
           {avatar ? (
@@ -442,7 +442,7 @@ function ProfileCardStory({ profile }: { profile: any }) {
             alignItems: "center",
             justifyContent: "center",
             marginBottom: 18,
-            boxShadow: "0 0 40px rgba(6,182,212,0.3)",
+            
           }}
         >
           {avatar ? (

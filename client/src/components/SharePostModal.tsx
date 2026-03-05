@@ -80,9 +80,8 @@ function ShareCardSquare({ post }: { post: any }) {
           src={ODJS_LOGO_URL}
           alt="ODJS"
           style={{
-            width: 52, height: 52, borderRadius: "50%", objectFit: "cover",
-            border: "2px solid rgba(6,182,212,0.7)",
-            boxShadow: "0 0 12px rgba(6,182,212,0.5), 0 0 24px rgba(168,85,247,0.3)"
+            width: 64, height: 64, borderRadius: "50%", objectFit: "cover",
+            border: "2px solid rgba(255,255,255,0.15)",
           }}
           crossOrigin="anonymous"
         />
@@ -188,9 +187,8 @@ function ShareCardSquare({ post }: { post: any }) {
             src={ODJS_LOGO_URL}
             alt="ODJS"
             style={{
-              width: 56, height: 56, borderRadius: "50%", objectFit: "cover",
-              border: "2px solid rgba(6,182,212,0.6)",
-              boxShadow: "0 0 14px rgba(6,182,212,0.5), 0 0 28px rgba(168,85,247,0.3)"
+              width: 72, height: 72, borderRadius: "50%", objectFit: "cover",
+              border: "2px solid rgba(255,255,255,0.15)",
             }}
             crossOrigin="anonymous"
           />
@@ -243,9 +241,8 @@ function ShareCardStory({ post }: { post: any }) {
           src={ODJS_LOGO_URL}
           alt="ODJS"
           style={{
-            width: 56, height: 56, borderRadius: "50%", objectFit: "cover",
-            border: "2px solid rgba(6,182,212,0.7)",
-            boxShadow: "0 0 14px rgba(6,182,212,0.5), 0 0 28px rgba(168,85,247,0.3)"
+            width: 72, height: 72, borderRadius: "50%", objectFit: "cover",
+            border: "2px solid rgba(255,255,255,0.15)",
           }}
           crossOrigin="anonymous"
         />
@@ -323,9 +320,8 @@ function ShareCardStory({ post }: { post: any }) {
           src={ODJS_LOGO_URL}
           alt="ODJS"
           style={{
-            width: 60, height: 60, borderRadius: "50%", objectFit: "cover",
-            border: "2px solid rgba(6,182,212,0.7)",
-            boxShadow: "0 0 16px rgba(6,182,212,0.5), 0 0 32px rgba(168,85,247,0.3)"
+            width: 80, height: 80, borderRadius: "50%", objectFit: "cover",
+            border: "2px solid rgba(255,255,255,0.15)",
           }}
           crossOrigin="anonymous"
         />
