@@ -14,6 +14,8 @@ import {
   Instagram, Twitter, Youtube, Globe, MapPin, CheckCircle2,
   Disc3, Mic2, Headphones
 } from "lucide-react";
+import { useState } from "react";
+import { ShareProfileModal } from "@/components/ShareProfileModal";
 
 function TrackCard({ track }: { track: any }) {
   const likeTrack = trpc.djProfiles.likeTrack.useMutation({
@@ -133,6 +135,7 @@ export default function DJProfile() {
     : "tracks";
 
   const { user } = useAuth();
+  const [showShareProfile, setShowShareProfile] = useState(false);
 
   const { data: profile, isLoading } = trpc.djProfiles.getByUsername.useQuery(
     { username },
@@ -302,8 +305,14 @@ export default function DJProfile() {
                       Edit Profile
                     </Button>
                   )}
-                  <Button variant="ghost" size="icon" className="h-9 w-9" onClick={shareProfile}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 bg-transparent"
+                    onClick={() => setShowShareProfile(true)}
+                  >
                     <Share2 className="w-4 h-4" />
+                    Share
                   </Button>
                 </div>
               </div>
@@ -409,6 +418,19 @@ export default function DJProfile() {
           </Tabs>
         </div>
       </div>
+
+      {/* Share Profile Modal */}
+      {showShareProfile && (
+        <ShareProfileModal
+          profile={{
+            ...p,
+            followersCount: Number(p?.followers_count || 0),
+            trackCount: Number(p?.track_count || 0),
+          }}
+          open={showShareProfile}
+          onClose={() => setShowShareProfile(false)}
+        />
+      )}
     </div>
   );
 }
