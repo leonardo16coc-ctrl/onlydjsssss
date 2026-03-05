@@ -166,6 +166,14 @@ export default function Navbar() {
                   <DropdownMenuContent align="end" className="w-56">
                     <DropdownMenuLabel>{t('nav.myProfile')}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
+                    {user?.username && (
+                      <Link href={`/${user.username}`}>
+                        <DropdownMenuItem>
+                          <User className="mr-2 h-4 w-4" />
+                          <span>My Profile</span>
+                        </DropdownMenuItem>
+                      </Link>
+                    )}
                     <Link href="/profile/edit">
                       <DropdownMenuItem>
                         <Settings className="mr-2 h-4 w-4" />
@@ -300,6 +308,17 @@ export default function Navbar() {
                           </p>
                         </div>
                       </div>
+                      
+                      {user?.username && (
+                        <Link 
+                          href={`/${user.username}`}
+                          className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          <User className="h-5 w-5 text-cyan-400" />
+                          <span>My Profile</span>
+                        </Link>
+                      )}
                       
                       <Link 
                         href="/profile/edit"

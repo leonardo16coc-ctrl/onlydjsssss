@@ -34,7 +34,7 @@ export const djProfilesRouter = router({
   getTracksByUsername: publicProcedure
     .input(z.object({
       username: z.string(),
-      type: z.enum(["all", "edit", "remix", "track"]).default("all"),
+      type: z.enum(["all", "edit", "remix", "track", "mashup"]).default("all"),
       page: z.number().default(1),
       limit: z.number().default(20),
     }))
@@ -59,7 +59,8 @@ export const djProfilesRouter = router({
         const typeMap: Record<string, string[]> = {
           edit: ["Edit"],
           remix: ["Remix"],
-          track: ["Extended Mix", "Rework", "Mashup"],
+          track: ["Extended Mix", "Rework"],
+          mashup: ["Mashup"],
         };
         const types = typeMap[input.type] || [];
         if (types.length > 0) {
@@ -363,7 +364,7 @@ export const djProfilesRouter = router({
   getTrendingTracks: publicProcedure
     .input(z.object({
       limit: z.number().default(20),
-      type: z.enum(["all", "edit", "remix", "track"]).default("all"),
+      type: z.enum(["all", "edit", "remix", "track", "mashup"]).default("all"),
       genre: z.string().optional(),
     }))
     .query(async ({ input }) => {

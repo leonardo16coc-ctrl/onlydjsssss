@@ -3172,3 +3172,8 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Sección DJs en Explore: Trending DJs y New DJs con DJ Cards
 - [x] Link "Charts" agregado en la Navbar
 - [x] DJProfile maneja múltiples rutas (/:username, /dj/:username, /@:username)
+
+## 41. Mejoras de UI - Mashup Tab y Profile Button
+- [x] Agregar pestaña "Mashup" en DJProfile con filtro por trackType Mashup
+- [x] Actualizar router getTracksByUsername para incluir tipo "mashup"
+- [x] Agregar botón/link "Profile" en la Navbar para ir al perfil público del usuario

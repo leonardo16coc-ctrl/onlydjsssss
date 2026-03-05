@@ -85,7 +85,7 @@ function TrackCard({ track }: { track: any }) {
   );
 }
 
-function TrackList({ username, type }: { username: string; type: "all" | "edit" | "remix" | "track" }) {
+function TrackList({ username, type }: { username: string; type: "all" | "edit" | "remix" | "track" | "mashup" }) {
   const { data, isLoading } = trpc.djProfiles.getTracksByUsername.useQuery({ username, type });
   if (isLoading) return (
     <div className="space-y-3">
@@ -331,6 +331,9 @@ export default function DJProfile() {
               <TabsTrigger value="remixes" className="flex items-center gap-2">
                 <Disc3 className="w-4 h-4" />Remixes
               </TabsTrigger>
+              <TabsTrigger value="mashups" className="flex items-center gap-2">
+                <Headphones className="w-4 h-4" />Mashups
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="tracks">
@@ -341,6 +344,9 @@ export default function DJProfile() {
             </TabsContent>
             <TabsContent value="remixes">
               <TrackList username={username} type="remix" />
+            </TabsContent>
+            <TabsContent value="mashups">
+              <TrackList username={username} type="mashup" />
             </TabsContent>
           </Tabs>
         </div>
