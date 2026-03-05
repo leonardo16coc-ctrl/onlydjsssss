@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { Download, Instagram, Twitter, Copy, Loader2, CheckCircle2, Zap } from "lucide-react";
 
 const ODJS_LOGO_URL =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663313258514/ZSqS9M2EFeWUjrPvMV6QuC/odjs-thumbnail-1200x630_fdb7b444.png";
+  "https://d2xsxph8kpxj0f.cloudfront.net/310519663313258514/ZSqS9M2EFeWUjrPvMV6QuC/odjs-logo-holographic_f6c80f68.png";
 
 // ── Background themes ──────────────────────────────────────────────────────
 type BgTheme = "dark" | "purple" | "cyan" | "gold";

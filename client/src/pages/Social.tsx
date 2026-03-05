@@ -32,14 +32,13 @@ function getDisplayName(u: any) {
 }
 
 // ── ODJS Logo Badge ────────────────────────────────────────────────────────
-const ODJS_LOGO_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663313258514/ZSqS9M2EFeWUjrPvMV6QuC/odjs-thumbnail-1200x630_fdb7b444.png";
+const ODJS_LOGO_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663313258514/ZSqS9M2EFeWUjrPvMV6QuC/odjs-logo-holographic_f6c80f68.png";
 
 function OdjsBadge({ size = "sm" }: { size?: "sm" | "md" }) {
   if (size === "md") {
     return (
       <div className="flex items-center gap-1.5">
-        <img src={ODJS_LOGO_URL} alt="ODJS" className="w-8 h-8 rounded-full object-cover border border-cyan-500/30" />
-        <span className="text-[9px] font-bold text-slate-400 leading-tight">ONLYDJS<br/>PLATFORM</span>
+                  <img src={ODJS_LOGO_URL} alt="ODJS" className="w-24 h-12 object-contain" />
       </div>
     );
   }
@@ -389,14 +388,13 @@ function SocialSidebar() {
     <aside className="w-64 flex-shrink-0 hidden lg:flex flex-col gap-2 sticky top-20 self-start bg-white rounded-2xl shadow-sm border border-gray-100 p-2">
       {/* Brand — ODJS Logo */}
       <div className="flex flex-col items-center px-3 py-5 mb-2">
-        <div className="relative mb-2">
+        <div className="relative mb-1">
           <img
             src={ODJS_LOGO_URL}
             alt="ODJS"
-            className="w-20 h-20 rounded-full object-cover"
+            className="w-32 h-16 object-contain"
           />
         </div>
-        <p className="font-black text-gray-900 text-base tracking-widest leading-none">ODJS</p>
         <p className="text-gray-400 text-[10px] tracking-wider mt-0.5">DJ COMMUNITY</p>
       </div>
 
@@ -596,7 +594,7 @@ export default function Social() {
             {!isLoading && posts.length === 0 && (
               <div className="text-center py-16">
                 <div className="inline-block mb-4">
-                  <img src={ODJS_LOGO_URL} alt="ODJS" className="w-16 h-16 rounded-full object-cover mx-auto" />
+                <img src={ODJS_LOGO_URL} alt="ODJS" className="w-32 h-16 object-contain mx-auto" />
                 </div>
                 <h3 className="text-gray-900 font-semibold mb-2">No posts yet</h3>
                 <p className="text-gray-500 text-sm">Be the first DJ to share something!</p>
