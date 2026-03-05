@@ -387,15 +387,22 @@ function SocialSidebar() {
 
   return (
     <aside className="w-64 flex-shrink-0 hidden lg:flex flex-col gap-2 sticky top-20 self-start">
-      {/* Brand */}
-      <div className="flex items-center gap-3 px-3 py-4 mb-2">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center">
-          <Radio className="w-5 h-5 text-white" />
+      {/* Brand — ODJS Logo */}
+      <div className="flex flex-col items-center px-3 py-5 mb-2">
+        <div
+          className="relative mb-2"
+          style={{
+            filter: "drop-shadow(0 0 12px rgba(6,182,212,0.5)) drop-shadow(0 0 24px rgba(168,85,247,0.3))",
+          }}
+        >
+          <img
+            src={ODJS_LOGO_URL}
+            alt="ODJS"
+            className="w-20 h-20 rounded-full object-cover border-2 border-cyan-500/50"
+          />
         </div>
-        <div>
-          <p className="font-bold text-white text-sm leading-none">ODJS Social</p>
-          <p className="text-slate-500 text-xs">DJ Community</p>
-        </div>
+        <p className="font-black text-white text-base tracking-widest leading-none">ODJS</p>
+        <p className="text-slate-500 text-[10px] tracking-wider mt-0.5">DJ COMMUNITY</p>
       </div>
 
       {navItems.map((item) => (
@@ -526,16 +533,27 @@ export default function Social() {
 
           {/* Center Feed */}
           <main className="flex-1 min-w-0 max-w-2xl mx-auto lg:mx-0">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-4">
-              <h1 className="text-xl font-bold text-white flex items-center gap-2">
-                <Radio className="w-5 h-5 text-cyan-400" />
-                ODJS Social
-              </h1>
-              <div className="flex items-center gap-2">
-                <OdjsBadge />
+            {/* Header — ODJS Logo centered */}
+            <div className="flex flex-col items-center mb-6">
+              <div
+                style={{
+                  filter: "drop-shadow(0 0 16px rgba(6,182,212,0.6)) drop-shadow(0 0 32px rgba(168,85,247,0.4))",
+                }}
+                className="mb-2"
+              >
+                <img
+                  src={ODJS_LOGO_URL}
+                  alt="ODJS"
+                  className="w-24 h-24 rounded-full object-cover border-2 border-cyan-500/60"
+                />
+              </div>
+              <p className="text-slate-400 text-xs tracking-widest font-semibold uppercase mt-1">ODJS Community Feed</p>
+              <div className="flex items-center gap-2 mt-2">
                 <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-[10px]">
-                  LIVE
+                  ● LIVE
+                </Badge>
+                <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 text-[10px]">
+                  DJ SOCIAL
                 </Badge>
               </div>
             </div>
@@ -559,6 +577,22 @@ export default function Social() {
             {/* Feed */}
             {isLoading && (
               <div className="space-y-4">
+                {/* Loading screen with ODJS logo */}
+                <div className="flex flex-col items-center py-8 mb-2">
+                  <div
+                    className="animate-pulse"
+                    style={{
+                      filter: "drop-shadow(0 0 20px rgba(6,182,212,0.7)) drop-shadow(0 0 40px rgba(168,85,247,0.5))",
+                    }}
+                  >
+                    <img
+                      src={ODJS_LOGO_URL}
+                      alt="ODJS"
+                      className="w-16 h-16 rounded-full object-cover border-2 border-cyan-500/50"
+                    />
+                  </div>
+                  <p className="text-slate-500 text-xs mt-3 tracking-widest">Loading feed...</p>
+                </div>
                 {[1, 2, 3].map(i => (
                   <div key={i} className="bg-[#0d0d1a] border border-white/5 rounded-2xl p-4 animate-pulse">
                     <div className="flex gap-3">
@@ -576,7 +610,12 @@ export default function Social() {
 
             {!isLoading && posts.length === 0 && (
               <div className="text-center py-16">
-                <Radio className="w-12 h-12 mx-auto mb-4 text-cyan-500/30" />
+                <div
+                  style={{ filter: "drop-shadow(0 0 12px rgba(6,182,212,0.4)) drop-shadow(0 0 24px rgba(168,85,247,0.3))" }}
+                  className="inline-block mb-4"
+                >
+                  <img src={ODJS_LOGO_URL} alt="ODJS" className="w-16 h-16 rounded-full object-cover border-2 border-cyan-500/40 mx-auto" />
+                </div>
                 <h3 className="text-white font-semibold mb-2">No posts yet</h3>
                 <p className="text-slate-500 text-sm">Be the first DJ to share something!</p>
               </div>
