@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 
 const ODJS_LOGO_URL =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663313258514/ZSqS9M2EFeWUjrPvMV6QuC/odjs-logo-circle_1e79334c.png";
+  "https://d2xsxph8kpxj0f.cloudfront.net/310519663313258514/ZSqS9M2EFeWUjrPvMV6QuC/odjs-thumbnail-1200x630_fdb7b444.png";
 
 // ── Tarjeta Square (1:1) para Twitter / Instagram Feed ─────────────────────
 function ProfileCardSquare({ profile }: { profile: any }) {

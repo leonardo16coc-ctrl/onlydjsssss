@@ -32,7 +32,7 @@ function getDisplayName(u: any) {
 }
 
 // ── ODJS Logo Badge ────────────────────────────────────────────────────────
-const ODJS_LOGO_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663313258514/ZSqS9M2EFeWUjrPvMV6QuC/odjs-logo-circle_1e79334c.png";
+const ODJS_LOGO_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663313258514/ZSqS9M2EFeWUjrPvMV6QuC/odjs-thumbnail-1200x630_fdb7b444.png";
 
 function OdjsBadge({ size = "sm" }: { size?: "sm" | "md" }) {
   if (size === "md") {
@@ -389,16 +389,11 @@ function SocialSidebar() {
     <aside className="w-64 flex-shrink-0 hidden lg:flex flex-col gap-2 sticky top-20 self-start">
       {/* Brand — ODJS Logo */}
       <div className="flex flex-col items-center px-3 py-5 mb-2">
-        <div
-          className="relative mb-2"
-          style={{
-            filter: "drop-shadow(0 0 12px rgba(6,182,212,0.5)) drop-shadow(0 0 24px rgba(168,85,247,0.3))",
-          }}
-        >
+        <div className="relative mb-2">
           <img
             src={ODJS_LOGO_URL}
             alt="ODJS"
-            className="w-20 h-20 rounded-full object-cover border-2 border-cyan-500/50"
+            className="w-20 h-20 rounded-full object-cover"
           />
         </div>
         <p className="font-black text-white text-base tracking-widest leading-none">ODJS</p>
@@ -535,16 +530,11 @@ export default function Social() {
           <main className="flex-1 min-w-0 max-w-2xl mx-auto lg:mx-0">
             {/* Header — ODJS Logo centered */}
             <div className="flex flex-col items-center mb-6">
-              <div
-                style={{
-                  filter: "drop-shadow(0 0 16px rgba(6,182,212,0.6)) drop-shadow(0 0 32px rgba(168,85,247,0.4))",
-                }}
-                className="mb-2"
-              >
+              <div className="mb-2">
                 <img
                   src={ODJS_LOGO_URL}
                   alt="ODJS"
-                  className="w-24 h-24 rounded-full object-cover border-2 border-cyan-500/60"
+                  className="w-24 h-24 rounded-full object-cover"
                 />
               </div>
               <p className="text-slate-400 text-xs tracking-widest font-semibold uppercase mt-1">ODJS Community Feed</p>
@@ -579,16 +569,11 @@ export default function Social() {
               <div className="space-y-4">
                 {/* Loading screen with ODJS logo */}
                 <div className="flex flex-col items-center py-8 mb-2">
-                  <div
-                    className="animate-pulse"
-                    style={{
-                      filter: "drop-shadow(0 0 20px rgba(6,182,212,0.7)) drop-shadow(0 0 40px rgba(168,85,247,0.5))",
-                    }}
-                  >
+                  <div className="animate-pulse">
                     <img
                       src={ODJS_LOGO_URL}
                       alt="ODJS"
-                      className="w-16 h-16 rounded-full object-cover border-2 border-cyan-500/50"
+                      className="w-16 h-16 rounded-full object-cover"
                     />
                   </div>
                   <p className="text-slate-500 text-xs mt-3 tracking-widest">Loading feed...</p>
@@ -610,11 +595,8 @@ export default function Social() {
 
             {!isLoading && posts.length === 0 && (
               <div className="text-center py-16">
-                <div
-                  style={{ filter: "drop-shadow(0 0 12px rgba(6,182,212,0.4)) drop-shadow(0 0 24px rgba(168,85,247,0.3))" }}
-                  className="inline-block mb-4"
-                >
-                  <img src={ODJS_LOGO_URL} alt="ODJS" className="w-16 h-16 rounded-full object-cover border-2 border-cyan-500/40 mx-auto" />
+                <div className="inline-block mb-4">
+                  <img src={ODJS_LOGO_URL} alt="ODJS" className="w-16 h-16 rounded-full object-cover mx-auto" />
                 </div>
                 <h3 className="text-white font-semibold mb-2">No posts yet</h3>
                 <p className="text-slate-500 text-sm">Be the first DJ to share something!</p>
