@@ -10,11 +10,12 @@ import { toast } from "sonner";
 import {
   Home, TrendingUp, Map, Swords, MessageCircle, User, Plus,
   Heart, Repeat2, MessageSquare, Bookmark, Image, Video, Music2,
-  Hash, Send, MoreHorizontal, CheckCircle2, Flame, Zap, Radio
+  Hash, Send, MoreHorizontal, CheckCircle2, Flame, Zap, Radio, Share2
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { useSEO } from "@/hooks/useSEO";
 import { formatDistanceToNow } from "date-fns";
+import { SharePostModal } from "@/components/SharePostModal";
 
 // ── helpers ────────────────────────────────────────────────────────────────
 function timeAgo(ts: number) {
@@ -157,6 +158,7 @@ function PostCard({ post, likedIds, repostedIds, savedIds, onInteraction }: {
   const { user } = useAuth();
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState("");
+  const [showShare, setShowShare] = useState(false);
 
   const liked = likedIds.includes(post.id);
   const reposted = repostedIds.includes(post.id);
@@ -280,8 +282,20 @@ function PostCard({ post, likedIds, repostedIds, savedIds, onInteraction }: {
             >
               <Bookmark className={`w-3.5 h-3.5 ${saved ? "fill-current" : ""}`} />
             </button>
+            {/* Share button */}
+            <button
+              onClick={() => setShowShare(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-slate-500 hover:bg-cyan-500/10 hover:text-cyan-400 transition-all"
+              title="Share on social media"
+            >
+              <Share2 className="w-3.5 h-3.5" />
+            </button>
             {/* ODJS Logo watermark — bottom right, like in the reference design */}
-            <div className="ml-auto flex items-center gap-1.5 opacity-70 hover:opacity-100 transition-opacity" title={`Posted on ONLYDJS · ${formatShareDate(post.createdAt)}`}>
+            <div
+              className="ml-auto flex items-center gap-1.5 opacity-70 hover:opacity-100 transition-opacity cursor-pointer"
+              title={`Posted on ONLYDJS · ${formatShareDate(post.createdAt)}`}
+              onClick={() => setShowShare(true)}
+            >
               <img
                 src={ODJS_LOGO_URL}
                 alt="ODJS"
@@ -343,6 +357,15 @@ function PostCard({ post, likedIds, repostedIds, savedIds, onInteraction }: {
           )}
         </div>
       </div>
+
+      {/* Share Modal */}
+      {showShare && (
+        <SharePostModal
+          post={post}
+          open={showShare}
+          onClose={() => setShowShare(false)}
+        />
+      )}
     </div>
   );
 }
