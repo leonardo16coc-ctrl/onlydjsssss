@@ -3183,3 +3183,8 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar contadores de tracks por tab en DJProfile (Tracks (N), Edits (N), etc.)
 - [x] Implementar rutas directas /username/edits, /username/remixes, /username/mashups, /username/tracks
 - [x] Activar automáticamente el tab correcto según la URL
+
+## 43. SEO Dinámico para Perfiles DJ
+- [x] Crear hook useSEO para inyectar metaetiquetas dinámicas (title, description, og:*, twitter:*)
+- [x] Integrar useSEO en DJProfile con nombre, bio, foto y stats del DJ
+- [x] Restaurar metaetiquetas por defecto al desmontar el componente

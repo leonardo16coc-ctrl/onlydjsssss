@@ -1,6 +1,7 @@
 import { useRoute, useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { useSEO } from "@/hooks/useSEO";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -181,6 +182,37 @@ export default function DJProfile() {
     toast("Profile link copied!");
   };
 
+  // ── Dynamic SEO meta tags ──────────────────────────────────────────────
+  const p = profile as any;
+  const djDisplayName = p?.djName || p?.name || username;
+  const djBio = p?.bio
+    ? p.bio.slice(0, 160)
+    : `${djDisplayName} is a DJ on ONLYDJS. Discover their tracks, edits, remixes and mashups.`;
+  const djImage =
+    p?.profileImageUrl || p?.avatarUrl || "https://www.onlydjss.com/logo-new-gradient.webp";
+  const djUrl = `https://www.onlydjss.com/${username}`;
+  const followersCount = Number(p?.followers_count || 0);
+  const trackCount = Number(p?.track_count || 0);
+  const seoTitle = p
+    ? `${djDisplayName} (@${username}) – DJ Profile on ONLYDJS`
+    : `ONLYDJS – The Operating System for DJs`;
+  const seoDescription = p
+    ? `${djBio} · ${followersCount.toLocaleString()} followers · ${trackCount} tracks on ONLYDJS.`
+    : djBio;
+
+  useSEO({
+    title: seoTitle,
+    description: seoDescription,
+    image: djImage,
+    url: djUrl,
+    type: "profile",
+    twitterCard: "summary_large_image",
+    extra: {
+      "profile:username": username,
+      "og:locale": "en_US",
+    },
+  });
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background">
@@ -206,8 +238,6 @@ export default function DJProfile() {
       </div>
     );
   }
-
-  const p = profile as any;
 
   const socialLinks = (() => {
     try { return JSON.parse(p.socialLinks || "{}"); } catch { return {}; }
