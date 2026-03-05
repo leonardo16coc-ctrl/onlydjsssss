@@ -44,6 +44,11 @@ import TrackDetail from "./pages/TrackDetail";
 import MyPlaylists from "./pages/MyPlaylists";
 import PlaylistDetail from "./pages/PlaylistDetail";
 import Charts from "./pages/Charts";
+import Social from "./pages/Social";
+import SocialDrops from "./pages/SocialDrops";
+import SocialBattles from "./pages/SocialBattles";
+import SocialRanking from "./pages/SocialRanking";
+import SocialMap from "./pages/SocialMap";
 
 function Router() {
   return (
@@ -85,6 +90,11 @@ function Router() {
       <Route path={"/:username/remixes"} component={DJProfile} />
       <Route path={"/:username/mashups"} component={DJProfile} />
       <Route path={"/charts"} component={Charts} />
+      <Route path={"/social"} component={Social} />
+      <Route path={"/social/drops"} component={SocialDrops} />
+      <Route path={"/social/battles"} component={SocialBattles} />
+      <Route path={"/social/ranking"} component={SocialRanking} />
+      <Route path={"/social/map"} component={SocialMap} />
       <Route path={"/profile/edit"} component={ProfileEdit} />
       <Route path={"/track/:id"} component={TrackDetail} />
       <Route path={"/my-playlists"} component={MyPlaylists} />

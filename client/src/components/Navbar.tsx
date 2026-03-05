@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
-import { Music, Sparkles, Trophy, LayoutDashboard, Upload, CreditCard, User, Settings, LogOut, Radio, Menu, X, TrendingUp } from "lucide-react";
+import { Music, Sparkles, Trophy, LayoutDashboard, Upload, CreditCard, User, Settings, LogOut, Radio, Menu, X, TrendingUp, Zap } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { useState, useEffect, useRef } from "react";
 import {
@@ -103,6 +103,11 @@ export default function Navbar() {
             <Link href="/charts" className="flex items-center space-x-2 text-foreground hover:text-yellow-400 transition-colors">
               <TrendingUp className="h-4 w-4" />
               <span>Charts</span>
+            </Link>
+
+            <Link href="/social" className="flex items-center space-x-2 transition-colors group">
+              <Zap className="h-4 w-4 text-cyan-400 group-hover:text-purple-400 transition-colors" />
+              <span className="font-semibold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">ODJS Social</span>
             </Link>
 
             <Link href="/rankings" className="flex items-center space-x-2 text-foreground hover:text-secondary transition-colors">
@@ -242,6 +247,15 @@ export default function Navbar() {
                 >
                   <Sparkles className="h-5 w-5 text-pink-400" />
                   <span className="text-lg text-glow-pink">Mainstage</span>
+                </Link>
+                
+                <Link 
+                  href="/social"
+                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Zap className="h-5 w-5 text-cyan-400" />
+                  <span className="text-lg font-semibold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">ODJS Social</span>
                 </Link>
                 
                 <Link 

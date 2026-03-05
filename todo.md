@@ -3188,3 +3188,16 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Crear hook useSEO para inyectar metaetiquetas dinámicas (title, description, og:*, twitter:*)
 - [x] Integrar useSEO en DJProfile con nombre, bio, foto y stats del DJ
 - [x] Restaurar metaetiquetas por defecto al desmontar el componente
+
+## 44. ODJS Social - Red Social para DJs
+- [x] Crear tablas BD: social_posts, social_post_likes, social_post_reposts, drop_radar, drop_votes, dj_battles, battle_votes
+- [x] Crear router tRPC social con CRUD de posts, drops, battles y rankings
+- [x] Crear página principal /social con layout sidebar + feed
+- [x] Crear componente PostComposer con upload de imagen/video/preview
+- [x] Crear componente PostCard con interacciones (like, repost, comment, save)
+- [x] Crear página /social/drops (Drop Radar con votación 🔥)
+- [x] Crear página /social/battles (DJ Battles con votación)
+- [x] Crear página /social/map (DJ Map interactivo)
+- [x] Crear página /social/ranking (Trending DJs Leaderboard)
+- [x] Agregar "ODJS Social" en la Navbar principal
+- [x] Registrar rutas /social/* en App.tsx
