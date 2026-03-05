@@ -3177,3 +3177,9 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar pestaña "Mashup" en DJProfile con filtro por trackType Mashup
 - [x] Actualizar router getTracksByUsername para incluir tipo "mashup"
 - [x] Agregar botón/link "Profile" en la Navbar para ir al perfil público del usuario
+
+## 42. Mejoras de Perfil DJ y Upload
+- [x] Agregar opción "Mashup" en selector de tipo de track en formulario Upload (ya existía)
+- [x] Agregar contadores de tracks por tab en DJProfile (Tracks (N), Edits (N), etc.)
+- [x] Implementar rutas directas /username/edits, /username/remixes, /username/mashups, /username/tracks
+- [x] Activar automáticamente el tab correcto según la URL

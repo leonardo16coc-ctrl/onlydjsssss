@@ -80,6 +80,10 @@ function Router() {
       <Route path={"/ab-testing"} component={ABTesting} />
       <Route path={"/dj/:username"} component={DJProfile} />
       <Route path={"/@:username"} component={DJProfile} />
+      <Route path={"/:username/tracks"} component={DJProfile} />
+      <Route path={"/:username/edits"} component={DJProfile} />
+      <Route path={"/:username/remixes"} component={DJProfile} />
+      <Route path={"/:username/mashups"} component={DJProfile} />
       <Route path={"/charts"} component={Charts} />
       <Route path={"/profile/edit"} component={ProfileEdit} />
       <Route path={"/track/:id"} component={TrackDetail} />

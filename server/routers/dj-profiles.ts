@@ -393,4 +393,40 @@ export const djProfilesRouter = router({
       const rows = result as any[];
       return { tracks: Array.isArray(rows[0]) ? rows[0] : rows };
     }),
+
+  // Get track counts per type for a username (for tab badges)
+  getTrackCountsByUsername: publicProcedure
+    .input(z.object({ username: z.string() }))
+    .query(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+
+      const userRes = await db.execute(sql`
+        SELECT id FROM users WHERE username = ${input.username} LIMIT 1
+      `);
+      const userRows = userRes as any[];
+      const user = Array.isArray(userRows[0]) ? userRows[0][0] : userRows[0];
+      if (!user) return { all: 0, track: 0, edit: 0, remix: 0, mashup: 0 };
+      const userId = user.id;
+
+      const result = await db.execute(sql`
+        SELECT
+          COUNT(*) as total,
+          SUM(CASE WHEN trackType IN ('Extended Mix', 'Rework') THEN 1 ELSE 0 END) as tracks,
+          SUM(CASE WHEN trackType = 'Edit' THEN 1 ELSE 0 END) as edits,
+          SUM(CASE WHEN trackType = 'Remix' THEN 1 ELSE 0 END) as remixes,
+          SUM(CASE WHEN trackType = 'Mashup' THEN 1 ELSE 0 END) as mashups
+        FROM tracks
+        WHERE userId = ${userId} AND status = 'approved'
+      `);
+      const rows = result as any[];
+      const row = Array.isArray(rows[0]) ? rows[0][0] : rows[0];
+      return {
+        all: Number(row?.total || 0),
+        track: Number(row?.tracks || 0),
+        edit: Number(row?.edits || 0),
+        remix: Number(row?.remixes || 0),
+        mashup: Number(row?.mashups || 0),
+      };
+    }),
 });

@@ -110,11 +110,35 @@ export default function DJProfile() {
   const [matchDirect, paramsDirect] = useRoute("/:username");
   const [matchDJ, paramsDJ] = useRoute("/dj/:username");
   const [matchAt, paramsAt] = useRoute("/@:username");
+  const [matchTracks, paramsTracks] = useRoute("/:username/tracks");
+  const [matchEdits, paramsEdits] = useRoute("/:username/edits");
+  const [matchRemixes, paramsRemixes] = useRoute("/:username/remixes");
+  const [matchMashups, paramsMashups] = useRoute("/:username/mashups");
   const [, navigate] = useLocation();
-  const username = (paramsDJ as any)?.username || (paramsAt as any)?.username || (paramsDirect as any)?.username || "";
+
+  const username =
+    (paramsDJ as any)?.username ||
+    (paramsAt as any)?.username ||
+    (paramsTracks as any)?.username ||
+    (paramsEdits as any)?.username ||
+    (paramsRemixes as any)?.username ||
+    (paramsMashups as any)?.username ||
+    (paramsDirect as any)?.username || "";
+
+  const defaultTab = matchTracks ? "tracks"
+    : matchEdits ? "edits"
+    : matchRemixes ? "remixes"
+    : matchMashups ? "mashups"
+    : "tracks";
+
   const { user } = useAuth();
 
   const { data: profile, isLoading } = trpc.djProfiles.getByUsername.useQuery(
+    { username },
+    { enabled: !!username }
+  );
+
+  const { data: counts } = trpc.djProfiles.getTrackCountsByUsername.useQuery(
     { username },
     { enabled: !!username }
   );
@@ -320,19 +344,23 @@ export default function DJProfile() {
 
         {/* Tabs */}
         <div className="py-6">
-          <Tabs defaultValue="tracks">
-            <TabsList className="mb-6">
+          <Tabs defaultValue={defaultTab} onValueChange={(val) => navigate(`/${username}/${val}`, { replace: true })}>
+            <TabsList className="mb-6 flex-wrap h-auto gap-1">
               <TabsTrigger value="tracks" className="flex items-center gap-2">
                 <Music className="w-4 h-4" />Tracks
+                {counts && <span className="ml-1 text-xs opacity-60">({counts.track})</span>}
               </TabsTrigger>
               <TabsTrigger value="edits" className="flex items-center gap-2">
                 <Mic2 className="w-4 h-4" />Edits
+                {counts && <span className="ml-1 text-xs opacity-60">({counts.edit})</span>}
               </TabsTrigger>
               <TabsTrigger value="remixes" className="flex items-center gap-2">
                 <Disc3 className="w-4 h-4" />Remixes
+                {counts && <span className="ml-1 text-xs opacity-60">({counts.remix})</span>}
               </TabsTrigger>
               <TabsTrigger value="mashups" className="flex items-center gap-2">
                 <Headphones className="w-4 h-4" />Mashups
+                {counts && <span className="ml-1 text-xs opacity-60">({counts.mashup})</span>}
               </TabsTrigger>
             </TabsList>
 
