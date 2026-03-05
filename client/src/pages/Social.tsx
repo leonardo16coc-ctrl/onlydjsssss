@@ -32,7 +32,7 @@ function getDisplayName(u: any) {
 }
 
 // ── ODJS Logo Badge ────────────────────────────────────────────────────────
-const ODJS_LOGO_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663313258514/ZSqS9M2EFeWUjrPvMV6QuC/odjs-logo_6f8aebf9.jpg";
+const ODJS_LOGO_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663313258514/ZSqS9M2EFeWUjrPvMV6QuC/odjs-logo-circle_1e79334c.png";
 
 function OdjsBadge({ size = "sm" }: { size?: "sm" | "md" }) {
   if (size === "md") {

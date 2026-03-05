@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { Download, Instagram, Twitter, Copy, Loader2, CheckCircle2, Zap } from "lucide-react";
 
 const ODJS_LOGO_URL =
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663313258514/ZSqS9M2EFeWUjrPvMV6QuC/odjs-logo_6f8aebf9.jpg";
+  "https://d2xsxph8kpxj0f.cloudfront.net/310519663313258514/ZSqS9M2EFeWUjrPvMV6QuC/odjs-logo-circle_1e79334c.png";
 
 function getAvatar(u: any) {
   return u?.profileImageUrl || u?.avatarUrl || "";
