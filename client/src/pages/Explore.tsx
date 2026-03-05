@@ -24,6 +24,37 @@ import DownloadButton from "@/components/DownloadButton";
 import DownloadLimitsCard from "@/components/DownloadLimitsCard";
 import ShareTrackButtons from "@/components/ShareTrackButtons";
 import { useAuth } from "@/_core/hooks/useAuth";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Users } from "lucide-react";
+import { useLocation } from "wouter";
+
+function DJCard({ dj }: { dj: any }) {
+  const [, navigate] = useLocation();
+  return (
+    <Card
+      className="p-4 bg-card/60 border-border/50 hover:border-primary/50 hover:bg-card transition-all cursor-pointer"
+      onClick={() => navigate(`/${dj.username}`)}
+    >
+      <div className="flex flex-col items-center text-center gap-3">
+        <Avatar className="w-16 h-16">
+          <AvatarImage src={dj.profileImageUrl || dj.avatarUrl || ""} />
+          <AvatarFallback className="bg-primary/10 text-lg">
+            {(dj.djName || dj.name || dj.username || "?").charAt(0).toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+        <div>
+          <p className="font-semibold text-sm truncate max-w-[120px]">{dj.djName || dj.name || dj.username}</p>
+          <p className="text-xs text-muted-foreground">@{dj.username}</p>
+        </div>
+        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+          <Users className="w-3 h-3" />
+          <span>{Number(dj.followers_count || 0).toLocaleString()} followers</span>
+        </div>
+        {dj.isVerified && <Badge variant="secondary" className="text-xs">Verified</Badge>}
+      </div>
+    </Card>
+  );
+}
 
 export default function Explore() {
   const { isAuthenticated, user } = useAuth();
@@ -33,6 +64,9 @@ export default function Explore() {
   const limit = 20;
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [trackToDelete, setTrackToDelete] = useState<{ id: number; title: string } | null>(null);
+
+  const { data: featuredDJs } = trpc.djProfiles.getFeaturedDJs.useQuery({ limit: 8, sortBy: "followers" });
+  const { data: newDJs } = trpc.djProfiles.getFeaturedDJs.useQuery({ limit: 8, sortBy: "recent" });
 
   const utils = trpc.useUtils();
   const deleteTrackMutation = trpc.tracks.delete.useMutation({
@@ -74,6 +108,39 @@ export default function Explore() {
     <div className="min-h-screen bg-background">
       <Navbar />
       <div className="container py-8">
+        {/* Trending DJs Section */}
+        {((featuredDJs as any)?.djs || []).length > 0 && (
+          <div className="mb-10">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold flex items-center gap-2">
+                <Users className="w-5 h-5 text-primary" />Trending DJs
+              </h2>
+              <a href="/charts" className="text-sm text-primary hover:underline">View Charts →</a>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+              {((featuredDJs as any)?.djs || []).map((dj: any) => (
+                <DJCard key={dj.id} dj={dj} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* New DJs Section */}
+        {((newDJs as any)?.djs || []).length > 0 && (
+          <div className="mb-10">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-primary" />New DJs
+              </h2>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+              {((newDJs as any)?.djs || []).map((dj: any) => (
+                <DJCard key={dj.id} dj={dj} />
+              ))}
+            </div>
+          </div>
+        )}
+
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2 text-glow-cyan">Discover</h1>
           <p className="text-muted-foreground">

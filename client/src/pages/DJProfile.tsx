@@ -1,271 +1,350 @@
-import { useRoute } from "wouter";
-import Navbar from "@/components/Navbar";
-import { Card } from "@/components/ui/card";
+import { useRoute, useLocation } from "wouter";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { trpc } from "@/lib/trpc";
-import { 
-  User, 
-  Music2, 
-  Download, 
-  DollarSign, 
-  Trophy,
-  MapPin,
-  CheckCircle2,
-  Instagram,
-  Twitter,
-  Globe,
-  Play,
-  Heart
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
+import {
+  Music, Users, Play, Download, Heart, Share2, Repeat2,
+  Instagram, Twitter, Youtube, Globe, MapPin, CheckCircle2,
+  Disc3, Mic2, Headphones
 } from "lucide-react";
-import { Loader2 } from "lucide-react";
+
+function TrackCard({ track }: { track: any }) {
+  const likeTrack = trpc.djProfiles.likeTrack.useMutation({
+    onSuccess: (data: any) => {
+      toast(data.liked ? "Track liked!" : "Like removed");
+    },
+  });
+  const repostTrack = trpc.djProfiles.repostTrack.useMutation({
+    onSuccess: (data: any) => {
+      toast(data.reposted ? "Reposted!" : "Repost removed");
+    },
+  });
+  const shareTrack = () => {
+    const url = `https://www.onlydjss.com/track/${track.id}`;
+    navigator.clipboard.writeText(url);
+    toast("Link copied!");
+  };
+  const formatDuration = (seconds: number) => {
+    if (!seconds) return "--:--";
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s.toString().padStart(2, "0")}`;
+  };
+  return (
+    <Card className="group bg-card/50 border-border/50 hover:border-border hover:bg-card transition-all duration-200">
+      <CardContent className="p-4">
+        <div className="flex gap-4 items-center">
+          <div className="relative flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden bg-muted">
+            {track.coverImageUrl ? (
+              <img src={track.coverImageUrl} alt={track.title} className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <Music className="w-6 h-6 text-muted-foreground" />
+              </div>
+            )}
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <p className="font-semibold text-sm truncate">{track.title}</p>
+                <p className="text-xs text-muted-foreground truncate">{track.artist}</p>
+              </div>
+              {track.trackType && (
+                <Badge variant="secondary" className="text-xs flex-shrink-0">{track.trackType}</Badge>
+              )}
+            </div>
+            <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
+              <span className="flex items-center gap-1"><Play className="w-3 h-3" />{(track.playCount || 0).toLocaleString()}</span>
+              <span className="flex items-center gap-1"><Heart className="w-3 h-3" />{(track.likeCount || 0).toLocaleString()}</span>
+              <span className="flex items-center gap-1"><Download className="w-3 h-3" />{(track.downloadCount || 0).toLocaleString()}</span>
+              {track.bpm && <span>{track.bpm} BPM</span>}
+              {track.musicalKey && <span>{track.musicalKey}</span>}
+              <span>{formatDuration(track.durationSeconds)}</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => likeTrack.mutate({ trackId: track.id })}>
+              <Heart className="w-4 h-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => repostTrack.mutate({ trackId: track.id })}>
+              <Repeat2 className="w-4 h-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={shareTrack}>
+              <Share2 className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function TrackList({ username, type }: { username: string; type: "all" | "edit" | "remix" | "track" }) {
+  const { data, isLoading } = trpc.djProfiles.getTracksByUsername.useQuery({ username, type });
+  if (isLoading) return (
+    <div className="space-y-3">
+      {[...Array(5)].map((_, i) => <Skeleton key={i} className="h-20 w-full rounded-lg" />)}
+    </div>
+  );
+  const tracks = Array.isArray((data as any)?.tracks) ? (data as any).tracks : [];
+  if (tracks.length === 0) return (
+    <div className="text-center py-16 text-muted-foreground">
+      <Music className="w-12 h-12 mx-auto mb-4 opacity-30" />
+      <p className="text-sm">No tracks yet</p>
+    </div>
+  );
+  return (
+    <div className="space-y-3">
+      {tracks.map((track: any) => <TrackCard key={track.id} track={track} />)}
+    </div>
+  );
+}
 
 export default function DJProfile() {
-  const [, params] = useRoute("/dj/:username");
-  const username = params?.username || "";
+  const [matchDirect, paramsDirect] = useRoute("/:username");
+  const [matchDJ, paramsDJ] = useRoute("/dj/:username");
+  const [matchAt, paramsAt] = useRoute("/@:username");
+  const [, navigate] = useLocation();
+  const username = (paramsDJ as any)?.username || (paramsAt as any)?.username || (paramsDirect as any)?.username || "";
+  const { user } = useAuth();
 
-  const { data: profile, isLoading, error } = trpc.profile.getByUsername.useQuery(
+  const { data: profile, isLoading } = trpc.djProfiles.getByUsername.useQuery(
     { username },
     { enabled: !!username }
   );
 
+  const { data: followStatus, refetch: refetchFollow } = trpc.djProfiles.isFollowing.useQuery(
+    { targetUserId: (profile as any)?.id || 0 },
+    { enabled: !!(profile as any)?.id && !!user }
+  );
+
+  const followMutation = trpc.djProfiles.follow.useMutation({
+    onSuccess: () => {
+      refetchFollow();
+      toast("Following!");
+    },
+  });
+
+  const unfollowMutation = trpc.djProfiles.unfollow.useMutation({
+    onSuccess: () => {
+      refetchFollow();
+      toast("Unfollowed");
+    },
+  });
+
+  const handleFollowToggle = () => {
+    if (!user) {
+      toast("Sign in to follow DJs");
+      return;
+    }
+    const p = profile as any;
+    if ((followStatus as any)?.following) {
+      unfollowMutation.mutate({ targetUserId: p.id });
+    } else {
+      followMutation.mutate({ targetUserId: p.id });
+    }
+  };
+
+  const shareProfile = () => {
+    const url = `https://www.onlydjss.com/${username}`;
+    navigator.clipboard.writeText(url);
+    toast("Profile link copied!");
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background">
-        <Navbar />
-        <div className="container py-20 flex justify-center">
-          <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <div className="h-48 bg-muted animate-pulse" />
+        <div className="max-w-4xl mx-auto px-4 -mt-16 pb-8">
+          <Skeleton className="w-32 h-32 rounded-full" />
+          <Skeleton className="h-8 w-48 mt-4" />
+          <Skeleton className="h-4 w-96 mt-2" />
         </div>
       </div>
     );
   }
 
-  if (error || !profile) {
+  if (!profile) {
     return (
-      <div className="min-h-screen bg-background">
-        <Navbar />
-        <div className="container py-20 text-center">
-          <h1 className="text-4xl font-bold mb-4">DJ no encontrado</h1>
-          <p className="text-muted-foreground">El perfil que buscas no existe.</p>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Headphones className="w-16 h-16 mx-auto mb-4 text-muted-foreground opacity-30" />
+          <h1 className="text-2xl font-bold mb-2">DJ Not Found</h1>
+          <p className="text-muted-foreground mb-6">The profile @{username} doesn&apos;t exist.</p>
+          <Button onClick={() => navigate("/explore")}>Explore DJs</Button>
         </div>
       </div>
     );
   }
 
-  const socialLinks = profile.socialLinks || {};
+  const p = profile as any;
+
+  const socialLinks = (() => {
+    try { return JSON.parse(p.socialLinks || "{}"); } catch { return {}; }
+  })();
+
+  const isOwnProfile = (user as any)?.id === p.id;
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
-      
-      {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-club">
-        <div className="absolute inset-0 bg-gradient-neon opacity-10"></div>
-        <div className="container relative z-10">
-          <div className="flex flex-col md:flex-row items-center gap-8">
-            {/* Profile Image */}
-            <div className="relative">
-              {profile.profileImageUrl ? (
-                <img
-                  src={profile.profileImageUrl}
-                  alt={profile.djName || profile.name || "DJ"}
-                  className="w-48 h-48 rounded-full object-cover border-4 border-primary glow-cyan"
-                />
-              ) : (
-                <div className="w-48 h-48 rounded-full bg-card border-4 border-primary glow-cyan flex items-center justify-center">
-                  <User className="h-24 w-24 text-muted-foreground" />
-                </div>
-              )}
-              {profile.isVerified && (
-                <div className="absolute bottom-2 right-2 bg-primary rounded-full p-2 glow-cyan">
-                  <CheckCircle2 className="h-6 w-6 text-primary-foreground" />
-                </div>
-              )}
-            </div>
+      {/* Hero Banner */}
+      <div className="h-48 bg-gradient-to-br from-primary/20 via-primary/10 to-background relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/30 via-transparent to-transparent" />
+      </div>
 
-            {/* Profile Info */}
-            <div className="flex-1 text-center md:text-left">
-              <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
-                <h1 className="text-4xl md:text-5xl font-bold text-glow-cyan">
-                  {profile.djName || profile.name}
-                </h1>
-                {profile.membershipStatus === "verified" && (
-                  <Badge className="bg-accent text-accent-foreground glow-pink">
-                    DJ Verificado
-                  </Badge>
-                )}
-                {profile.membershipStatus === "member" && (
-                  <Badge className="bg-secondary text-secondary-foreground glow-purple">
-                    DJ Miembro
-                  </Badge>
-                )}
-              </div>
-              
-              <p className="text-xl text-muted-foreground mb-4">@{profile.username}</p>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6">
+        {/* Profile Header */}
+        <div className="relative -mt-16 pb-6 border-b border-border">
+          <div className="flex flex-col sm:flex-row sm:items-end gap-4">
+            {/* Avatar */}
+            <Avatar className="w-32 h-32 border-4 border-background shadow-xl">
+              <AvatarImage src={p.profileImageUrl || p.avatarUrl || ""} />
+              <AvatarFallback className="text-3xl bg-primary/10">
+                {(p.djName || p.name || username).charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
 
-              {profile.country && (
-                <div className="flex items-center justify-center md:justify-start gap-2 mb-4">
-                  <MapPin className="h-5 w-5 text-muted-foreground" />
-                  <span className="text-muted-foreground">{profile.country}</span>
-                </div>
-              )}
-
-              {/* Social Links */}
-              {Object.keys(socialLinks).length > 0 && (
-                <div className="flex gap-3 justify-center md:justify-start mb-6">
-                  {socialLinks.instagram && (
-                    <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer">
-                      <Button size="sm" variant="outline" className="gap-2">
-                        <Instagram className="h-4 w-4" />
-                      </Button>
-                    </a>
-                  )}
-                  {socialLinks.twitter && (
-                    <a href={socialLinks.twitter} target="_blank" rel="noopener noreferrer">
-                      <Button size="sm" variant="outline" className="gap-2">
-                        <Twitter className="h-4 w-4" />
-                      </Button>
-                    </a>
-                  )}
-                  {socialLinks.website && (
-                    <a href={socialLinks.website} target="_blank" rel="noopener noreferrer">
-                      <Button size="sm" variant="outline" className="gap-2">
-                        <Globe className="h-4 w-4" />
-                      </Button>
-                    </a>
+            {/* Info + Actions */}
+            <div className="flex-1 sm:pb-2">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h1 className="text-2xl font-bold">{p.djName || p.name || username}</h1>
+                    {p.isVerified && (
+                      <CheckCircle2 className="w-5 h-5 text-primary" />
+                    )}
+                    {p.membershipStatus === "member" && (
+                      <Badge className="bg-primary/10 text-primary border-primary/20 text-xs">PRO</Badge>
+                    )}
+                  </div>
+                  <p className="text-muted-foreground text-sm">@{p.username}</p>
+                  {p.country && (
+                    <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+                      <MapPin className="w-3 h-3" />{p.country}
+                    </p>
                   )}
                 </div>
-              )}
 
-              {/* Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <Card className="p-4 bg-card/50 border-border">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Download className="h-4 w-4 text-primary" />
-                    <span className="text-sm text-muted-foreground">Descargas</span>
-                  </div>
-                  <p className="text-2xl font-bold">{profile.stats.totalDownloads.toLocaleString()}</p>
-                </Card>
-
-                <Card className="p-4 bg-card/50 border-border">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Music2 className="h-4 w-4 text-secondary" />
-                    <span className="text-sm text-muted-foreground">Tracks</span>
-                  </div>
-                  <p className="text-2xl font-bold">{profile.stats.totalTracks}</p>
-                </Card>
-
-                <Card className="p-4 bg-card/50 border-border">
-                  <div className="flex items-center gap-2 mb-1">
-                    <DollarSign className="h-4 w-4 text-accent" />
-                    <span className="text-sm text-muted-foreground">Ganancias</span>
-                  </div>
-                  <p className="text-2xl font-bold">${profile.stats.totalEarnings.toFixed(2)}</p>
-                </Card>
-
-                <Card className="p-4 bg-card/50 border-border">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Trophy className="h-4 w-4 text-primary" />
-                    <span className="text-sm text-muted-foreground">Ranking</span>
-                  </div>
-                  <p className="text-2xl font-bold">#{profile.stats.ranking}</p>
-                </Card>
+                <div className="flex items-center gap-2">
+                  {!isOwnProfile && (
+                    <Button
+                      onClick={handleFollowToggle}
+                      variant={(followStatus as any)?.following ? "outline" : "default"}
+                      size="sm"
+                      disabled={followMutation.isPending || unfollowMutation.isPending}
+                    >
+                      <Users className="w-4 h-4 mr-1" />
+                      {(followStatus as any)?.following ? "Following" : "Follow"}
+                    </Button>
+                  )}
+                  {isOwnProfile && (
+                    <Button variant="outline" size="sm" onClick={() => navigate("/dashboard")}>
+                      Edit Profile
+                    </Button>
+                  )}
+                  <Button variant="ghost" size="icon" className="h-9 w-9" onClick={shareProfile}>
+                    <Share2 className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Bio Section */}
-      {profile.bio && (
-        <section className="py-12 bg-background/50">
-          <div className="container max-w-4xl">
-            <Card className="card-neon p-8 bg-card">
-              <h2 className="text-2xl font-bold mb-4 text-glow-purple">Biografía</h2>
-              <p className="text-muted-foreground whitespace-pre-wrap">{profile.bio}</p>
-            </Card>
+          {/* Bio */}
+          {p.bio && (
+            <p className="mt-4 text-sm text-muted-foreground max-w-2xl">{p.bio}</p>
+          )}
+
+          {/* Stats */}
+          <div className="flex flex-wrap gap-6 mt-4">
+            <div className="text-center">
+              <p className="text-xl font-bold">{Number(p.followers_count || 0).toLocaleString()}</p>
+              <p className="text-xs text-muted-foreground">Followers</p>
+            </div>
+            <div className="text-center">
+              <p className="text-xl font-bold">{Number(p.following_count || 0).toLocaleString()}</p>
+              <p className="text-xs text-muted-foreground">Following</p>
+            </div>
+            <div className="text-center">
+              <p className="text-xl font-bold">{Number(p.track_count || 0).toLocaleString()}</p>
+              <p className="text-xs text-muted-foreground">Tracks</p>
+            </div>
+            <div className="text-center">
+              <p className="text-xl font-bold">{Number(p.total_plays || 0).toLocaleString()}</p>
+              <p className="text-xs text-muted-foreground">Plays</p>
+            </div>
           </div>
-        </section>
-      )}
 
-      {/* Genres Section */}
-      {profile.genres && profile.genres.length > 0 && (
-        <section className="py-12">
-          <div className="container max-w-4xl">
-            <Card className="card-neon p-8 bg-card">
-              <h2 className="text-2xl font-bold mb-6 text-glow-cyan">Géneros Principales</h2>
-              <div className="flex flex-wrap gap-3">
-                {profile.genres.map((genre) => (
-                  <Badge
-                    key={genre.genre}
-                    className="text-lg py-2 px-4 bg-primary/20 text-primary border-primary"
-                  >
-                    {genre.genre} ({genre.count})
-                  </Badge>
-                ))}
-              </div>
-            </Card>
-          </div>
-        </section>
-      )}
-
-      {/* Tracks Section */}
-      <section className="py-12 bg-background/50">
-        <div className="container max-w-6xl">
-          <h2 className="text-3xl font-bold mb-8 text-glow-purple">Tracks Recientes</h2>
-          
-          {profile.tracks.length === 0 ? (
-            <Card className="p-12 text-center bg-card">
-              <Music2 className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
-              <p className="text-muted-foreground">Este DJ aún no ha subido tracks.</p>
-            </Card>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {profile.tracks.map((track) => (
-                <Card key={track.id} className="card-neon p-6 bg-card hover:border-primary transition-colors">
-                  {track.coverImageUrl && (
-                    <img
-                      src={track.coverImageUrl}
-                      alt={track.title}
-                      className="w-full h-48 object-cover rounded-lg mb-4"
-                    />
-                  )}
-                  
-                  <h3 className="text-xl font-bold mb-2 line-clamp-1">{track.title}</h3>
-                  <p className="text-muted-foreground mb-3 line-clamp-1">{track.artist}</p>
-                  
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    <Badge variant="outline" className="text-xs">
-                      {track.genre}
-                    </Badge>
-                    {track.bpm && (
-                      <Badge variant="outline" className="text-xs">
-                        {track.bpm} BPM
-                      </Badge>
-                    )}
-                    {track.musicalKey && (
-                      <Badge variant="outline" className="text-xs">
-                        {track.musicalKey}
-                      </Badge>
-                    )}
-                  </div>
-
-                  <div className="flex gap-2">
-                    <Button size="sm" className="flex-1 bg-primary hover:bg-primary/90">
-                      <Play className="h-4 w-4 mr-1" />
-                      Preview
-                    </Button>
-                    <Button size="sm" variant="outline">
-                      <Heart className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </Card>
-              ))}
+          {/* Social Links */}
+          {Object.keys(socialLinks).length > 0 && (
+            <div className="flex items-center gap-3 mt-4">
+              {socialLinks.instagram && (
+                <a href={`https://instagram.com/${socialLinks.instagram}`} target="_blank" rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-foreground transition-colors">
+                  <Instagram className="w-5 h-5" />
+                </a>
+              )}
+              {socialLinks.twitter && (
+                <a href={`https://twitter.com/${socialLinks.twitter}`} target="_blank" rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-foreground transition-colors">
+                  <Twitter className="w-5 h-5" />
+                </a>
+              )}
+              {socialLinks.youtube && (
+                <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-foreground transition-colors">
+                  <Youtube className="w-5 h-5" />
+                </a>
+              )}
+              {socialLinks.soundcloud && (
+                <a href={socialLinks.soundcloud} target="_blank" rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-foreground transition-colors">
+                  <Disc3 className="w-5 h-5" />
+                </a>
+              )}
+              {socialLinks.website && (
+                <a href={socialLinks.website} target="_blank" rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-foreground transition-colors">
+                  <Globe className="w-5 h-5" />
+                </a>
+              )}
             </div>
           )}
         </div>
-      </section>
+
+        {/* Tabs */}
+        <div className="py-6">
+          <Tabs defaultValue="tracks">
+            <TabsList className="mb-6">
+              <TabsTrigger value="tracks" className="flex items-center gap-2">
+                <Music className="w-4 h-4" />Tracks
+              </TabsTrigger>
+              <TabsTrigger value="edits" className="flex items-center gap-2">
+                <Mic2 className="w-4 h-4" />Edits
+              </TabsTrigger>
+              <TabsTrigger value="remixes" className="flex items-center gap-2">
+                <Disc3 className="w-4 h-4" />Remixes
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="tracks">
+              <TrackList username={username} type="track" />
+            </TabsContent>
+            <TabsContent value="edits">
+              <TrackList username={username} type="edit" />
+            </TabsContent>
+            <TabsContent value="remixes">
+              <TrackList username={username} type="remix" />
+            </TabsContent>
+          </Tabs>
+        </div>
+      </div>
     </div>
   );
 }

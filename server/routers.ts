@@ -35,6 +35,8 @@ import { emailAnalyticsRouter } from "./routers/email-analytics";
 import { abTestingRouter } from "./routers/ab-testing";
 import { playlistsRouter } from "./routers/playlists";
 import { smartPlaylistsRouter } from "./routers/smart-playlists";
+import { djProfilesRouter } from "./routers/dj-profiles";
+import { exploreChartsRouter } from "./routers/explore-charts";
 import { getDb } from "./db";
 import { tracks, downloads } from "../drizzle/schema";
 import { eq, and, gte, sql } from "drizzle-orm";
@@ -76,6 +78,8 @@ export const appRouter = router({
   abTesting: abTestingRouter,
   playlists: playlistsRouter,
   smartPlaylists: smartPlaylistsRouter,
+  djProfiles: djProfilesRouter,
+  exploreCharts: exploreChartsRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

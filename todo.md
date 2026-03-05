@@ -3096,3 +3096,79 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Revisar validación de archivos en backend - OK
 - [x] Revisar validación de archivos en frontend - OK
 - [x] Guardar checkpoint
+
+
+## 109. Sistema Completo de Perfiles DJ y Creator Platform
+
+### Schema de Base de Datos
+- [ ] Agregar columna `username` a tabla users (único, slug)
+- [ ] Agregar columnas de perfil: bio, avatar_url, website, social_links (JSON)
+- [ ] Agregar columna `type` a tabla tracks (edit/remix/track)
+- [ ] Crear tabla `followers` (follower_id, following_id, created_at)
+- [ ] Crear tabla `likes` (user_id, track_id, created_at)
+- [ ] Crear tabla `reposts` (user_id, track_id, created_at)
+- [ ] Verificar que tracks tenga play_count
+
+### tRPC Procedures
+- [ ] Procedure para obtener perfil público por username
+- [ ] Procedure para obtener tracks de usuario por tipo (edit/remix/track)
+- [ ] Procedure para follow/unfollow DJ
+- [ ] Procedure para like/unlike track
+- [ ] Procedure para repost/unrepost track
+- [ ] Procedure para obtener followers/following de usuario
+- [ ] Procedure para estadísticas del dashboard
+- [ ] Procedure para actualizar perfil (bio, avatar, social links, username)
+- [ ] Procedure para charts (top DJs, top tracks, trending)
+- [ ] Procedure para explore (trending DJs, new DJs, latest content)
+
+### Página de Perfil Público /username
+- [ ] Crear página DJProfile.tsx con header de perfil
+- [ ] Header: avatar, nombre, bio, social links, followers count
+- [ ] Tabs: All / Edits / Remixes / Tracks
+- [ ] Audio preview player en cada track card
+- [ ] Botón Follow/Unfollow
+- [ ] Rutas: /:username, /:username/edits, /:username/remixes, /:username/tracks
+- [ ] Página 404 si username no existe
+
+### Dashboard Privado /dashboard
+- [ ] Crear Dashboard.tsx con sidebar navigation
+- [ ] Sección: Upload Music (con tipo edit/remix/track)
+- [ ] Sección: Manage Edits / Remixes / Tracks
+- [ ] Sección: Edit Profile (bio, avatar, social links, username)
+- [ ] Sección: Followers list
+- [ ] Sección: Statistics (plays, likes, reposts, followers)
+
+### Explore Page /explore
+- [ ] Crear/actualizar Explore.tsx
+- [ ] Sección: Trending DJs (DJ Cards)
+- [ ] Sección: New DJs
+- [ ] Sección: Latest Edits
+- [ ] Sección: Latest Remixes
+- [ ] Sección: Popular Tracks
+
+### Charts Page /charts
+- [ ] Crear/actualizar Charts.tsx
+- [ ] Sección: Top DJs (ranking por followers + plays)
+- [ ] Sección: Top Edits
+- [ ] Sección: Top Remixes
+- [ ] Sección: Trending Tracks
+
+### Upload Actualizado
+- [ ] Agregar selector de tipo (Edit / Remix / Original Track) en Upload.tsx
+
+### Routing SEO-Friendly
+- [ ] Agregar ruta /dashboard en App.tsx
+- [ ] Agregar ruta /explore en App.tsx
+- [ ] Agregar ruta /charts en App.tsx
+- [ ] Agregar ruta /:username con tabs en App.tsx
+- [ ] Guardar checkpoint final
+
+## 40. Plataforma DJ Creator - Perfiles Públicos y Social (NUEVO)
+- [x] Tablas de base de datos: dj_followers, track_reposts creadas
+- [x] Router djProfiles actualizado con endpoints: getFeaturedDJs, getTrendingTracks
+- [x] Router djProfiles corregido para usar tablas dj_followers y track_reposts
+- [x] Rutas públicas de perfil: /:username, /dj/:username, /@:username
+- [x] Página Charts (/charts) con tabs: Top DJs, Trending Tracks, Top Edits, Top Remixes
+- [x] Sección DJs en Explore: Trending DJs y New DJs con DJ Cards
+- [x] Link "Charts" agregado en la Navbar
+- [x] DJProfile maneja múltiples rutas (/:username, /dj/:username, /@:username)

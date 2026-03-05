@@ -1,0 +1,9 @@
+{
+  "query": "\nCREATE TABLE IF NOT EXISTS likes (id INT AUTO_INCREMENT PRIMARY KEY, user_id INT NOT NULL, track_id INT NOT NULL, created_at BIGINT NOT NULL DEFAULT 0);\nCREATE TABLE IF NOT EXISTS reposts (id INT AUTO_INCREMENT PRIMARY KEY, user_id INT NOT NULL, track_id INT NOT NULL, created_at BIGINT NOT NULL DEFAULT 0);\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute \nCREATE TABLE IF NOT EXISTS likes (id INT AUTO_INCREMENT PRIMARY KEY, user_id INT NOT NULL, track_id INT NOT NULL, created_at BIGINT NOT NULL DEFAULT 0);\nCREATE TABLE IF NOT EXISTS reposts (id INT AUTO_INCREMENT PRIMARY KEY, user_id INT NOT NULL, track_id INT NOT NULL, created_at BIGINT NOT NULL DEFAULT 0);\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 458
+}

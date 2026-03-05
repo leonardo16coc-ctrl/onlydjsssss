@@ -1,0 +1,9 @@
+{
+  "query": "\nALTER TABLE users \nADD COLUMN IF NOT EXISTS username VARCHAR(50),\nADD COLUMN IF NOT EXISTS bio TEXT,\nADD COLUMN IF NOT EXISTS avatar_url TEXT,\nADD COLUMN IF NOT EXISTS website VARCHAR(255),\nADD COLUMN IF NOT EXISTS social_links JSON,\nADD COLUMN IF NOT EXISTS followers_count INT DEFAULT 0,\nADD COLUMN IF NOT EXISTS following_count INT DEFAULT 0;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute \nALTER TABLE users \nADD COLUMN IF NOT EXISTS username VARCHAR(50),\nADD COLUMN IF NOT EXISTS bio TEXT,\nADD COLUMN IF NOT EXISTS avatar_url TEXT,\nADD COLUMN IF NOT EXISTS website VARCHAR(255),\nADD COLUMN IF NOT EXISTS social_links JSON,\nADD COLUMN IF NOT EXISTS followers_count INT DEFAULT 0,\nADD COLUMN IF NOT EXISTS following_count INT DEFAULT 0;\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1164
+}

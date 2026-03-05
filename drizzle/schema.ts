@@ -875,3 +875,35 @@ export const djLeads = mysqlTable("dj_leads", {
 
 export type DjLead = typeof djLeads.$inferSelect;
 export type InsertDjLead = typeof djLeads.$inferInsert;
+
+/**
+ * DJ Followers - Users following other DJs
+ */
+export const djFollowers = mysqlTable("dj_followers", {
+  id: int("id").autoincrement().primaryKey(),
+  followerId: int("followerId").notNull(), // User who follows
+  followingId: int("followingId").notNull(), // DJ being followed
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => ({
+  followerIdx: index("dj_followers_follower_idx").on(table.followerId),
+  followingIdx: index("dj_followers_following_idx").on(table.followingId),
+  uniqueFollow: index("dj_followers_unique").on(table.followerId, table.followingId),
+}));
+export type DjFollower = typeof djFollowers.$inferSelect;
+export type InsertDjFollower = typeof djFollowers.$inferInsert;
+
+/**
+ * Track Reposts - Users reposting tracks to their profile
+ */
+export const trackReposts = mysqlTable("track_reposts", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  trackId: int("trackId").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("track_reposts_user_id_idx").on(table.userId),
+  trackIdIdx: index("track_reposts_track_id_idx").on(table.trackId),
+  uniqueRepost: index("track_reposts_unique").on(table.userId, table.trackId),
+}));
+export type TrackRepost = typeof trackReposts.$inferSelect;
+export type InsertTrackRepost = typeof trackReposts.$inferInsert;

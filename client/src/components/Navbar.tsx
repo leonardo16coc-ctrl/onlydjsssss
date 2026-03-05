@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
-import { Music, Sparkles, Trophy, LayoutDashboard, Upload, CreditCard, User, Settings, LogOut, Radio, Menu, X } from "lucide-react";
+import { Music, Sparkles, Trophy, LayoutDashboard, Upload, CreditCard, User, Settings, LogOut, Radio, Menu, X, TrendingUp } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { useState, useEffect, useRef } from "react";
 import {
@@ -100,6 +100,11 @@ export default function Navbar() {
               <span className="text-glow-pink">Mainstage</span>
             </Link>
             
+            <Link href="/charts" className="flex items-center space-x-2 text-foreground hover:text-yellow-400 transition-colors">
+              <TrendingUp className="h-4 w-4" />
+              <span>Charts</span>
+            </Link>
+
             <Link href="/rankings" className="flex items-center space-x-2 text-foreground hover:text-secondary transition-colors">
               <Trophy className="h-4 w-4" />
               <span>Network</span>

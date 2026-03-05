@@ -43,6 +43,7 @@ import ABTesting from "./pages/ABTesting";
 import TrackDetail from "./pages/TrackDetail";
 import MyPlaylists from "./pages/MyPlaylists";
 import PlaylistDetail from "./pages/PlaylistDetail";
+import Charts from "./pages/Charts";
 
 function Router() {
   return (
@@ -78,6 +79,8 @@ function Router() {
       <Route path={"/email-analytics"} component={EmailAnalytics} />
       <Route path={"/ab-testing"} component={ABTesting} />
       <Route path={"/dj/:username"} component={DJProfile} />
+      <Route path={"/@:username"} component={DJProfile} />
+      <Route path={"/charts"} component={Charts} />
       <Route path={"/profile/edit"} component={ProfileEdit} />
       <Route path={"/track/:id"} component={TrackDetail} />
       <Route path={"/my-playlists"} component={MyPlaylists} />
@@ -89,6 +92,7 @@ function Router() {
       <Route path={"/refund"} component={Refund} />
       <Route path={"/copyright"} component={Copyright} />
       <Route path={"/404"} component={NotFound} />
+      <Route path={"/:username"} component={DJProfile} />
       <Route component={NotFound} />
     </Switch>
   );
