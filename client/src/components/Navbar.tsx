@@ -256,6 +256,9 @@ export default function Navbar() {
               <Radio className="h-4 w-4" />
               <span className="text-glow-purple">DJ MODE</span>
             </Link>
+
+            {/* Search Bar — before Mainstage */}
+            <NavSearchBar />
             
             <Link href="/mainstage" className="flex items-center space-x-2 text-foreground hover:text-accent transition-colors">
               <Sparkles className="h-4 w-4" />
@@ -275,16 +278,6 @@ export default function Navbar() {
             <Link href="/rankings" className="flex items-center space-x-2 text-foreground hover:text-secondary transition-colors">
               <Trophy className="h-4 w-4" />
               <span>Network</span>
-            </Link>
-
-            <Link href="/dashboard" className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
-              <LayoutDashboard className="h-4 w-4" />
-              <span>Creator Hub</span>
-            </Link>
-
-            <Link href="/pricing" className="flex items-center space-x-2 text-foreground hover:text-cyan-400 transition-colors">
-              <CreditCard className="h-4 w-4" />
-              <span className="text-glow-cyan">Pricing</span>
             </Link>
             
             {isAuthenticated && user?.membershipStatus !== "free" && (
@@ -306,8 +299,6 @@ export default function Navbar() {
 
           {/* Desktop Right Section */}
           <div className="hidden md:flex items-center space-x-4">
-            {/* Search Bar */}
-            <NavSearchBar />
             <LanguageSelector />
             {isAuthenticated ? (
               <>
@@ -353,6 +344,12 @@ export default function Navbar() {
                       <DropdownMenuItem>
                         <LayoutDashboard className="mr-2 h-4 w-4" />
                         <span>Creator Hub</span>
+                      </DropdownMenuItem>
+                    </Link>
+                    <Link href="/pricing">
+                      <DropdownMenuItem>
+                        <CreditCard className="mr-2 h-4 w-4" />
+                        <span>Pricing</span>
                       </DropdownMenuItem>
                     </Link>
                     <DropdownMenuSeparator />
