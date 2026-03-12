@@ -1,6 +1,6 @@
 /**
  * Connect Social Media Page
- * Allows artists to connect Instagram (and future platforms) to display their feed on their profile.
+ * Allows artists to connect Instagram and Threads to display their feed on their profile.
  */
 import { useState, useEffect } from "react";
 import { trpc } from "@/lib/trpc";
@@ -12,17 +12,24 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import {
   Instagram, Facebook, CheckCircle2, XCircle, RefreshCw,
-  ExternalLink, Unlink, Users, AlertCircle, Info
+  ExternalLink, Unlink, Users, AlertCircle, Info, AtSign
 } from "lucide-react";
 import { useLocation } from "wouter";
 
-// ── OAuth callback handler ──────────────────────────────────────────────────
+// ── Threads SVG icon ────────────────────────────────────────────────────────
+function ThreadsIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.474 12.01v-.017c.03-3.579.885-6.43 2.548-8.48C5.865 1.205 8.618.024 12.2 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.291a13.853 13.853 0 0 1 3.02.142c-.126-.742-.375-1.332-.75-1.757-.513-.586-1.308-.883-2.359-.89h-.029c-.844 0-1.992.232-2.721 1.32L7.734 7.847c.98-1.454 2.568-2.256 4.478-2.256h.044c3.194.02 5.097 1.975 5.287 5.388.108.046.216.094.321.142 1.49.7 2.58 1.761 3.154 3.07.797 1.82.871 4.79-1.548 7.158-1.85 1.81-4.094 2.628-7.284 2.651Zm.valeur-8.77c-.11 0-.221.003-.332.01-1.12.065-1.977.37-2.474.876-.43.44-.621.997-.589 1.657.069 1.275 1.213 2.026 3.182 1.917 1.106-.06 1.907-.407 2.45-1.06.535-.643.797-1.565.78-2.74a11.415 11.415 0 0 0-3.017-.66Z"/>
+    </svg>
+  );
+}
+
+// ── OAuth callback handlers ─────────────────────────────────────────────────
 function useInstagramOAuthCallback() {
-  const [, navigate] = useLocation();
   const connectInstagram = trpc.instagram.connectInstagram.useMutation({
     onSuccess: (data) => {
       toast.success(`✅ Instagram @${data.username} conectado con ${data.postCount} posts`);
-      // Clean URL
       window.history.replaceState({}, "", "/connect-social");
     },
     onError: (err) => {
@@ -44,9 +51,35 @@ function useInstagramOAuthCallback() {
   return connectInstagram.isPending;
 }
 
+function useThreadsOAuthCallback(onSuccess: () => void) {
+  const connectThreads = trpc.threads.connectThreads.useMutation({
+    onSuccess: (data) => {
+      toast.success(`✅ Threads @${data.username} conectado con ${data.postCount} posts`);
+      window.history.replaceState({}, "", "/connect-social");
+      onSuccess();
+    },
+    onError: (err) => {
+      toast.error(`Error al conectar Threads: ${err.message}`);
+      window.history.replaceState({}, "", "/connect-social");
+    },
+  });
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    const state = params.get("state");
+    if (code && state === "threads") {
+      const redirectUri = `${window.location.origin}/connect-social`;
+      connectThreads.mutate({ code, redirectUri });
+    }
+  }, []);
+
+  return connectThreads.isPending;
+}
+
 // ── Platform card component ─────────────────────────────────────────────────
 interface PlatformCardProps {
-  platform: "instagram" | "facebook";
+  platform: "instagram" | "facebook" | "threads";
   icon: React.ReactNode;
   name: string;
   description: string;
@@ -65,12 +98,14 @@ interface PlatformCardProps {
   isDisconnecting?: boolean;
   isRefreshing?: boolean;
   comingSoon?: boolean;
+  accentColor?: string;
 }
 
 function PlatformCard({
   platform, icon, name, description, connection,
   onConnect, onDisconnect, onRefresh,
-  isConnecting, isDisconnecting, isRefreshing, comingSoon
+  isConnecting, isDisconnecting, isRefreshing, comingSoon,
+  accentColor = "from-purple-500 via-pink-500 to-orange-400"
 }: PlatformCardProps) {
   const isConnected = connection?.isActive;
 
@@ -79,23 +114,25 @@ function PlatformCard({
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className={`p-2 rounded-xl ${platform === "instagram" ? "bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400" : "bg-blue-600"}`}>
-              <span className="text-white">{icon}</span>
+            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${accentColor} flex items-center justify-center text-white`}>
+              {icon}
             </div>
             <div>
               <CardTitle className="text-base">{name}</CardTitle>
-              <CardDescription className="text-xs mt-0.5">{description}</CardDescription>
+              <CardDescription className="text-xs">{description}</CardDescription>
             </div>
           </div>
-          {comingSoon ? (
-            <Badge variant="secondary" className="text-xs">Próximamente</Badge>
-          ) : isConnected ? (
-            <Badge className="bg-green-500/10 text-green-500 border-green-500/20 text-xs flex items-center gap-1">
-              <CheckCircle2 className="w-3 h-3" />Conectado
+          {isConnected ? (
+            <Badge variant="outline" className="border-green-500/50 text-green-400 bg-green-500/10 text-xs">
+              <CheckCircle2 className="w-3 h-3 mr-1" />
+              Conectado
             </Badge>
+          ) : comingSoon ? (
+            <Badge variant="outline" className="text-xs text-muted-foreground">Próximamente</Badge>
           ) : (
-            <Badge variant="secondary" className="text-xs flex items-center gap-1">
-              <XCircle className="w-3 h-3" />No conectado
+            <Badge variant="outline" className="border-muted text-muted-foreground text-xs">
+              <XCircle className="w-3 h-3 mr-1" />
+              No conectado
             </Badge>
           )}
         </div>
@@ -104,24 +141,24 @@ function PlatformCard({
         {isConnected && connection ? (
           <div className="space-y-3">
             {/* Profile info */}
-            <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
+            <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/30">
               <Avatar className="w-10 h-10">
-                <AvatarImage src={connection.profilePictureUrl || ""} />
-                <AvatarFallback className="text-sm">
-                  {connection.platformUsername?.charAt(0).toUpperCase() || "?"}
+                {connection.profilePictureUrl && <AvatarImage src={connection.profilePictureUrl} />}
+                <AvatarFallback className="text-xs">
+                  {connection.platformUsername?.slice(0, 2).toUpperCase() || "??"}
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-sm truncate">@{connection.platformUsername}</p>
-                {connection.followerCount !== null && connection.followerCount !== undefined && (
+                <p className="text-sm font-medium truncate">@{connection.platformUsername}</p>
+                {connection.followerCount != null && (
                   <p className="text-xs text-muted-foreground flex items-center gap-1">
                     <Users className="w-3 h-3" />
-                    {(connection.followerCount || 0).toLocaleString()} seguidores
+                    {connection.followerCount.toLocaleString()} seguidores
                   </p>
                 )}
               </div>
               <a
-                href={`https://instagram.com/${connection.platformUsername}`}
+                href={`https://${platform === "threads" ? "threads.net" : "instagram.com"}/${connection.platformUsername}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-foreground transition-colors"
@@ -136,12 +173,15 @@ function PlatformCard({
               </p>
             )}
             {/* Token expiry warning */}
-            {connection.tokenExpiresAt && new Date(connection.tokenExpiresAt) < new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) && (
-              <div className="flex items-center gap-2 p-2 rounded-lg bg-yellow-500/10 border border-yellow-500/20 text-xs text-yellow-600">
-                <AlertCircle className="w-3 h-3 flex-shrink-0" />
-                Tu token expira pronto. Reconecta tu cuenta para mantener el feed activo.
-              </div>
-            )}
+            {connection.tokenExpiresAt && (() => {
+              const daysLeft = Math.floor((new Date(connection.tokenExpiresAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+              return daysLeft < 7 ? (
+                <div className="flex items-center gap-2 p-2 rounded-lg bg-yellow-500/10 border border-yellow-500/20 text-xs text-yellow-400">
+                  <AlertCircle className="w-3 h-3 flex-shrink-0" />
+                  Token expira en {daysLeft} días. Reconecta tu cuenta pronto.
+                </div>
+              ) : null;
+            })()}
             {/* Actions */}
             <div className="flex gap-2">
               {onRefresh && (
@@ -177,7 +217,7 @@ function PlatformCard({
           <Button
             onClick={onConnect}
             disabled={isConnecting}
-            className={`w-full ${platform === "instagram" ? "bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 hover:opacity-90 text-white border-0" : "bg-blue-600 hover:bg-blue-700 text-white border-0"}`}
+            className={`w-full bg-gradient-to-r ${accentColor} hover:opacity-90 text-white border-0`}
           >
             {isConnecting ? (
               <><RefreshCw className="w-4 h-4 mr-2 animate-spin" />Conectando...</>
@@ -194,45 +234,71 @@ function PlatformCard({
 // ── Main page ───────────────────────────────────────────────────────────────
 export default function ConnectSocialMedia() {
   const { user } = useAuth();
-  const isProcessingCallback = useInstagramOAuthCallback();
 
-  const { data: connections, refetch: refetchConnections } = trpc.instagram.getMyConnections.useQuery(undefined, {
+  const { data: igConnections, refetch: refetchIg } = trpc.instagram.getMyConnections.useQuery(undefined, {
     enabled: !!user,
   });
 
-  const getAuthUrl = trpc.instagram.getAuthUrl.useQuery(
+  const { data: threadsConnection, refetch: refetchThreads } = trpc.threads.getMyConnection.useQuery(undefined, {
+    enabled: !!user,
+  });
+
+  const isProcessingInstagram = useInstagramOAuthCallback();
+  const isProcessingThreads = useThreadsOAuthCallback(() => refetchThreads());
+
+  // Instagram
+  const igGetAuthUrl = trpc.instagram.getAuthUrl.useQuery(
     { redirectUri: `${window.location.origin}/connect-social` },
     { enabled: false }
   );
-
-  const disconnect = trpc.instagram.disconnect.useMutation({
-    onSuccess: () => {
-      toast.success("Cuenta desconectada correctamente");
-      refetchConnections();
-    },
+  const igDisconnect = trpc.instagram.disconnect.useMutation({
+    onSuccess: () => { toast.success("Instagram desconectado"); refetchIg(); },
+    onError: (err) => toast.error(`Error: ${err.message}`),
+  });
+  const igRefresh = trpc.instagram.refreshFeed.useMutation({
+    onSuccess: (data) => { toast.success(`Feed actualizado: ${data.postCount} posts`); refetchIg(); },
     onError: (err) => toast.error(`Error: ${err.message}`),
   });
 
-  const refreshFeed = trpc.instagram.refreshFeed.useMutation({
-    onSuccess: (data) => {
-      toast.success(`Feed actualizado con ${data.postCount} posts`);
-      refetchConnections();
-    },
-    onError: (err) => toast.error(`Error al actualizar: ${err.message}`),
+  // Threads
+  const threadsGetAuthUrl = trpc.threads.getAuthUrl.useQuery(
+    { redirectUri: `${window.location.origin}/connect-social` },
+    { enabled: false }
+  );
+  const threadsDisconnect = trpc.threads.disconnect.useMutation({
+    onSuccess: () => { toast.success("Threads desconectado"); refetchThreads(); },
+    onError: (err) => toast.error(`Error: ${err.message}`),
+  });
+  const threadsRefresh = trpc.threads.refreshFeed.useMutation({
+    onSuccess: (data) => { toast.success(`Feed actualizado: ${data.postCount} posts`); refetchThreads(); },
+    onError: (err) => toast.error(`Error: ${err.message}`),
   });
 
-  const instagramConnection = connections?.find(c => c.platform === "instagram" && c.isActive);
+  const instagramConnection = igConnections?.find(c => c.platform === "instagram" && c.isActive);
 
   const handleConnectInstagram = async () => {
     try {
-      const result = await getAuthUrl.refetch();
+      const result = await igGetAuthUrl.refetch();
       if (result.data?.url) {
         window.location.href = result.data.url;
       } else {
-        toast.error("No se pudo obtener el enlace de autorización. Verifica que INSTAGRAM_APP_ID esté configurado.");
+        toast.error("No se pudo obtener el enlace de autorización de Instagram.");
       }
     } catch (err: any) {
       toast.error(err.message || "Error al iniciar la conexión con Instagram");
+    }
+  };
+
+  const handleConnectThreads = async () => {
+    try {
+      const result = await threadsGetAuthUrl.refetch();
+      if (result.data?.url) {
+        window.location.href = result.data.url;
+      } else {
+        toast.error("No se pudo obtener el enlace de autorización de Threads.");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Error al iniciar la conexión con Threads");
     }
   };
 
@@ -243,6 +309,8 @@ export default function ConnectSocialMedia() {
       </div>
     );
   }
+
+  const isProcessingCallback = isProcessingInstagram || isProcessingThreads;
 
   return (
     <div className="min-h-screen bg-background">
@@ -259,7 +327,7 @@ export default function ConnectSocialMedia() {
         {isProcessingCallback && (
           <div className="mb-6 flex items-center gap-3 p-4 rounded-xl bg-primary/10 border border-primary/20">
             <RefreshCw className="w-5 h-5 animate-spin text-primary" />
-            <p className="text-sm font-medium">Conectando tu cuenta de Instagram...</p>
+            <p className="text-sm font-medium">Conectando tu cuenta...</p>
           </div>
         )}
 
@@ -269,19 +337,21 @@ export default function ConnectSocialMedia() {
           <div>
             <p className="font-medium mb-1">¿Cómo funciona?</p>
             <p className="text-xs text-muted-foreground">
-              Al conectar tu Instagram, tus últimos 9 posts aparecerán automáticamente en tu perfil público.
-              El feed se actualiza cada hora. Solo se muestran imágenes y carruseles (no Reels ni Stories).
+              Al conectar Instagram o Threads, tus últimos 9 posts aparecerán automáticamente en tu perfil público.
+              El feed se actualiza cada hora. Los tokens se renuevan automáticamente cada 60 días.
             </p>
           </div>
         </div>
 
         {/* Platform cards */}
         <div className="grid gap-4">
+          {/* Instagram */}
           <PlatformCard
             platform="instagram"
             icon={<Instagram className="w-5 h-5" />}
             name="Instagram"
             description="Muestra tus últimos 9 posts en tu perfil"
+            accentColor="from-purple-500 via-pink-500 to-orange-400"
             connection={instagramConnection ? {
               platformUsername: instagramConnection.platformUsername,
               profilePictureUrl: instagramConnection.profilePictureUrl,
@@ -291,18 +361,43 @@ export default function ConnectSocialMedia() {
               tokenExpiresAt: instagramConnection.tokenExpiresAt,
             } : null}
             onConnect={handleConnectInstagram}
-            onDisconnect={() => disconnect.mutate({ platform: "instagram" })}
-            onRefresh={() => refreshFeed.mutate()}
-            isConnecting={getAuthUrl.isFetching}
-            isDisconnecting={disconnect.isPending}
-            isRefreshing={refreshFeed.isPending}
+            onDisconnect={() => igDisconnect.mutate({ platform: "instagram" })}
+            onRefresh={() => igRefresh.mutate()}
+            isConnecting={igGetAuthUrl.isFetching}
+            isDisconnecting={igDisconnect.isPending}
+            isRefreshing={igRefresh.isPending}
           />
 
+          {/* Threads */}
+          <PlatformCard
+            platform="threads"
+            icon={<ThreadsIcon className="w-5 h-5" />}
+            name="Threads"
+            description="Muestra tus últimos posts de Threads en tu perfil"
+            accentColor="from-gray-700 via-gray-600 to-gray-500"
+            connection={threadsConnection?.isActive ? {
+              platformUsername: threadsConnection.platformUsername,
+              profilePictureUrl: threadsConnection.profilePictureUrl,
+              followerCount: threadsConnection.followerCount,
+              isActive: threadsConnection.isActive,
+              lastSyncAt: threadsConnection.lastSyncAt,
+              tokenExpiresAt: threadsConnection.tokenExpiresAt,
+            } : null}
+            onConnect={handleConnectThreads}
+            onDisconnect={() => threadsDisconnect.mutate()}
+            onRefresh={() => threadsRefresh.mutate()}
+            isConnecting={threadsGetAuthUrl.isFetching}
+            isDisconnecting={threadsDisconnect.isPending}
+            isRefreshing={threadsRefresh.isPending}
+          />
+
+          {/* Facebook - Coming soon */}
           <PlatformCard
             platform="facebook"
             icon={<Facebook className="w-5 h-5" />}
             name="Facebook Page"
             description="Conecta tu página de Facebook para mostrar tus publicaciones"
+            accentColor="from-blue-600 to-blue-500"
             connection={null}
             onConnect={() => toast.info("Facebook estará disponible próximamente")}
             onDisconnect={() => {}}
@@ -312,16 +407,16 @@ export default function ConnectSocialMedia() {
 
         {/* Requirements note */}
         <div className="mt-8 p-4 rounded-xl bg-muted/30 border border-border/50">
-          <p className="text-xs text-muted-foreground font-medium mb-2">Requisitos para Instagram</p>
+          <p className="text-xs text-muted-foreground font-medium mb-2">Requisitos para Instagram y Threads</p>
           <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
-            <li>Tu cuenta de Instagram debe ser una <strong>cuenta de creador o empresa</strong> (no personal)</li>
-            <li>Debes tener una <strong>App de Meta</strong> configurada con los permisos <code>user_profile</code> y <code>user_media</code></li>
-            <li>El token de acceso se renueva automáticamente cada 60 días</li>
+            <li>Instagram: tu cuenta debe ser <strong>cuenta de creador o empresa</strong> (no personal)</li>
+            <li>Threads: cualquier cuenta pública de Threads es compatible</li>
+            <li>Ambas plataformas requieren una <strong>Meta App</strong> configurada con los permisos correctos</li>
+            <li>Los tokens de acceso se renuevan automáticamente cada 60 días</li>
           </ul>
           <p className="text-xs text-muted-foreground mt-3">
-            Para configurar las credenciales de Instagram, ve a <strong>Settings → Secrets</strong> y agrega{" "}
-            <code className="bg-muted px-1 rounded">INSTAGRAM_APP_ID</code> y{" "}
-            <code className="bg-muted px-1 rounded">INSTAGRAM_APP_SECRET</code>.
+            Agrega el Redirect URI en tu Meta App:{" "}
+            <code className="bg-muted px-1 rounded">{window.location.origin}/connect-social</code>
           </p>
         </div>
       </div>

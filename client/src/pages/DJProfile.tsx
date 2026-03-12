@@ -18,6 +18,100 @@ import { useState } from "react";
 import { ShareProfileModal } from "@/components/ShareProfileModal";
 import { ExternalLink, Grid3X3 } from "lucide-react";
 
+// ── Threads SVG icon ──────────────────────────────────────────────────────
+function ThreadsIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.474 12.01v-.017c.03-3.579.885-6.43 2.548-8.48C5.865 1.205 8.618.024 12.2 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.589 12c.027 3.086.718 5.496 2.057 7.164 1.43 1.783 3.631 2.698 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.964-.065-1.19.408-2.285 1.33-3.082.88-.76 2.119-1.207 3.583-1.291a13.853 13.853 0 0 1 3.02.142c-.126-.742-.375-1.332-.75-1.757-.513-.586-1.308-.883-2.359-.89h-.029c-.844 0-1.992.232-2.721 1.32L7.734 7.847c.98-1.454 2.568-2.256 4.478-2.256h.044c3.194.02 5.097 1.975 5.287 5.388.108.046.216.094.321.142 1.49.7 2.58 1.761 3.154 3.07.797 1.82.871 4.79-1.548 7.158-1.85 1.81-4.094 2.628-7.284 2.651Zm.186-8.77c-.11 0-.221.003-.332.01-1.12.065-1.977.37-2.474.876-.43.44-.621.997-.589 1.657.069 1.275 1.213 2.026 3.182 1.917 1.106-.06 1.907-.407 2.45-1.06.535-.643.797-1.565.78-2.74a11.415 11.415 0 0 0-3.017-.66Z"/>
+    </svg>
+  );
+}
+
+// ── Threads Feed Component ──────────────────────────────────────────────────
+function ThreadsFeed({ username }: { username: string }) {
+  const { data, isLoading } = trpc.threads.getArtistThreadsFeed.useQuery(
+    { username },
+    { retry: false }
+  );
+
+  if (isLoading) {
+    return (
+      <div className="py-6">
+        <div className="flex items-center gap-2 mb-4">
+          <ThreadsIcon className="w-5 h-5" />
+          <h3 className="font-semibold text-base">Threads Feed</h3>
+        </div>
+        <div className="space-y-3">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Skeleton key={i} className="h-16 rounded-lg" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (!data?.posts?.length || !data.threadsUsername) return null;
+
+  return (
+    <div className="py-6 border-t border-border">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <div className="p-1.5 rounded-lg bg-gradient-to-br from-gray-700 to-gray-500">
+            <ThreadsIcon className="w-4 h-4 text-white" />
+          </div>
+          <h3 className="font-semibold text-base">Threads</h3>
+        </div>
+        <a
+          href={`https://threads.net/@${data.threadsUsername}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <ExternalLink className="w-3.5 h-3.5" />
+          @{data.threadsUsername}
+        </a>
+      </div>
+
+      {/* Posts list */}
+      <div className="space-y-3">
+        {data.posts.slice(0, 9).map((post: any) => (
+          <a
+            key={post.id}
+            href={post.permalink || `https://threads.net/@${data.threadsUsername}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex gap-3 p-3 rounded-xl bg-muted/30 hover:bg-muted/60 transition-colors border border-border/30 hover:border-border/60 block"
+          >
+            {/* Image if available */}
+            {(post.media_url || post.thumbnail_url) && (
+              <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-muted">
+                <img
+                  src={post.media_url || post.thumbnail_url}
+                  alt="Threads post"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+            )}
+            <div className="flex-1 min-w-0">
+              {post.text && (
+                <p className="text-sm text-foreground line-clamp-2 mb-1">{post.text}</p>
+              )}
+              <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                <span>{new Date(post.timestamp).toLocaleDateString()}</span>
+                {post.like_count > 0 && <span>❤️ {post.like_count}</span>}
+                {post.replies_count > 0 && <span>💬 {post.replies_count}</span>}
+              </div>
+            </div>
+            <ExternalLink className="w-3.5 h-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ── Instagram Feed Component ────────────────────────────────────────────────
 function InstagramFeed({ username }: { username: string }) {
   const { data, isLoading } = trpc.instagram.getArtistInstagramFeed.useQuery(
@@ -457,6 +551,9 @@ export default function DJProfile() {
 
         {/* Instagram Feed */}
         <InstagramFeed username={username} />
+
+        {/* Threads Feed */}
+        <ThreadsFeed username={username} />
 
         {/* Tabs */}
         <div className="py-6">
