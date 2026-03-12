@@ -907,3 +907,35 @@ export const trackReposts = mysqlTable("track_reposts", {
 }));
 export type TrackRepost = typeof trackReposts.$inferSelect;
 export type InsertTrackRepost = typeof trackReposts.$inferInsert;
+
+/**
+ * Social Media Connections - OAuth tokens for Instagram, Facebook, TikTok, YouTube
+ */
+export const socialMediaConnections = mysqlTable("social_media_connections", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  platform: mysqlEnum("platform", ["instagram", "facebook", "tiktok", "youtube"]).notNull(),
+  // OAuth credentials
+  platformUserId: varchar("platformUserId", { length: 255 }).notNull(),
+  platformUsername: varchar("platformUsername", { length: 255 }),
+  accessToken: text("accessToken").notNull(),
+  tokenExpiresAt: timestamp("tokenExpiresAt"),
+  // Profile info cached from API
+  profilePictureUrl: text("profilePictureUrl"),
+  followerCount: int("followerCount").default(0),
+  // Cache for feed posts (JSON array)
+  cachedPosts: text("cachedPosts"),
+  cacheExpiresAt: timestamp("cacheExpiresAt"),
+  // Status
+  isActive: boolean("isActive").default(true).notNull(),
+  lastSyncAt: timestamp("lastSyncAt"),
+  // Timestamps
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("smc_user_id_idx").on(table.userId),
+  platformIdx: index("smc_platform_idx").on(table.platform),
+  uniqueUserPlatform: index("smc_unique_user_platform").on(table.userId, table.platform),
+}));
+export type SocialMediaConnection = typeof socialMediaConnections.$inferSelect;
+export type InsertSocialMediaConnection = typeof socialMediaConnections.$inferInsert;

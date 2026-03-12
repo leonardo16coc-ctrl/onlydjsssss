@@ -49,6 +49,7 @@ import SocialDrops from "./pages/SocialDrops";
 import SocialBattles from "./pages/SocialBattles";
 import SocialRanking from "./pages/SocialRanking";
 import SocialMap from "./pages/SocialMap";
+import ConnectSocialMedia from "./pages/ConnectSocialMedia";
 
 function Router() {
   return (
@@ -96,6 +97,7 @@ function Router() {
       <Route path={"/social/ranking"} component={SocialRanking} />
       <Route path={"/social/map"} component={SocialMap} />
       <Route path={"/profile/edit"} component={ProfileEdit} />
+      <Route path={"/connect-social"} component={ConnectSocialMedia} />
       <Route path={"/track/:id"} component={TrackDetail} />
       <Route path={"/my-playlists"} component={MyPlaylists} />
       <Route path={"/playlist/:id"} component={PlaylistDetail} />

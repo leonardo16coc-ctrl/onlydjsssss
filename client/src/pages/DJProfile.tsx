@@ -16,6 +16,80 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { ShareProfileModal } from "@/components/ShareProfileModal";
+import { ExternalLink, Grid3X3 } from "lucide-react";
+
+// ── Instagram Feed Component ────────────────────────────────────────────────
+function InstagramFeed({ username }: { username: string }) {
+  const { data, isLoading } = trpc.instagram.getArtistInstagramFeed.useQuery(
+    { username },
+    { retry: false }
+  );
+
+  if (isLoading) {
+    return (
+      <div className="py-6">
+        <div className="flex items-center gap-2 mb-4">
+          <Instagram className="w-5 h-5 text-pink-500" />
+          <h3 className="font-semibold text-base">Instagram Feed</h3>
+        </div>
+        <div className="grid grid-cols-3 gap-1.5">
+          {Array.from({ length: 9 }).map((_, i) => (
+            <Skeleton key={i} className="aspect-square rounded-lg" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (!data?.posts?.length || !data.instagramUsername) return null;
+
+  return (
+    <div className="py-6 border-t border-border">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <div className="p-1.5 rounded-lg bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400">
+            <Instagram className="w-4 h-4 text-white" />
+          </div>
+          <h3 className="font-semibold text-base">Instagram Feed</h3>
+        </div>
+        <a
+          href={`https://instagram.com/${data.instagramUsername}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <ExternalLink className="w-3.5 h-3.5" />
+          @{data.instagramUsername}
+        </a>
+      </div>
+
+      {/* Grid */}
+      <div className="grid grid-cols-3 sm:grid-cols-3 gap-1.5">
+        {data.posts.slice(0, 9).map((post: any) => (
+          <a
+            key={post.id}
+            href={post.permalink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative aspect-square overflow-hidden rounded-lg bg-muted block"
+          >
+            <img
+              src={post.media_url || post.thumbnail_url}
+              alt={post.caption?.slice(0, 60) || "Instagram post"}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              loading="lazy"
+            />
+            {/* Hover overlay */}
+            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <ExternalLink className="w-5 h-5 text-white" />
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function TrackCard({ track }: { track: any }) {
   const likeTrack = trpc.djProfiles.likeTrack.useMutation({
@@ -380,6 +454,9 @@ export default function DJProfile() {
             </div>
           )}
         </div>
+
+        {/* Instagram Feed */}
+        <InstagramFeed username={username} />
 
         {/* Tabs */}
         <div className="py-6">

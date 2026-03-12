@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
-import { Music, Sparkles, Trophy, LayoutDashboard, Upload, CreditCard, User, Settings, LogOut, Radio, Menu, X, TrendingUp, Zap, Search, Mic2, FileText } from "lucide-react";
+import { Music, Sparkles, Trophy, LayoutDashboard, Upload, CreditCard, User, Settings, LogOut, Radio, Menu, X, TrendingUp, Zap, Search, Mic2, FileText, Instagram } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { useState, useEffect, useRef } from "react";
 import {
@@ -511,6 +511,12 @@ export default function Navbar() {
                       <DropdownMenuItem>
                         <CreditCard className="mr-2 h-4 w-4" />
                         <span>Pricing</span>
+                      </DropdownMenuItem>
+                    </Link>
+                    <Link href="/connect-social">
+                      <DropdownMenuItem>
+                        <Instagram className="mr-2 h-4 w-4" />
+                        <span>Conectar Redes</span>
                       </DropdownMenuItem>
                     </Link>
                     <DropdownMenuSeparator />
