@@ -265,7 +265,7 @@ function useTwitterOAuthCallback(onSuccess: () => void) {
     const code = params.get("code");
     const state = params.get("state");
     if (code && state?.startsWith("twitter_")) {
-      const redirectUri = `${window.location.origin}/connect-social`;
+      const redirectUri = "https://onlydjs-musi-zsqs9m2e.manus.space/connect-social";
       connectTwitter.mutate({ code, state, redirectUri });
     }
   }, []);
@@ -307,9 +307,10 @@ export default function ConnectSocialMedia() {
     onError: (err) => toast.error(`Error: ${err.message}`),
   });
 
-  // Twitter
+  // Twitter - fixed callback URI must match Twitter Developer Portal exactly
+  const TWITTER_CALLBACK_URI = "https://onlydjs-musi-zsqs9m2e.manus.space/connect-social";
   const twitterGetAuthUrl = trpc.twitter.getAuthUrl.useQuery(
-    { redirectUri: `${window.location.origin}/connect-social` },
+    { redirectUri: TWITTER_CALLBACK_URI },
     { enabled: false }
   );
   const twitterDisconnect = trpc.twitter.disconnectTwitter.useMutation({
