@@ -36,20 +36,42 @@ function decrypt(text: string): string {
   }
 }
 
-// ── Instagram Graph API helpers ────────────────────────────────────────────
-const IG_API_BASE = "https://graph.instagram.com";
+// ── Instagram Graph API helpers (v25.0) ───────────────────────────────────────────
+const IG_API_VERSION = "v25.0";
+const IG_API_BASE = `https://graph.instagram.com/${IG_API_VERSION}`;
 const IG_AUTH_BASE = "https://www.instagram.com/oauth";
 const IG_TOKEN_BASE = "https://api.instagram.com/oauth";
+const IG_LONG_TOKEN_BASE = `https://graph.instagram.com/${IG_API_VERSION}/access_token`;
+const IG_REFRESH_TOKEN_BASE = `https://graph.instagram.com/${IG_API_VERSION}/refresh_access_token`;
+
+// All available public fields for Instagram media (v25.0)
+const IG_MEDIA_FIELDS = [
+  "id",
+  "media_type",
+  "media_url",
+  "thumbnail_url",
+  "permalink",
+  "caption",
+  "timestamp",
+  "like_count",
+  "comments_count",
+  "alt_text",
+  "is_shared_to_feed",
+].join(",");
 
 async function fetchInstagramPosts(accessToken: string, limit = 9): Promise<any[]> {
   try {
-    const fields = "id,media_type,media_url,thumbnail_url,permalink,caption,timestamp";
-    const url = `${IG_API_BASE}/me/media?fields=${fields}&limit=${limit}&access_token=${accessToken}`;
+    const url = `${IG_API_BASE}/me/media?fields=${IG_MEDIA_FIELDS}&limit=${limit}&access_token=${accessToken}`;
     const res = await fetch(url);
-    if (!res.ok) throw new Error(`Instagram API error: ${res.status}`);
+    if (!res.ok) {
+      const errBody = await res.text();
+      console.error("[Instagram] Media API error:", res.status, errBody);
+      throw new Error(`Instagram API error: ${res.status}`);
+    }
     const data = await res.json();
+    // Include IMAGE, CAROUSEL_ALBUM and VIDEO (Reels) — filter out STORY
     return (data.data || []).filter((p: any) =>
-      p.media_type === "IMAGE" || p.media_type === "CAROUSEL_ALBUM"
+      ["IMAGE", "CAROUSEL_ALBUM", "VIDEO"].includes(p.media_type)
     );
   } catch (err) {
     console.error("[Instagram] Failed to fetch posts:", err);
@@ -57,15 +79,32 @@ async function fetchInstagramPosts(accessToken: string, limit = 9): Promise<any[
   }
 }
 
-async function fetchInstagramProfile(accessToken: string): Promise<{ id: string; username: string; profile_picture_url?: string; followers_count?: number } | null> {
+async function fetchInstagramProfile(accessToken: string): Promise<{ id: string; username: string; profile_picture_url?: string; followers_count?: number; name?: string } | null> {
   try {
-    const fields = "id,username,profile_picture_url,followers_count";
+    // instagram_business_basic grants: id, username, name, profile_picture_url, followers_count, follows_count, media_count
+    const fields = "id,username,name,profile_picture_url,followers_count,follows_count,media_count";
     const url = `${IG_API_BASE}/me?fields=${fields}&access_token=${accessToken}`;
     const res = await fetch(url);
-    if (!res.ok) throw new Error(`Instagram profile API error: ${res.status}`);
+    if (!res.ok) {
+      const errBody = await res.text();
+      console.error("[Instagram] Profile API error:", res.status, errBody);
+      throw new Error(`Instagram profile API error: ${res.status}`);
+    }
     return await res.json();
   } catch (err) {
     console.error("[Instagram] Failed to fetch profile:", err);
+    return null;
+  }
+}
+
+async function refreshInstagramToken(accessToken: string): Promise<string | null> {
+  try {
+    const url = `${IG_REFRESH_TOKEN_BASE}?grant_type=ig_refresh_token&access_token=${accessToken}`;
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.access_token || null;
+  } catch {
     return null;
   }
 }
@@ -86,14 +125,19 @@ export const instagramRouter = router({
           message: "Instagram App ID not configured. Please add INSTAGRAM_APP_ID to your environment variables.",
         });
       }
+      // Scopes: instagram_business_basic is required for profile + media access
+      // instagram_business_content_publish allows publishing (optional)
       const params = new URLSearchParams({
         client_id: appId,
         redirect_uri: input.redirectUri,
         scope: "instagram_business_basic",
         response_type: "code",
         enable_fb_login: "0",
+        force_reauth: "0",
       });
-      return { url: `${IG_AUTH_BASE}/authorize?${params.toString()}` };
+      const authUrl = `${IG_AUTH_BASE}/authorize?${params.toString()}`;
+      console.log("[Instagram] Auth URL generated:", authUrl.replace(appId, "APP_ID_HIDDEN"));
+      return { url: authUrl };
     }),
 
   /**
@@ -136,11 +180,19 @@ export const instagramRouter = router({
       const tokenData = await tokenRes.json();
       const shortToken = tokenData.access_token;
 
-      // Exchange for long-lived token (60 days)
+      // Exchange for long-lived token (60 days) using the correct endpoint
+      // POST to https://graph.instagram.com/v25.0/access_token
       const longTokenRes = await fetch(
-        `${IG_API_BASE}/access_token?grant_type=ig_exchange_token&client_secret=${appSecret}&access_token=${shortToken}`
+        `${IG_LONG_TOKEN_BASE}?grant_type=ig_exchange_token&client_secret=${appSecret}&access_token=${shortToken}`
       );
-      const longTokenData = longTokenRes.ok ? await longTokenRes.json() : { access_token: shortToken };
+      let longTokenData: any = { access_token: shortToken };
+      if (longTokenRes.ok) {
+        longTokenData = await longTokenRes.json();
+        console.log("[Instagram] Long-lived token obtained, expires_in:", longTokenData.expires_in);
+      } else {
+        const errBody = await longTokenRes.text();
+        console.warn("[Instagram] Long-lived token exchange failed, using short-lived:", errBody);
+      }
       const accessToken = longTokenData.access_token || shortToken;
 
       // Fetch profile info

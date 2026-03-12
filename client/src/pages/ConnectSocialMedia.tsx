@@ -25,11 +25,14 @@ function ThreadsIcon({ className }: { className?: string }) {
   );
 }
 
-// ── OAuth callback handlers ─────────────────────────────────────────────────
+/// ── OAuth callback handlers ────────────────────────────────────────────────
 function useInstagramOAuthCallback() {
+  const utils = trpc.useUtils();
   const connectInstagram = trpc.instagram.connectInstagram.useMutation({
     onSuccess: (data) => {
       toast.success(`✅ Instagram @${data.username} conectado con ${data.postCount} posts`);
+      utils.instagram.getMyConnections.invalidate();
+      // Clean URL: remove code and state params
       window.history.replaceState({}, "", "/connect-social");
     },
     onError: (err) => {
@@ -40,9 +43,22 @@ function useInstagramOAuthCallback() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const code = params.get("code");
+    // Instagram appends #_ to the code — strip it
+    let code = params.get("code");
+    if (code) code = code.replace(/#_$/, "");
     const state = params.get("state");
-    if (code && state === "instagram") {
+    const error = params.get("error");
+
+    if (error) {
+      const reason = params.get("error_reason") || "";
+      if (reason !== "user_denied") {
+        toast.error(`Instagram rechazó la conexión: ${params.get("error_description") || error}`);
+      }
+      window.history.replaceState({}, "", "/connect-social");
+      return;
+    }
+
+    if (code && state === "instagram" && !connectInstagram.isPending && !connectInstagram.isSuccess) {
       const redirectUri = `${window.location.origin}/connect-social`;
       connectInstagram.mutate({ code, redirectUri });
     }
@@ -280,7 +296,10 @@ export default function ConnectSocialMedia() {
     try {
       const result = await igGetAuthUrl.refetch();
       if (result.data?.url) {
-        window.location.href = result.data.url;
+        // Append state=instagram for CSRF protection and callback identification
+        const url = new URL(result.data.url);
+        url.searchParams.set("state", "instagram");
+        window.location.href = url.toString();
       } else {
         toast.error("No se pudo obtener el enlace de autorización de Instagram.");
       }
