@@ -113,6 +113,49 @@ function ThreadsFeed({ username }: { username: string }) {
 }
 
 
+// ── Last Tweet (header highlight) ─────────────────────────────────────────
+function LastTweet({ username }: { username: string }) {
+  const { data, isLoading } = trpc.twitter.getArtistTwitterFeed.useQuery(
+    { username },
+    { retry: false }
+  );
+
+  if (isLoading) {
+    return <Skeleton className="h-16 w-full rounded-xl mt-4" />;
+  }
+
+  const tweet = data?.tweets?.[0];
+  if (!tweet || !data?.username) return null;
+
+  return (
+    <a
+      href={`https://twitter.com/${data.username}/status/${tweet.id}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group flex items-start gap-3 mt-4 p-3 rounded-xl bg-sky-500/5 border border-sky-500/20 hover:bg-sky-500/10 hover:border-sky-500/40 transition-all"
+    >
+      <div className="p-1.5 rounded-lg bg-gradient-to-br from-sky-500 to-blue-600 flex-shrink-0 mt-0.5">
+        <Twitter className="w-3.5 h-3.5 text-white" />
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-1.5 mb-1">
+          <span className="text-xs font-medium text-sky-400">@{data.username}</span>
+          <span className="text-xs text-muted-foreground">·</span>
+          <span className="text-xs text-muted-foreground">{new Date(tweet.createdAt).toLocaleDateString()}</span>
+        </div>
+        <p className="text-sm text-foreground line-clamp-2 leading-snug">{tweet.text}</p>
+        {(tweet.likeCount > 0 || tweet.retweetCount > 0) && (
+          <div className="flex items-center gap-3 mt-1.5 text-xs text-muted-foreground">
+            {tweet.likeCount > 0 && <span>❤️ {tweet.likeCount.toLocaleString()}</span>}
+            {tweet.retweetCount > 0 && <span>🔁 {tweet.retweetCount.toLocaleString()}</span>}
+          </div>
+        )}
+      </div>
+      <ExternalLink className="w-3.5 h-3.5 text-sky-400 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
+    </a>
+  );
+}
+
 // ── Twitter Feed Component ────────────────────────────────────────────────
 function TwitterFeed({ username }: { username: string }) {
   const { data, isLoading } = trpc.twitter.getArtistTwitterFeed.useQuery(
@@ -625,6 +668,8 @@ export default function DJProfile() {
           )}
         </div>
 
+        {/* Last Tweet highlight in header */}
+        <LastTweet username={username} />
         {/* Instagram Feed */}
         <InstagramFeed username={username} />
 
