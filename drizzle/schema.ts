@@ -914,7 +914,7 @@ export type InsertTrackRepost = typeof trackReposts.$inferInsert;
 export const socialMediaConnections = mysqlTable("social_media_connections", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId").notNull(),
-  platform: mysqlEnum("platform", ["instagram", "facebook", "tiktok", "youtube", "threads"]).notNull(),
+  platform: mysqlEnum("platform", ["instagram", "facebook", "tiktok", "youtube", "threads", "twitter"]).notNull(),
   // OAuth credentials
   platformUserId: varchar("platformUserId", { length: 255 }).notNull(),
   platformUsername: varchar("platformUsername", { length: 255 }),

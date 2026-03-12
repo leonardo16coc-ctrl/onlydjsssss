@@ -40,6 +40,7 @@ import { exploreChartsRouter } from "./routers/explore-charts";
 import { socialRouter } from "./routers/social";
 import { instagramRouter } from "./routers/instagram.router";
 import { threadsRouter } from "./routers/threads.router";
+import { twitterRouter } from "./routers/twitter.router";
 import { getDb } from "./db";
 import { tracks, downloads } from "../drizzle/schema";
 import { eq, and, gte, sql } from "drizzle-orm";
@@ -86,6 +87,7 @@ export const appRouter = router({
   social: socialRouter,
   instagram: instagramRouter,
   threads: threadsRouter,
+  twitter: twitterRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

@@ -12,7 +12,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import {
   Instagram, Facebook, CheckCircle2, XCircle, RefreshCw,
-  ExternalLink, Unlink, Users, AlertCircle, Info, AtSign
+  ExternalLink, Unlink, Users, AlertCircle, Info, AtSign, Twitter
 } from "lucide-react";
 import { useLocation } from "wouter";
 
@@ -247,6 +247,32 @@ function PlatformCard({
   );
 }
 
+function useTwitterOAuthCallback(onSuccess: () => void) {
+  const connectTwitter = trpc.twitter.connectTwitter.useMutation({
+    onSuccess: (data) => {
+      toast.success(`✅ Twitter @${data.username} conectado (${data.followers.toLocaleString()} seguidores)`);
+      window.history.replaceState({}, "", "/connect-social");
+      onSuccess();
+    },
+    onError: (err) => {
+      toast.error(`Error al conectar Twitter: ${err.message}`);
+      window.history.replaceState({}, "", "/connect-social");
+    },
+  });
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    const state = params.get("state");
+    if (code && state?.startsWith("twitter_")) {
+      const redirectUri = `${window.location.origin}/connect-social`;
+      connectTwitter.mutate({ code, state, redirectUri });
+    }
+  }, []);
+
+  return connectTwitter.isPending;
+}
+
 // ── Main page ───────────────────────────────────────────────────────────────
 export default function ConnectSocialMedia() {
   const { user } = useAuth();
@@ -259,8 +285,13 @@ export default function ConnectSocialMedia() {
     enabled: !!user,
   });
 
+  const { data: twitterConnection, refetch: refetchTwitter } = trpc.twitter.getMyConnections.useQuery(undefined, {
+    enabled: !!user,
+  });
+
   const isProcessingInstagram = useInstagramOAuthCallback();
   const isProcessingThreads = useThreadsOAuthCallback(() => refetchThreads());
+  const isProcessingTwitter = useTwitterOAuthCallback(() => refetchTwitter());
 
   // Instagram
   const igGetAuthUrl = trpc.instagram.getAuthUrl.useQuery(
@@ -273,6 +304,20 @@ export default function ConnectSocialMedia() {
   });
   const igRefresh = trpc.instagram.refreshFeed.useMutation({
     onSuccess: (data) => { toast.success(`Feed actualizado: ${data.postCount} posts`); refetchIg(); },
+    onError: (err) => toast.error(`Error: ${err.message}`),
+  });
+
+  // Twitter
+  const twitterGetAuthUrl = trpc.twitter.getAuthUrl.useQuery(
+    { redirectUri: `${window.location.origin}/connect-social` },
+    { enabled: false }
+  );
+  const twitterDisconnect = trpc.twitter.disconnectTwitter.useMutation({
+    onSuccess: () => { toast.success("Twitter/X desconectado"); refetchTwitter(); },
+    onError: (err) => toast.error(`Error: ${err.message}`),
+  });
+  const twitterRefresh = trpc.twitter.refreshFeed.useMutation({
+    onSuccess: () => { toast.success("Feed de Twitter actualizado"); refetchTwitter(); },
     onError: (err) => toast.error(`Error: ${err.message}`),
   });
 
@@ -308,6 +353,19 @@ export default function ConnectSocialMedia() {
     }
   };
 
+  const handleConnectTwitter = async () => {
+    try {
+      const result = await twitterGetAuthUrl.refetch();
+      if (result.data?.authUrl) {
+        window.location.href = result.data.authUrl;
+      } else {
+        toast.error("No se pudo obtener el enlace de autorización de Twitter.");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Error al iniciar la conexión con Twitter");
+    }
+  };
+
   const handleConnectThreads = async () => {
     try {
       const result = await threadsGetAuthUrl.refetch();
@@ -329,7 +387,7 @@ export default function ConnectSocialMedia() {
     );
   }
 
-  const isProcessingCallback = isProcessingInstagram || isProcessingThreads;
+  const isProcessingCallback = isProcessingInstagram || isProcessingThreads || isProcessingTwitter;
 
   return (
     <div className="min-h-screen bg-background">
@@ -408,6 +466,28 @@ export default function ConnectSocialMedia() {
             isConnecting={threadsGetAuthUrl.isFetching}
             isDisconnecting={threadsDisconnect.isPending}
             isRefreshing={threadsRefresh.isPending}
+          />
+
+          {/* Twitter/X */}
+          <PlatformCard
+            platform="instagram"
+            icon={<Twitter className="w-5 h-5" />}
+            name="Twitter / X"
+            description="Muestra tus últimos tweets en tu perfil"
+            accentColor="from-sky-500 to-blue-600"
+            connection={twitterConnection?.twitter ? {
+              platformUsername: twitterConnection.twitter.username,
+              profilePictureUrl: twitterConnection.twitter.profilePicture,
+              followerCount: twitterConnection.twitter.followers,
+              isActive: true,
+              lastSyncAt: twitterConnection.twitter.lastSync,
+            } : null}
+            onConnect={handleConnectTwitter}
+            onDisconnect={() => twitterDisconnect.mutate()}
+            onRefresh={() => twitterRefresh.mutate()}
+            isConnecting={twitterGetAuthUrl.isFetching || isProcessingTwitter}
+            isDisconnecting={twitterDisconnect.isPending}
+            isRefreshing={twitterRefresh.isPending}
           />
 
           {/* Facebook - Coming soon */}

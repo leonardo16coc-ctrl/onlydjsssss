@@ -112,6 +112,82 @@ function ThreadsFeed({ username }: { username: string }) {
   );
 }
 
+
+// ── Twitter Feed Component ────────────────────────────────────────────────
+function TwitterFeed({ username }: { username: string }) {
+  const { data, isLoading } = trpc.twitter.getArtistTwitterFeed.useQuery(
+    { username },
+    { retry: false }
+  );
+
+  if (isLoading) {
+    return (
+      <div className="py-6">
+        <div className="flex items-center gap-2 mb-4">
+          <Twitter className="w-5 h-5" />
+          <h3 className="font-semibold text-base">Twitter / X</h3>
+        </div>
+        <div className="space-y-3">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Skeleton key={i} className="h-16 rounded-lg" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (!data?.tweets?.length || !data.username) return null;
+
+  return (
+    <div className="py-6 border-t border-border">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <div className="p-1.5 rounded-lg bg-gradient-to-br from-sky-500 to-blue-600">
+            <Twitter className="w-4 h-4 text-white" />
+          </div>
+          <h3 className="font-semibold text-base">Twitter / X</h3>
+        </div>
+        <a
+          href={`https://twitter.com/${data.username}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <ExternalLink className="w-3.5 h-3.5" />
+          @{data.username}
+        </a>
+      </div>
+      <div className="space-y-3">
+        {data.tweets.slice(0, 9).map((tweet: any) => (
+          <a
+            key={tweet.id}
+            href={`https://twitter.com/${data.username}/status/${tweet.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex gap-3 p-3 rounded-xl bg-muted/30 hover:bg-muted/60 transition-colors border border-border/30 hover:border-border/60 block"
+          >
+            {tweet.imageUrl && (
+              <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-muted">
+                <img src={tweet.imageUrl} alt="Tweet media" className="w-full h-full object-cover" loading="lazy" />
+              </div>
+            )}
+            <div className="flex-1 min-w-0">
+              {tweet.text && <p className="text-sm text-foreground line-clamp-2 mb-1">{tweet.text}</p>}
+              <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                <span>{new Date(tweet.createdAt).toLocaleDateString()}</span>
+                {tweet.likeCount > 0 && <span>❤️ {tweet.likeCount.toLocaleString()}</span>}
+                {tweet.retweetCount > 0 && <span>🔁 {tweet.retweetCount.toLocaleString()}</span>}
+                {tweet.replyCount > 0 && <span>💬 {tweet.replyCount.toLocaleString()}</span>}
+              </div>
+            </div>
+            <ExternalLink className="w-3.5 h-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ── Instagram Feed Component ────────────────────────────────────────────────
 function InstagramFeed({ username }: { username: string }) {
   const { data, isLoading } = trpc.instagram.getArtistInstagramFeed.useQuery(
@@ -551,6 +627,9 @@ export default function DJProfile() {
 
         {/* Instagram Feed */}
         <InstagramFeed username={username} />
+
+        {/* Twitter Feed */}
+        <TwitterFeed username={username} />
 
         {/* Threads Feed */}
         <ThreadsFeed username={username} />
