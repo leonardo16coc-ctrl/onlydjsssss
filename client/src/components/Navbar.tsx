@@ -426,11 +426,6 @@ export default function Navbar() {
               <span className="font-semibold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">ODJS Social</span>
             </Link>
 
-            <Link href="/rankings" className="flex items-center space-x-2 text-foreground hover:text-secondary transition-colors">
-              <Trophy className="h-4 w-4" />
-              <span>Network</span>
-            </Link>
-            
             {isAuthenticated && user?.membershipStatus !== "free" && (
               <Link href="/upload" className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
                 <Upload className="h-4 w-4" />
@@ -504,6 +499,12 @@ export default function Navbar() {
                       <DropdownMenuItem>
                         <LayoutDashboard className="mr-2 h-4 w-4" />
                         <span>Creator Hub</span>
+                      </DropdownMenuItem>
+                    </Link>
+                    <Link href="/rankings">
+                      <DropdownMenuItem>
+                        <Trophy className="mr-2 h-4 w-4" />
+                        <span>Network</span>
                       </DropdownMenuItem>
                     </Link>
                     <Link href="/pricing">
@@ -580,15 +581,6 @@ export default function Navbar() {
                 </Link>
                 
                 <Link 
-                  href="/rankings"
-                  className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <Trophy className="h-5 w-5 text-yellow-400" />
-                  <span className="text-lg">Network</span>
-                </Link>
-                
-                <Link 
                   href="/dashboard"
                   className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
@@ -662,6 +654,24 @@ export default function Navbar() {
                       >
                         <Settings className="h-5 w-5" />
                         <span>{t('nav.settings')}</span>
+                      </Link>
+
+                      <Link 
+                        href="/rankings"
+                        className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <Trophy className="h-5 w-5 text-yellow-400" />
+                        <span>Network</span>
+                      </Link>
+
+                      <Link 
+                        href="/pricing"
+                        className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <CreditCard className="h-5 w-5 text-cyan-400" />
+                        <span>Pricing</span>
                       </Link>
                       
                       <button
