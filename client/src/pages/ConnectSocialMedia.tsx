@@ -275,7 +275,7 @@ function useTwitterOAuthCallback(onSuccess: () => void) {
 
 // ── Main page ───────────────────────────────────────────────────────────────
 export default function ConnectSocialMedia() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
 
   const { data: igConnections, refetch: refetchIg } = trpc.instagram.getMyConnections.useQuery(undefined, {
     enabled: !!user,
@@ -380,7 +380,28 @@ export default function ConnectSocialMedia() {
     }
   };
 
+  // While auth is loading (e.g. returning from OAuth redirect), show spinner
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <RefreshCw className="w-8 h-8 animate-spin text-primary" />
+          <p className="text-muted-foreground text-sm">Verificando sesión...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!user) {
+    // Check if we have OAuth callback params — if so, redirect to login then back
+    const params = new URLSearchParams(window.location.search);
+    const hasOAuthCallback = params.has("code") || params.has("state");
+    if (hasOAuthCallback) {
+      // Store the full callback URL so we can resume after login
+      sessionStorage.setItem("oauth_callback_url", window.location.href);
+      window.location.href = "/";
+      return null;
+    }
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <p className="text-muted-foreground">Debes iniciar sesión para acceder a esta sección.</p>
