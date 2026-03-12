@@ -1,0 +1,130 @@
+{
+  "query": "SELECT u.id, u.username, u.name, u.djName FROM users u; SELECT t.id, t.title, t.artist, t.userId FROM tracks t LIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute SELECT u.id, u.username, u.name, u.djName FROM users u; SELECT t.id, t.title, t.artist, t.userId FROM tracks t LIMIT 10;",
+  "rows": [
+    {
+      "id": "1",
+      "username": "newusername",
+      "name": "Leo Zam",
+      "djName": "DJ New Name"
+    },
+    {
+      "id": "840020",
+      "username": "NULL",
+      "name": "Test Free Artist",
+      "djName": "NULL"
+    },
+    {
+      "id": "1140198",
+      "username": "NULL",
+      "name": "MorePlaces",
+      "djName": "NULL"
+    },
+    {
+      "id": "1380001",
+      "username": "NULL",
+      "name": "Ian Elizardo",
+      "djName": "NULL"
+    },
+    {
+      "id": "1470001",
+      "username": "NULL",
+      "name": "Aria HUNT",
+      "djName": "NULL"
+    },
+    {
+      "id": "3660001",
+      "username": "NYELO",
+      "name": "NYELO NYELO",
+      "djName": "NYELO"
+    },
+    {
+      "id": "3690153",
+      "username": "NULL",
+      "name": "Test Update User",
+      "djName": "NULL"
+    },
+    {
+      "id": "3690154",
+      "username": "NULL",
+      "name": "Other User",
+      "djName": "NULL"
+    },
+    {
+      "id": "3690157",
+      "username": "NULL",
+      "name": "Test Update User",
+      "djName": "NULL"
+    },
+    {
+      "id": "3690158",
+      "username": "NULL",
+      "name": "Other User",
+      "djName": "NULL"
+    },
+    {
+      "id": "3870009",
+      "username": "NULL",
+      "name": "Test Delete User",
+      "djName": "NULL"
+    },
+    {
+      "id": "3870010",
+      "username": "NULL",
+      "name": "Other Delete User",
+      "djName": "NULL"
+    },
+    {
+      "id": "5160001",
+      "username": "NULL",
+      "name": "György - Georg Kovacs",
+      "djName": "NULL"
+    },
+    {
+      "id": "6090039",
+      "username": "NULL",
+      "name": "Test User Sellfy",
+      "djName": "NULL"
+    },
+    {
+      "id": "id",
+      "username": "title",
+      "name": "artist",
+      "djName": "userId"
+    },
+    {
+      "id": "1",
+      "username": "Summer Vibes (Extended Mix)",
+      "name": "DJ Leo Zam",
+      "djName": "1"
+    },
+    {
+      "id": "159992",
+      "username": "ONLY FRIENDS",
+      "name": "SEAJACKERS, NYELO ",
+      "djName": "3660001"
+    },
+    {
+      "id": "159993",
+      "username": "Updated Title",
+      "name": "Updated Artist",
+      "djName": "3690157"
+    },
+    {
+      "id": "189993",
+      "username": "Protected Track",
+      "name": "Test Artist",
+      "djName": "3870009"
+    },
+    {
+      "id": "309992",
+      "username": "Disco Lines & Tinashe - No Broke Boys (Nyelo Extended Remix)",
+      "name": "NYELO",
+      "djName": "3660001"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tusername\tname\tdjName\n1\tnewusername\tLeo Zam\tDJ New Name\n840020\tNULL\tTest Free Artist\tNULL\n1140198\tNULL\tMorePlaces\tNULL\n1380001\tNULL\tIan Elizardo\tNULL\n1470001\tNULL\tAria HUNT\tNULL\n3660001\tNYELO\tNYELO NYELO\tNYELO\n3690153\tNULL\tTest Update User\tNULL\n3690154\tNULL\tOther User\tNULL\n3690157\tNULL\tTest Update User\tNULL\n3690158\tNULL\tOther User\tNULL\n3870009\tNULL\tTest Delete User\tNULL\n3870010\tNULL\tOther Delete User\tNULL\n5160001\tNULL\tGyörgy - Georg Kovacs\tNULL\n6090039\tNULL\tTest User Sellfy\tNULL\nid\ttitle\tartist\tuserId\n1\tSummer Vibes (Extended Mix)\tDJ Leo Zam\t1\n159992\tONLY FRIENDS\tSEAJACKERS, NYELO \t3660001\n159993\tUpdated Title\tUpdated Artist\t3690157\n189993\tProtected Track\tTest Artist\t3870009\n309992\tDisco Lines & Tinashe - No Broke Boys (Nyelo Extended Remix)\tNYELO\t3660001\n",
+  "stderr": "",
+  "execution_time_ms": 404
+}

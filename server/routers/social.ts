@@ -367,22 +367,48 @@ export const socialRouter = router({
       const q = `%${input.query.trim()}%`;
       const lim = input.limit;
 
-      // Search DJs / users
+      // Search DJs / users by username, djName (artist name), name, bio
+      // NOTE: users table has no 'genre' column — use djName and name only
       const djsResult = await db.execute(sql`
-        SELECT id, username, name, djName, avatarUrl, profileImageUrl, isVerified, genre
-        FROM users
-        WHERE username LIKE ${q} OR name LIKE ${q} OR djName LIKE ${q}
+        SELECT DISTINCT u.id, u.username, u.name, u.djName, u.avatarUrl, u.profileImageUrl,
+               u.isVerified, u.country, u.bio
+        FROM users u
+        WHERE u.username LIKE ${q}
+           OR u.djName LIKE ${q}
+           OR u.name LIKE ${q}
+           OR u.bio LIKE ${q}
         LIMIT ${lim}
       `);
-      const djs = (Array.isArray((djsResult as any)[0]) ? (djsResult as any)[0] : djsResult as any[]);
+      const djsFromUsers = (Array.isArray((djsResult as any)[0]) ? (djsResult as any)[0] : djsResult as any[]);
 
-      // Search tracks
+      // Also find users who uploaded tracks matching the search (artist name on tracks)
+      const djsFromTracksResult = await db.execute(sql`
+        SELECT DISTINCT u.id, u.username, u.name, u.djName, u.avatarUrl, u.profileImageUrl,
+               u.isVerified, u.country, u.bio
+        FROM users u
+        INNER JOIN tracks t ON t.userId = u.id
+        WHERE t.artist LIKE ${q} OR t.title LIKE ${q}
+        LIMIT ${lim}
+      `);
+      const djsFromTracks = (Array.isArray((djsFromTracksResult as any)[0]) ? (djsFromTracksResult as any)[0] : djsFromTracksResult as any[]);
+
+      // Merge and deduplicate by id
+      const djMap = new Map<number, any>();
+      [...djsFromUsers, ...djsFromTracks].forEach((dj: any) => {
+        if (dj.id && !djMap.has(Number(dj.id))) djMap.set(Number(dj.id), dj);
+      });
+      const djs = Array.from(djMap.values()).slice(0, lim);
+
+      // Search tracks — use coverImageUrl (correct column name)
       const tracksResult = await db.execute(sql`
-        SELECT t.id, t.title, t.artist, t.genre, t.coverUrl, t.bpm, t.downloadCount,
-               u.username, u.djName
+        SELECT t.id, t.title, t.artist, t.genre, t.coverImageUrl as coverUrl, t.bpm, t.downloadCount,
+               u.id as userId, u.username, u.djName
         FROM tracks t
         LEFT JOIN users u ON u.id = t.userId
-        WHERE t.title LIKE ${q} OR t.artist LIKE ${q} OR t.genre LIKE ${q}
+        WHERE t.title LIKE ${q}
+           OR t.artist LIKE ${q}
+           OR t.genre LIKE ${q}
+           OR t.tags LIKE ${q}
         ORDER BY t.downloadCount DESC
         LIMIT ${lim}
       `);

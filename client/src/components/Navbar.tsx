@@ -133,7 +133,7 @@ function NavSearchBar() {
                 </span>
               </div>
               {tracks.map((t: any) => (
-                <button key={t.id} onClick={() => { navigate("/discover"); handleClose(); }}
+                <button key={t.id} onClick={() => { navigate(t.username ? `/${t.username}` : "/discover"); handleClose(); }}
                   className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-muted/50 transition-colors text-left">
                   <div className="w-7 h-7 rounded-md bg-gradient-to-br from-purple-500/30 to-cyan-500/30 flex items-center justify-center flex-shrink-0 overflow-hidden">
                     {t.coverUrl
@@ -159,7 +159,7 @@ function NavSearchBar() {
                 </span>
               </div>
               {posts.map((p: any) => (
-                <button key={p.id} onClick={() => { navigate("/social"); handleClose(); }}
+                <button key={p.id} onClick={() => { navigate(p.username ? `/${p.username}` : "/social"); handleClose(); }}
                   className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-muted/50 transition-colors text-left">
                   <Avatar className="w-7 h-7 flex-shrink-0">
                     <AvatarImage src={p.profileImageUrl || p.avatarUrl || ""} />
@@ -286,7 +286,7 @@ function MobileSearchOverlay({ onClose }: { onClose: () => void }) {
               </span>
             </div>
             {tracks.map((t: any) => (
-              <button key={t.id} onClick={() => handleSelect("/discover")}
+              <button key={t.id} onClick={() => handleSelect(t.username ? `/${t.username}` : "/discover")}
                 className="w-full flex items-center gap-3 px-4 py-3 hover:bg-muted/40 active:bg-muted/60 transition-colors text-left border-b border-border/30">
                 <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/30 to-cyan-500/30 flex items-center justify-center flex-shrink-0 overflow-hidden">
                   {t.coverUrl
@@ -312,7 +312,7 @@ function MobileSearchOverlay({ onClose }: { onClose: () => void }) {
               </span>
             </div>
             {posts.map((p: any) => (
-              <button key={p.id} onClick={() => handleSelect("/social")}
+              <button key={p.id} onClick={() => handleSelect(p.username ? `/${p.username}` : "/social")}
                 className="w-full flex items-center gap-3 px-4 py-3 hover:bg-muted/40 active:bg-muted/60 transition-colors text-left border-b border-border/30">
                 <Avatar className="w-10 h-10 flex-shrink-0">
                   <AvatarImage src={p.profileImageUrl || p.avatarUrl || ""} />
