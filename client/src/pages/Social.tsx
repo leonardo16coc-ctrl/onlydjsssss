@@ -7,10 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import {
-  Home, TrendingUp, Map, Swords, MessageCircle, User, Plus,
+import { Home, TrendingUp, Map, Swords, MessageCircle, User, Plus,
   Heart, Repeat2, MessageSquare, Bookmark, Image, Video, Music2,
-  Hash, Send, MoreHorizontal, CheckCircle2, Flame, Zap, Radio, Share2
+  Hash, Send, MoreHorizontal, CheckCircle2, Flame, Zap, Radio, Share2,
+  Search, Music, Mic2, FileText, X
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { useSEO } from "@/hooks/useSEO";
@@ -29,6 +29,147 @@ function getAvatar(u: any) {
 
 function getDisplayName(u: any) {
   return u?.djName || u?.name || u?.username || "DJ";
+}
+
+// ── Global Search Bar ────────────────────────────────────────────────────
+function GlobalSearchBar() {
+  const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false);
+  const [, navigate] = useLocation();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const { data, isFetching } = trpc.social.globalSearch.useQuery(
+    { query: query.trim() },
+    { enabled: query.trim().length >= 2 }
+  );
+
+  const djs: any[] = data?.djs || [];
+  const tracks: any[] = data?.tracks || [];
+  const posts: any[] = data?.posts || [];
+  const hasResults = djs.length > 0 || tracks.length > 0 || posts.length > 0;
+
+  const handleClose = () => { setOpen(false); setQuery(""); };
+
+  return (
+    <div className="relative w-full max-w-xl mx-auto">
+      <div className="relative flex items-center">
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+        <input
+          ref={inputRef}
+          value={query}
+          onChange={e => { setQuery(e.target.value); setOpen(true); }}
+          onFocus={() => setOpen(true)}
+          placeholder="Search DJs, tracks, mixes, hashtags..."
+          className="w-full bg-[#0d0d1a] border border-white/10 rounded-full pl-10 pr-10 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/30 transition-all"
+        />
+        {query && (
+          <button onClick={handleClose} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white">
+            <X className="w-4 h-4" />
+          </button>
+        )}
+      </div>
+
+      {open && query.trim().length >= 2 && (
+        <div className="absolute top-full left-0 right-0 mt-2 bg-[#0d0d1a] border border-white/10 rounded-2xl shadow-2xl shadow-black/60 z-50 overflow-hidden max-h-[480px] overflow-y-auto">
+          {isFetching && (
+            <div className="flex items-center justify-center py-8">
+              <div className="w-5 h-5 border-2 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin" />
+            </div>
+          )}
+
+          {!isFetching && !hasResults && (
+            <div className="py-8 text-center">
+              <Search className="w-8 h-8 text-slate-600 mx-auto mb-2" />
+              <p className="text-slate-500 text-sm">No results for "{query}"</p>
+            </div>
+          )}
+
+          {/* DJs */}
+          {djs.length > 0 && (
+            <div>
+              <div className="px-4 py-2 border-b border-white/5">
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
+                  <Mic2 className="w-3 h-3" /> DJs
+                </span>
+              </div>
+              {djs.map((dj: any) => (
+                <button key={dj.id} onClick={() => { navigate(`/${dj.username}`); handleClose(); }}
+                  className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 transition-colors text-left">
+                  <Avatar className="w-8 h-8 flex-shrink-0">
+                    <AvatarImage src={dj.profileImageUrl || dj.avatarUrl || ""} />
+                    <AvatarFallback className="bg-gradient-to-br from-cyan-500 to-purple-600 text-white text-xs">
+                      {(dj.djName || dj.name || dj.username || "D").charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white text-sm font-semibold truncate">{dj.djName || dj.name || dj.username}</p>
+                    <p className="text-slate-500 text-xs">@{dj.username}{dj.genre ? ` · ${dj.genre}` : ""}</p>
+                  </div>
+                  {dj.isVerified && <CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0" />}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Tracks */}
+          {tracks.length > 0 && (
+            <div>
+              <div className="px-4 py-2 border-b border-white/5 border-t border-t-white/5">
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
+                  <Music className="w-3 h-3" /> Tracks & Mixes
+                </span>
+              </div>
+              {tracks.map((t: any) => (
+                <button key={t.id} onClick={() => { navigate("/discover"); handleClose(); }}
+                  className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 transition-colors text-left">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500/30 to-cyan-500/30 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    {t.coverUrl
+                      ? <img src={t.coverUrl} alt="" className="w-full h-full object-cover rounded-lg" />
+                      : <Music className="w-4 h-4 text-purple-400" />}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white text-sm font-semibold truncate">{t.title}</p>
+                    <p className="text-slate-500 text-xs truncate">{t.artist}{t.bpm ? ` · ${t.bpm} BPM` : ""}</p>
+                  </div>
+                  {t.genre && <Badge className="text-[9px] bg-purple-500/20 text-purple-300 border-purple-500/30 px-1.5 py-0">{t.genre}</Badge>}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Posts */}
+          {posts.length > 0 && (
+            <div>
+              <div className="px-4 py-2 border-b border-white/5 border-t border-t-white/5">
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1.5">
+                  <FileText className="w-3 h-3" /> Posts
+                </span>
+              </div>
+              {posts.map((p: any) => (
+                <button key={p.id} onClick={() => { navigate("/social"); handleClose(); }}
+                  className="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-white/5 transition-colors text-left">
+                  <Avatar className="w-8 h-8 flex-shrink-0">
+                    <AvatarImage src={p.profileImageUrl || p.avatarUrl || ""} />
+                    <AvatarFallback className="bg-gradient-to-br from-cyan-500 to-purple-600 text-white text-xs">
+                      {(p.djName || p.username || "D").charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-slate-300 text-xs truncate">{p.content?.slice(0, 80)}{p.content?.length > 80 ? "..." : ""}</p>
+                    <p className="text-slate-500 text-[10px]">@{p.username} · ❤️ {p.likeCount || 0}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+
+          <div className="px-4 py-2 border-t border-white/5">
+            <p className="text-slate-600 text-[10px] text-center">Press ESC to close</p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 // ── ODJS Logo Badge ────────────────────────────────────────────────────────
@@ -528,7 +669,7 @@ export default function Social() {
 
           {/* Center Feed */}
           <main className="flex-1 min-w-0 max-w-2xl mx-auto lg:mx-0">
-            {/* Header — ODJS Logo centered */}
+            {/* Header — ODJS Logo + Search Bar */}
             <div className="flex flex-col items-center mb-6">
               <div className="mb-2">
                 <img
@@ -538,13 +679,17 @@ export default function Social() {
                 />
               </div>
               <p className="text-slate-400 text-xs tracking-widest font-semibold uppercase mt-1">ODJS Community Feed</p>
-              <div className="flex items-center gap-2 mt-2">
+              <div className="flex items-center gap-2 mt-2 mb-4">
                 <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-[10px]">
                   ● LIVE
                 </Badge>
                 <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 text-[10px]">
                   DJ SOCIAL
                 </Badge>
+              </div>
+              {/* Search Bar */}
+              <div className="w-full">
+                <GlobalSearchBar />
               </div>
             </div>
 

@@ -358,6 +358,51 @@ export const socialRouter = router({
 
   // ── DJ MAP ────────────────────────────────────────────────────────────────
 
+  // ── GLOBAL SEARCH ────────────────────────────────────────────────────────
+  globalSearch: publicProcedure
+    .input(z.object({ query: z.string().min(1).max(100), limit: z.number().default(8) }))
+    .query(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+      const q = `%${input.query.trim()}%`;
+      const lim = input.limit;
+
+      // Search DJs / users
+      const djsResult = await db.execute(sql`
+        SELECT id, username, name, djName, avatarUrl, profileImageUrl, isVerified, genre
+        FROM users
+        WHERE username LIKE ${q} OR name LIKE ${q} OR djName LIKE ${q}
+        LIMIT ${lim}
+      `);
+      const djs = (Array.isArray((djsResult as any)[0]) ? (djsResult as any)[0] : djsResult as any[]);
+
+      // Search tracks
+      const tracksResult = await db.execute(sql`
+        SELECT t.id, t.title, t.artist, t.genre, t.coverUrl, t.bpm, t.downloadCount,
+               u.username, u.djName
+        FROM tracks t
+        LEFT JOIN users u ON u.id = t.userId
+        WHERE t.title LIKE ${q} OR t.artist LIKE ${q} OR t.genre LIKE ${q}
+        ORDER BY t.downloadCount DESC
+        LIMIT ${lim}
+      `);
+      const tracks = (Array.isArray((tracksResult as any)[0]) ? (tracksResult as any)[0] : tracksResult as any[]);
+
+      // Search posts by content or hashtag
+      const postsResult = await db.execute(sql`
+        SELECT p.id, p.content, p.hashtags, p.postType, p.likeCount, p.createdAt,
+               u.id as userId, u.username, u.djName, u.avatarUrl, u.profileImageUrl, u.isVerified
+        FROM social_posts p
+        JOIN users u ON u.id = p.userId
+        WHERE p.content LIKE ${q} OR p.hashtags LIKE ${q}
+        ORDER BY p.likeCount DESC
+        LIMIT ${lim}
+      `);
+      const posts = (Array.isArray((postsResult as any)[0]) ? (postsResult as any)[0] : postsResult as any[]);
+
+      return { djs, tracks, posts };
+    }),
+
   getDJsForMap: publicProcedure.query(async () => {
     const db = await getDb();
     if (!db) throw new Error("Database not available");
