@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
-import { Music, Sparkles, Trophy, LayoutDashboard, Upload, CreditCard, User, Settings, LogOut, Radio, Menu, X, TrendingUp, Zap } from "lucide-react";
+import { Music, Sparkles, Trophy, LayoutDashboard, Upload, CreditCard, User, Settings, LogOut, Radio, Menu, X, TrendingUp, Zap, Search, Mic2, FileText } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { useState, useEffect, useRef } from "react";
 import {
@@ -22,6 +22,168 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { trpc } from "@/lib/trpc";
 import { useTranslation } from "react-i18next";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { useLocation } from "wouter";
+
+// ── Inline Search Component ────────────────────────────────────────────────
+function NavSearchBar() {
+  const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false);
+  const [, navigate] = useLocation();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { data, isFetching } = trpc.social.globalSearch.useQuery(
+    { query: query.trim() },
+    { enabled: query.trim().length >= 2 }
+  );
+
+  const djs: any[] = data?.djs || [];
+  const tracks: any[] = data?.tracks || [];
+  const posts: any[] = data?.posts || [];
+  const hasResults = djs.length > 0 || tracks.length > 0 || posts.length > 0;
+
+  const handleClose = () => { setOpen(false); setQuery(""); };
+
+  // Close on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  // Close on ESC
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") handleClose(); };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, []);
+
+  return (
+    <div ref={containerRef} className="relative w-56 xl:w-72">
+      <div className="relative flex items-center">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
+        <input
+          ref={inputRef}
+          value={query}
+          onChange={e => { setQuery(e.target.value); setOpen(true); }}
+          onFocus={() => setOpen(true)}
+          placeholder="Search DJs, tracks..."
+          className="w-full bg-muted/50 border border-border rounded-full pl-8 pr-8 py-1.5 text-xs text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/30 transition-all"
+        />
+        {query && (
+          <button onClick={handleClose} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+            <X className="w-3 h-3" />
+          </button>
+        )}
+      </div>
+
+      {open && query.trim().length >= 2 && (
+        <div className="absolute top-full left-0 right-0 mt-2 bg-background border border-border rounded-2xl shadow-2xl z-[200] overflow-hidden max-h-[420px] overflow-y-auto">
+          {isFetching && (
+            <div className="flex items-center justify-center py-6">
+              <div className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+            </div>
+          )}
+          {!isFetching && !hasResults && (
+            <div className="py-6 text-center">
+              <Search className="w-6 h-6 text-muted-foreground mx-auto mb-1" />
+              <p className="text-muted-foreground text-xs">No results for "{query}"</p>
+            </div>
+          )}
+
+          {/* DJs */}
+          {djs.length > 0 && (
+            <div>
+              <div className="px-3 py-1.5 border-b border-border bg-muted/30">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-1">
+                  <Mic2 className="w-3 h-3" /> DJs
+                </span>
+              </div>
+              {djs.map((dj: any) => (
+                <button key={dj.id} onClick={() => { navigate(`/${dj.username}`); handleClose(); }}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-muted/50 transition-colors text-left">
+                  <Avatar className="w-7 h-7 flex-shrink-0">
+                    <AvatarImage src={dj.profileImageUrl || dj.avatarUrl || ""} />
+                    <AvatarFallback className="bg-gradient-to-br from-cyan-500 to-purple-600 text-white text-[10px]">
+                      {(dj.djName || dj.name || dj.username || "D").charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-foreground text-xs font-semibold truncate">{dj.djName || dj.name || dj.username}</p>
+                    <p className="text-muted-foreground text-[10px]">@{dj.username}{dj.genre ? ` · ${dj.genre}` : ""}</p>
+                  </div>
+                  {dj.isVerified && <span className="text-cyan-400 text-[10px]">✓</span>}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Tracks */}
+          {tracks.length > 0 && (
+            <div>
+              <div className="px-3 py-1.5 border-b border-border bg-muted/30">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-1">
+                  <Music className="w-3 h-3" /> Tracks & Mixes
+                </span>
+              </div>
+              {tracks.map((t: any) => (
+                <button key={t.id} onClick={() => { navigate("/discover"); handleClose(); }}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-muted/50 transition-colors text-left">
+                  <div className="w-7 h-7 rounded-md bg-gradient-to-br from-purple-500/30 to-cyan-500/30 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    {t.coverUrl
+                      ? <img src={t.coverUrl} alt="" className="w-full h-full object-cover rounded-md" />
+                      : <Music className="w-3.5 h-3.5 text-purple-400" />}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-foreground text-xs font-semibold truncate">{t.title}</p>
+                    <p className="text-muted-foreground text-[10px] truncate">{t.artist}{t.bpm ? ` · ${t.bpm} BPM` : ""}</p>
+                  </div>
+                  {t.genre && <Badge className="text-[9px] bg-purple-500/20 text-purple-400 border-purple-500/30 px-1 py-0">{t.genre}</Badge>}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* Posts */}
+          {posts.length > 0 && (
+            <div>
+              <div className="px-3 py-1.5 border-b border-border bg-muted/30">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-1">
+                  <FileText className="w-3 h-3" /> Posts
+                </span>
+              </div>
+              {posts.map((p: any) => (
+                <button key={p.id} onClick={() => { navigate("/social"); handleClose(); }}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-muted/50 transition-colors text-left">
+                  <Avatar className="w-7 h-7 flex-shrink-0">
+                    <AvatarImage src={p.profileImageUrl || p.avatarUrl || ""} />
+                    <AvatarFallback className="bg-gradient-to-br from-cyan-500 to-purple-600 text-white text-[10px]">
+                      {(p.djName || p.username || "D").charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-muted-foreground text-[10px] truncate">{p.content?.slice(0, 60)}{p.content?.length > 60 ? "..." : ""}</p>
+                    <p className="text-muted-foreground/60 text-[9px]">@{p.username} · ❤️ {p.likeCount || 0}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+
+          <div className="px-3 py-1.5 border-t border-border bg-muted/20">
+            <p className="text-muted-foreground/50 text-[9px] text-center">ESC to close · Enter to search</p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function Navbar() {
   const { user, isAuthenticated } = useAuth();
@@ -144,6 +306,8 @@ export default function Navbar() {
 
           {/* Desktop Right Section */}
           <div className="hidden md:flex items-center space-x-4">
+            {/* Search Bar */}
+            <NavSearchBar />
             <LanguageSelector />
             {isAuthenticated ? (
               <>
