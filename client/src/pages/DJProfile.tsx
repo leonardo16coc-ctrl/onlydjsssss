@@ -205,12 +205,13 @@ function TwitterFeed({ username }: { username: string }) {
         </a>
       </div>
       {/* Twitter Timeline Embed - no API credits needed */}
-      <div ref={embedRef} className="rounded-xl overflow-hidden border border-border/40 min-h-[400px]">
+      <div ref={embedRef} className="rounded-xl overflow-hidden border border-border/40" style={{ maxHeight: 320 }}>
         <a
           className="twitter-timeline"
           data-theme="dark"
-          data-tweet-limit="6"
-          data-chrome="noheader nofooter noborders"
+          data-tweet-limit="3"
+          data-chrome="noheader nofooter noborders transparent"
+          data-height="320"
           href={`https://twitter.com/${data.username}`}
         >
           Tweets de @{data.username}
@@ -659,16 +660,8 @@ export default function DJProfile() {
 
         {/* Last Tweet highlight in header */}
         <LastTweet username={username} />
-        {/* Instagram Feed */}
-        <InstagramFeed username={username} />
 
-        {/* Twitter Feed */}
-        <TwitterFeed username={username} />
-
-        {/* Threads Feed */}
-        <ThreadsFeed username={username} />
-
-        {/* Tabs */}
+        {/* Tabs - Music first */}
         <div className="py-6">
           <Tabs defaultValue={defaultTab} onValueChange={(val) => navigate(`/${username}/${val}`, { replace: true })}>
             <TabsList className="mb-6 flex-wrap h-auto gap-1">
@@ -704,6 +697,11 @@ export default function DJProfile() {
             </TabsContent>
           </Tabs>
         </div>
+
+        {/* Social Feeds - below music */}
+        <InstagramFeed username={username} />
+        <TwitterFeed username={username} />
+        <ThreadsFeed username={username} />
       </div>
 
       {/* Share Profile Modal */}
