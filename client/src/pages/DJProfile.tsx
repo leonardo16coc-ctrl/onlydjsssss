@@ -12,9 +12,9 @@ import { toast } from "sonner";
 import {
   Music, Users, Play, Download, Heart, Share2, Repeat2,
   Instagram, Twitter, Youtube, Globe, MapPin, CheckCircle2,
-  Disc3, Mic2, Headphones
+  Disc3, Mic2, Headphones, Pause
 } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { ShareProfileModal } from "@/components/ShareProfileModal";
 import { ExternalLink, Grid3X3, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 
@@ -508,10 +508,95 @@ function TrackCard({ track }: { track: any }) {
     const s = seconds % 60;
     return `${m}:${s.toString().padStart(2, "0")}`;
   };
+
+  // ── Mini Audio Player ────────────────────────────────────────────────────────
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(track.durationSeconds || 0);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Use preview if available, otherwise full audio
+  const audioSrc = track.previewFileUrl || track.audioFileUrl;
+
+  const togglePlay = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio || !audioSrc) return;
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      // Pause all other audio elements on the page
+      document.querySelectorAll("audio").forEach(a => {
+        if (a !== audio) a.pause();
+      });
+      audio.play().catch(() => toast("No se pudo reproducir el audio"));
+    }
+  }, [isPlaying, audioSrc]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const onPlay = () => setIsPlaying(true);
+    const onPause = () => setIsPlaying(false);
+    const onEnded = () => { setIsPlaying(false); setProgress(0); setCurrentTime(0); };
+    const onTimeUpdate = () => {
+      setCurrentTime(audio.currentTime);
+      if (audio.duration) setProgress((audio.currentTime / audio.duration) * 100);
+    };
+    const onLoadedMetadata = () => setDuration(audio.duration);
+    const onWaiting = () => setIsLoading(true);
+    const onCanPlay = () => setIsLoading(false);
+    audio.addEventListener("play", onPlay);
+    audio.addEventListener("pause", onPause);
+    audio.addEventListener("ended", onEnded);
+    audio.addEventListener("timeupdate", onTimeUpdate);
+    audio.addEventListener("loadedmetadata", onLoadedMetadata);
+    audio.addEventListener("waiting", onWaiting);
+    audio.addEventListener("canplay", onCanPlay);
+    return () => {
+      audio.removeEventListener("play", onPlay);
+      audio.removeEventListener("pause", onPause);
+      audio.removeEventListener("ended", onEnded);
+      audio.removeEventListener("timeupdate", onTimeUpdate);
+      audio.removeEventListener("loadedmetadata", onLoadedMetadata);
+      audio.removeEventListener("waiting", onWaiting);
+      audio.removeEventListener("canplay", onCanPlay);
+    };
+  }, []);
+
+  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
+    const audio = audioRef.current;
+    if (!audio || !audio.duration) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const ratio = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = ratio * audio.duration;
+  };
+
+  const handleDownload = async () => {
+    const url = track.audioFileUrl;
+    if (!url) { toast("Archivo no disponible"); return; }
+    try {
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${track.title} - ${track.artist}.${track.fileFormat?.toLowerCase() || "mp3"}`;
+      a.target = "_blank";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      toast("Descarga iniciada");
+    } catch {
+      toast("Error al descargar");
+    }
+  };
+
   return (
-    <Card className="group bg-card/50 border-border/50 hover:border-border hover:bg-card transition-all duration-200">
+    <Card className={`group bg-card/50 border-border/50 hover:border-border hover:bg-card transition-all duration-200 ${
+      isPlaying ? "border-sky-500/50 bg-sky-950/20" : ""
+    }`}>
       <CardContent className="p-4">
         <div className="flex gap-4 items-center">
+          {/* Cover + Play Button */}
           <div className="relative flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden bg-muted">
             {track.coverImageUrl ? (
               <img src={track.coverImageUrl} alt={track.title} className="w-full h-full object-cover" />
@@ -520,7 +605,24 @@ function TrackCard({ track }: { track: any }) {
                 <Music className="w-6 h-6 text-muted-foreground" />
               </div>
             )}
+            {/* Play overlay on cover */}
+            {audioSrc && (
+              <button
+                onClick={togglePlay}
+                className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"
+                aria-label={isPlaying ? "Pausar" : "Reproducir"}
+              >
+                {isLoading ? (
+                  <Loader2 className="w-6 h-6 text-white animate-spin" />
+                ) : isPlaying ? (
+                  <Pause className="w-6 h-6 text-white" />
+                ) : (
+                  <Play className="w-6 h-6 text-white fill-white" />
+                )}
+              </button>
+            )}
           </div>
+
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
               <div className="min-w-0">
@@ -531,27 +633,109 @@ function TrackCard({ track }: { track: any }) {
                 <Badge variant="secondary" className="text-xs flex-shrink-0">{track.trackType}</Badge>
               )}
             </div>
+
+            {/* Progress bar - visible when playing */}
+            {audioSrc && (
+              <div
+                className="mt-2 h-1 bg-muted rounded-full cursor-pointer overflow-hidden"
+                onClick={handleSeek}
+                title={`${formatDuration(currentTime)} / ${formatDuration(duration)}`}
+              >
+                <div
+                  className="h-full bg-sky-400 rounded-full transition-all duration-100"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+            )}
+
             <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1"><Play className="w-3 h-3" />{(track.playCount || 0).toLocaleString()}</span>
-              <span className="flex items-center gap-1"><Heart className="w-3 h-3" />{(track.likeCount || 0).toLocaleString()}</span>
-              <span className="flex items-center gap-1"><Download className="w-3 h-3" />{(track.downloadCount || 0).toLocaleString()}</span>
+              <span className="flex items-center gap-1">
+                <Play className="w-3 h-3" />{(track.playCount || 0).toLocaleString()}
+              </span>
+              <span className="flex items-center gap-1">
+                <Heart className="w-3 h-3" />{(track.likeCount || 0).toLocaleString()}
+              </span>
+              <span className="flex items-center gap-1">
+                <Download className="w-3 h-3" />{(track.downloadCount || 0).toLocaleString()}
+              </span>
               {track.bpm && <span>{track.bpm} BPM</span>}
               {track.musicalKey && <span>{track.musicalKey}</span>}
-              <span>{formatDuration(track.durationSeconds)}</span>
+              {isPlaying ? (
+                <span className="text-sky-400 font-medium">
+                  {formatDuration(currentTime)} / {formatDuration(duration)}
+                </span>
+              ) : (
+                <span>{formatDuration(track.durationSeconds)}</span>
+              )}
             </div>
           </div>
-          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => likeTrack.mutate({ trackId: track.id })}>
+
+          {/* Action buttons */}
+          <div className="flex items-center gap-1">
+            {/* Play/Pause button - always visible */}
+            {audioSrc && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className={`h-8 w-8 ${
+                  isPlaying ? "text-sky-400 hover:text-sky-300" : "opacity-0 group-hover:opacity-100"
+                } transition-opacity`}
+                onClick={togglePlay}
+                aria-label={isPlaying ? "Pausar" : "Reproducir"}
+              >
+                {isLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : isPlaying ? (
+                  <Pause className="w-4 h-4" />
+                ) : (
+                  <Play className="w-4 h-4" />
+                )}
+              </Button>
+            )}
+            {/* Download button - always visible */}
+            {track.audioFileUrl && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity hover:text-green-400"
+                onClick={handleDownload}
+                aria-label="Descargar track"
+                title="Descargar"
+              >
+                <Download className="w-4 h-4" />
+              </Button>
+            )}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={() => likeTrack.mutate({ trackId: track.id })}
+            >
               <Heart className="w-4 h-4" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => repostTrack.mutate({ trackId: track.id })}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={() => repostTrack.mutate({ trackId: track.id })}
+            >
               <Repeat2 className="w-4 h-4" />
             </Button>
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={shareTrack}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={shareTrack}
+            >
               <Share2 className="w-4 h-4" />
             </Button>
           </div>
         </div>
+
+        {/* Hidden audio element */}
+        {audioSrc && (
+          <audio ref={audioRef} src={audioSrc} preload="none" />
+        )}
       </CardContent>
     </Card>
   );

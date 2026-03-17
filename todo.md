@@ -3228,3 +3228,10 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar touchstart/touchend al contenedor del carrusel para detectar swipe horizontal
 - [x] Umbral de 50px para activar navegación al deslizar
 - [x] Funciona en conjunto con los botones de flechas existentes
+
+## 50. Reproductor y descarga en TrackCards del perfil
+- [x] Verificar que fileUrl y downloadUrl existen en el schema de tracks
+- [x] Agregar mini-player de audio (play/pause + barra de progreso) en TrackCard del perfil
+- [x] Agregar botón de descarga en TrackCard del perfil
+- [x] Manejar estado global del player (solo un track reproduciendo a la vez)
+- [ ] Incrementar contador de plays al reproducir (pendiente)
