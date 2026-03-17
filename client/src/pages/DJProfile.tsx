@@ -285,13 +285,13 @@ function TwitterFeed({ username }: { username: string }) {
         </a>
       </div>
       {/* Twitter Timeline Embed - no API credits needed */}
-      <div ref={embedRef} className="rounded-xl overflow-hidden border border-border/40" style={{ maxHeight: 240 }}>
+      <div ref={embedRef} className="rounded-xl overflow-hidden border border-border/40" style={{ maxHeight: 420 }}>
         <a
           className="twitter-timeline"
           data-theme="dark"
-          data-tweet-limit="2"
+          data-tweet-limit="3"
           data-chrome="noheader nofooter noborders transparent"
-          data-height="240"
+          data-height="420"
           href={`https://twitter.com/${data.username}`}
         >
           Tweets de @{data.username}
