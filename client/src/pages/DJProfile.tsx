@@ -658,9 +658,6 @@ export default function DJProfile() {
           )}
         </div>
 
-        {/* Last Tweet highlight in header */}
-        <LastTweet username={username} />
-
         {/* Tabs - Music first */}
         <div className="py-6">
           <Tabs defaultValue={defaultTab} onValueChange={(val) => navigate(`/${username}/${val}`, { replace: true })}>
@@ -702,6 +699,9 @@ export default function DJProfile() {
         <InstagramFeed username={username} />
         <TwitterFeed username={username} />
         <ThreadsFeed username={username} />
+
+        {/* Twitter link - at the very bottom */}
+        <LastTweet username={username} />
       </div>
 
       {/* Share Profile Modal */}
