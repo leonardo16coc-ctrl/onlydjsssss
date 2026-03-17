@@ -1,0 +1,27 @@
+{
+  "query": "SELECT * FROM social_media_connections LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute SELECT * FROM social_media_connections LIMIT 5;",
+  "rows": [
+    {
+      "id": "1",
+      "userId": "1",
+      "platform": "twitter",
+      "platformUserId": "2032172975781527553",
+      "platformUsername": "dan1451979",
+      "accessToken": "edd558a0e7ae4f8abf9f618566e2a1dc:1bda90e22a41b9555063b5989307df326ffad7f4f363e773faa358ade45d6b905f2c5eee30cf263e3f008874c9fa6579da75df12757864a3bc1e6fbfc4f7c11da3986527f1dfc90b8529ca3d4f16b49f95b30c7058e347c8e39df26bbaa6666d||REFRESH||6b349f49d3b4dbfa54dc4ca3a89adb1e:089f238098a3662e6cec79f54118c0ce64e347e306e12a58f6133ce859eb803e39dd0f5695cf6e68c36f78ae79d9e624cbc17af47ea12016d1506cdeddaa83206cf340d020ef3aec14be21d48f76b07d194fe8d66e6b1be1579864f13322960d",
+      "tokenExpiresAt": "2026-03-12 22:41:50",
+      "profilePictureUrl": "https://pbs.twimg.com/profile_images/2032173034153590784/Xn4ZfxNJ_400x400.jpg",
+      "followerCount": "0",
+      "cachedPosts": "NULL",
+      "cacheExpiresAt": "NULL",
+      "isActive": "1",
+      "lastSyncAt": "2026-03-12 20:02:08",
+      "createdAt": "2026-03-12 20:02:07",
+      "updatedAt": "2026-03-12 20:41:49"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tuserId\tplatform\tplatformUserId\tplatformUsername\taccessToken\ttokenExpiresAt\tprofilePictureUrl\tfollowerCount\tcachedPosts\tcacheExpiresAt\tisActive\tlastSyncAt\tcreatedAt\tupdatedAt\n1\t1\ttwitter\t2032172975781527553\tdan1451979\tedd558a0e7ae4f8abf9f618566e2a1dc:1bda90e22a41b9555063b5989307df326ffad7f4f363e773faa358ade45d6b905f2c5eee30cf263e3f008874c9fa6579da75df12757864a3bc1e6fbfc4f7c11da3986527f1dfc90b8529ca3d4f16b49f95b30c7058e347c8e39df26bbaa6666d||REFRESH||6b349f49d3b4dbfa54dc4ca3a89adb1e:089f238098a3662e6cec79f54118c0ce64e347e306e12a58f6133ce859eb803e39dd0f5695cf6e68c36f78ae79d9e624cbc17af47ea12016d1506cdeddaa83206cf340d020ef3aec14be21d48f76b07d194fe8d66e6b1be1579864f13322960d\t2026-03-12 22:41:50\thttps://pbs.twimg.com/profile_images/2032173034153590784/Xn4ZfxNJ_400x400.jpg\t0\tNULL\tNULL\t1\t2026-03-12 20:02:08\t2026-03-12 20:02:07\t2026-03-12 20:41:49\n",
+  "stderr": "",
+  "execution_time_ms": 351
+}

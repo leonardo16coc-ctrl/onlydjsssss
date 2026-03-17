@@ -3201,3 +3201,11 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Crear página /social/ranking (Trending DJs Leaderboard)
 - [x] Agregar "ODJS Social" en la Navbar principal
 - [x] Registrar rutas /social/* en App.tsx
+
+## 45. Twitter Embed - Solución sin créditos de API
+- [x] Actualizar backend getArtistTwitterFeed para devolver solo el username (sin llamadas a API de Twitter)
+- [x] Reemplazar TwitterFeed con Twitter Timeline Embed oficial (widgets.js)
+- [x] Agregar script de Twitter Widgets en index.html
+- [x] Agregar useEffect para reinicializar el widget cuando React renderiza el componente
+- [x] Actualizar LastTweet para mostrar enlace al perfil de Twitter (sin datos de API)
+- [x] Agregar tests de Twitter Embed (6 tests pasando)

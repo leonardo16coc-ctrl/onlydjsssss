@@ -1,0 +1,18 @@
+{
+  "query": "SELECT id, userId, platform, platformUsername, isActive, createdAt FROM social_media_connections ORDER BY createdAt DESC LIMIT 20;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute SELECT id, userId, platform, platformUsername, isActive, createdAt FROM social_media_connections ORDER BY createdAt DESC LIMIT 20;",
+  "rows": [
+    {
+      "id": "1",
+      "userId": "1",
+      "platform": "twitter",
+      "platformUsername": "dan1451979",
+      "isActive": "1",
+      "createdAt": "2026-03-12 20:02:07"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tuserId\tplatform\tplatformUsername\tisActive\tcreatedAt\n1\t1\ttwitter\tdan1451979\t1\t2026-03-12 20:02:07\n",
+  "stderr": "",
+  "execution_time_ms": 360
+}

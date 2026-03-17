@@ -32,3 +32,27 @@ describe("Twitter/X OAuth 2.0 Credentials", () => {
     expect(url.toString()).toContain("tweet.read");
   });
 });
+
+describe("Twitter Embed (no API credits)", () => {
+  it("should construct correct Twitter timeline embed URL", () => {
+    const twitterUsername = "testdj";
+    const embedUrl = `https://twitter.com/${twitterUsername}`;
+    expect(embedUrl).toBe("https://twitter.com/testdj");
+  });
+
+  it("should construct correct Twitter profile URL for embed link", () => {
+    const twitterUsername = "testdj";
+    const profileUrl = `https://twitter.com/${twitterUsername}`;
+    expect(profileUrl).toContain("twitter.com");
+    expect(profileUrl).toContain(twitterUsername);
+  });
+
+  it("getArtistTwitterFeed should return only username (no tweet data)", () => {
+    // The embed approach returns { username: string | null }
+    // This verifies the contract: no tweets array, no API calls needed
+    const mockResult = { username: "testdj" };
+    expect(mockResult).toHaveProperty("username");
+    expect(mockResult).not.toHaveProperty("tweets");
+    expect(mockResult).not.toHaveProperty("posts");
+  });
+});

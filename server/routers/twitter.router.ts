@@ -326,116 +326,33 @@ export const twitterRouter = router({
   }),
 
   /**
-   * Get tweets for a public artist profile (with 1-hour cache)
+   * Get Twitter username for a public artist profile
+   * Uses Twitter Embed (no API credits needed)
    */
   getArtistTwitterFeed: publicProcedure
     .input(z.object({ username: z.string() }))
     .query(async ({ input }) => {
       const db = await getDb();
-      if (!db) return { tweets: [], username: null };
+      if (!db) return { username: null };
       // Look up user by username first
       const userRows = await db
         .select({ id: users.id })
         .from(users)
         .where(eq(users.username, input.username))
         .limit(1);
-      if (userRows.length === 0) return { tweets: [], username: null };
+      if (userRows.length === 0) return { username: null };
       const userId = userRows[0].id;
       const connections = await db
-        .select()
+        .select({ platformUsername: socialMediaConnections.platformUsername })
         .from(socialMediaConnections)
         .where(and(
           eq(socialMediaConnections.userId, userId),
           eq(socialMediaConnections.platform, "twitter"),
           eq(socialMediaConnections.isActive, true)
         ))
-        .limit(1);;
-
-      if (connections.length === 0) return { tweets: [], username: null };
-
-      const conn = connections[0];
-      const now = new Date();
-
-      // Return cached posts if still valid
-      if (conn.cachedPosts && conn.cacheExpiresAt && conn.cacheExpiresAt > now) {
-        try {
-          return { tweets: JSON.parse(conn.cachedPosts), username: conn.platformUsername };
-        } catch {
-          // Cache corrupted, refetch
-        }
-      }
-
-      // Decrypt token (format: encryptedAccessToken||REFRESH||encryptedRefreshToken)
-      const [encryptedAccess, encryptedRefresh] = conn.accessToken.split("||REFRESH||");
-      let accessToken = decrypt(encryptedAccess);
-
-      // Try to refresh if we have a refresh token
-      if (encryptedRefresh) {
-        try {
-          const refreshToken = decrypt(encryptedRefresh);
-          const refreshed = await refreshTwitterToken(refreshToken);
-          accessToken = refreshed.accessToken;
-
-          const newEncryptedAccess = encrypt(refreshed.accessToken);
-          const newEncryptedRefresh = encrypt(refreshed.refreshToken);
-          const newExpiresAt = new Date(Date.now() + refreshed.expiresIn * 1000);
-
-          await db.update(socialMediaConnections).set({
-            accessToken: `${newEncryptedAccess}||REFRESH||${newEncryptedRefresh}`,
-            tokenExpiresAt: newExpiresAt,
-          }).where(eq(socialMediaConnections.id, conn.id));
-        } catch {
-          // Use existing token if refresh fails
-        }
-      }
-
-      try {
-        const data = await fetchTwitterUserTweets(accessToken, conn.platformUserId, 9);
-
-        // Build media map
-        const mediaMap: Record<string, { url?: string; preview?: string; type: string }> = {};
-        if (data.includes?.media) {
-          for (const m of data.includes.media) {
-            mediaMap[m.media_key] = {
-              url: m.url || m.preview_image_url,
-              preview: m.preview_image_url,
-              type: m.type,
-            };
-          }
-        }
-
-        const tweets = (data.data || []).map((tweet: any) => {
-          const mediaKeys: string[] = tweet.attachments?.media_keys || [];
-          const media = mediaKeys.map((k: string) => mediaMap[k]).filter(Boolean);
-          return {
-            id: tweet.id,
-            text: tweet.text,
-            createdAt: tweet.created_at,
-            likeCount: tweet.public_metrics?.like_count ?? 0,
-            retweetCount: tweet.public_metrics?.retweet_count ?? 0,
-            replyCount: tweet.public_metrics?.reply_count ?? 0,
-            media,
-            permalink: `https://twitter.com/${conn.platformUsername}/status/${tweet.id}`,
-          };
-        });
-
-        // Cache for 1 hour
-        const cacheExpiry = new Date(Date.now() + 60 * 60 * 1000);
-        await db.update(socialMediaConnections).set({
-          cachedPosts: JSON.stringify(tweets),
-          cacheExpiresAt: cacheExpiry,
-          lastSyncAt: now,
-        }).where(eq(socialMediaConnections.id, conn.id));
-
-        return { tweets, username: conn.platformUsername };
-      } catch (err) {
-        console.error("[Twitter] Feed fetch error:", err);
-        // Return cached even if expired on error
-        if (conn.cachedPosts) {
-          try { return { tweets: JSON.parse(conn.cachedPosts), username: conn.platformUsername }; } catch { /* ignore */ }
-        }
-        return { tweets: [], username: conn.platformUsername };
-      }
+        .limit(1);
+      if (connections.length === 0) return { username: null };
+      return { username: connections[0].platformUsername };
     }),
 
   /**

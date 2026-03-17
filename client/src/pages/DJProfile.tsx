@@ -14,7 +14,7 @@ import {
   Instagram, Twitter, Youtube, Globe, MapPin, CheckCircle2,
   Disc3, Mic2, Headphones
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ShareProfileModal } from "@/components/ShareProfileModal";
 import { ExternalLink, Grid3X3 } from "lucide-react";
 
@@ -117,51 +117,59 @@ function ThreadsFeed({ username }: { username: string }) {
 function LastTweet({ username }: { username: string }) {
   const { data, isLoading } = trpc.twitter.getArtistTwitterFeed.useQuery(
     { username },
-    { retry: false }
+    { retry: false, staleTime: 60 * 60 * 1000 }
   );
 
   if (isLoading) {
     return <Skeleton className="h-16 w-full rounded-xl mt-4" />;
   }
 
-  const tweet = data?.tweets?.[0];
-  if (!tweet || !data?.username) return null;
+  if (!data?.username) return null;
 
   return (
     <a
-      href={`https://twitter.com/${data.username}/status/${tweet.id}`}
+      href={`https://twitter.com/${data.username}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-start gap-3 mt-4 p-3 rounded-xl bg-sky-500/5 border border-sky-500/20 hover:bg-sky-500/10 hover:border-sky-500/40 transition-all"
+      className="group flex items-center gap-3 mt-4 p-3 rounded-xl bg-sky-500/5 border border-sky-500/20 hover:bg-sky-500/10 hover:border-sky-500/40 transition-all"
     >
-      <div className="p-1.5 rounded-lg bg-gradient-to-br from-sky-500 to-blue-600 flex-shrink-0 mt-0.5">
+      <div className="p-1.5 rounded-lg bg-gradient-to-br from-sky-500 to-blue-600 flex-shrink-0">
         <Twitter className="w-3.5 h-3.5 text-white" />
       </div>
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-1.5 mb-1">
-          <span className="text-xs font-medium text-sky-400">@{data.username}</span>
-          <span className="text-xs text-muted-foreground">·</span>
-          <span className="text-xs text-muted-foreground">{new Date(tweet.createdAt).toLocaleDateString()}</span>
-        </div>
-        <p className="text-sm text-foreground line-clamp-2 leading-snug">{tweet.text}</p>
-        {(tweet.likeCount > 0 || tweet.retweetCount > 0) && (
-          <div className="flex items-center gap-3 mt-1.5 text-xs text-muted-foreground">
-            {tweet.likeCount > 0 && <span>❤️ {tweet.likeCount.toLocaleString()}</span>}
-            {tweet.retweetCount > 0 && <span>🔁 {tweet.retweetCount.toLocaleString()}</span>}
-          </div>
-        )}
+        <span className="text-xs font-medium text-sky-400">@{data.username}</span>
+        <p className="text-xs text-muted-foreground">Ver tweets en Twitter / X</p>
       </div>
-      <ExternalLink className="w-3.5 h-3.5 text-sky-400 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
+      <ExternalLink className="w-3.5 h-3.5 text-sky-400 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
     </a>
   );
 }
 
-// ── Twitter Feed Component ────────────────────────────────────────────────
+// ── Twitter Feed Component (Embed) ──────────────────────────────────
 function TwitterFeed({ username }: { username: string }) {
   const { data, isLoading } = trpc.twitter.getArtistTwitterFeed.useQuery(
     { username },
-    { retry: false }
+    { retry: false, staleTime: 60 * 60 * 1000 }
   );
+  const embedRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!data?.username) return;
+    // Re-initialize Twitter widgets after React renders the embed anchor
+    const tw = (window as any).twttr;
+    if (tw && tw.widgets) {
+      tw.widgets.load(embedRef.current ?? undefined);
+    } else {
+      // If script hasn't loaded yet, wait for it
+      const script = document.querySelector('script[src*="platform.twitter.com/widgets.js"]');
+      if (script) {
+        script.addEventListener('load', () => {
+          const tw2 = (window as any).twttr;
+          if (tw2 && tw2.widgets) tw2.widgets.load(embedRef.current ?? undefined);
+        }, { once: true });
+      }
+    }
+  }, [data?.username]);
 
   if (isLoading) {
     return (
@@ -170,16 +178,12 @@ function TwitterFeed({ username }: { username: string }) {
           <Twitter className="w-5 h-5" />
           <h3 className="font-semibold text-base">Twitter / X</h3>
         </div>
-        <div className="space-y-3">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <Skeleton key={i} className="h-16 rounded-lg" />
-          ))}
-        </div>
+        <Skeleton className="h-[500px] rounded-xl" />
       </div>
     );
   }
 
-  if (!data?.tweets?.length || !data.username) return null;
+  if (!data?.username) return null;
 
   return (
     <div className="py-6 border-t border-border">
@@ -200,32 +204,17 @@ function TwitterFeed({ username }: { username: string }) {
           @{data.username}
         </a>
       </div>
-      <div className="space-y-3">
-        {data.tweets.slice(0, 9).map((tweet: any) => (
-          <a
-            key={tweet.id}
-            href={`https://twitter.com/${data.username}/status/${tweet.id}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex gap-3 p-3 rounded-xl bg-muted/30 hover:bg-muted/60 transition-colors border border-border/30 hover:border-border/60 block"
-          >
-            {tweet.imageUrl && (
-              <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-muted">
-                <img src={tweet.imageUrl} alt="Tweet media" className="w-full h-full object-cover" loading="lazy" />
-              </div>
-            )}
-            <div className="flex-1 min-w-0">
-              {tweet.text && <p className="text-sm text-foreground line-clamp-2 mb-1">{tweet.text}</p>}
-              <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                <span>{new Date(tweet.createdAt).toLocaleDateString()}</span>
-                {tweet.likeCount > 0 && <span>❤️ {tweet.likeCount.toLocaleString()}</span>}
-                {tweet.retweetCount > 0 && <span>🔁 {tweet.retweetCount.toLocaleString()}</span>}
-                {tweet.replyCount > 0 && <span>💬 {tweet.replyCount.toLocaleString()}</span>}
-              </div>
-            </div>
-            <ExternalLink className="w-3.5 h-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
-          </a>
-        ))}
+      {/* Twitter Timeline Embed - no API credits needed */}
+      <div ref={embedRef} className="rounded-xl overflow-hidden border border-border/40 min-h-[400px]">
+        <a
+          className="twitter-timeline"
+          data-theme="dark"
+          data-tweet-limit="6"
+          data-chrome="noheader nofooter noborders"
+          href={`https://twitter.com/${data.username}`}
+        >
+          Tweets de @{data.username}
+        </a>
       </div>
     </div>
   );
