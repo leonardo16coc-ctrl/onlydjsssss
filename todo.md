@@ -3218,3 +3218,12 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar tarjeta TikTok en ConnectSocialMedia (/connect-social)
 - [x] Crear componente TikTokFeed en DJProfile con embed de video de TikTok
 - [x] Registrar tiktokRouter en server/routers.ts
+
+## 47. Rediseño Home estilo SoundCloud
+- [x] Reemplazar hero section con layout tipo SoundCloud: barra de bienvenida + botón Upload siempre visible
+- [x] Agregar sección "Trending Now" con carrusel horizontal de artistas/DJs
+- [x] Agregar sección "Trending Tracks" con carrusel horizontal de tracks
+- [x] Mantener AIAnalyzer (analizador de ONLYDJS)
+- [x] Eliminar sección Pricing/Pricing Preview y MonetizationSection del Home
+- [x] Eliminar referencias a "Monetization Tools" y "suscripción" del hero
+- [x] Mantener stats (Active DJs, Tracks, etc.) pero integrarlos naturalmente
