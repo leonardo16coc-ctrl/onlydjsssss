@@ -516,9 +516,24 @@ function TrackCard({ track }: { track: any }) {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(track.durationSeconds || 0);
   const [isLoading, setIsLoading] = useState(false);
+  const [localPlayCount, setLocalPlayCount] = useState<number | null>(null);
+  const streamDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hasCountedRef = useRef(false);
 
   // Use preview if available, otherwise full audio
   const audioSrc = track.previewFileUrl || track.audioFileUrl;
+
+  // Record stream mutation
+  const recordStream = trpc.djProfiles.recordStream.useMutation({
+    onSuccess: (data: any) => {
+      if (data?.success) {
+        // Optimistically update the local play count
+        setLocalPlayCount(prev =>
+          prev !== null ? prev + 1 : (track.playCount || 0) + 1
+        );
+      }
+    },
+  });
 
   const togglePlay = useCallback(() => {
     const audio = audioRef.current;
@@ -531,8 +546,19 @@ function TrackCard({ track }: { track: any }) {
         if (a !== audio) a.pause();
       });
       audio.play().catch(() => toast("No se pudo reproducir el audio"));
+
+      // Client-side debounce: count only once per 10 seconds per play session
+      if (!hasCountedRef.current) {
+        hasCountedRef.current = true;
+        recordStream.mutate({ trackId: track.id });
+        // Reset after 10 seconds so a new play session can count again
+        if (streamDebounceRef.current) clearTimeout(streamDebounceRef.current);
+        streamDebounceRef.current = setTimeout(() => {
+          hasCountedRef.current = false;
+        }, 10_000);
+      }
     }
-  }, [isPlaying, audioSrc]);
+  }, [isPlaying, audioSrc, track.id]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -650,7 +676,8 @@ function TrackCard({ track }: { track: any }) {
 
             <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
               <span className="flex items-center gap-1">
-                <Play className="w-3 h-3" />{(track.playCount || 0).toLocaleString()}
+                <Play className="w-3 h-3" />
+                {(localPlayCount !== null ? localPlayCount : (track.playCount || 0)).toLocaleString()}
               </span>
               <span className="flex items-center gap-1">
                 <Heart className="w-3 h-3" />{(track.likeCount || 0).toLocaleString()}

@@ -429,4 +429,45 @@ export const djProfilesRouter = router({
         mashup: Number(row?.mashups || 0),
       };
     }),
+
+  /**
+   * Record a stream/play for a track.
+   * Increments streamCount and playCount atomically.
+   * Public so any visitor (logged in or not) can trigger it.
+   * Server-side debounce: same visitor + same track within 30 s is ignored.
+   */
+  recordStream: publicProcedure
+    .input(z.object({ trackId: z.number().int().positive() }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) return { success: false };
+
+      // Build a debounce key from userId (if logged in) or IP
+      const req = (ctx as any).req;
+      const ip: string =
+        req?.headers?.["x-forwarded-for"]?.split(",")[0]?.trim() ||
+        req?.socket?.remoteAddress ||
+        "unknown";
+      const userId: number | null = (ctx as any).user?.id ?? null;
+      const debounceKey = `${userId ?? ip}:${input.trackId}`;
+
+      if (recentStreams.has(debounceKey)) {
+        return { success: false, reason: "debounced" };
+      }
+      // Block the same visitor from counting again for 30 seconds
+      recentStreams.set(debounceKey, Date.now());
+      setTimeout(() => recentStreams.delete(debounceKey), 30_000);
+
+      await db.execute(sql`
+        UPDATE tracks
+        SET streamCount = streamCount + 1,
+            playCount   = playCount   + 1
+        WHERE id = ${input.trackId}
+      `);
+
+      return { success: true };
+    }),
 });
+
+// In-memory debounce store — resets on server restart, sufficient for rate-limiting
+const recentStreams = new Map<string, number>();

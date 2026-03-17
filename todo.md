@@ -3234,4 +3234,9 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar mini-player de audio (play/pause + barra de progreso) en TrackCard del perfil
 - [x] Agregar botón de descarga en TrackCard del perfil
 - [x] Manejar estado global del player (solo un track reproduciendo a la vez)
-- [ ] Incrementar contador de plays al reproducir (pendiente)
+- [x] Incrementar contador de plays al reproducir
+
+## 51. Contador de plays (streamCount)
+- [x] Crear endpoint publicProcedure recordStream en dj-profiles.ts que incrementa streamCount y playCount
+- [x] Llamar al endpoint desde TrackCard al presionar play (con debounce de 10s para evitar spam)
+- [x] Mostrar streamCount actualizado en la UI sin recargar la página
