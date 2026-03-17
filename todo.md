@@ -3218,3 +3218,8 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar tarjeta TikTok en ConnectSocialMedia (/connect-social)
 - [x] Crear componente TikTokFeed en DJProfile con embed de video de TikTok
 - [x] Registrar tiktokRouter en server/routers.ts
+
+## 48. Carrusel de tweets con navegación
+- [x] Actualizar backend twitter.router.ts para obtener tweet IDs via scraping/oEmbed
+- [x] Crear componente TwitterCarousel con botones anterior/siguiente en DJProfile
+- [x] Mostrar un tweet a la vez con embed oficial de Twitter y navegación

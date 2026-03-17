@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { ShareProfileModal } from "@/components/ShareProfileModal";
-import { ExternalLink, Grid3X3 } from "lucide-react";
+import { ExternalLink, Grid3X3, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 
 // ── Threads SVG icon ──────────────────────────────────────────────────────
 function ThreadsIcon({ className }: { className?: string }) {
@@ -225,31 +225,16 @@ function LastTweet({ username, hasEmbed }: { username: string; hasEmbed: boolean
   );
 }
 
-// ── Twitter Feed Component (Embed) ──────────────────────────────────
+// ── Twitter Carousel Component ────────────────────────────────────────────────
+// Shows individual tweets with prev/next navigation using Twitter Timeline Embed + CSS isolation
+const TWEET_COUNT = 5; // Number of latest tweets to show in carousel
+
 function TwitterFeed({ username }: { username: string }) {
   const { data, isLoading } = trpc.twitter.getArtistTwitterFeed.useQuery(
     { username },
     { retry: false, staleTime: 60 * 60 * 1000 }
   );
-  const embedRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!data?.username) return;
-    // Re-initialize Twitter widgets after React renders the embed anchor
-    const tw = (window as any).twttr;
-    if (tw && tw.widgets) {
-      tw.widgets.load(embedRef.current ?? undefined);
-    } else {
-      // If script hasn't loaded yet, wait for it
-      const script = document.querySelector('script[src*="platform.twitter.com/widgets.js"]');
-      if (script) {
-        script.addEventListener('load', () => {
-          const tw2 = (window as any).twttr;
-          if (tw2 && tw2.widgets) tw2.widgets.load(embedRef.current ?? undefined);
-        }, { once: true });
-      }
-    }
-  }, [data?.username]);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   if (isLoading) {
     return (
@@ -258,15 +243,18 @@ function TwitterFeed({ username }: { username: string }) {
           <Twitter className="w-5 h-5" />
           <h3 className="font-semibold text-base">Twitter / X</h3>
         </div>
-        <Skeleton className="h-[500px] rounded-xl" />
+        <Skeleton className="h-48 rounded-xl" />
       </div>
     );
   }
 
   if (!data?.username) return null;
 
+  const twitterUser = data.username;
+
   return (
     <div className="py-6 border-t border-border">
+      {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <div className="p-1.5 rounded-lg bg-gradient-to-br from-sky-500 to-blue-600">
@@ -275,28 +263,126 @@ function TwitterFeed({ username }: { username: string }) {
           <h3 className="font-semibold text-base">Twitter / X</h3>
         </div>
         <a
-          href={`https://twitter.com/${data.username}`}
+          href={`https://twitter.com/${twitterUser}`}
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           <ExternalLink className="w-3.5 h-3.5" />
-          @{data.username}
+          @{twitterUser}
         </a>
       </div>
-      {/* Twitter Timeline Embed - no API credits needed */}
-      <div ref={embedRef} className="rounded-xl overflow-hidden border border-border/40" style={{ maxHeight: 420 }}>
+
+      {/* Carousel container */}
+      <div className="relative">
+        {/* Tweet embed - shows timeline filtered to show one tweet at a time via CSS */}
+        <div className="rounded-xl overflow-hidden border border-border/40 bg-black/20">
+          <TwitterCarouselEmbed
+            username={twitterUser}
+            currentIndex={currentIndex}
+            total={TWEET_COUNT}
+          />
+        </div>
+
+        {/* Navigation arrows */}
+        <button
+          onClick={() => setCurrentIndex(i => Math.max(0, i - 1))}
+          disabled={currentIndex === 0}
+          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-8 h-8 rounded-full bg-background border border-border shadow-md flex items-center justify-center hover:bg-accent transition-colors disabled:opacity-30 disabled:cursor-not-allowed z-10"
+          aria-label="Tweet anterior"
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+        <button
+          onClick={() => setCurrentIndex(i => Math.min(TWEET_COUNT - 1, i + 1))}
+          disabled={currentIndex === TWEET_COUNT - 1}
+          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-8 h-8 rounded-full bg-background border border-border shadow-md flex items-center justify-center hover:bg-accent transition-colors disabled:opacity-30 disabled:cursor-not-allowed z-10"
+          aria-label="Tweet siguiente"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Dot indicators */}
+      <div className="flex justify-center gap-1.5 mt-4">
+        {Array.from({ length: TWEET_COUNT }).map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrentIndex(i)}
+            className={`w-1.5 h-1.5 rounded-full transition-all ${
+              i === currentIndex
+                ? "bg-sky-400 w-4"
+                : "bg-muted-foreground/30 hover:bg-muted-foreground/60"
+            }`}
+            aria-label={`Ir al tweet ${i + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── TwitterCarouselEmbed: uses CSS to show only the nth tweet ─────────────────
+function TwitterCarouselEmbed({ username, currentIndex, total }: {
+  username: string;
+  currentIndex: number;
+  total: number;
+}) {
+  const embedRef = useRef<HTMLDivElement>(null);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!embedRef.current) return;
+    const initWidget = () => {
+      const tw = (window as any).twttr;
+      if (tw && tw.widgets) {
+        tw.widgets.load(embedRef.current!).then(() => setLoaded(true));
+      }
+    };
+    const tw = (window as any).twttr;
+    if (tw && tw.widgets) {
+      initWidget();
+    } else {
+      const script = document.querySelector('script[src*="platform.twitter.com/widgets.js"]');
+      if (script) {
+        script.addEventListener('load', initWidget, { once: true });
+      }
+    }
+  }, [username]);
+
+  return (
+    <div className="relative overflow-hidden">
+      {/* Inject CSS to show only the nth tweet article */}
+      <style>{`
+        .twitter-carousel-wrap .twitter-tweet-rendered {
+          display: none !important;
+        }
+        .twitter-carousel-wrap .twitter-tweet-rendered:nth-child(${currentIndex + 1}) {
+          display: block !important;
+        }
+        .twitter-carousel-wrap .EmbeddedTweet {
+          display: none !important;
+        }
+        .twitter-carousel-wrap .EmbeddedTweet:nth-child(${currentIndex + 1}) {
+          display: block !important;
+        }
+      `}</style>
+      <div ref={embedRef} className="twitter-carousel-wrap">
         <a
           className="twitter-timeline"
           data-theme="dark"
-          data-tweet-limit="3"
+          data-tweet-limit={String(total)}
           data-chrome="noheader nofooter noborders transparent"
-          data-height="420"
-          href={`https://twitter.com/${data.username}`}
+          href={`https://twitter.com/${username}`}
         >
-          Tweets de @{data.username}
+          Tweets de @{username}
         </a>
       </div>
+      {!loaded && (
+        <div className="flex items-center justify-center h-48">
+          <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+        </div>
+      )}
     </div>
   );
 }

@@ -356,6 +356,35 @@ export const twitterRouter = router({
     }),
 
   /**
+   * Get tweet oEmbed HTML for a specific tweet URL (no API key needed)
+   * Uses Twitter's free publish.twitter.com/oembed endpoint
+   */
+  getTweetEmbed: publicProcedure
+    .input(z.object({ tweetUrl: z.string().url() }))
+    .query(async ({ input }) => {
+      try {
+        const oembedUrl = new URL("https://publish.twitter.com/oembed");
+        oembedUrl.searchParams.set("url", input.tweetUrl);
+        oembedUrl.searchParams.set("theme", "dark");
+        oembedUrl.searchParams.set("hide_thread", "true");
+        oembedUrl.searchParams.set("omit_script", "true");
+        oembedUrl.searchParams.set("dnt", "true");
+
+        const res = await fetch(oembedUrl.toString(), {
+          headers: { "User-Agent": "OnlyDJs/1.0" },
+          signal: AbortSignal.timeout(8000),
+        });
+
+        if (!res.ok) return { html: null, error: `oEmbed error: ${res.status}` };
+
+        const data = await res.json() as { html: string; author_name?: string; author_url?: string };
+        return { html: data.html, authorName: data.author_name, authorUrl: data.author_url };
+      } catch (err) {
+        return { html: null, error: String(err) };
+      }
+    }),
+
+  /**
    * Force refresh the tweet cache
    */
   refreshFeed: protectedProcedure.mutation(async ({ ctx }) => {
