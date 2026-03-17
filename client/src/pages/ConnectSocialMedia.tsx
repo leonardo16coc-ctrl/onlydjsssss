@@ -16,6 +16,15 @@ import {
 } from "lucide-react";
 import { useLocation } from "wouter";
 
+// ── TikTok SVG icon ────────────────────────────────────────────────────────
+function TikTokIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.2 8.2 0 0 0 4.79 1.53V6.77a4.85 4.85 0 0 1-1.02-.08z"/>
+    </svg>
+  );
+}
+
 // ── Threads SVG icon ────────────────────────────────────────────────────────
 function ThreadsIcon({ className }: { className?: string }) {
   return (
@@ -289,9 +298,32 @@ export default function ConnectSocialMedia() {
     enabled: !!user,
   });
 
+  const { data: tiktokConnection, refetch: refetchTikTok } = trpc.tiktok.getMyConnections.useQuery(undefined, {
+    enabled: !!user,
+  });
+
   const isProcessingInstagram = useInstagramOAuthCallback();
   const isProcessingThreads = useThreadsOAuthCallback(() => refetchThreads());
   const isProcessingTwitter = useTwitterOAuthCallback(() => refetchTwitter());
+
+  // TikTok OAuth callback handler
+  const connectTikTok = trpc.tiktok.connectTikTok.useMutation({
+    onSuccess: (data) => {
+      toast.success(`✅ TikTok @${data.username} conectado (${data.followers.toLocaleString()} seguidores)`);
+      refetchTikTok();
+    },
+    onError: (err) => toast.error(`Error al conectar TikTok: ${err.message}`),
+  });
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    const state = params.get("state");
+    if (code && state?.startsWith("tiktok_") && !connectTikTok.isPending && !connectTikTok.isSuccess) {
+      const redirectUri = `${window.location.origin}/connect-social`;
+      connectTikTok.mutate({ code, state, redirectUri });
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, []);
 
   // Instagram
   const igGetAuthUrl = trpc.instagram.getAuthUrl.useQuery(
@@ -321,6 +353,30 @@ export default function ConnectSocialMedia() {
     onSuccess: () => { toast.success("Feed de Twitter actualizado"); refetchTwitter(); },
     onError: (err) => toast.error(`Error: ${err.message}`),
   });
+
+  // TikTok
+  const TIKTOK_CALLBACK_URI = `${window.location.origin}/connect-social`;
+  const tiktokGetAuthUrl = trpc.tiktok.getAuthUrl.useQuery(
+    { redirectUri: TIKTOK_CALLBACK_URI },
+    { enabled: false }
+  );
+  const tiktokDisconnect = trpc.tiktok.disconnectTikTok.useMutation({
+    onSuccess: () => { toast.success("TikTok desconectado"); refetchTikTok(); },
+    onError: (err) => toast.error(`Error: ${err.message}`),
+  });
+
+  const handleConnectTikTok = async () => {
+    try {
+      const result = await tiktokGetAuthUrl.refetch();
+      if (result.data?.authUrl) {
+        window.location.href = result.data.authUrl;
+      } else {
+        toast.error("TikTok no está configurado aún. Agrega TIKTOK_CLIENT_KEY y TIKTOK_CLIENT_SECRET en Settings → Secrets.");
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Error al iniciar la conexión con TikTok");
+    }
+  };
 
   // Threads
   const threadsGetAuthUrl = trpc.threads.getAuthUrl.useQuery(
@@ -510,6 +566,26 @@ export default function ConnectSocialMedia() {
             isConnecting={twitterGetAuthUrl.isFetching || isProcessingTwitter}
             isDisconnecting={twitterDisconnect.isPending}
             isRefreshing={twitterRefresh.isPending}
+          />
+
+          {/* TikTok */}
+          <PlatformCard
+            platform="instagram"
+            icon={<TikTokIcon className="w-5 h-5" />}
+            name="TikTok"
+            description="Muestra tu perfil de TikTok en tu página de artista"
+            accentColor="from-[#010101] via-[#69C9D0] to-[#EE1D52]"
+            connection={tiktokConnection?.tiktok ? {
+              platformUsername: tiktokConnection.tiktok.username,
+              profilePictureUrl: tiktokConnection.tiktok.profilePicture,
+              followerCount: tiktokConnection.tiktok.followers,
+              isActive: true,
+              lastSyncAt: tiktokConnection.tiktok.connectedAt,
+            } : null}
+            onConnect={handleConnectTikTok}
+            onDisconnect={() => tiktokDisconnect.mutate()}
+            isConnecting={tiktokGetAuthUrl.isFetching || connectTikTok.isPending}
+            isDisconnecting={tiktokDisconnect.isPending}
           />
 
           {/* Facebook - Coming soon */}

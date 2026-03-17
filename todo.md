@@ -3209,3 +3209,12 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar useEffect para reinicializar el widget cuando React renderiza el componente
 - [x] Actualizar LastTweet para mostrar enlace al perfil de Twitter (sin datos de API)
 - [x] Agregar tests de Twitter Embed (6 tests pasando)
+
+## 46. Mejoras Twitter Embed + TikTok Integration
+- [x] Reducir más el Twitter Embed (altura 240px, 2 tweets)
+- [x] Ocultar banner LastTweet si ya hay Twitter Embed activo (mostrar solo cuando no hay embed)
+- [x] Agregar tabla social_media_connections soporte para plataforma "tiktok"
+- [x] Crear tiktok.router.ts con OAuth y endpoint getArtistTikTokFeed (devuelve username)
+- [x] Agregar tarjeta TikTok en ConnectSocialMedia (/connect-social)
+- [x] Crear componente TikTokFeed en DJProfile con embed de video de TikTok
+- [x] Registrar tiktokRouter en server/routers.ts
