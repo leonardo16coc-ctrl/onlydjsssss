@@ -3223,3 +3223,8 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Actualizar backend twitter.router.ts para obtener tweet IDs via scraping/oEmbed
 - [x] Crear componente TwitterCarousel con botones anterior/siguiente en DJProfile
 - [x] Mostrar un tweet a la vez con embed oficial de Twitter y navegación
+
+## 49. Swipe táctil en carrusel de tweets
+- [x] Agregar touchstart/touchend al contenedor del carrusel para detectar swipe horizontal
+- [x] Umbral de 50px para activar navegación al deslizar
+- [x] Funciona en conjunto con los botones de flechas existentes

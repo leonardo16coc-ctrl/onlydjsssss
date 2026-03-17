@@ -236,6 +236,28 @@ function TwitterFeed({ username }: { username: string }) {
   );
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  // ── Swipe táctil ──────────────────────────────────────────────────────────
+  const touchStartX = useRef<number | null>(null);
+  const SWIPE_THRESHOLD = 50; // px mínimos para activar el swipe
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(deltaX) < SWIPE_THRESHOLD) return;
+    if (deltaX < 0) {
+      // Swipe izquierda → siguiente tweet
+      setCurrentIndex(i => Math.min(TWEET_COUNT - 1, i + 1));
+    } else {
+      // Swipe derecha → tweet anterior
+      setCurrentIndex(i => Math.max(0, i - 1));
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="py-6">
@@ -273,8 +295,12 @@ function TwitterFeed({ username }: { username: string }) {
         </a>
       </div>
 
-      {/* Carousel container */}
-      <div className="relative">
+      {/* Carousel container - touch swipe enabled */}
+      <div
+        className="relative"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         {/* Tweet embed - shows timeline filtered to show one tweet at a time via CSS */}
         <div className="rounded-xl overflow-hidden border border-border/40 bg-black/20">
           <TwitterCarouselEmbed

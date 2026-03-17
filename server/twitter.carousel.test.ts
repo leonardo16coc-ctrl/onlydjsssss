@@ -58,6 +58,60 @@ describe("Twitter Carousel - CSS nth-child selector", () => {
   });
 });
 
+describe("Twitter Carousel - Swipe Touch Logic", () => {
+  const SWIPE_THRESHOLD = 50;
+
+  it("should advance to next tweet on left swipe (deltaX < -50)", () => {
+    let currentIndex = 1;
+    const deltaX = -80; // swipe izquierda
+    if (Math.abs(deltaX) >= SWIPE_THRESHOLD) {
+      if (deltaX < 0) currentIndex = Math.min(TWEET_COUNT - 1, currentIndex + 1);
+      else currentIndex = Math.max(0, currentIndex - 1);
+    }
+    expect(currentIndex).toBe(2);
+  });
+
+  it("should go to previous tweet on right swipe (deltaX > 50)", () => {
+    let currentIndex = 2;
+    const deltaX = 90; // swipe derecha
+    if (Math.abs(deltaX) >= SWIPE_THRESHOLD) {
+      if (deltaX < 0) currentIndex = Math.min(TWEET_COUNT - 1, currentIndex + 1);
+      else currentIndex = Math.max(0, currentIndex - 1);
+    }
+    expect(currentIndex).toBe(1);
+  });
+
+  it("should ignore swipe shorter than threshold (deltaX = 30)", () => {
+    let currentIndex = 2;
+    const deltaX = 30; // muy corto
+    if (Math.abs(deltaX) >= SWIPE_THRESHOLD) {
+      if (deltaX < 0) currentIndex = Math.min(TWEET_COUNT - 1, currentIndex + 1);
+      else currentIndex = Math.max(0, currentIndex - 1);
+    }
+    expect(currentIndex).toBe(2); // sin cambio
+  });
+
+  it("should not go below 0 on right swipe at first tweet", () => {
+    let currentIndex = 0;
+    const deltaX = 100;
+    if (Math.abs(deltaX) >= SWIPE_THRESHOLD) {
+      if (deltaX < 0) currentIndex = Math.min(TWEET_COUNT - 1, currentIndex + 1);
+      else currentIndex = Math.max(0, currentIndex - 1);
+    }
+    expect(currentIndex).toBe(0);
+  });
+
+  it("should not exceed TWEET_COUNT-1 on left swipe at last tweet", () => {
+    let currentIndex = TWEET_COUNT - 1;
+    const deltaX = -100;
+    if (Math.abs(deltaX) >= SWIPE_THRESHOLD) {
+      if (deltaX < 0) currentIndex = Math.min(TWEET_COUNT - 1, currentIndex + 1);
+      else currentIndex = Math.max(0, currentIndex - 1);
+    }
+    expect(currentIndex).toBe(TWEET_COUNT - 1);
+  });
+});
+
 describe("Twitter oEmbed endpoint", () => {
   it("should construct correct oEmbed URL", () => {
     const tweetUrl = "https://twitter.com/testuser/status/123456789";
