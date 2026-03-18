@@ -3240,3 +3240,7 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Crear endpoint publicProcedure recordStream en dj-profiles.ts que incrementa streamCount y playCount
 - [x] Llamar al endpoint desde TrackCard al presionar play (con debounce de 10s para evitar spam)
 - [x] Mostrar streamCount actualizado en la UI sin recargar la página
+
+## 52. Corrección formato tiempo reproductor
+- [x] Corregir formatDuration para usar Math.floor en segundos y evitar decimales
+- [x] Verificar que el tooltip y el display de tiempo muestran MM:SS correctamente

@@ -503,9 +503,10 @@ function TrackCard({ track }: { track: any }) {
     toast("Link copied!");
   };
   const formatDuration = (seconds: number) => {
-    if (!seconds) return "--:--";
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
+    if (!seconds || isNaN(seconds)) return "--:--";
+    const totalSecs = Math.floor(seconds);
+    const m = Math.floor(totalSecs / 60);
+    const s = totalSecs % 60;
     return `${m}:${s.toString().padStart(2, "0")}`;
   };
 
