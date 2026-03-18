@@ -3244,3 +3244,13 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 ## 52. Corrección formato tiempo reproductor
 - [x] Corregir formatDuration para usar Math.floor en segundos y evitar decimales
 - [x] Verificar que el tooltip y el display de tiempo muestran MM:SS correctamente
+
+## 53. Rediseño Home con Design System JSON
+- [x] Aplicar colores: fondo #141414, surface #222222, acento naranja #FF5500, texto blanco/gris
+- [x] Hero banner con imagen de fondo + gradiente a la izquierda, texto alineado a la izquierda
+- [x] Botones primarios: fondo blanco, texto negro; secundarios: borde #333, fondo #222
+- [x] Carrusel "Trending Tracks" con grid 5 columnas desktop / 2 móvil, cards cuadradas 1:1
+- [x] Carrusel "Top DJs" con grid de avatares circulares
+- [x] Tipografía bold/800 para títulos de sección, acento naranja en labels
+- [x] Sección CTA centrada con fondo oscuro
+- [x] Mantener el Analizador de ONLYDJS

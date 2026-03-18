@@ -1,516 +1,504 @@
+import { useState, useRef } from "react";
 import { Link } from "wouter";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Upload, Play, Pause, Download, ChevronLeft, ChevronRight, Music2, Brain, BarChart3, Users, Zap, TrendingUp } from "lucide-react";
 import Navbar from "@/components/Navbar";
-import { Music2, TrendingUp, DollarSign, Sparkles, Shield, Zap, Upload, BarChart3, Brain, Wallet, Users, Star, CheckCircle2, ArrowRight } from "lucide-react";
-import MonetizationSection from "@/components/MonetizationSection";
-import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
 import { AIAnalyzer } from "@/components/AIAnalyzer";
-import TrackCarousel from "@/components/TrackCarousel";
-import MiniTrackCarousel from "@/components/MiniTrackCarousel";
 import { trpc } from "@/lib/trpc";
 
-function HeroTracksPreview() {
-  const { data: tracks, isLoading } = trpc.tracks.list.useQuery({
-    limit: 8,
-  });
+// ─── Helpers ────────────────────────────────────────────────────────────────
+function formatDuration(s: number) {
+  if (!s || isNaN(s)) return "";
+  const total = Math.floor(s);
+  return `${Math.floor(total / 60)}:${(total % 60).toString().padStart(2, "0")}`;
+}
 
-  if (isLoading || !tracks || tracks.length === 0) {
-    return (
-      <div className="relative">
-        <div className="relative rounded-2xl overflow-hidden border border-slate-700/50 shadow-2xl shadow-cyan-500/10 h-[500px]">
-          <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-6 h-full flex items-center justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400"></div>
-          </div>
-        </div>
-        <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-full blur-2xl"></div>
-        <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full blur-2xl"></div>
-      </div>
-    );
-  }
+// ─── Mini Play Button (used inside track cards) ──────────────────────────────
+function TrackPlayButton({ audioUrl, trackId }: { audioUrl?: string; trackId: number }) {
+  const [playing, setPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const recordStream = trpc.djProfiles.recordStream.useMutation();
+
+  if (!audioUrl) return null;
+
+  const toggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (playing) {
+      audio.pause();
+    } else {
+      document.querySelectorAll("audio").forEach(a => { if (a !== audio) a.pause(); });
+      audio.play().catch(() => {});
+      recordStream.mutate({ trackId });
+    }
+  };
 
   return (
-    <div className="relative">
-      <div className="relative rounded-2xl overflow-hidden border border-slate-700/50 shadow-2xl shadow-cyan-500/10 hover:shadow-cyan-500/20 transition-shadow h-[500px]">
-        <div className="bg-gradient-to-br from-slate-900 to-slate-950 p-6 h-full flex flex-col">
-          {/* Header */}
-          <div className="flex items-center justify-between pb-4 border-b border-slate-800 flex-shrink-0">
-            <h3 className="text-lg font-semibold text-white">Trending Now</h3>
-            <div className="flex gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-500/50"></div>
-              <div className="w-3 h-3 rounded-full bg-yellow-500/50"></div>
-              <div className="w-3 h-3 rounded-full bg-green-500/50"></div>
-            </div>
-          </div>
-
-          {/* Mini Carousel */}
-          <div className="flex-1 overflow-hidden mt-4">
-            <MiniTrackCarousel tracks={tracks} />
-          </div>
+    <>
+      <audio
+        ref={audioRef}
+        src={audioUrl}
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
+        onEnded={() => setPlaying(false)}
+      />
+      <button
+        onClick={toggle}
+        className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+        aria-label={playing ? "Pausar" : "Reproducir"}
+      >
+        <div className="w-10 h-10 rounded-full bg-[#FF5500] flex items-center justify-center shadow-lg">
+          {playing
+            ? <Pause className="w-4 h-4 text-white fill-white" />
+            : <Play className="w-4 h-4 text-white fill-white ml-0.5" />
+          }
         </div>
-      </div>
-      
-      {/* Floating Elements */}
-      <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 rounded-full blur-2xl"></div>
-      <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-full blur-2xl"></div>
-    </div>
+      </button>
+    </>
   );
 }
 
-function FeaturedTracksSection() {
-  const { data: tracks, isLoading } = trpc.tracks.list.useQuery({
-    limit: 12,
-  });
-
-  if (isLoading) {
-    return (
-      <section className="py-16 bg-slate-950 border-b border-slate-800">
-        <div className="container">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold mb-3 text-white">
-              <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Trending Tracks
-              </span>
-            </h2>
-            <p className="text-slate-400">Discover what DJs are uploading right now</p>
-          </div>
-          <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400"></div>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  if (!tracks || tracks.length === 0) {
-    return null;
-  }
+// ─── Trending Tracks Grid ────────────────────────────────────────────────────
+function TrendingTracksSection() {
+  const { data, isLoading } = trpc.djProfiles.getTrendingTracks.useQuery({ limit: 10 });
+  const tracks = data?.tracks ?? [];
 
   return (
-    <section className="py-16 bg-slate-950 border-b border-slate-800">
-      <div className="container">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold mb-3 text-white">
-            <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Trending Tracks
+    <section style={{ background: "#141414" }} className="py-16 border-t border-[#333]">
+      <div className="max-w-[1240px] mx-auto px-6 md:px-12">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <p className="text-[#FF5500] text-sm font-bold uppercase tracking-widest mb-1">Charts</p>
+            <h2 className="text-white font-extrabold text-3xl tracking-tight">Trending Tracks</h2>
+          </div>
+          <Link href="/explore">
+            <span className="text-[#A1A1A1] hover:text-white text-sm font-bold transition-colors cursor-pointer">
+              Ver todos →
             </span>
-          </h2>
-          <p className="text-slate-400">Discover what DJs are uploading right now</p>
+          </Link>
         </div>
-        <TrackCarousel tracks={tracks} />
+
+        {isLoading ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
+            {Array.from({ length: 10 }).map((_, i) => (
+              <div key={i} className="animate-pulse">
+                <div className="aspect-square bg-[#222] rounded" />
+                <div className="mt-2 h-3 bg-[#222] rounded w-3/4" />
+                <div className="mt-1 h-3 bg-[#222] rounded w-1/2" />
+              </div>
+            ))}
+          </div>
+        ) : tracks.length === 0 ? (
+          <p className="text-[#555] text-center py-12">Aún no hay tracks disponibles</p>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
+            {tracks.map((track: any) => (
+              <Link key={track.id} href={`/dj/${track.username}`}>
+                <div className="group cursor-pointer">
+                  {/* Square cover art */}
+                  <div className="relative aspect-square bg-[#222] rounded overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.6)]">
+                    {track.coverImageUrl ? (
+                      <img
+                        src={track.coverImageUrl}
+                        alt={track.title}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Music2 className="w-8 h-8 text-[#555]" />
+                      </div>
+                    )}
+                    <TrackPlayButton
+                      audioUrl={track.previewFileUrl || track.audioFileUrl}
+                      trackId={track.id}
+                    />
+                    {/* Duration badge */}
+                    {track.durationSeconds > 0 && (
+                      <span className="absolute bottom-1 right-1 bg-black/70 text-white text-[10px] px-1.5 py-0.5 rounded font-mono">
+                        {formatDuration(track.durationSeconds)}
+                      </span>
+                    )}
+                  </div>
+                  {/* Info */}
+                  <div className="mt-2 px-0.5">
+                    <p className="text-white text-sm font-bold leading-tight truncate">{track.title}</p>
+                    <p className="text-[#A1A1A1] text-xs truncate mt-0.5">{track.djName || track.name || track.username}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      {track.bpm && <span className="text-[#FF5500] text-[10px] font-bold">{track.bpm} BPM</span>}
+                      {track.genre && <span className="text-[#555] text-[10px] truncate">{track.genre}</span>}
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
 }
 
-export default function Home() {
-  const { t } = useTranslation();
+// ─── Top DJs Carousel ────────────────────────────────────────────────────────
+function TopDJsSection() {
+  const { data, isLoading } = trpc.djProfiles.getFeaturedDJs.useQuery({ limit: 12, sortBy: "followers" });
+  const djs = data?.djs ?? [];
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (dir: "left" | "right") => {
+    if (!scrollRef.current) return;
+    scrollRef.current.scrollBy({ left: dir === "left" ? -320 : 320, behavior: "smooth" });
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-      <Navbar />
-      
-      {/* Hero Section - SaaS Positioning */}
-      <section className="relative overflow-hidden py-24 md:py-32">
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-purple-500/5 to-pink-500/5"></div>
-        <div className="container relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
-            {/* Left: Copy */}
-            <div className="space-y-8">
-              <div className="space-y-6">
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
-                  <span className="bg-gradient-to-r from-white via-cyan-100 to-white bg-clip-text text-transparent">
-                    The Operating System
-                  </span>
-                  <br />
-                  <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                    for DJs
-                  </span>
-                </h1>
-                <p className="text-lg md:text-xl text-slate-300 leading-relaxed max-w-xl">
-                  Create AI-powered DJ sets, manage your music library, monetize content, and track performance analytics — all from one cloud platform.
-                </p>
-              </div>
-              
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/upload">
-                  <Button size="lg" className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white text-lg px-8 py-6 rounded-xl shadow-lg shadow-pink-500/20 transition-all hover:scale-105">
-                    <Upload className="w-5 h-5 mr-2" />
-                    Upload Track
-                  </Button>
-                </Link>
-                <Link href="/membership">
-                  <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 text-white text-lg px-8 py-6 rounded-xl shadow-lg shadow-cyan-500/20 transition-all hover:scale-105">
-                    Start Free
-                  </Button>
-                </Link>
-                <Link href="/dj-mode">
-                  <Button size="lg" variant="outline" className="border-slate-700 text-slate-200 hover:bg-slate-800 text-lg px-8 py-6 rounded-xl transition-all hover:scale-105">
-                    View Platform
-                  </Button>
-                </Link>
-              </div>
-
-              {/* Feature Pills */}
-              <div className="flex flex-wrap gap-3 pt-4">
-                <div className="inline-flex items-center gap-2 bg-slate-800/50 border border-slate-700 rounded-full px-4 py-2 hover:border-cyan-500/50 transition-colors">
-                  <Brain className="w-4 h-4 text-cyan-400" />
-                  <span className="text-sm text-slate-300">AI Set Generator</span>
-                </div>
-                <div className="inline-flex items-center gap-2 bg-slate-800/50 border border-slate-700 rounded-full px-4 py-2 hover:border-purple-500/50 transition-colors">
-                  <BarChart3 className="w-4 h-4 text-purple-400" />
-                  <span className="text-sm text-slate-300">Analytics Dashboard</span>
-                </div>
-                <div className="inline-flex items-center gap-2 bg-slate-800/50 border border-slate-700 rounded-full px-4 py-2 hover:border-pink-500/50 transition-colors">
-                  <Wallet className="w-4 h-4 text-pink-400" />
-                  <span className="text-sm text-slate-300">Monetization Tools</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Right: Live Tracks Preview */}
-            <HeroTracksPreview />
-
-
+    <section style={{ background: "#141414" }} className="py-16 border-t border-[#333]">
+      <div className="max-w-[1240px] mx-auto px-6 md:px-12">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <p className="text-[#FF5500] text-sm font-bold uppercase tracking-widest mb-1">Comunidad</p>
+            <h2 className="text-white font-extrabold text-3xl tracking-tight">Top DJs</h2>
           </div>
-        </div>
-      </section>
-
-      {/* Featured Tracks Carousel */}
-      <FeaturedTracksSection />
-
-      {/* Social Proof Stats */}
-      <section className="py-12 bg-slate-900/50 border-y border-slate-800">
-        <div className="container">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mb-2">
-                10K+
-              </div>
-              <div className="text-sm text-slate-400">Active DJs</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
-                500K+
-              </div>
-              <div className="text-sm text-slate-400">Tracks Uploaded</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-pink-400 to-cyan-400 bg-clip-text text-transparent mb-2">
-                2M+
-              </div>
-              <div className="text-sm text-slate-400">Downloads</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-pink-400 bg-clip-text text-transparent mb-2">
-                $500K+
-              </div>
-              <div className="text-sm text-slate-400">Paid to DJs</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* AI BPM & Key Analyzer - Free Tool */}
-      <AIAnalyzer />
-
-      {/* Featured Section - Key Features */}
-      <section className="py-20 bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900">
-        <div className="container">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  Everything you need to succeed as a DJ
-                </span>
-              </h2>
-              <p className="text-xl text-slate-400">
-                Professional tools designed for modern DJs
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="p-6 bg-slate-900/50 backdrop-blur-sm border-slate-800 hover:border-cyan-500/50 transition-all hover:scale-105 group">
-                <div className="flex flex-col items-center text-center">
-                  <div className="w-12 h-12 bg-cyan-500/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-cyan-500/20 transition-colors">
-                    <Brain className="h-6 w-6 text-cyan-400" />
-                  </div>
-                  <h3 className="text-lg font-bold mb-2 text-white">AI-Powered Sets</h3>
-                  <p className="text-sm text-slate-400">Generate perfect DJ sets with AI that understands energy flow and harmonic mixing</p>
-                </div>
-              </Card>
-              
-              <Card className="p-6 bg-slate-900/50 backdrop-blur-sm border-slate-800 hover:border-purple-500/50 transition-all hover:scale-105 group">
-                <div className="flex flex-col items-center text-center">
-                  <div className="w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-purple-500/20 transition-colors">
-                    <BarChart3 className="h-6 w-6 text-purple-400" />
-                  </div>
-                  <h3 className="text-lg font-bold mb-2 text-white">Performance Analytics</h3>
-                  <p className="text-sm text-slate-400">Track downloads, streams, and earnings with real-time dashboards</p>
-                </div>
-              </Card>
-              
-              <Card className="p-6 bg-slate-900/50 backdrop-blur-sm border-slate-800 hover:border-pink-500/50 transition-all hover:scale-105 group">
-                <div className="flex flex-col items-center text-center">
-                  <div className="w-12 h-12 bg-pink-500/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-pink-500/20 transition-colors">
-                    <Wallet className="h-6 w-6 text-pink-400" />
-                  </div>
-                  <h3 className="text-lg font-bold mb-2 text-white">Monetization Tools</h3>
-                  <p className="text-sm text-slate-400">Upload your tracks and earn from every download with transparent revenue sharing</p>
-                </div>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="py-20 bg-slate-950">
-        <div className="container">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
-                How It Works
-              </h2>
-              <p className="text-xl text-slate-400">
-                Get started in minutes
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="relative group">
-                <div className="flex flex-col items-center text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-cyan-500/20 group-hover:shadow-cyan-500/40 transition-shadow">
-                    <span className="text-2xl font-bold text-white">1</span>
-                  </div>
-                  <h3 className="text-xl font-bold mb-2 text-white">Sign Up Free</h3>
-                  <p className="text-slate-400">Create your account and access the platform instantly</p>
-                </div>
-                {/* Connector Line */}
-                <div className="hidden md:block absolute top-8 left-[60%] w-[80%] h-0.5 bg-gradient-to-r from-cyan-500/50 to-purple-500/50"></div>
-              </div>
-
-              <div className="relative group">
-                <div className="flex flex-col items-center text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-purple-500/20 group-hover:shadow-purple-500/40 transition-shadow">
-                    <span className="text-2xl font-bold text-white">2</span>
-                  </div>
-                  <h3 className="text-xl font-bold mb-2 text-white">Upload & Analyze</h3>
-                  <p className="text-slate-400">Upload your tracks and let AI analyze BPM, key, and energy</p>
-                </div>
-                {/* Connector Line */}
-                <div className="hidden md:block absolute top-8 left-[60%] w-[80%] h-0.5 bg-gradient-to-r from-purple-500/50 to-pink-500/50"></div>
-              </div>
-
-              <div className="relative group">
-                <div className="flex flex-col items-center text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-pink-500/20 group-hover:shadow-pink-500/40 transition-shadow">
-                    <span className="text-2xl font-bold text-white">3</span>
-                  </div>
-                  <h3 className="text-xl font-bold mb-2 text-white">Create & Earn</h3>
-                  <p className="text-slate-400">Generate AI sets, share your music, and start earning</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="text-center mt-12">
-              <Link href="/membership">
-                <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 text-white text-lg px-10 py-6 rounded-xl shadow-lg shadow-cyan-500/20 transition-all hover:scale-105">
-                  Get Started Now
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Preview */}
-      <section className="py-20 bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900">
-        <div className="container">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  Simple, Transparent Pricing
-                </span>
-              </h2>
-              <p className="text-xl text-slate-400">
-                Start free, upgrade when you're ready
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              {/* Free Plan */}
-              <Card className="p-8 bg-slate-900/50 border-slate-800 hover:border-slate-700 transition-all">
-                <div className="text-center mb-6">
-                  <h3 className="text-2xl font-bold text-white mb-2">Free</h3>
-                  <div className="text-4xl font-bold text-slate-300 mb-4">$0<span className="text-lg text-slate-500">/month</span></div>
-                  <p className="text-slate-400">Perfect for getting started</p>
-                </div>
-                <ul className="space-y-3 mb-8">
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-slate-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-slate-400">Browse unlimited tracks</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-slate-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-slate-400">1-minute previews</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-slate-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-slate-400">AI analysis tools</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-slate-500 mt-0.5 flex-shrink-0" />
-                    <span className="text-slate-400">Basic search filters</span>
-                  </li>
-                </ul>
-                <Link href="/membership">
-                  <Button variant="outline" className="w-full border-slate-700 text-slate-300 hover:bg-slate-800">
-                    Get Started
-                  </Button>
-                </Link>
-              </Card>
-
-              {/* Pro Plan */}
-              <Card className="p-8 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 border-cyan-500/50 hover:border-cyan-500 transition-all relative overflow-hidden">
-                {/* Popular Badge */}
-                <div className="absolute top-4 right-4 bg-gradient-to-r from-cyan-500 to-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full">
-                  POPULAR
-                </div>
-                <div className="text-center mb-6">
-                  <h3 className="text-2xl font-bold text-white mb-2">Pro</h3>
-                  <div className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mb-4">
-                    $4.99<span className="text-lg text-slate-400">/month</span>
-                  </div>
-                  <p className="text-slate-300">For serious DJs</p>
-                </div>
-                <ul className="space-y-3 mb-8">
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-white font-medium">Everything in Free, plus:</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-slate-300">Unlimited downloads (MP3 & WAV)</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-slate-300">Upload & monetize your tracks</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-slate-300">AI Set Generator</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-slate-300">Advanced analytics dashboard</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" />
-                    <span className="text-slate-300">Priority support</span>
-                  </li>
-                </ul>
-                <a href="https://onlydjs.sellfy.store/p/subscription/" target="_blank" rel="noopener noreferrer">
-                  <Button className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 text-white shadow-lg shadow-cyan-500/20">
-                    Upgrade to Pro
-                  </Button>
-                </a>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Monetization Section */}
-      <MonetizationSection />
-
-      {/* Features Grid */}
-      <section className="py-20 bg-slate-950">
-        <div className="container">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  Built for Professional DJs
-                </span>
-              </h2>
-              <p className="text-xl text-slate-400">
-                All the tools you need in one platform
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <Card className="p-6 bg-slate-900/50 border-slate-800 hover:border-cyan-500/50 transition-all hover:scale-105 group">
-                <Music2 className="h-8 w-8 text-cyan-400 mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="text-lg font-bold mb-2 text-white">Smart Music Library</h3>
-                <p className="text-sm text-slate-400">Organize thousands of tracks with AI-powered tagging and search</p>
-              </Card>
-
-              <Card className="p-6 bg-slate-900/50 border-slate-800 hover:border-purple-500/50 transition-all hover:scale-105 group">
-                <Sparkles className="h-8 w-8 text-purple-400 mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="text-lg font-bold mb-2 text-white">AI Recommendations</h3>
-                <p className="text-sm text-slate-400">Get personalized track suggestions based on your DJ style</p>
-              </Card>
-
-              <Card className="p-6 bg-slate-900/50 border-slate-800 hover:border-pink-500/50 transition-all hover:scale-105 group">
-                <TrendingUp className="h-8 w-8 text-pink-400 mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="text-lg font-bold mb-2 text-white">Trending Insights</h3>
-                <p className="text-sm text-slate-400">See what's hot in your genre before everyone else</p>
-              </Card>
-
-              <Card className="p-6 bg-slate-900/50 border-slate-800 hover:border-green-500/50 transition-all hover:scale-105 group">
-                <DollarSign className="h-8 w-8 text-green-400 mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="text-lg font-bold mb-2 text-white">Revenue Dashboard</h3>
-                <p className="text-sm text-slate-400">Track earnings, downloads, and payouts in real-time</p>
-              </Card>
-
-              <Card className="p-6 bg-slate-900/50 border-slate-800 hover:border-blue-500/50 transition-all hover:scale-105 group">
-                <Shield className="h-8 w-8 text-blue-400 mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="text-lg font-bold mb-2 text-white">Secure Storage</h3>
-                <p className="text-sm text-slate-400">Cloud-based library with automatic backups</p>
-              </Card>
-
-              <Card className="p-6 bg-slate-900/50 border-slate-800 hover:border-yellow-500/50 transition-all hover:scale-105 group">
-                <Zap className="h-8 w-8 text-yellow-400 mb-4 group-hover:scale-110 transition-transform" />
-                <h3 className="text-lg font-bold mb-2 text-white">Lightning Fast</h3>
-                <p className="text-sm text-slate-400">Instant uploads, downloads, and analysis</p>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="py-20 bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 border-t border-slate-800">
-        <div className="container">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Ready to elevate your DJ career?
+          <div className="flex items-center gap-3">
+            <Link href="/explore">
+              <span className="text-[#A1A1A1] hover:text-white text-sm font-bold transition-colors cursor-pointer mr-4">
+                Ver todos →
               </span>
-            </h2>
-            <p className="text-xl text-slate-400 mb-8 max-w-2xl mx-auto">
-              Join thousands of DJs who are already using ONLYDJS to create better sets, grow their audience, and earn from their music.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/membership">
-                <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 text-white text-lg px-10 py-6 rounded-xl shadow-lg shadow-cyan-500/20 transition-all hover:scale-105">
-                  Start Free Today
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
+            </Link>
+            <button
+              onClick={() => scroll("left")}
+              className="w-8 h-8 rounded-full border border-[#333] flex items-center justify-center text-white hover:border-white transition-colors"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => scroll("right")}
+              className="w-8 h-8 rounded-full border border-[#333] flex items-center justify-center text-white hover:border-white transition-colors"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {isLoading ? (
+          <div className="flex gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="animate-pulse flex-shrink-0 w-32 text-center">
+                <div className="w-20 h-20 rounded-full bg-[#222] mx-auto" />
+                <div className="mt-2 h-3 bg-[#222] rounded w-3/4 mx-auto" />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div
+            ref={scrollRef}
+            className="flex gap-6 overflow-x-auto scrollbar-hide pb-2"
+            style={{ scrollbarWidth: "none" }}
+          >
+            {djs.map((dj: any) => (
+              <Link key={dj.id} href={`/dj/${dj.username}`}>
+                <div className="group flex-shrink-0 w-32 text-center cursor-pointer">
+                  <div className="relative w-20 h-20 mx-auto rounded-full overflow-hidden bg-[#222] border-2 border-[#333] group-hover:border-[#FF5500] transition-colors duration-200 shadow-[0_4px_16px_rgba(0,0,0,0.6)]">
+                    {dj.profileImageUrl || dj.avatarUrl ? (
+                      <img
+                        src={dj.profileImageUrl || dj.avatarUrl}
+                        alt={dj.djName || dj.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Users className="w-8 h-8 text-[#555]" />
+                      </div>
+                    )}
+                    {dj.isVerified && (
+                      <div className="absolute bottom-0 right-0 w-5 h-5 bg-[#FF5500] rounded-full flex items-center justify-center">
+                        <span className="text-white text-[8px] font-bold">✓</span>
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-white text-xs font-bold mt-2 truncate px-1">
+                    {dj.djName || dj.name || dj.username}
+                  </p>
+                  <p className="text-[#A1A1A1] text-[10px] mt-0.5">
+                    {Number(dj.followers_count || 0).toLocaleString()} seguidores
+                  </p>
+                </div>
               </Link>
-              <Link href="/discover">
-                <Button size="lg" variant="outline" className="border-slate-700 text-slate-200 hover:bg-slate-800 text-lg px-10 py-6 rounded-xl transition-all hover:scale-105">
-                  Explore Tracks
-                </Button>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+// ─── Feature Cards ───────────────────────────────────────────────────────────
+const FEATURES = [
+  {
+    icon: Brain,
+    title: "AI Set Generator",
+    desc: "Genera sets perfectos con IA que entiende energía y mezcla armónica.",
+    accent: "#FF5500",
+  },
+  {
+    icon: BarChart3,
+    title: "Analytics en Tiempo Real",
+    desc: "Rastrea descargas, streams y ganancias con dashboards en vivo.",
+    accent: "#FF5500",
+  },
+  {
+    icon: Upload,
+    title: "Upload Ilimitado",
+    desc: "Sube tus tracks en MP3 y WAV con análisis automático de BPM y tonalidad.",
+    accent: "#FF5500",
+  },
+  {
+    icon: TrendingUp,
+    title: "Charts & Trending",
+    desc: "Aparece en los charts de la comunidad y gana visibilidad orgánica.",
+    accent: "#FF5500",
+  },
+  {
+    icon: Zap,
+    title: "Análisis Instantáneo",
+    desc: "BPM, key y energía detectados automáticamente al subir tu track.",
+    accent: "#FF5500",
+  },
+  {
+    icon: Users,
+    title: "Red de DJs",
+    desc: "Conecta con DJs de todo el mundo, sigue artistas y comparte tu música.",
+    accent: "#FF5500",
+  },
+];
+
+// ─── Main Home ───────────────────────────────────────────────────────────────
+export default function Home() {
+  return (
+    <div style={{ background: "#141414", color: "#FFFFFF", fontFamily: "'Helvetica Neue', Arial, sans-serif" }} className="min-h-screen">
+      <Navbar />
+
+      {/* ── Hero Banner ─────────────────────────────────────────────────────── */}
+      <section
+        className="relative overflow-hidden"
+        style={{
+          background: "linear-gradient(135deg, #141414 0%, #1a0a00 50%, #141414 100%)",
+          padding: "96px 0",
+        }}
+      >
+        {/* Subtle orange glow */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse 60% 50% at 70% 50%, rgba(255,85,0,0.08) 0%, transparent 70%)",
+          }}
+        />
+
+        <div className="max-w-[1240px] mx-auto px-6 md:px-12 relative z-10">
+          <div className="max-w-[50%] min-w-[320px]">
+            {/* Label */}
+            <p
+              className="text-sm font-bold uppercase tracking-widest mb-4"
+              style={{ color: "#FF5500" }}
+            >
+              La plataforma para DJs
+            </p>
+
+            {/* H1 */}
+            <h1
+              className="leading-none mb-6"
+              style={{
+                fontSize: "clamp(36px, 5vw, 56px)",
+                fontWeight: 800,
+                letterSpacing: "-0.02em",
+                lineHeight: 1.1,
+                color: "#FFFFFF",
+                textShadow: "0 2px 4px rgba(0,0,0,0.5)",
+              }}
+            >
+              Tu música.<br />
+              Tu comunidad.<br />
+              <span style={{ color: "#FF5500" }}>ONLYDJS.</span>
+            </h1>
+
+            <p
+              className="mb-8 max-w-md"
+              style={{ fontSize: "18px", lineHeight: 1.5, color: "#A1A1A1" }}
+            >
+              Sube, analiza y comparte tus tracks con la comunidad DJ más grande.
+              Descubre trending tracks, conecta con artistas y haz crecer tu carrera.
+            </p>
+
+            {/* CTAs */}
+            <div className="flex flex-wrap gap-4">
+              <Link href="/upload">
+                <button
+                  className="flex items-center gap-2 font-bold transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                  style={{
+                    background: "#FFFFFF",
+                    color: "#000000",
+                    border: "none",
+                    borderRadius: "4px",
+                    padding: "12px 24px",
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    boxShadow: "0 4px 16px rgba(0,0,0,0.6)",
+                  }}
+                >
+                  <Upload className="w-4 h-4" />
+                  Upload Track
+                </button>
+              </Link>
+              <Link href="/explore">
+                <button
+                  className="flex items-center gap-2 font-bold transition-all duration-200 hover:border-white"
+                  style={{
+                    background: "#222222",
+                    color: "#FFFFFF",
+                    border: "1px solid #333333",
+                    borderRadius: "4px",
+                    padding: "12px 24px",
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                  }}
+                >
+                  <Play className="w-4 h-4 fill-current" />
+                  Explorar Música
+                </button>
               </Link>
             </div>
-            <p className="text-sm text-slate-500 mt-6">
-              No credit card required • Cancel anytime • 10K+ active DJs
-            </p>
+
+            {/* Stats row */}
+            <div className="flex flex-wrap gap-8 mt-10">
+              {[
+                { value: "10K+", label: "DJs activos" },
+                { value: "500K+", label: "Tracks" },
+                { value: "2M+", label: "Descargas" },
+              ].map(stat => (
+                <div key={stat.label}>
+                  <p className="text-white font-extrabold text-2xl leading-none">{stat.value}</p>
+                  <p className="text-[#A1A1A1] text-xs mt-1">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Trending Tracks Grid ─────────────────────────────────────────────── */}
+      <TrendingTracksSection />
+
+      {/* ── Top DJs Carousel ─────────────────────────────────────────────────── */}
+      <TopDJsSection />
+
+      {/* ── AI Analyzer ──────────────────────────────────────────────────────── */}
+      <div style={{ borderTop: "1px solid #333" }}>
+        <AIAnalyzer />
+      </div>
+
+      {/* ── Features Grid ────────────────────────────────────────────────────── */}
+      <section style={{ background: "#141414", borderTop: "1px solid #333" }} className="py-20">
+        <div className="max-w-[1240px] mx-auto px-6 md:px-12">
+          <div className="text-center mb-12">
+            <p className="text-[#FF5500] text-sm font-bold uppercase tracking-widest mb-2">Herramientas</p>
+            <h2
+              className="text-white font-extrabold"
+              style={{ fontSize: "clamp(28px, 4vw, 40px)", letterSpacing: "-0.01em" }}
+            >
+              Todo lo que necesitas como DJ
+            </h2>
+            <p className="text-[#A1A1A1] mt-3 text-lg">Herramientas profesionales en una sola plataforma</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {FEATURES.map(({ icon: Icon, title, desc }) => (
+              <div
+                key={title}
+                className="group transition-all duration-200 hover:scale-[1.02]"
+                style={{
+                  background: "#222222",
+                  border: "1px solid #333333",
+                  borderRadius: "4px",
+                  padding: "24px",
+                  cursor: "default",
+                }}
+                onMouseEnter={e => (e.currentTarget.style.borderColor = "#FF5500")}
+                onMouseLeave={e => (e.currentTarget.style.borderColor = "#333333")}
+              >
+                <div
+                  className="w-10 h-10 flex items-center justify-center mb-4 rounded"
+                  style={{ background: "rgba(255,85,0,0.12)" }}
+                >
+                  <Icon className="w-5 h-5" style={{ color: "#FF5500" }} />
+                </div>
+                <h3 className="text-white font-bold text-base mb-2">{title}</h3>
+                <p className="text-[#A1A1A1] text-sm leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA Section ──────────────────────────────────────────────────────── */}
+      <section
+        style={{
+          background: "linear-gradient(180deg, #141414 0%, #1a0a00 50%, #141414 100%)",
+          borderTop: "1px solid #333",
+          padding: "64px 24px",
+        }}
+      >
+        <div className="max-w-[1240px] mx-auto text-center">
+          <p className="text-[#FF5500] text-sm font-bold uppercase tracking-widest mb-3">Únete ahora</p>
+          <h2
+            className="text-white font-extrabold mb-4"
+            style={{ fontSize: "clamp(28px, 4vw, 40px)", letterSpacing: "-0.01em" }}
+          >
+            Empieza a subir tu música hoy
+          </h2>
+          <p className="text-[#A1A1A1] text-lg mb-8 max-w-lg mx-auto">
+            Crea tu perfil, sube tus tracks y conecta con miles de DJs en todo el mundo.
+          </p>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Link href="/upload">
+              <button
+                className="flex items-center gap-2 font-bold transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                style={{
+                  background: "#FFFFFF",
+                  color: "#000000",
+                  border: "none",
+                  borderRadius: "4px",
+                  padding: "14px 32px",
+                  fontSize: "14px",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  boxShadow: "0 4px 16px rgba(0,0,0,0.6)",
+                }}
+              >
+                <Upload className="w-4 h-4" />
+                Upload tu primer track
+              </button>
+            </Link>
+            <Link href="/explore">
+              <button
+                className="font-bold transition-all duration-200"
+                style={{
+                  background: "transparent",
+                  color: "#FFFFFF",
+                  border: "none",
+                  borderRadius: "4px",
+                  padding: "14px 32px",
+                  fontSize: "14px",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+                onMouseEnter={e => (e.currentTarget.style.color = "#A1A1A1")}
+                onMouseLeave={e => (e.currentTarget.style.color = "#FFFFFF")}
+              >
+                Explorar la comunidad
+              </button>
+            </Link>
           </div>
         </div>
       </section>
