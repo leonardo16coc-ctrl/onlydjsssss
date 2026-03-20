@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import AudioPlayer from "@/components/AudioPlayer";
+import WaveformPlayer from "@/components/WaveformPlayer";
 import ShareTrackButtons from "@/components/ShareTrackButtons";
 import DownloadButton from "@/components/DownloadButton";
 import AddToPlaylistButton from "@/components/AddToPlaylistButton";
@@ -206,13 +206,11 @@ export default function TrackDetail() {
               </div>
             </div>
 
-            {/* Audio Player */}
+            {/* Audio Player with Waveform */}
             <Card className="bg-card/50 backdrop-blur border-border/50">
               <CardContent className="p-6">
-                <AudioPlayer
+                <WaveformPlayer
                   audioUrl={track.audioFileUrl}
-                  trackId={track.id}
-                  trackTitle={track.title}
                 />
               </CardContent>
             </Card>

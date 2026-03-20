@@ -3268,3 +3268,9 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Redirige a la SPA para usuarios reales (meta http-equiv refresh)
 - [x] Fallback a logo de ONLYDJS si no hay cover art
 - [x] Cache de 5 minutos en el servidor para respuestas de bots
+
+## 57. Waveform interactiva en TrackDetail
+- [x] Revisar estructura de waveformData en la DB (ya existe WaveformPlayer con WaveSurfer.js)
+- [x] Integrar WaveformPlayer en TrackDetail reemplazando AudioPlayer plano
+- [x] WaveSurfer.js: waveform visual interactiva, click para saltar, drag to seek
+- [x] Controles de play/pause, tiempo y volumen integrados en el player
