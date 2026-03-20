@@ -3274,3 +3274,9 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Integrar WaveformPlayer en TrackDetail reemplazando AudioPlayer plano
 - [x] WaveSurfer.js: waveform visual interactiva, click para saltar, drag to seek
 - [x] Controles de play/pause, tiempo y volumen integrados en el player
+
+## 58. Dominio canónico en URLs de tracks
+- [x] Actualizar shareTrack en DJProfile para usar www.onlydjss.com como dominio base
+- [x] Actualizar ShareTrackButtons para aceptar djUsername y generar URL /dj/:username/track/:id
+- [x] Pasar djUsername al ShareTrackButtons desde TrackDetail
+- [x] SSR de Open Graph ya usa www.onlydjss.com en og:url

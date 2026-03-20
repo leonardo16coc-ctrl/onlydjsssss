@@ -499,9 +499,11 @@ function TrackCard({ track, djUsername }: { track: any; djUsername?: string }) {
   });
   const [linkCopied, setLinkCopied] = useState(false);
   // Build canonical URL: /dj/:username/track/:id if username is available
+  // Siempre usar el dominio canónico para que el link sea válido en cualquier entorno
+  const CANONICAL_DOMAIN = "https://www.onlydjss.com";
   const trackUrl = djUsername
-    ? `${window.location.origin}/dj/${djUsername}/track/${track.id}`
-    : `${window.location.origin}/track/${track.id}`;
+    ? `${CANONICAL_DOMAIN}/dj/${djUsername}/track/${track.id}`
+    : `${CANONICAL_DOMAIN}/track/${track.id}`;
   const shareTrack = async () => {
     try {
       await navigator.clipboard.writeText(trackUrl);

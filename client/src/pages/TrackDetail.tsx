@@ -242,6 +242,7 @@ export default function TrackDetail() {
                 trackId={track.id}
                 trackTitle={track.title}
                 artistName={track.artist}
+                djUsername={track.username || params.username}
               />
             </div>
 

@@ -12,13 +12,17 @@ interface ShareTrackButtonsProps {
   trackId: number;
   trackTitle: string;
   artistName: string;
+  djUsername?: string; // Para URL canónica /dj/:username/track/:id
 }
 
-export default function ShareTrackButtons({ trackId, trackTitle, artistName }: ShareTrackButtonsProps) {
+export default function ShareTrackButtons({ trackId, trackTitle, artistName, djUsername }: ShareTrackButtonsProps) {
   const [copied, setCopied] = useState(false);
 
-  // Construir URL del track con dominio personalizado
-  const trackUrl = `https://www.onlydjss.com/track/${trackId}`;
+  // Construir URL canónica del track con dominio personalizado
+  const CANONICAL_DOMAIN = "https://www.onlydjss.com";
+  const trackUrl = djUsername
+    ? `${CANONICAL_DOMAIN}/dj/${djUsername}/track/${trackId}`
+    : `${CANONICAL_DOMAIN}/track/${trackId}`;
   
   // Texto para compartir
   const shareText = `🎧 Check out "${trackTitle}" by ${artistName} on ONLYDJS`;
