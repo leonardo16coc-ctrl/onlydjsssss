@@ -160,6 +160,113 @@ async function startServer() {
     }
   });
   
+  // ============= OPEN GRAPH SSR ENDPOINTS =============
+  // When bots (WhatsApp, Telegram, Slack, Twitter) visit track URLs,
+  // serve a lightweight HTML page with proper OG meta tags.
+  // This enables rich link previews without full SSR.
+  const BOT_USER_AGENTS = [
+    'facebookexternalhit', 'twitterbot', 'whatsapp', 'telegrambot',
+    'slackbot', 'linkedinbot', 'discordbot', 'googlebot', 'bingbot',
+    'applebot', 'pinterest', 'vkshare', 'w3c_validator', 'curl', 'wget',
+    'python-requests', 'axios', 'node-fetch', 'got',
+  ];
+  
+  const isBot = (userAgent: string = '') => {
+    const ua = userAgent.toLowerCase();
+    return BOT_USER_AGENTS.some(bot => ua.includes(bot));
+  };
+
+  const buildOgHtml = (track: {
+    id: number; title: string; artist: string; genre?: string | null;
+    bpm?: number | null; musicalKey?: string | null; coverImageUrl?: string | null;
+    audioFileUrl?: string | null; durationSeconds?: number | null;
+    username?: string | null; djName?: string | null; trackType?: string | null;
+  }) => {
+    const siteUrl = 'https://www.onlydjss.com';
+    const canonicalUrl = track.username
+      ? `${siteUrl}/dj/${track.username}/track/${track.id}`
+      : `${siteUrl}/track/${track.id}`;
+    const image = track.coverImageUrl || `${siteUrl}/logo-new-gradient.webp`;
+    const djDisplay = track.djName || track.username || track.artist;
+    const bpmInfo = track.bpm ? ` • ${track.bpm} BPM` : '';
+    const keyInfo = track.musicalKey ? ` • ${track.musicalKey}` : '';
+    const typeInfo = track.trackType ? ` [${track.trackType}]` : '';
+    const title = `${track.title}${typeInfo} — ${djDisplay}`;
+    const description = `${track.genre || 'Electronic'}${bpmInfo}${keyInfo} | Escúchalo y descárgalo en ONLYDJS — La plataforma de DJs profesionales.`;
+    const durationSecs = track.durationSeconds || 0;
+    
+    return `<!DOCTYPE html>
+<html prefix="og: https://ogp.me/ns# music: https://ogp.me/ns/music#">
+<head>
+  <meta charset="UTF-8">
+  <title>${title}</title>
+  <!-- Open Graph -->
+  <meta property="og:type" content="music.song">
+  <meta property="og:title" content="${title}">
+  <meta property="og:description" content="${description}">
+  <meta property="og:image" content="${image}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="1200">
+  <meta property="og:url" content="${canonicalUrl}">
+  <meta property="og:site_name" content="ONLYDJS">
+  <meta property="og:locale" content="es_MX">
+  ${track.audioFileUrl ? `<meta property="og:audio" content="${track.audioFileUrl}">` : ''}
+  ${track.audioFileUrl ? `<meta property="og:audio:type" content="audio/mpeg">` : ''}
+  <meta property="music:musician" content="${djDisplay}">
+  ${durationSecs ? `<meta property="music:duration" content="${durationSecs}">` : ''}
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="${title}">
+  <meta name="twitter:description" content="${description}">
+  <meta name="twitter:image" content="${image}">
+  <meta name="twitter:site" content="@onlydjss">
+  <!-- Canonical -->
+  <link rel="canonical" href="${canonicalUrl}">
+  <!-- Redirect to SPA for real users -->
+  <meta http-equiv="refresh" content="0; url=${canonicalUrl}">
+</head>
+<body>
+  <p>Redirigiendo a <a href="${canonicalUrl}">${title}</a>...</p>
+</body>
+</html>`;
+  };
+
+  // SSR OG handler for /track/:id
+  app.get('/track/:id', async (req, res, next) => {
+    const ua = req.headers['user-agent'] || '';
+    if (!isBot(ua)) return next();
+    try {
+      const { getTrackById } = await import('../db');
+      const trackId = parseInt(req.params.id);
+      if (isNaN(trackId)) return next();
+      const track = await getTrackById(trackId);
+      if (!track) return res.status(404).send('Track not found');
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.setHeader('Cache-Control', 'public, max-age=300'); // 5 min cache
+      return res.send(buildOgHtml(track));
+    } catch (e) {
+      return next();
+    }
+  });
+
+  // SSR OG handler for /dj/:username/track/:id (canonical URL)
+  app.get('/dj/:username/track/:id', async (req, res, next) => {
+    const ua = req.headers['user-agent'] || '';
+    if (!isBot(ua)) return next();
+    try {
+      const { getTrackById } = await import('../db');
+      const trackId = parseInt(req.params.id);
+      if (isNaN(trackId)) return next();
+      const track = await getTrackById(trackId);
+      if (!track) return res.status(404).send('Track not found');
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.setHeader('Cache-Control', 'public, max-age=300'); // 5 min cache
+      return res.send(buildOgHtml(track));
+    } catch (e) {
+      return next();
+    }
+  });
+
   // tRPC API
   app.use(
     "/api/trpc",

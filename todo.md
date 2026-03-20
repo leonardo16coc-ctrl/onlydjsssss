@@ -3259,3 +3259,12 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Actualizar shareTrack en TrackCard para generar URL /dj/:username/track/:id
 - [x] Actualizar og:url en TrackDetail para usar URL canónica con username
 - [x] Mantener compatibilidad con URLs antiguas /track/:id (redirect automático)
+
+## 56. Open Graph mejorado para tracks
+- [x] Crear endpoint SSR /track/:id y /dj/:username/track/:id que detecta bots y devuelve HTML con meta tags OG
+- [x] Incluir og:title, og:description, og:image (cover art), og:url, og:type music.song
+- [x] Incluir twitter:card summary_large_image, twitter:title, twitter:description, twitter:image
+- [x] Incluir music:musician, music:duration, og:audio para reproductores de música
+- [x] Redirige a la SPA para usuarios reales (meta http-equiv refresh)
+- [x] Fallback a logo de ONLYDJS si no hay cover art
+- [x] Cache de 5 minutos en el servidor para respuestas de bots
