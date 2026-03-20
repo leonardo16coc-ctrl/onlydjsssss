@@ -3252,3 +3252,10 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Botón Share/Copy Link en TrackCard del perfil del DJ
 - [x] Registrar ruta /track/:id en App.tsx (ya existía como TrackDetail)
 - [x] Incrementar viewCount al abrir la página del track (via streamCount al reproducir)
+
+## 55. URL descriptiva de tracks /dj/:username/track/:id
+- [x] Agregar ruta /dj/:username/track/:id en App.tsx (mantener /track/:id como redirect)
+- [x] Actualizar TrackDetail para leer username y trackId de los params
+- [x] Actualizar shareTrack en TrackCard para generar URL /dj/:username/track/:id
+- [x] Actualizar og:url en TrackDetail para usar URL canónica con username
+- [x] Mantener compatibilidad con URLs antiguas /track/:id (redirect automático)

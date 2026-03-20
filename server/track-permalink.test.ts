@@ -1,7 +1,15 @@
 import { describe, it, expect } from "vitest";
 
 describe("Track Permalink System", () => {
-  it("generates correct track URL from ID", () => {
+  it("generates correct canonical track URL with username", () => {
+    const trackId = 42;
+    const username = "djnexus";
+    const baseUrl = "https://www.onlydjss.com";
+    const trackUrl = `${baseUrl}/dj/${username}/track/${trackId}`;
+    expect(trackUrl).toBe("https://www.onlydjss.com/dj/djnexus/track/42");
+  });
+
+  it("falls back to /track/:id when username is not available", () => {
     const trackId = 42;
     const baseUrl = "https://www.onlydjss.com";
     const trackUrl = `${baseUrl}/track/${trackId}`;

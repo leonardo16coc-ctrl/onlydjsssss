@@ -98,6 +98,7 @@ function Router() {
       <Route path={"/social/map"} component={SocialMap} />
       <Route path={"/profile/edit"} component={ProfileEdit} />
       <Route path={"/connect-social"} component={ConnectSocialMedia} />
+      <Route path={"/dj/:username/track/:id"} component={TrackDetail} />
       <Route path={"/track/:id"} component={TrackDetail} />
       <Route path={"/my-playlists"} component={MyPlaylists} />
       <Route path={"/playlist/:id"} component={PlaylistDetail} />

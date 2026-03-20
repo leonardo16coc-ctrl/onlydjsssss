@@ -27,15 +27,23 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
 export default function TrackDetail() {
-  const { id } = useParams<{ id: string }>();
+  const params = useParams<{ id: string; username?: string }>();
   const { t } = useTranslation();
   const { user, isAuthenticated } = useAuth();
   const [, setLocation] = useLocation();
   const [isLiked, setIsLiked] = useState(false);
 
-  const trackId = parseInt(id || "0");
+  const trackId = parseInt(params.id || "0");
   
   const { data: track, isLoading } = trpc.tracks.getById.useQuery({ id: trackId });
+
+  // Redirect to canonical URL /dj/:username/track/:id once track data is loaded
+  useEffect(() => {
+    if (track && !params.username && track.username) {
+      // Silently replace URL to canonical form without re-rendering
+      window.history.replaceState(null, "", `/dj/${track.username}/track/${track.id}`);
+    }
+  }, [track, params.username]);
   // Related tracks will be added later
   const relatedTracks: any[] = [];
 
@@ -75,7 +83,10 @@ export default function TrackDetail() {
       updateMetaTag('og:description', `Listen to ${track.title} by ${track.artist} on ONLYDJS. ${track.genre} • ${track.bpm} BPM • ${track.musicalKey || 'N/A'} Key`);
       updateMetaTag('og:image', track.coverImageUrl || '/logo-new-gradient.webp');
       updateMetaTag('og:type', 'music.song');
-      updateMetaTag('og:url', `https://www.onlydjss.com/track/${track.id}`);
+      const canonicalUrl = track.username
+        ? `https://www.onlydjss.com/dj/${track.username}/track/${track.id}`
+        : `https://www.onlydjss.com/track/${track.id}`;
+      updateMetaTag('og:url', canonicalUrl);
       updateMetaTag('og:audio', track.audioFileUrl);
       updateMetaTag('music:musician', track.artist);
     }

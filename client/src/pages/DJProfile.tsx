@@ -486,7 +486,7 @@ function InstagramFeed({ username }: { username: string }) {
   );
 }
 
-function TrackCard({ track }: { track: any }) {
+function TrackCard({ track, djUsername }: { track: any; djUsername?: string }) {
   const likeTrack = trpc.djProfiles.likeTrack.useMutation({
     onSuccess: (data: any) => {
       toast(data.liked ? "Track liked!" : "Like removed");
@@ -498,13 +498,16 @@ function TrackCard({ track }: { track: any }) {
     },
   });
   const [linkCopied, setLinkCopied] = useState(false);
+  // Build canonical URL: /dj/:username/track/:id if username is available
+  const trackUrl = djUsername
+    ? `${window.location.origin}/dj/${djUsername}/track/${track.id}`
+    : `${window.location.origin}/track/${track.id}`;
   const shareTrack = async () => {
-    const url = `${window.location.origin}/track/${track.id}`;
     try {
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(trackUrl);
       setLinkCopied(true);
-      toast.success(`\uD83D\uDD17 Link copiado — envíalo a sellos discográficos`, {
-        description: url,
+      toast.success(`\uD83D\uDD17 Link copiado \u2014 env\u00edalo a sellos discogr\u00e1ficos`, {
+        description: trackUrl,
         duration: 4000,
       });
       setTimeout(() => setLinkCopied(false), 3000);
@@ -513,7 +516,7 @@ function TrackCard({ track }: { track: any }) {
     }
   };
   const openTrackPage = () => {
-    window.open(`${window.location.origin}/track/${track.id}`, "_blank");
+    window.open(trackUrl, "_blank");
   };
   const formatDuration = (seconds: number) => {
     if (!seconds || isNaN(seconds)) return "--:--";
@@ -808,7 +811,7 @@ function TrackList({ username, type }: { username: string; type: "all" | "edit" 
   );
   return (
     <div className="space-y-3">
-      {tracks.map((track: any) => <TrackCard key={track.id} track={track} />)}
+      {tracks.map((track: any) => <TrackCard key={track.id} track={track} djUsername={username} />)}
     </div>
   );
 }

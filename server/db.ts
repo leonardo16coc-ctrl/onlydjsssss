@@ -127,7 +127,49 @@ export async function getTrackById(id: number) {
   const db = await getDb();
   if (!db) return undefined;
   
-  const result = await db.select().from(tracks).where(eq(tracks.id, id)).limit(1);
+  // Join with users to get username for canonical URL /dj/:username/track/:id
+  const result = await db
+    .select({
+      id: tracks.id,
+      userId: tracks.userId,
+      title: tracks.title,
+      artist: tracks.artist,
+      audioFileKey: tracks.audioFileKey,
+      audioFileUrl: tracks.audioFileUrl,
+      previewFileKey: tracks.previewFileKey,
+      previewFileUrl: tracks.previewFileUrl,
+      waveformData: tracks.waveformData,
+      coverImageKey: tracks.coverImageKey,
+      coverImageUrl: tracks.coverImageUrl,
+      bpm: tracks.bpm,
+      genre: tracks.genre,
+      subgenre: tracks.subgenre,
+      trackType: tracks.trackType,
+      musicalKey: tracks.musicalKey,
+      energy: tracks.energy,
+      mood: tracks.mood,
+      tags: tracks.tags,
+      isMainstage: tracks.isMainstage,
+      durationSeconds: tracks.durationSeconds,
+      fileSizeBytes: tracks.fileSizeBytes,
+      fileFormat: tracks.fileFormat,
+      downloadCount: tracks.downloadCount,
+      playCount: tracks.playCount,
+      streamCount: tracks.streamCount,
+      likeCount: tracks.likeCount,
+      playlistsCount: tracks.playlistsCount,
+      status: tracks.status,
+      createdAt: tracks.createdAt,
+      updatedAt: tracks.updatedAt,
+      // From users join — for canonical URL
+      username: users.username,
+      djName: users.djName,
+      avatarUrl: users.avatarUrl,
+    })
+    .from(tracks)
+    .leftJoin(users, eq(users.id, tracks.userId))
+    .where(eq(tracks.id, id))
+    .limit(1);
   return result.length > 0 ? result[0] : undefined;
 }
 
