@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { ShareProfileModal } from "@/components/ShareProfileModal";
-import { ExternalLink, Grid3X3, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { ExternalLink, Grid3X3, ChevronLeft, ChevronRight, Loader2, Copy, Link2, Check } from "lucide-react";
 
 // ── Threads SVG icon ──────────────────────────────────────────────────────
 function ThreadsIcon({ className }: { className?: string }) {
@@ -497,10 +497,23 @@ function TrackCard({ track }: { track: any }) {
       toast(data.reposted ? "Reposted!" : "Repost removed");
     },
   });
-  const shareTrack = () => {
-    const url = `https://www.onlydjss.com/track/${track.id}`;
-    navigator.clipboard.writeText(url);
-    toast("Link copied!");
+  const [linkCopied, setLinkCopied] = useState(false);
+  const shareTrack = async () => {
+    const url = `${window.location.origin}/track/${track.id}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setLinkCopied(true);
+      toast.success(`\uD83D\uDD17 Link copiado — envíalo a sellos discográficos`, {
+        description: url,
+        duration: 4000,
+      });
+      setTimeout(() => setLinkCopied(false), 3000);
+    } catch {
+      toast.error("No se pudo copiar el link");
+    }
+  };
+  const openTrackPage = () => {
+    window.open(`${window.location.origin}/track/${track.id}`, "_blank");
   };
   const formatDuration = (seconds: number) => {
     if (!seconds || isNaN(seconds)) return "--:--";
@@ -752,10 +765,20 @@ function TrackCard({ track }: { track: any }) {
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
+              className={`h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity ${linkCopied ? "text-green-400" : ""}`}
               onClick={shareTrack}
+              title="Copiar link para sellos"
             >
-              <Share2 className="w-4 h-4" />
+              {linkCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity hover:text-cyan-400"
+              onClick={openTrackPage}
+              title="Abrir página del track"
+            >
+              <ExternalLink className="w-4 h-4" />
             </Button>
           </div>
         </div>

@@ -3244,3 +3244,11 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 ## 52. Corrección formato tiempo reproductor
 - [x] Corregir formatDuration para usar Math.floor en segundos y evitar decimales
 - [x] Verificar que el tooltip y el display de tiempo muestran MM:SS correctamente
+
+## 54. URLs permanentes de tracks para sellos discográficos
+- [x] Crear endpoint público getTrackBySlug (por ID o slug) en dj-profiles.ts
+- [x] Crear página /track/:id con player completo, info del track y del DJ
+- [x] Botón "Copiar Link" y "Compartir" en la página del track
+- [x] Botón Share/Copy Link en TrackCard del perfil del DJ
+- [x] Registrar ruta /track/:id en App.tsx (ya existía como TrackDetail)
+- [x] Incrementar viewCount al abrir la página del track (via streamCount al reproducir)

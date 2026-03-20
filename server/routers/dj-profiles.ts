@@ -467,6 +467,32 @@ export const djProfilesRouter = router({
 
       return { success: true };
     }),
+
+  // ─── Get single track by ID (public shareable link for labels) ───────────
+  getTrackById: publicProcedure
+    .input(z.object({ trackId: z.number().int().positive() }))
+    .query(async ({ input }) => {
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+      const result = await db.execute(sql`
+        SELECT
+          t.id, t.title, t.artist, t.genre, t.subgenre, t.trackType,
+          t.bpm, t.musicalKey, t.coverImageUrl, t.audioFileUrl, t.previewFileUrl,
+          t.durationSeconds, t.createdAt, t.downloadCount, t.playCount, t.streamCount,
+          t.likeCount, t.status, t.description,
+          u.id as userId, u.username, u.djName, u.name, u.avatarUrl, u.profileImageUrl,
+          u.isVerified, u.country, u.bio
+        FROM tracks t
+        JOIN users u ON u.id = t.userId
+        WHERE t.id = ${input.trackId}
+          AND t.status = 'approved'
+        LIMIT 1
+      `);
+      const rows = result as any[];
+      const data = Array.isArray(rows[0]) ? rows[0] : rows;
+      if (!data || data.length === 0) return null;
+      return data[0] as any;
+    }),
 });
 
 // In-memory debounce store — resets on server restart, sufficient for rate-limiting
