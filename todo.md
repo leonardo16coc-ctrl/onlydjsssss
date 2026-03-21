@@ -3280,3 +3280,8 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Actualizar ShareTrackButtons para aceptar djUsername y generar URL /dj/:username/track/:id
 - [x] Pasar djUsername al ShareTrackButtons desde TrackDetail
 - [x] SSR de Open Graph ya usa www.onlydjss.com en og:url
+
+## 59. Botón "Enviar a sello" con email pre-redactado
+- [x] Crear función sendToLabel en TrackDetail
+- [x] Email pre-redactado con: asunto profesional, título, artista, BPM, key, género, duración y link canónico
+- [x] Botón naranja/amber visible y destacado en la página del track junto a Like, Download y Share

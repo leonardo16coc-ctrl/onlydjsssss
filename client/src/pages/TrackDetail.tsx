@@ -21,7 +21,9 @@ import {
   Disc3,
   Clock,
   TrendingUp,
-  User
+  User,
+  Mail,
+  Building2
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -52,6 +54,64 @@ export default function TrackDetail() {
     mutate: () => {
       toast.info("Like feature coming soon!");
     }
+  };
+
+  // ── Enviar a sello: abre el cliente de correo con borrador pre-redactado ──
+  const sendToLabel = () => {
+    if (!track) return;
+    const canonicalUrl = track.username
+      ? `https://www.onlydjss.com/dj/${track.username}/track/${track.id}`
+      : `https://www.onlydjss.com/track/${track.id}`;
+
+    const formatDur = (secs: number) => {
+      if (!secs || isNaN(secs)) return "N/A";
+      const m = Math.floor(secs / 60);
+      const s = Math.floor(secs % 60).toString().padStart(2, "0");
+      return `${m}:${s}`;
+    };
+
+    const trackType = track.trackType
+      ? track.trackType.charAt(0).toUpperCase() + track.trackType.slice(1)
+      : "Track";
+
+    const subject = encodeURIComponent(
+      `Demo Submission: "${track.title}" [${trackType}] by ${track.artist}`
+    );
+
+    const body = encodeURIComponent(
+`Hello,
+
+I hope this message finds you well. My name is ${track.artist} and I would like to submit the following track for your consideration:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TRACK INFORMATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Title:    ${track.title}
+Artist:   ${track.artist}
+Type:     ${trackType}
+Genre:    ${track.genre || "N/A"}
+BPM:      ${track.bpm || "N/A"}
+Key:      ${track.musicalKey || "N/A"}
+Duration: ${formatDur(track.durationSeconds ?? 0)}
+
+🎧 Listen & Download:
+${canonicalUrl}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The track is available for streaming and download at the link above. Please feel free to reach out if you need any additional information, stems, or alternative formats.
+
+Thank you for your time and consideration.
+
+Best regards,
+${track.artist}
+— Powered by ONLYDJS | www.onlydjss.com`
+    );
+
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    toast.success("📧 Abriendo cliente de correo...", {
+      description: "El borrador ya tiene todos los datos del track listos para enviar.",
+      duration: 4000,
+    });
   };
 
   const handleLike = () => {
@@ -244,6 +304,16 @@ export default function TrackDetail() {
                 artistName={track.artist}
                 djUsername={track.username || params.username}
               />
+
+              {/* Enviar a sello */}
+              <Button
+                size="lg"
+                onClick={sendToLabel}
+                className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold shadow-lg shadow-orange-500/20 border-0"
+              >
+                <Building2 className="h-5 w-5 mr-2" />
+                Enviar a sello
+              </Button>
             </div>
 
             <Separator className="bg-border/50" />
