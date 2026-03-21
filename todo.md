@@ -3285,3 +3285,21 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Crear función sendToLabel en TrackDetail
 - [x] Email pre-redactado con: asunto profesional, título, artista, BPM, key, género, duración y link canónico
 - [x] Botón naranja/amber visible y destacado en la página del track junto a Like, Download y Share
+
+## 60. Sistema de mensajería directa entre usuarios
+- [ ] Crear tablas conversations y messages en drizzle/schema.ts
+- [ ] Migrar schema con pnpm db:push
+- [ ] Crear messaging.router.ts con endpoints: sendMessage, getConversations, getMessages, markAsRead
+- [ ] Crear página /messages con lista de conversaciones y chat
+- [ ] Agregar badge de no leídos en Navbar
+- [ ] Botón "Enviar mensaje" en perfil del DJ
+- [ ] Polling cada 5s para nuevos mensajes
+
+## 60. Sistema de mensajería directa - COMPLETADO
+- [x] Crear tablas conversations y messages en drizzle/schema.ts
+- [x] Migrar schema con SQL directo (tablas conversations y messages)
+- [x] Crear messaging.router.ts con endpoints: getConversations, getMessages, sendMessage, markAsRead, getUnreadCount, startConversation
+- [x] Crear página /messages con lista de conversaciones y chat
+- [x] Agregar badge de mensajes no leídos en el Navbar (polling cada 30s)
+- [x] Registrar ruta /messages en App.tsx
+- [ ] Agregar botón "Enviar mensaje" en el perfil del DJ (pendiente)

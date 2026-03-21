@@ -939,3 +939,51 @@ export const socialMediaConnections = mysqlTable("social_media_connections", {
 }));
 export type SocialMediaConnection = typeof socialMediaConnections.$inferSelect;
 export type InsertSocialMediaConnection = typeof socialMediaConnections.$inferInsert;
+
+/**
+ * Conversations - Direct message threads between two users
+ */
+export const conversations = mysqlTable("conversations", {
+  id: int("id").autoincrement().primaryKey(),
+  // Participants (always stored with user1Id < user2Id to avoid duplicates)
+  user1Id: int("user1Id").notNull(),
+  user2Id: int("user2Id").notNull(),
+  // Last message preview
+  lastMessageAt: timestamp("lastMessageAt").defaultNow().notNull(),
+  lastMessagePreview: varchar("lastMessagePreview", { length: 255 }),
+  // Unread counts per participant
+  user1UnreadCount: int("user1UnreadCount").default(0).notNull(),
+  user2UnreadCount: int("user2UnreadCount").default(0).notNull(),
+  // Timestamps
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => ({
+  user1Idx: index("conv_user1_idx").on(table.user1Id),
+  user2Idx: index("conv_user2_idx").on(table.user2Id),
+  uniqueConv: index("conv_unique").on(table.user1Id, table.user2Id),
+}));
+export type Conversation = typeof conversations.$inferSelect;
+export type InsertConversation = typeof conversations.$inferInsert;
+
+/**
+ * Messages - Individual messages within a conversation
+ */
+export const messages = mysqlTable("messages", {
+  id: int("id").autoincrement().primaryKey(),
+  conversationId: int("conversationId").notNull(),
+  senderId: int("senderId").notNull(),
+  receiverId: int("receiverId").notNull(),
+  content: text("content").notNull(),
+  isRead: boolean("isRead").default(false).notNull(),
+  readAt: timestamp("readAt"),
+  // Optional: attach a track to a message
+  attachedTrackId: int("attachedTrackId"),
+  // Timestamps
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => ({
+  convIdIdx: index("msg_conv_id_idx").on(table.conversationId),
+  senderIdx: index("msg_sender_idx").on(table.senderId),
+  receiverIdx: index("msg_receiver_idx").on(table.receiverId),
+  createdAtIdx: index("msg_created_at_idx").on(table.createdAt),
+}));
+export type Message = typeof messages.$inferSelect;
+export type InsertMessage = typeof messages.$inferInsert;

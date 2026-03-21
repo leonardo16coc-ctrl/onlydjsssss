@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
-import { Music, Sparkles, Trophy, LayoutDashboard, Upload, CreditCard, User, Settings, LogOut, Radio, Menu, X, TrendingUp, Zap, Search, Mic2, FileText, Instagram } from "lucide-react";
+import { Music, Sparkles, Trophy, LayoutDashboard, Upload, CreditCard, User, Settings, LogOut, Radio, Menu, X, TrendingUp, Zap, Search, Mic2, FileText, Instagram, MessageCircle } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { useState, useEffect, useRef } from "react";
 import {
@@ -25,6 +25,27 @@ import { useTranslation } from "react-i18next";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useLocation } from "wouter";
+
+// ── Messages Nav Button ──────────────────────────────────────────────────────
+function MessagesNavButton() {
+  const { data } = trpc.messaging.getUnreadCount.useQuery(undefined, {
+    refetchInterval: 30000, // poll every 30 seconds
+  });
+  const unreadCount = data?.count ?? 0;
+
+  return (
+    <Link href="/messages">
+      <Button variant="ghost" size="icon" className="relative" aria-label="Mensajes">
+        <MessageCircle className="h-5 w-5" />
+        {unreadCount > 0 && (
+          <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center px-1">
+            {unreadCount > 99 ? "99+" : unreadCount}
+          </span>
+        )}
+      </Button>
+    </Link>
+  );
+}
 
 // ── Inline Search Component ────────────────────────────────────────────────
 function NavSearchBar() {
@@ -457,6 +478,8 @@ export default function Navbar() {
             <LanguageSelector />
             {isAuthenticated ? (
               <>
+                {/* Messages button with unread badge */}
+                <MessagesNavButton />
                 {user?.membershipStatus === "free" && (
                   <Link href="/membership">
                     <Button className="btn-neon bg-accent hover:bg-accent/90 glow-pink">

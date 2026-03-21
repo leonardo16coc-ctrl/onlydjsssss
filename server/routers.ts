@@ -42,6 +42,7 @@ import { instagramRouter } from "./routers/instagram.router";
 import { threadsRouter } from "./routers/threads.router";
 import { twitterRouter } from "./routers/twitter.router";
 import { tiktokRouter } from "./routers/tiktok.router";
+import { messagingRouter } from "./routers/messaging.router";
 import { getDb } from "./db";
 import { tracks, downloads } from "../drizzle/schema";
 import { eq, and, gte, sql } from "drizzle-orm";
@@ -90,6 +91,7 @@ export const appRouter = router({
   threads: threadsRouter,
   twitter: twitterRouter,
   tiktok: tiktokRouter,
+  messaging: messagingRouter,
   
   auth: router({
     me: publicProcedure.query(opts => opts.ctx.user),

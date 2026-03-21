@@ -50,6 +50,7 @@ import SocialBattles from "./pages/SocialBattles";
 import SocialRanking from "./pages/SocialRanking";
 import SocialMap from "./pages/SocialMap";
 import ConnectSocialMedia from "./pages/ConnectSocialMedia";
+import Messages from "./pages/Messages";
 
 function Router() {
   return (
@@ -98,6 +99,7 @@ function Router() {
       <Route path={"/social/map"} component={SocialMap} />
       <Route path={"/profile/edit"} component={ProfileEdit} />
       <Route path={"/connect-social"} component={ConnectSocialMedia} />
+      <Route path={"/messages"} component={Messages} />
       <Route path={"/dj/:username/track/:id"} component={TrackDetail} />
       <Route path={"/track/:id"} component={TrackDetail} />
       <Route path={"/my-playlists"} component={MyPlaylists} />
