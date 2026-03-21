@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import {
   Music, Users, Play, Download, Heart, Share2, Repeat2,
   Instagram, Twitter, Youtube, Globe, MapPin, CheckCircle2,
-  Disc3, Mic2, Headphones, Pause
+  Disc3, Mic2, Headphones, Pause, MessageCircle
 } from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { ShareProfileModal } from "@/components/ShareProfileModal";
@@ -894,6 +894,25 @@ export default function DJProfile() {
     toast("Profile link copied!");
   };
 
+  const startConversationMutation = trpc.messaging.getOrCreateConversation.useMutation({
+    onSuccess: () => {
+      navigate("/messages");
+    },
+    onError: () => {
+      navigate("/messages");
+    },
+  });
+
+  const handleSendMessage = () => {
+    if (!user) {
+      toast("Sign in to send messages");
+      return;
+    }
+    const p = profile as any;
+    if (!p?.id) return;
+    startConversationMutation.mutate({ otherUserId: p.id });
+  };
+
   // ── Dynamic SEO meta tags ──────────────────────────────────────────────
   const p = profile as any;
   const djDisplayName = p?.djName || p?.name || username;
@@ -1007,6 +1026,18 @@ export default function DJProfile() {
                     >
                       <Users className="w-4 h-4 mr-1" />
                       {(followStatus as any)?.following ? "Following" : "Follow"}
+                    </Button>
+                  )}
+                  {!isOwnProfile && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="gap-1.5 border-violet-500/30 text-violet-400 hover:bg-violet-500/10 bg-transparent"
+                      onClick={handleSendMessage}
+                      disabled={startConversationMutation.isPending}
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                      {startConversationMutation.isPending ? "Opening..." : "Message"}
                     </Button>
                   )}
                   {isOwnProfile && (

@@ -3303,3 +3303,8 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar badge de mensajes no leídos en el Navbar (polling cada 30s)
 - [x] Registrar ruta /messages en App.tsx
 - [ ] Agregar botón "Enviar mensaje" en el perfil del DJ (pendiente)
+
+## 61. Botón "Enviar mensaje" en perfil del DJ
+- [x] Agregar botón "Message" en el header del perfil público del DJ
+- [x] Ocultar el botón si el usuario no está autenticado o es su propio perfil
+- [x] Al hacer clic, llamar a getOrCreateConversation y redirigir a /messages
