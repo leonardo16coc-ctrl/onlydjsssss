@@ -122,6 +122,23 @@ export const djProfilesRouter = router({
         INSERT INTO dj_followers (followerId, followingId, createdAt)
         VALUES (${ctx.user.id}, ${input.targetUserId}, NOW())
       `);
+
+      // Insert a notification for the followed DJ
+      const followerName = (ctx.user as any).djName || (ctx.user as any).name || `@${(ctx.user as any).username}` || "Alguien";
+      try {
+        await db.execute(sql`
+          INSERT INTO notifications (userId, type, title, message, isRead, createdAt)
+          VALUES (
+            ${input.targetUserId},
+            'new_follower',
+            'Nuevo seguidor',
+            ${`${followerName} ahora te sigue`},
+            0,
+            NOW()
+          )
+        `);
+      } catch { /* silently skip if table not ready */ }
+
       return { following: true };
     }),
 

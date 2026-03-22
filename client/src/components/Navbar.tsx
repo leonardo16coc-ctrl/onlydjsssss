@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
-import { Music, Sparkles, Trophy, LayoutDashboard, Upload, CreditCard, User, Settings, LogOut, Radio, Menu, X, TrendingUp, Zap, Search, Mic2, FileText, Instagram, MessageCircle } from "lucide-react";
+import { Music, Sparkles, Trophy, LayoutDashboard, Upload, CreditCard, User, Settings, LogOut, Radio, Menu, X, TrendingUp, Zap, Search, Mic2, FileText, Instagram, MessageCircle, Bell, UserPlus, Eye, CheckCheck } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { useState, useEffect, useRef } from "react";
 import {
@@ -25,6 +25,103 @@ import { useTranslation } from "react-i18next";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useLocation } from "wouter";
+
+// ── Notification Bell ────────────────────────────────────────────────────────
+function getNotifIcon(type: string) {
+  if (type === "new_follower") return <UserPlus className="w-4 h-4 text-cyan-400 flex-shrink-0" />;
+  if (type === "profile_visit") return <Eye className="w-4 h-4 text-violet-400 flex-shrink-0" />;
+  return <Bell className="w-4 h-4 text-muted-foreground flex-shrink-0" />;
+}
+
+function formatTimeAgo(date: string | Date): string {
+  const diff = Date.now() - new Date(date).getTime();
+  const m = Math.floor(diff / 60_000);
+  if (m < 1) return "ahora";
+  if (m < 60) return `${m}m`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h`;
+  return `${Math.floor(h / 24)}d`;
+}
+
+function NotificationBell() {
+  const [open, setOpen] = useState(false);
+
+  const { data: countData } = trpc.notifications.getUnreadCount.useQuery(undefined, {
+    refetchInterval: 30_000,
+  });
+  const unread = countData?.count ?? 0;
+
+  const { data: notifs, refetch } = trpc.notifications.getMyNotifications.useQuery(undefined, {
+    enabled: open,
+  });
+
+  const markAll = trpc.notifications.markAllRead.useMutation({
+    onSuccess: () => refetch(),
+  });
+
+  const handleOpen = (v: boolean) => {
+    setOpen(v);
+    if (v && unread > 0) {
+      // Mark as read after a short delay so the user sees the badge first
+      setTimeout(() => markAll.mutate(), 1500);
+    }
+  };
+
+  return (
+    <DropdownMenu open={open} onOpenChange={handleOpen}>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon" className="relative" aria-label="Notificaciones">
+          <Bell className="h-5 w-5" />
+          {unread > 0 && (
+            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center px-1">
+              {unread > 99 ? "99+" : unread}
+            </span>
+          )}
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-80 p-0">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+          <span className="font-semibold text-sm">Notificaciones</span>
+          {unread > 0 && (
+            <button
+              onClick={() => markAll.mutate()}
+              className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
+            >
+              <CheckCheck className="w-3.5 h-3.5" />
+              Marcar todo leído
+            </button>
+          )}
+        </div>
+        <div className="max-h-[360px] overflow-y-auto">
+          {!notifs || notifs.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-10 gap-2">
+              <Bell className="w-8 h-8 text-muted-foreground/30" />
+              <p className="text-sm text-muted-foreground">Sin notificaciones</p>
+            </div>
+          ) : (
+            notifs.map((n: any) => (
+              <div
+                key={n.id}
+                className={`flex items-start gap-3 px-4 py-3 border-b border-border/50 hover:bg-muted/40 transition-colors ${
+                  !n.isRead ? "bg-primary/5" : ""
+                }`}
+              >
+                <div className="mt-0.5">{getNotifIcon(n.type)}</div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium leading-tight">{n.title}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5 leading-snug">{n.message}</p>
+                </div>
+                <span className="text-[10px] text-muted-foreground/60 flex-shrink-0 mt-0.5">
+                  {formatTimeAgo(n.createdAt)}
+                </span>
+              </div>
+            ))
+          )}
+        </div>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
 // ── Messages Nav Button ──────────────────────────────────────────────────────
 function MessagesDropdownItem() {
@@ -71,7 +168,34 @@ function MobileMessagesItem({ onClose }: { onClose: () => void }) {
   );
 }
 
-// ── Inline Search Component ────────────────────────────────────────────────
+//// ── Mobile Notifications Item ──────────────────────────────────────────
+function MobileNotificationsItem({ onClose }: { onClose: () => void }) {
+  const [, navigate] = useLocation();
+  const { data } = trpc.notifications.getUnreadCount.useQuery(undefined, {
+    refetchInterval: 30000,
+  });
+  const unreadCount = data?.count ?? 0;
+
+  return (
+    <button
+      className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors text-left"
+      onClick={() => {
+        onClose();
+        navigate("/notifications");
+      }}
+    >
+      <Bell className="h-5 w-5 text-yellow-400" />
+      <span>Notificaciones</span>
+      {unreadCount > 0 && (
+        <span className="ml-auto min-w-[20px] h-5 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center px-1">
+          {unreadCount > 99 ? "99+" : unreadCount}
+        </span>
+      )}
+    </button>
+  );
+}
+
+// ── Inline Search Component ──────────────────────────────────────────
 function NavSearchBar() {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
@@ -511,6 +635,7 @@ export default function Navbar() {
                     </Button>
                   </Link>
                 )}
+                <NotificationBell />
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="flex items-center space-x-2">
@@ -701,6 +826,7 @@ export default function Navbar() {
                       )}
 
                       <MobileMessagesItem onClose={() => setMobileMenuOpen(false)} />
+                      <MobileNotificationsItem onClose={() => setMobileMenuOpen(false)} />
                       
                       <Link 
                         href="/profile/edit"
