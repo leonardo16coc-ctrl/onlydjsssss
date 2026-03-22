@@ -48,6 +48,29 @@ function MessagesDropdownItem() {
   );
 }
 
+function MobileMessagesItem({ onClose }: { onClose: () => void }) {
+  const { data } = trpc.messaging.getUnreadCount.useQuery(undefined, {
+    refetchInterval: 30000,
+  });
+  const unreadCount = data?.count ?? 0;
+
+  return (
+    <Link
+      href="/messages"
+      className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
+      onClick={onClose}
+    >
+      <MessageCircle className="h-5 w-5 text-violet-400" />
+      <span>Messages</span>
+      {unreadCount > 0 && (
+        <span className="ml-auto min-w-[20px] h-5 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center px-1">
+          {unreadCount > 99 ? "99+" : unreadCount}
+        </span>
+      )}
+    </Link>
+  );
+}
+
 // ── Inline Search Component ────────────────────────────────────────────────
 function NavSearchBar() {
   const [query, setQuery] = useState("");
@@ -676,6 +699,8 @@ export default function Navbar() {
                           <span>My Profile</span>
                         </Link>
                       )}
+
+                      <MobileMessagesItem onClose={() => setMobileMenuOpen(false)} />
                       
                       <Link 
                         href="/profile/edit"
