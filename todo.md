@@ -3308,3 +3308,7 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 - [x] Agregar botón "Message" en el header del perfil público del DJ
 - [x] Ocultar el botón si el usuario no está autenticado o es su propio perfil
 - [x] Al hacer clic, llamar a getOrCreateConversation y redirigir a /messages
+
+## 62. Messages en dropdown del perfil
+- [ ] Agregar enlace "Messages" con badge en el dropdown del perfil del Navbar, debajo de "My Profile"
+- [ ] Quitar el botón de Messages del Navbar principal (MessagesNavButton)

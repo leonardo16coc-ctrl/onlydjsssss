@@ -27,22 +27,23 @@ import { Badge } from "@/components/ui/badge";
 import { useLocation } from "wouter";
 
 // ── Messages Nav Button ──────────────────────────────────────────────────────
-function MessagesNavButton() {
+function MessagesDropdownItem() {
   const { data } = trpc.messaging.getUnreadCount.useQuery(undefined, {
-    refetchInterval: 30000, // poll every 30 seconds
+    refetchInterval: 30000,
   });
   const unreadCount = data?.count ?? 0;
 
   return (
     <Link href="/messages">
-      <Button variant="ghost" size="icon" className="relative" aria-label="Mensajes">
-        <MessageCircle className="h-5 w-5" />
+      <DropdownMenuItem className="relative">
+        <MessageCircle className="mr-2 h-4 w-4" />
+        <span>Messages</span>
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center px-1">
+          <span className="ml-auto min-w-[20px] h-5 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center px-1">
             {unreadCount > 99 ? "99+" : unreadCount}
           </span>
         )}
-      </Button>
+      </DropdownMenuItem>
     </Link>
   );
 }
@@ -478,8 +479,7 @@ export default function Navbar() {
             <LanguageSelector />
             {isAuthenticated ? (
               <>
-                {/* Messages button with unread badge */}
-                <MessagesNavButton />
+
                 {user?.membershipStatus === "free" && (
                   <Link href="/membership">
                     <Button className="btn-neon bg-accent hover:bg-accent/90 glow-pink">
@@ -512,6 +512,7 @@ export default function Navbar() {
                         </DropdownMenuItem>
                       </Link>
                     )}
+                    <MessagesDropdownItem />
                     <Link href="/profile/edit">
                       <DropdownMenuItem>
                         <Settings className="mr-2 h-4 w-4" />
