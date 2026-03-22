@@ -110,6 +110,13 @@ export default function Messages() {
 
   const selectedConv = conversations?.find((c) => c.id === selectedConvId);
 
+  // Bulk online status for all conversation partners
+  const otherUserIds = (conversations || []).map((c) => c.otherUser.id).filter(Boolean);
+  const { data: onlineMap } = trpc.presence.getBulkOnlineStatus.useQuery(
+    { userIds: otherUserIds },
+    { enabled: otherUserIds.length > 0, refetchInterval: 60 * 1000 }
+  );
+
   if (authLoading) {
     return (
       <div className="flex items-center justify-center h-screen bg-background">
@@ -245,6 +252,10 @@ export default function Messages() {
                         {getInitials(getDisplayName(conv.otherUser))}
                       </AvatarFallback>
                     </Avatar>
+                    {/* Online indicator */}
+                    {(onlineMap as any)?.[conv.otherUser.id] && (
+                      <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-green-500 border-2 border-background" />
+                    )}
                     {conv.unreadCount > 0 && (
                       <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-bold">
                         {conv.unreadCount > 9 ? "9+" : conv.unreadCount}
@@ -304,17 +315,27 @@ export default function Messages() {
               </Button>
               {selectedConv && (
                 <>
-                  <Avatar className="h-9 w-9">
-                    <AvatarImage src={getAvatarUrl(selectedConv.otherUser)} />
-                    <AvatarFallback className="bg-gradient-to-br from-primary/30 to-purple-500/30 text-sm font-semibold">
-                      {getInitials(getDisplayName(selectedConv.otherUser))}
-                    </AvatarFallback>
-                  </Avatar>
+                  <div className="relative">
+                    <Avatar className="h-9 w-9">
+                      <AvatarImage src={getAvatarUrl(selectedConv.otherUser)} />
+                      <AvatarFallback className="bg-gradient-to-br from-primary/30 to-purple-500/30 text-sm font-semibold">
+                        {getInitials(getDisplayName(selectedConv.otherUser))}
+                      </AvatarFallback>
+                    </Avatar>
+                    {(onlineMap as any)?.[selectedConv.otherUser.id] && (
+                      <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-green-500 border-2 border-background" />
+                    )}
+                  </div>
                   <div>
                     <p className="font-semibold text-sm">{getDisplayName(selectedConv.otherUser)}</p>
-                    {selectedConv.otherUser.username && (
+                    {(onlineMap as any)?.[selectedConv.otherUser.id] ? (
+                      <p className="text-xs text-green-400 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                        En línea
+                      </p>
+                    ) : selectedConv.otherUser.username ? (
                       <p className="text-xs text-muted-foreground">@{selectedConv.otherUser.username}</p>
-                    )}
+                    ) : null}
                   </div>
                   <Button
                     variant="ghost"

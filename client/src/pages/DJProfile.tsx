@@ -818,6 +818,20 @@ function TrackList({ username, type }: { username: string; type: "all" | "edit" 
   );
 }
 
+// Formats a timestamp as "Activo hace X minutos/horas/días"
+function formatLastSeen(lastSeenAt: string | Date): string {
+  const diff = Date.now() - new Date(lastSeenAt).getTime();
+  const minutes = Math.floor(diff / 60_000);
+  if (minutes < 1) return "Activo hace un momento";
+  if (minutes < 60) return `Activo hace ${minutes} min`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `Activo hace ${hours} h`;
+  const days = Math.floor(hours / 24);
+  if (days === 1) return "Activo hace 1 día";
+  if (days < 30) return `Activo hace ${days} días`;
+  return "Inactivo por un tiempo";
+}
+
 export default function DJProfile() {
   const [matchDirect, paramsDirect] = useRoute("/:username");
   const [matchDJ, paramsDJ] = useRoute("/dj/:username");
@@ -900,6 +914,14 @@ export default function DJProfile() {
     { enabled: !!(profile as any)?.id, refetchInterval: 60 * 1000 } // refresh every minute
   );
   const isOnline = (onlineStatus as any)?.isOnline ?? false;
+
+  // Notify the DJ that someone visited their profile (rate-limited server-side to 1/hour)
+  const notifyVisit = trpc.presence.notifyProfileVisit.useMutation();
+  useEffect(() => {
+    const profileId = (profile as any)?.id;
+    if (!profileId) return;
+    notifyVisit.mutate({ djUserId: profileId });
+  }, [(profile as any)?.id]);
 
   const startConversationMutation = trpc.messaging.getOrCreateConversation.useMutation({
     onSuccess: () => {
@@ -1030,6 +1052,11 @@ export default function DJProfile() {
                     )}
                   </div>
                   <p className="text-muted-foreground text-sm">@{p.username}</p>
+                  {!isOnline && (onlineStatus as any)?.lastSeenAt && (
+                    <p className="text-xs text-muted-foreground/60 mt-0.5">
+                      {formatLastSeen((onlineStatus as any).lastSeenAt)}
+                    </p>
+                  )}
                   {p.country && (
                     <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
                       <MapPin className="w-3 h-3" />{p.country}

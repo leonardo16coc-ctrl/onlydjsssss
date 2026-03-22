@@ -35,7 +35,7 @@ import { emailAnalyticsRouter } from "./routers/email-analytics";
 import { abTestingRouter } from "./routers/ab-testing";
 import { playlistsRouter } from "./routers/playlists";
 import { smartPlaylistsRouter } from "./routers/smart-playlists";
-import { djProfilesRouter, presenceRouter } from "./routers/dj-profiles";
+import { djProfilesRouter, presenceRouter, notificationsRouter } from "./routers/dj-profiles";
 import { exploreChartsRouter } from "./routers/explore-charts";
 import { socialRouter } from "./routers/social";
 import { instagramRouter } from "./routers/instagram.router";
@@ -86,6 +86,7 @@ export const appRouter = router({
   smartPlaylists: smartPlaylistsRouter,
   djProfiles: djProfilesRouter,
   presence: presenceRouter,
+  notifications: notificationsRouter,
   exploreCharts: exploreChartsRouter,
   social: socialRouter,
   instagram: instagramRouter,

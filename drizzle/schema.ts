@@ -988,3 +988,22 @@ export const messages = mysqlTable("messages", {
 }));
 export type Message = typeof messages.$inferSelect;
 export type InsertMessage = typeof messages.$inferInsert;
+
+/**
+ * Notifications - In-app notifications for DJs
+ */
+export const notifications = mysqlTable("notifications", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  type: varchar("type", { length: 50 }).notNull(), // e.g. 'profile_visit', 'new_follower', 'new_message'
+  title: varchar("title", { length: 255 }).notNull(),
+  message: text("message").notNull(),
+  isRead: boolean("isRead").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => ({
+  userIdIdx: index("notif_user_id_idx").on(table.userId),
+  isReadIdx: index("notif_is_read_idx").on(table.isRead),
+  createdAtIdx: index("notif_created_at_idx").on(table.createdAt),
+}));
+export type Notification = typeof notifications.$inferSelect;
+export type InsertNotification = typeof notifications.$inferInsert;

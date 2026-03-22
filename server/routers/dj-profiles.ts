@@ -547,4 +547,109 @@ export const presenceRouter = router({
       }
       return statusMap;
     }),
+
+  // Notify the DJ owner when someone visits their profile
+  // Rate-limited: one notification per visitor per DJ per hour (in-memory)
+  notifyProfileVisit: publicProcedure
+    .input(z.object({ djUserId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      // Don't notify if the DJ is viewing their own profile
+      if (ctx.user && ctx.user.id === input.djUserId) return { ok: false };
+
+      // Rate-limit: key = visitorId (or IP) + djUserId, TTL 1 hour
+      const visitorKey = ctx.user ? `user:${ctx.user.id}` : `anon`;
+      const rateKey = `${visitorKey}:${input.djUserId}`;
+      const now = Date.now();
+      const last = profileVisitCache.get(rateKey) || 0;
+      if (now - last < 60 * 60 * 1000) return { ok: false }; // already notified within 1h
+      profileVisitCache.set(rateKey, now);
+
+      const db = await getDb();
+      if (!db) return { ok: false };
+
+      // Get DJ info
+      const djResult = await db.execute(sql`
+        SELECT id, name, djName, username FROM users WHERE id = ${input.djUserId} LIMIT 1
+      `);
+      const djRows = djResult as any[];
+      const dj = Array.isArray(djRows[0]) ? djRows[0][0] : djRows[0];
+      if (!dj) return { ok: false };
+
+      // Build visitor label
+      let visitorLabel = "Alguien";
+      if (ctx.user) {
+        visitorLabel = ctx.user.djName || ctx.user.name || `@${ctx.user.username}` || "Un usuario";
+      }
+
+      // Insert notification into the notifications table
+      try {
+        await db.execute(sql`
+          INSERT INTO notifications (userId, type, title, message, isRead, createdAt)
+          VALUES (
+            ${input.djUserId},
+            'profile_visit',
+            'Alguien visitó tu perfil',
+            ${`${visitorLabel} visitó tu perfil de DJ`},
+            0,
+            NOW()
+          )
+        `);
+      } catch {
+        // notifications table may not exist — silently skip
+      }
+
+      return { ok: true };
+    }),
+});
+
+// In-memory rate-limit cache for profile visit notifications
+const profileVisitCache = new Map<string, number>();
+
+// ── Notifications router (read-only for now) ──────────────────────────────────
+export const notificationsRouter = router({
+  // Get the last 20 notifications for the current user
+  getMyNotifications: protectedProcedure.query(async ({ ctx }) => {
+    const db = await getDb();
+    if (!db) return [];
+    const result = await db.execute(sql`
+      SELECT id, type, title, message, isRead, createdAt
+      FROM notifications
+      WHERE userId = ${ctx.user.id}
+      ORDER BY createdAt DESC
+      LIMIT 20
+    `);
+    const rows = result as any[];
+    const data = Array.isArray(rows[0]) ? rows[0] : rows;
+    return data.map((r: any) => ({
+      id: r.id,
+      type: r.type,
+      title: r.title,
+      message: r.message,
+      isRead: Boolean(r.isRead),
+      createdAt: r.createdAt,
+    }));
+  }),
+
+  // Count unread notifications
+  getUnreadCount: protectedProcedure.query(async ({ ctx }) => {
+    const db = await getDb();
+    if (!db) return { count: 0 };
+    const result = await db.execute(sql`
+      SELECT COUNT(*) as cnt FROM notifications
+      WHERE userId = ${ctx.user.id} AND isRead = 0
+    `);
+    const rows = result as any[];
+    const row = Array.isArray(rows[0]) ? rows[0][0] : rows[0];
+    return { count: Number(row?.cnt || 0) };
+  }),
+
+  // Mark all notifications as read
+  markAllRead: protectedProcedure.mutation(async ({ ctx }) => {
+    const db = await getDb();
+    if (!db) return { ok: false };
+    await db.execute(sql`
+      UPDATE notifications SET isRead = 1 WHERE userId = ${ctx.user.id}
+    `);
+    return { ok: true };
+  }),
 });
