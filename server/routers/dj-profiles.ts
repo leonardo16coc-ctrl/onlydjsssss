@@ -497,3 +497,54 @@ export const djProfilesRouter = router({
 
 // In-memory debounce store — resets on server restart, sufficient for rate-limiting
 const recentStreams = new Map<string, number>();
+
+// ── Presence helpers ────────────────────────────────────────────────────────
+export const presenceRouter = router({
+  // Called by the frontend every 5 minutes to keep lastSeenAt fresh
+  ping: protectedProcedure.mutation(async ({ ctx }) => {
+    const db = await getDb();
+    if (!db) return { ok: false };
+    await db.execute(sql`
+      UPDATE users SET lastSeenAt = NOW() WHERE id = ${ctx.user.id}
+    `);
+    return { ok: true };
+  }),
+
+  // Returns whether a given userId was active in the last 15 minutes
+  getOnlineStatus: publicProcedure
+    .input(z.object({ userId: z.number() }))
+    .query(async ({ input }) => {
+      const db = await getDb();
+      if (!db) return { isOnline: false };
+      const result = await db.execute(sql`
+        SELECT lastSeenAt FROM users WHERE id = ${input.userId} LIMIT 1
+      `);
+      const rows = result as any[];
+      const row = Array.isArray(rows[0]) ? rows[0][0] : rows[0];
+      if (!row) return { isOnline: false };
+      const lastSeen = new Date(row.lastSeenAt).getTime();
+      const isOnline = Date.now() - lastSeen < 15 * 60 * 1000; // 15 minutes
+      return { isOnline, lastSeenAt: row.lastSeenAt };
+    }),
+
+  // Returns online status for multiple userIds at once (used in DJ cards)
+  getBulkOnlineStatus: publicProcedure
+    .input(z.object({ userIds: z.array(z.number()) }))
+    .query(async ({ input }) => {
+      if (input.userIds.length === 0) return {};
+      const db = await getDb();
+      if (!db) return {};
+      const ids = input.userIds.join(",");
+      const result = await db.execute(sql`
+        SELECT id, lastSeenAt FROM users WHERE id IN (${sql.raw(ids)})
+      `);
+      const rows = result as any[];
+      const data = Array.isArray(rows[0]) ? rows[0] : rows;
+      const threshold = Date.now() - 15 * 60 * 1000;
+      const statusMap: Record<number, boolean> = {};
+      for (const row of data) {
+        statusMap[row.id] = new Date(row.lastSeenAt).getTime() > threshold;
+      }
+      return statusMap;
+    }),
+});

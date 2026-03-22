@@ -894,6 +894,13 @@ export default function DJProfile() {
     toast("Profile link copied!");
   };
 
+  // Presence: check if this DJ was active in the last 15 minutes
+  const { data: onlineStatus } = trpc.presence.getOnlineStatus.useQuery(
+    { userId: (profile as any)?.id || 0 },
+    { enabled: !!(profile as any)?.id, refetchInterval: 60 * 1000 } // refresh every minute
+  );
+  const isOnline = (onlineStatus as any)?.isOnline ?? false;
+
   const startConversationMutation = trpc.messaging.getOrCreateConversation.useMutation({
     onSuccess: () => {
       navigate("/messages");
@@ -987,13 +994,21 @@ export default function DJProfile() {
         {/* Profile Header */}
         <div className="relative -mt-16 pb-6 border-b border-border">
           <div className="flex flex-col sm:flex-row sm:items-end gap-4">
-            {/* Avatar */}
-            <Avatar className="w-32 h-32 border-4 border-background shadow-xl">
-              <AvatarImage src={p.profileImageUrl || p.avatarUrl || ""} />
-              <AvatarFallback className="text-3xl bg-primary/10">
-                {(p.djName || p.name || username).charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
+            {/* Avatar with online indicator */}
+            <div className="relative inline-block">
+              <Avatar className="w-32 h-32 border-4 border-background shadow-xl">
+                <AvatarImage src={p.profileImageUrl || p.avatarUrl || ""} />
+                <AvatarFallback className="text-3xl bg-primary/10">
+                  {(p.djName || p.name || username).charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              {isOnline && (
+                <span
+                  className="absolute bottom-2 right-2 w-4 h-4 rounded-full bg-green-500 border-2 border-background shadow-md"
+                  title="En línea ahora"
+                />
+              )}
+            </div>
 
             {/* Info + Actions */}
             <div className="flex-1 sm:pb-2">
@@ -1006,6 +1021,12 @@ export default function DJProfile() {
                     )}
                     {p.membershipStatus === "member" && (
                       <Badge className="bg-primary/10 text-primary border-primary/20 text-xs">PRO</Badge>
+                    )}
+                    {isOnline && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-green-500/15 border border-green-500/30 text-green-400 text-[10px] font-semibold">
+                        <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                        En línea
+                      </span>
                     )}
                   </div>
                   <p className="text-muted-foreground text-sm">@{p.username}</p>

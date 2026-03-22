@@ -39,6 +39,7 @@ export const users = mysqlTable("users", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
+  lastSeenAt: timestamp("lastSeenAt").defaultNow().notNull(),
 }, (table) => ({
   membershipStatusIdx: index("membership_status_idx").on(table.membershipStatus),
   totalDownloadsIdx: index("total_downloads_idx").on(table.totalDownloads),

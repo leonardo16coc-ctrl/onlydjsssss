@@ -51,6 +51,26 @@ import SocialRanking from "./pages/SocialRanking";
 import SocialMap from "./pages/SocialMap";
 import ConnectSocialMedia from "./pages/ConnectSocialMedia";
 import Messages from "./pages/Messages";
+import { useEffect } from "react";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "./_core/hooks/useAuth";
+
+// Pings the server every 5 minutes to keep lastSeenAt fresh
+function PresencePing() {
+  const { isAuthenticated } = useAuth();
+  const ping = trpc.presence.ping.useMutation();
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    // Ping immediately on mount
+    ping.mutate();
+    // Then every 5 minutes
+    const interval = setInterval(() => ping.mutate(), 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [isAuthenticated]);
+
+  return null;
+}
 
 function Router() {
   return (
@@ -123,6 +143,7 @@ function App() {
       <ThemeProvider defaultTheme="dark">
         <TooltipProvider>
           <Toaster />
+          <PresencePing />
           <Router />
         </TooltipProvider>
       </ThemeProvider>
