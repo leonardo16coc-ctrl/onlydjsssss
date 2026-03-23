@@ -267,6 +267,10 @@ async function startServer() {
     }
   });
 
+  // ── Public REST API v1 ──────────────────────────────────────────────────
+  const { publicApiRouter } = await import("../routes/public-api");
+  app.use("/api/v1", publicApiRouter);
+
   // tRPC API
   app.use(
     "/api/trpc",
