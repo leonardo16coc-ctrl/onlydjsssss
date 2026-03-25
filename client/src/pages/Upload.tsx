@@ -13,6 +13,7 @@ import {
   Music,
   X,
   CloudUpload,
+  CreditCard,
 } from "lucide-react";
 import { useState, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
@@ -102,7 +103,8 @@ export default function Upload() {
   const analyzeAudio = trpc.musicAnalysis.analyze.useMutation();
   const createTrack  = trpc.tracks.create.useMutation();
 
-  const isFreeUser = !isAuthenticated || user?.membershipStatus === "free";
+  const isFreeUser = user?.membershipStatus === "free";
+  const canMonetize = isAuthenticated && !isFreeUser;
 
   // ── Handlers ─────────────────────────────────────────────────────────────────
   const validateAudio = (file: File) => {
@@ -256,26 +258,7 @@ export default function Upload() {
     );
   }
 
-  // ── Free user gate ────────────────────────────────────────────────────────
-  if (isFreeUser) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Navbar />
-        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
-          <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-            <UploadIcon className="w-7 h-7 text-primary" />
-          </div>
-          <h2 className="text-xl font-semibold mb-2">Membresía requerida</h2>
-          <p className="text-muted-foreground mb-6 max-w-sm">
-            Necesitas una membresía activa para publicar tracks en ONLYDJS.
-          </p>
-          <Link href="/membership">
-            <Button className="bg-primary hover:bg-primary/90">Ver planes</Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  // Free users can upload — membership only needed for monetization
 
   // ════════════════════════════════════════════════════════════════════════════
   // STEP 1 — Drop zone
@@ -658,6 +641,22 @@ export default function Upload() {
 
           </div>
         </div>
+
+        {/* Monetization banner for free users */}
+        {isFreeUser && (
+          <div className="mt-6 p-4 rounded-xl border border-primary/20 bg-primary/5 flex items-center justify-between gap-4 flex-wrap">
+            <div className="flex items-center gap-3">
+              <CreditCard className="w-5 h-5 text-primary flex-shrink-0" />
+              <div>
+                <p className="text-sm font-semibold">¿Quieres cobrar por tus descargas?</p>
+                <p className="text-xs text-muted-foreground">Activa tu membresía por $4.99/mes y empieza a monetizar tu música.</p>
+              </div>
+            </div>
+            <Link href="/membership">
+              <Button size="sm" className="rounded-full bg-primary hover:bg-primary/90 flex-shrink-0">Ver planes</Button>
+            </Link>
+          </div>
+        )}
 
         {/* Bottom action bar (mobile) */}
         <div className="mt-8 pt-6 border-t border-border flex items-center justify-between gap-4 lg:hidden">
