@@ -595,7 +595,7 @@ export default function Navbar() {
               <span className="font-semibold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">ODJS Social</span>
             </Link>
 
-            {isAuthenticated && user?.membershipStatus !== "free" && (
+            {isAuthenticated && (
               <Link href="/upload" className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
                 <Upload className="h-4 w-4" />
                 <span>{t('nav.upload')}</span>
@@ -776,7 +776,7 @@ export default function Navbar() {
                   <span className="text-lg text-glow-cyan">Pricing</span>
                 </Link>
                 
-                {isAuthenticated && user?.membershipStatus !== "free" && (
+                {isAuthenticated && (
                   <Link 
                     href="/upload"
                     className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent/10 transition-colors"
