@@ -122,6 +122,7 @@ export const tracks = mysqlTable("tracks", {
   // Privacy
   isPrivate: boolean("isPrivate").default(false).notNull(),
   privateToken: varchar("privateToken", { length: 64 }), // Unique token for private link sharing
+  privateViews: int("privateViews").default(0).notNull(), // Counter of private link accesses
   // Status
   status: mysqlEnum("status", ["pending", "approved", "rejected"]).default("approved").notNull(),
   // Timestamps

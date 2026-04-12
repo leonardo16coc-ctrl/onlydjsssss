@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { Lock, Globe, Copy, Check, RefreshCw, Loader2 } from "lucide-react";
 
 export default function TrackDetail() {
   const params = useParams<{ id: string; username?: string }>();
@@ -34,10 +35,54 @@ export default function TrackDetail() {
   const { user, isAuthenticated } = useAuth();
   const [, setLocation] = useLocation();
   const [isLiked, setIsLiked] = useState(false);
+  const [localIsPrivate, setLocalIsPrivate] = useState<boolean | null>(null);
+  const [localPrivateToken, setLocalPrivateToken] = useState<string | null>(null);
+  const [localPrivateViews, setLocalPrivateViews] = useState<number>(0);
+  const [privateLinkCopied, setPrivateLinkCopied] = useState(false);
+  const utils = trpc.useUtils();
 
   const trackId = parseInt(params.id || "0");
   
   const { data: track, isLoading } = trpc.tracks.getById.useQuery({ id: trackId });
+
+  // Sync privacy state from track data
+  useEffect(() => {
+    if (track) {
+      setLocalIsPrivate((track as any).isPrivate ?? false);
+      setLocalPrivateToken((track as any).privateToken ?? null);
+      setLocalPrivateViews((track as any).privateViews ?? 0);
+    }
+  }, [track]);
+
+  const setPrivacy = trpc.tracks.setPrivacy.useMutation({
+    onSuccess: (data: any) => {
+      const newPrivate = data.isPrivate !== undefined ? data.isPrivate : !localIsPrivate;
+      setLocalIsPrivate(newPrivate);
+      if (data.privateToken !== undefined) setLocalPrivateToken(data.privateToken);
+      toast.success(newPrivate ? "🔒 Track ahora es PRIVADO — no visible en Explore" : "🌐 Track ahora es público — visible en Explore");
+      utils.tracks.getById.invalidate({ id: trackId });
+    },
+  });
+
+  const regenerateToken = trpc.tracks.regeneratePrivateToken.useMutation({
+    onSuccess: (data: any) => {
+      setLocalPrivateToken(data.privateToken);
+      setLocalPrivateViews(0); // Reset counter on new token
+      toast.success("🔄 Nuevo link privado generado — el anterior ya no funciona");
+    },
+  });
+
+  const CANONICAL_DOMAIN = "https://www.onlydjss.com";
+  const copyPrivateLink = async () => {
+    if (!localPrivateToken) return;
+    const url = `${CANONICAL_DOMAIN}/track/private/${localPrivateToken}`;
+    await navigator.clipboard.writeText(url);
+    setPrivateLinkCopied(true);
+    toast.success("Link privado copiado", { description: url, duration: 4000 });
+    setTimeout(() => setPrivateLinkCopied(false), 3000);
+  };
+
+  const isOwner = isAuthenticated && track && (user as any)?.id === (track as any)?.userId;
 
   // Redirect to canonical URL /dj/:username/track/:id once track data is loaded
   useEffect(() => {
@@ -315,6 +360,85 @@ ${track.artist}
                 Enviar a sello
               </Button>
             </div>
+
+            {/* Privacy Panel — owner only */}
+            {isOwner && localIsPrivate !== null && (
+              <Card className="bg-card/50 backdrop-blur border-amber-500/20">
+                <CardContent className="p-4 space-y-3">
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <div className="flex items-center gap-2">
+                      {localIsPrivate ? (
+                        <>
+                          <Lock className="w-4 h-4 text-amber-400" />
+                          <span className="text-sm font-semibold text-amber-400 uppercase tracking-wide">PRIVADO</span>
+                          <span className="text-sm text-muted-foreground">— no visible en Explore</span>
+                        </>
+                      ) : (
+                        <>
+                          <Globe className="w-4 h-4 text-green-400" />
+                          <span className="text-sm font-semibold text-green-400 uppercase tracking-wide">PÚBLICO</span>
+                          <span className="text-sm text-muted-foreground">— visible en Explore</span>
+                        </>
+                      )}
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className={`gap-1.5 ${
+                        localIsPrivate
+                          ? "border-green-500/40 text-green-400 hover:bg-green-500/10"
+                          : "border-amber-500/40 text-amber-400 hover:bg-amber-500/10"
+                      }`}
+                      onClick={() => setPrivacy.mutate({ id: trackId, isPrivate: !localIsPrivate })}
+                      disabled={setPrivacy.isPending}
+                    >
+                      {setPrivacy.isPending ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : localIsPrivate ? (
+                        <Globe className="w-4 h-4" />
+                      ) : (
+                        <Lock className="w-4 h-4" />
+                      )}
+                      {localIsPrivate ? "Hacer público" : "Hacer privado"}
+                    </Button>
+                  </div>
+
+                  {localIsPrivate && localPrivateToken && (
+                    <div className="flex items-center justify-between gap-2 flex-wrap pt-2 border-t border-border/40">
+                      <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                        <Eye className="w-4 h-4 text-violet-400" />
+                        <span>
+                          <span className="font-semibold text-violet-400">{localPrivateViews}</span>
+                          {" "}{localPrivateViews === 1 ? "escucha" : "escuchas"} al link privado
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="gap-1.5 border-violet-500/40 text-violet-400 hover:bg-violet-500/10"
+                          onClick={copyPrivateLink}
+                        >
+                          {privateLinkCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                          {privateLinkCopied ? "Copiado" : "Copiar link privado"}
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="gap-1.5 text-muted-foreground hover:text-amber-400"
+                          onClick={() => regenerateToken.mutate({ id: trackId })}
+                          disabled={regenerateToken.isPending}
+                          title="Genera un nuevo link e invalida el anterior"
+                        >
+                          <RefreshCw className={`w-4 h-4 ${regenerateToken.isPending ? 'animate-spin' : ''}`} />
+                          Nuevo link
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
 
             <Separator className="bg-border/50" />
 

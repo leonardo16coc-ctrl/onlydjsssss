@@ -406,6 +406,29 @@ export const appRouter = router({
         if (!result || result.length === 0) {
           throw new TRPCError({ code: "NOT_FOUND", message: "Link privado no encontrado o expirado" });
         }
+        // Increment private view counter asynchronously (fire-and-forget)
+        dbInstance.update(tracks)
+          .set({ privateViews: (result[0].privateViews ?? 0) + 1 })
+          .where(eq(tracks.id, result[0].id))
+          .catch(() => {});
+        return result[0];
+      }),
+
+    // Get privacy stats for a specific track (owner only)
+    getPrivacyStats: protectedProcedure
+      .input(z.object({ id: z.number().int() }))
+      .query(async ({ ctx, input }) => {
+        const dbInstance = await getDb();
+        if (!dbInstance) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "DB unavailable" });
+        const result = await dbInstance
+          .select({ isPrivate: tracks.isPrivate, privateToken: tracks.privateToken, privateViews: tracks.privateViews })
+          .from(tracks)
+          .where(eq(tracks.id, input.id))
+          .limit(1);
+        if (!result || result.length === 0) throw new TRPCError({ code: "NOT_FOUND", message: "Track no encontrado" });
+        if (result[0] && (await dbInstance.select({ userId: tracks.userId }).from(tracks).where(eq(tracks.id, input.id)).limit(1))[0]?.userId !== ctx.user.id) {
+          throw new TRPCError({ code: "FORBIDDEN", message: "Sin permiso" });
+        }
         return result[0];
       }),
 

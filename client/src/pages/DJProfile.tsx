@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import {
   Music, Users, Play, Download, Heart, Share2, Repeat2,
   Instagram, Twitter, Youtube, Globe, MapPin, CheckCircle2,
-  Disc3, Mic2, Headphones, Pause, MessageCircle
+  Disc3, Mic2, Headphones, Pause, MessageCircle, Eye
 } from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { ShareProfileModal } from "@/components/ShareProfileModal";
@@ -490,6 +490,7 @@ function TrackCard({ track, djUsername, isOwner }: { track: any; djUsername?: st
   const utils = trpc.useUtils();
   const [localIsPrivate, setLocalIsPrivate] = useState<boolean>(track.isPrivate ?? false);
   const [localPrivateToken, setLocalPrivateToken] = useState<string | null>(track.privateToken ?? null);
+  const [localPrivateViews, setLocalPrivateViews] = useState<number>(track.privateViews ?? 0);
   const [privateLinkCopied, setPrivateLinkCopied] = useState(false);
   const CANONICAL_DOMAIN = "https://www.onlydjss.com";
 
@@ -818,64 +819,79 @@ function TrackCard({ track, djUsername, isOwner }: { track: any; djUsername?: st
 
         {/* Privacy management panel — visible only to owner */}
         {isOwner && (
-          <div className="mt-3 pt-3 border-t border-border/50">
+          <div className="mt-3 pt-3 border-t border-border/50 space-y-2">
+            {/* Status row */}
             <div className="flex items-center justify-between gap-2 flex-wrap">
               <div className="flex items-center gap-2">
                 {localIsPrivate ? (
-                  <Lock className="w-3.5 h-3.5 text-amber-400" />
-                ) : (
-                  <Globe className="w-3.5 h-3.5 text-green-400" />
-                )}
-                <span className="text-xs text-muted-foreground">
-                  {localIsPrivate ? "Privado — solo con link" : "Público — visible en Explore"}
-                </span>
-              </div>
-              <div className="flex items-center gap-1">
-                {localIsPrivate && localPrivateToken && (
                   <>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-7 px-2 text-xs gap-1 hover:text-amber-400"
-                      onClick={copyPrivateLink}
-                      title="Copiar link privado"
-                    >
-                      {privateLinkCopied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                      {privateLinkCopied ? "Copiado" : "Copiar link"}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-7 px-2 text-xs gap-1 hover:text-amber-400"
-                      onClick={() => regenerateToken.mutate({ id: track.id })}
-                      disabled={regenerateToken.isPending}
-                      title="Generar nuevo link"
-                    >
-                      <RefreshCw className={`w-3 h-3 ${regenerateToken.isPending ? 'animate-spin' : ''}`} />
-                      Nuevo link
-                    </Button>
+                    <Lock className="w-3.5 h-3.5 text-amber-400" />
+                    <span className="text-xs font-semibold text-amber-400 uppercase tracking-wide">PRIVADO</span>
+                    <span className="text-xs text-muted-foreground">— no visible en Explore</span>
+                  </>
+                ) : (
+                  <>
+                    <Globe className="w-3.5 h-3.5 text-green-400" />
+                    <span className="text-xs font-semibold text-green-400 uppercase tracking-wide">PÚBLICO</span>
+                    <span className="text-xs text-muted-foreground">— visible en Explore</span>
                   </>
                 )}
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={`h-7 px-2 text-xs gap-1 ${
-                    localIsPrivate ? "hover:text-green-400" : "hover:text-amber-400"
-                  }`}
-                  onClick={() => setPrivacy.mutate({ id: track.id, isPrivate: !localIsPrivate })}
-                  disabled={setPrivacy.isPending}
-                >
-                  {setPrivacy.isPending ? (
-                    <Loader2 className="w-3 h-3 animate-spin" />
-                  ) : localIsPrivate ? (
-                    <Globe className="w-3 h-3" />
-                  ) : (
-                    <Lock className="w-3 h-3" />
-                  )}
-                  {localIsPrivate ? "Hacer público" : "Hacer privado"}
-                </Button>
               </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={`h-7 px-2 text-xs gap-1 ${
+                  localIsPrivate ? "hover:text-green-400" : "hover:text-amber-400"
+                }`}
+                onClick={() => setPrivacy.mutate({ id: track.id, isPrivate: !localIsPrivate })}
+                disabled={setPrivacy.isPending}
+              >
+                {setPrivacy.isPending ? (
+                  <Loader2 className="w-3 h-3 animate-spin" />
+                ) : localIsPrivate ? (
+                  <Globe className="w-3 h-3" />
+                ) : (
+                  <Lock className="w-3 h-3" />
+                )}
+                {localIsPrivate ? "Hacer público" : "Hacer privado"}
+              </Button>
             </div>
+
+            {/* Private link actions + view counter */}
+            {localIsPrivate && localPrivateToken && (
+              <div className="flex items-center justify-between gap-2 flex-wrap">
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <Eye className="w-3.5 h-3.5 text-violet-400" />
+                  <span>
+                    <span className="font-semibold text-violet-400">{localPrivateViews}</span>
+                    {" "}{localPrivateViews === 1 ? "escucha" : "escuchas"} al link privado
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 px-2 text-xs gap-1 hover:text-amber-400"
+                    onClick={copyPrivateLink}
+                    title="Copiar link privado"
+                  >
+                    {privateLinkCopied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                    {privateLinkCopied ? "Copiado" : "Copiar link"}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 px-2 text-xs gap-1 hover:text-amber-400"
+                    onClick={() => regenerateToken.mutate({ id: track.id })}
+                    disabled={regenerateToken.isPending}
+                    title="Generar nuevo link (invalida el anterior)"
+                  >
+                    <RefreshCw className={`w-3 h-3 ${regenerateToken.isPending ? 'animate-spin' : ''}`} />
+                    Nuevo link
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
