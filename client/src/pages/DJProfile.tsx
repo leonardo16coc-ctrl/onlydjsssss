@@ -668,8 +668,8 @@ function TrackCard({ track, djUsername, isOwner }: { track: any; djUsername?: st
     <Card className={`group bg-card/50 border-border/50 hover:border-border hover:bg-card transition-all duration-200 ${
       isPlaying ? "border-sky-500/50 bg-sky-950/20" : ""
     }`}>
-      <CardContent className="p-4">
-        <div className="flex gap-4 items-center">
+      <CardContent className="p-3 sm:p-4">
+        <div className="flex gap-3 sm:gap-4 items-center">
           {/* Cover + Play Button */}
           <div className="relative flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden bg-muted">
             {track.coverImageUrl ? (
@@ -722,7 +722,7 @@ function TrackCard({ track, djUsername, isOwner }: { track: any; djUsername?: st
               </div>
             )}
 
-            <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-xs text-muted-foreground">
               <span className="flex items-center gap-1">
                 <Play className="w-3 h-3" />
                 {(localPlayCount !== null ? localPlayCount : (track.playCount || 0)).toLocaleString()}
@@ -733,8 +733,8 @@ function TrackCard({ track, djUsername, isOwner }: { track: any; djUsername?: st
               <span className="flex items-center gap-1">
                 <Download className="w-3 h-3" />{(track.downloadCount || 0).toLocaleString()}
               </span>
-              {track.bpm && <span>{track.bpm} BPM</span>}
-              {track.musicalKey && <span>{track.musicalKey}</span>}
+              {track.bpm && <span className="hidden sm:inline">{track.bpm} BPM</span>}
+              {track.musicalKey && <span className="hidden sm:inline">{track.musicalKey}</span>}
               {isPlaying ? (
                 <span className="text-sky-400 font-medium">
                   {formatDuration(currentTime)} / {formatDuration(duration)}
@@ -753,7 +753,7 @@ function TrackCard({ track, djUsername, isOwner }: { track: any; djUsername?: st
                 variant="ghost"
                 size="icon"
                 className={`h-8 w-8 ${
-                  isPlaying ? "text-sky-400 hover:text-sky-300" : "opacity-0 group-hover:opacity-100"
+                  isPlaying ? "text-sky-400 hover:text-sky-300" : "sm:opacity-0 sm:group-hover:opacity-100"
                 } transition-opacity`}
                 onClick={togglePlay}
                 aria-label={isPlaying ? "Pausar" : "Reproducir"}
@@ -1220,10 +1220,10 @@ export default function DJProfile() {
                 </AvatarFallback>
               </Avatar>
               {isOnline && (
-                <span
-                  className="absolute bottom-2 right-2 w-4 h-4 rounded-full bg-green-500 border-2 border-background shadow-md"
-                  title="En línea ahora"
-                />
+                <span className="absolute bottom-1 right-1 flex h-4 w-4">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-4 w-4 bg-green-500 border-2 border-background" />
+                </span>
               )}
             </div>
 
@@ -1231,16 +1231,16 @@ export default function DJProfile() {
             <div className="flex-1 sm:pb-2">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div>
-                  <div className="flex items-center gap-2">
-                    <h1 className="text-2xl font-bold">{p.djName || p.name || username}</h1>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h1 className="text-xl sm:text-2xl font-bold leading-tight">{p.djName || p.name || username}</h1>
                     {p.isVerified && (
-                      <CheckCircle2 className="w-5 h-5 text-primary" />
+                      <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" />
                     )}
                     {p.membershipStatus === "member" && (
-                      <Badge className="bg-primary/10 text-primary border-primary/20 text-xs">PRO</Badge>
+                      <Badge className="bg-primary/10 text-primary border-primary/20 text-xs flex-shrink-0">PRO</Badge>
                     )}
                     {isOnline && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-green-500/15 border border-green-500/30 text-green-400 text-[10px] font-semibold">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-green-500/15 border border-green-500/30 text-green-400 text-[10px] font-semibold flex-shrink-0">
                         <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
                         En línea
                       </span>
@@ -1380,7 +1380,7 @@ export default function DJProfile() {
         {/* Tabs - Music first */}
         <div className="py-6">
           <Tabs defaultValue={defaultTab} onValueChange={(val) => navigate(`/${username}/${val}`, { replace: true })}>
-            <TabsList className="mb-6 flex-wrap h-auto gap-1">
+            <TabsList className="mb-6 w-full overflow-x-auto flex flex-nowrap h-auto gap-1 justify-start">
               <TabsTrigger value="tracks" className="flex items-center gap-2">
                 <Music className="w-4 h-4" />Tracks
                 {counts && <span className="ml-1 text-xs opacity-60">({counts.track})</span>}
