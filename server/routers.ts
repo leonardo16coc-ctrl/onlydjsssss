@@ -1,4 +1,5 @@
 import { COOKIE_NAME } from "@shared/const";
+import { randomBytes } from "crypto";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
@@ -209,7 +210,7 @@ export const appRouter = router({
           mainstageTags: input.mainstageTags ? JSON.stringify(input.mainstageTags) : null,
           isPrivate: input.isPrivate ?? false,
           privateToken: (input.isPrivate || input.isPrivateDemo)
-            ? require('crypto').randomBytes(32).toString('hex')
+            ? randomBytes(32).toString('hex')
             : null,
           isPrivateDemo: input.isPrivateDemo ?? false,
           canDownload: input.canDownload ?? true,
@@ -318,7 +319,7 @@ export const appRouter = router({
         const existing = await dbInstance.select().from(tracks).where(eq(tracks.id, input.id)).limit(1);
         if (!existing || existing.length === 0) throw new TRPCError({ code: "NOT_FOUND", message: "Demo no encontrado" });
         if (existing[0].userId !== ctx.user.id) throw new TRPCError({ code: "FORBIDDEN", message: "Sin permiso" });
-        const newToken = require('crypto').randomBytes(32).toString('hex');
+        const newToken = randomBytes(32).toString('hex');
         await dbInstance.update(tracks).set({ privateToken: newToken, privateViews: 0 }).where(eq(tracks.id, input.id));
         return { success: true, privateToken: newToken };
       }),
@@ -516,9 +517,8 @@ export const appRouter = router({
         const existing = await dbInstance.select().from(tracks).where(eq(tracks.id, input.id)).limit(1);
         if (!existing || existing.length === 0) throw new TRPCError({ code: "NOT_FOUND", message: "Track no encontrado" });
         if (existing[0].userId !== ctx.user.id) throw new TRPCError({ code: "FORBIDDEN", message: "Sin permiso" });
-        const crypto = require('crypto');
         const newToken = input.isPrivate
-          ? (existing[0].privateToken || crypto.randomBytes(32).toString('hex'))
+          ? (existing[0].privateToken || randomBytes(32).toString('hex'))
           : null;
         await dbInstance.update(tracks).set({ isPrivate: input.isPrivate, privateToken: newToken }).where(eq(tracks.id, input.id));
         return { success: true, privateToken: newToken };
@@ -533,7 +533,7 @@ export const appRouter = router({
         const existing = await dbInstance.select().from(tracks).where(eq(tracks.id, input.id)).limit(1);
         if (!existing || existing.length === 0) throw new TRPCError({ code: "NOT_FOUND", message: "Track no encontrado" });
         if (existing[0].userId !== ctx.user.id) throw new TRPCError({ code: "FORBIDDEN", message: "Sin permiso" });
-        const newToken = require('crypto').randomBytes(32).toString('hex');
+        const newToken = randomBytes(32).toString('hex');
         await dbInstance.update(tracks).set({ privateToken: newToken }).where(eq(tracks.id, input.id));
         return { success: true, privateToken: newToken };
       }),
