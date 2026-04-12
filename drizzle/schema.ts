@@ -123,6 +123,9 @@ export const tracks = mysqlTable("tracks", {
   isPrivate: boolean("isPrivate").default(false).notNull(),
   privateToken: varchar("privateToken", { length: 64 }), // Unique token for private link sharing
   privateViews: int("privateViews").default(0).notNull(), // Counter of private link accesses
+  // Private Demo System (separate from isPrivate — full isolation from public routes)
+  isPrivateDemo: boolean("isPrivateDemo").default(false).notNull(),
+  canDownload: boolean("canDownload").default(true).notNull(), // Allow download on demo page
   // Status
   status: mysqlEnum("status", ["pending", "approved", "rejected"]).default("approved").notNull(),
   // Timestamps
@@ -136,6 +139,8 @@ export const tracks = mysqlTable("tracks", {
   isMainstageIdx: index("is_mainstage_idx").on(table.isMainstage),
   downloadCountIdx: index("download_count_idx").on(table.downloadCount),
   createdAtIdx: index("created_at_idx").on(table.createdAt),
+  isPrivateDemoIdx: index("is_private_demo_idx").on(table.isPrivateDemo),
+  privateTokenIdx: index("private_token_idx").on(table.privateToken),
 }));
 
 export type Track = typeof tracks.$inferSelect;

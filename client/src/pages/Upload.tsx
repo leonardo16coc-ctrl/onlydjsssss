@@ -83,6 +83,8 @@ export default function Upload() {
 
   // ── File states ─────────────────────────────────────────────────────────────
   const [isPrivate, setIsPrivate]         = useState(false);
+  const [isPrivateDemo, setIsPrivateDemo] = useState(false);
+  const [canDownload, setCanDownload]     = useState(true);
   const [audioFile, setAudioFile]         = useState<File | null>(null);
   const [coverImage, setCoverImage]       = useState<File | null>(null);
   const [coverPreview, setCoverPreview]   = useState<string | null>(null);
@@ -238,10 +240,17 @@ export default function Upload() {
         coverImageUrl: uploadedCover?.fileUrl,
         energy: analysisResult?.energy,
         mood: analysisResult?.mood,
-        isPrivate,
+        isPrivate: isPrivateDemo ? false : isPrivate,
+        isPrivateDemo,
+        canDownload,
       });
-      toast.success("¡Track publicado exitosamente!");
-      setTimeout(() => setLocation("/explore"), 1500);
+      if (isPrivateDemo) {
+        toast.success("¡Demo privado subido! Copia el link desde tu perfil.");
+        setTimeout(() => setLocation("/profile"), 1500);
+      } else {
+        toast.success("¡Track publicado exitosamente!");
+        setTimeout(() => setLocation("/explore"), 1500);
+      }
     } catch (err: any) {
       toast.error(err.message || "Error al publicar el track");
     }
@@ -651,39 +660,85 @@ export default function Upload() {
         {/* Privacy selector */}
         <div className="mt-6 p-4 rounded-xl border border-border bg-card">
           <p className="text-sm font-semibold mb-3">Visibilidad del track</p>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-3 gap-3">
+            {/* Público */}
             <button
               type="button"
-              onClick={() => setIsPrivate(false)}
-              className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${
-                !isPrivate
+              onClick={() => { setIsPrivate(false); setIsPrivateDemo(false); }}
+              className={`flex items-center gap-2 p-3 rounded-lg border transition-all ${
+                !isPrivate && !isPrivateDemo
                   ? "border-primary bg-primary/10 text-primary"
                   : "border-border bg-background text-muted-foreground hover:border-primary/50"
               }`}
             >
-              <Globe className="w-5 h-5 flex-shrink-0" />
+              <Globe className="w-4 h-4 flex-shrink-0" />
               <div className="text-left">
-                <p className="text-sm font-medium">Público</p>
-                <p className="text-xs opacity-70">Visible en Explore</p>
+                <p className="text-xs font-semibold">Público</p>
+                <p className="text-xs opacity-70 hidden sm:block">Visible en Explore</p>
               </div>
             </button>
+            {/* Privado con link */}
             <button
               type="button"
-              onClick={() => setIsPrivate(true)}
-              className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${
-                isPrivate
+              onClick={() => { setIsPrivate(true); setIsPrivateDemo(false); }}
+              className={`flex items-center gap-2 p-3 rounded-lg border transition-all ${
+                isPrivate && !isPrivateDemo
                   ? "border-primary bg-primary/10 text-primary"
                   : "border-border bg-background text-muted-foreground hover:border-primary/50"
               }`}
             >
-              <Lock className="w-5 h-5 flex-shrink-0" />
+              <Lock className="w-4 h-4 flex-shrink-0" />
               <div className="text-left">
-                <p className="text-sm font-medium">Privado</p>
-                <p className="text-xs opacity-70">Solo con link secreto</p>
+                <p className="text-xs font-semibold">Privado</p>
+                <p className="text-xs opacity-70 hidden sm:block">Solo link secreto</p>
+              </div>
+            </button>
+            {/* Private Demo */}
+            <button
+              type="button"
+              onClick={() => { setIsPrivateDemo(true); setIsPrivate(false); }}
+              className={`flex items-center gap-2 p-3 rounded-lg border transition-all ${
+                isPrivateDemo
+                  ? "border-violet-500 bg-violet-500/10 text-violet-400"
+                  : "border-border bg-background text-muted-foreground hover:border-violet-500/50"
+              }`}
+            >
+              <Lock className="w-4 h-4 flex-shrink-0" />
+              <div className="text-left">
+                <p className="text-xs font-semibold">Private Demo</p>
+                <p className="text-xs opacity-70 hidden sm:block">Ruta /demo/token</p>
               </div>
             </button>
           </div>
-          {isPrivate && (
+
+          {/* Private Demo info + download toggle */}
+          {isPrivateDemo && (
+            <div className="mt-4 space-y-3">
+              <div className="p-3 rounded-lg bg-violet-500/10 border border-violet-500/30 text-xs text-violet-300 flex items-start gap-2">
+                <Lock className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
+                <span>El track <strong>no aparecerá en Explore ni en tu perfil público</strong>. Solo accesible desde la ruta <code className="bg-violet-900/40 px-1 rounded">/demo/[token]</code>. Comparte el link por DM.</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-medium">Permitir descarga</p>
+                  <p className="text-xs text-muted-foreground">El receptor puede descargar el archivo</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setCanDownload(v => !v)}
+                  className={`relative w-10 h-5 rounded-full transition-colors ${
+                    canDownload ? "bg-violet-500" : "bg-muted"
+                  }`}
+                >
+                  <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform ${
+                    canDownload ? "translate-x-5" : "translate-x-0"
+                  }`} />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {isPrivate && !isPrivateDemo && (
             <p className="text-xs text-muted-foreground mt-3 flex items-center gap-1.5">
               <Lock className="w-3 h-3" />
               Se generará un link único para compartir. El track no aparecerá en Explore ni en tu perfil público.

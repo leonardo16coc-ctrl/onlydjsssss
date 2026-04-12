@@ -3312,3 +3312,14 @@ MAINSTAGE MODE = 🧠 IA + 🎧 Música + 🔥 Predicción de impacto + 📊 Ten
 ## 62. Messages en dropdown del perfil
 - [ ] Agregar enlace "Messages" con badge en el dropdown del perfil del Navbar, debajo de "My Profile"
 - [ ] Quitar el botón de Messages del Navbar principal (MessagesNavButton)
+
+## Private Demo Routing System (NUEVO)
+
+- [ ] Agregar columnas is_private_demo y can_download en la tabla tracks (DB + schema)
+- [ ] Backend: bloquear acceso a demos desde rutas públicas (retornar 404)
+- [ ] Backend: endpoint getByDemoToken para /demo/:token
+- [ ] Backend: excluir is_private_demo=true de todos los endpoints de Discover/Explore
+- [ ] Upload: agregar opción "Upload as Private Demo" en el formulario
+- [ ] Crear página /demo/:token con player limpio, descarga opcional, sin métricas públicas
+- [ ] Perfil DJ: sección "Private Demos" visible solo para el owner (listar, copiar link, eliminar)
+- [ ] Seguridad: tokens random de 32 chars, meta noindex en página de demo

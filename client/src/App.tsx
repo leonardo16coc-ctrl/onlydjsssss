@@ -42,6 +42,7 @@ import EmailAnalytics from "./pages/EmailAnalytics";
 import ABTesting from "./pages/ABTesting";
 import TrackDetail from "./pages/TrackDetail";
 import PrivateTrack from "./pages/PrivateTrack";
+import DemoPlayer from "./pages/DemoPlayer";
 import MyPlaylists from "./pages/MyPlaylists";
 import PlaylistDetail from "./pages/PlaylistDetail";
 import Charts from "./pages/Charts";
@@ -123,6 +124,7 @@ function Router() {
       <Route path={"/messages"} component={Messages} />
       <Route path={"/dj/:username/track/:id"} component={TrackDetail} />
       <Route path={"/track/private/:token"} component={PrivateTrack} />
+      <Route path={"/demo/:token"} component={DemoPlayer} />
       <Route path={"/track/:id"} component={TrackDetail} />
       <Route path={"/my-playlists"} component={MyPlaylists} />
       <Route path={"/playlist/:id"} component={PlaylistDetail} />

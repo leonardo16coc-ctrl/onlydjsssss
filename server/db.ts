@@ -188,7 +188,7 @@ export async function getAllTracks(limit = 100, offset = 0) {
   if (!db) return [];
   
   return await db.select().from(tracks)
-    .where(eq(tracks.status, "approved"))
+    .where(and(eq(tracks.status, "approved"), eq(tracks.isPrivateDemo, false)))
     .orderBy(desc(tracks.createdAt))
     .limit(limit)
     .offset(offset);
@@ -201,7 +201,8 @@ export async function getTracksByGenre(genre: string, limit = 50) {
   return await db.select().from(tracks)
     .where(and(
       eq(tracks.genre, genre as any),
-      eq(tracks.status, "approved")
+      eq(tracks.status, "approved"),
+      eq(tracks.isPrivateDemo, false)
     ))
     .orderBy(desc(tracks.createdAt))
     .limit(limit);
@@ -214,7 +215,8 @@ export async function getMainstageTracks(limit = 50) {
   return await db.select().from(tracks)
     .where(and(
       eq(tracks.isMainstage, true),
-      eq(tracks.status, "approved")
+      eq(tracks.status, "approved"),
+      eq(tracks.isPrivateDemo, false)
     ))
     .orderBy(desc(tracks.downloadCount))
     .limit(limit);
@@ -233,7 +235,7 @@ export async function searchTracks(params: {
   const db = await getDb();
   if (!db) return [];
   
-  const conditions = [eq(tracks.status, "approved")];
+  const conditions = [eq(tracks.status, "approved"), eq(tracks.isPrivateDemo, false)];
   
   if (params.query) {
     conditions.push(

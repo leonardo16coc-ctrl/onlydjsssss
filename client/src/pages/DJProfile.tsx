@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { ShareProfileModal } from "@/components/ShareProfileModal";
-import { ExternalLink, Grid3X3, ChevronLeft, ChevronRight, Loader2, Copy, Link2, Check, Mail, Lock, RefreshCw } from "lucide-react";
+import { ExternalLink, Grid3X3, ChevronLeft, ChevronRight, Loader2, Copy, Link2, Check, Mail, Lock, RefreshCw, Trash2 } from "lucide-react";
 
 // ── Threads SVG icon ──────────────────────────────────────────────────────
 function ThreadsIcon({ className }: { className?: string }) {
@@ -925,6 +925,94 @@ function TrackList({ username, type, isOwner }: { username: string; type: "all" 
   );
 }
 
+// ── Private Demos Section (owner only) ──────────────────────────────────────
+function PrivateDemosSection() {
+  const CANONICAL_DOMAIN = typeof window !== "undefined" ? window.location.origin : "https://www.onlydjss.com";
+  const utils = trpc.useUtils();
+  const { data: demos, isLoading } = trpc.tracks.myPrivateDemos.useQuery();
+  const deleteDemo = trpc.tracks.deleteDemo.useMutation({
+    onSuccess: () => utils.tracks.myPrivateDemos.invalidate(),
+  });
+  const regenerateToken = trpc.tracks.regenerateDemoToken.useMutation({
+    onSuccess: () => utils.tracks.myPrivateDemos.invalidate(),
+  });
+  const [copiedId, setCopiedId] = useState<number | null>(null);
+
+  const copyLink = (token: string, id: number) => {
+    navigator.clipboard.writeText(`${CANONICAL_DOMAIN}/demo/${token}`);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  if (isLoading) {
+    return <div className="py-8 text-center text-sm text-muted-foreground">Cargando demos…</div>;
+  }
+
+  if (!demos || demos.length === 0) {
+    return (
+      <div className="py-12 text-center space-y-3">
+        <Lock className="w-10 h-10 text-violet-400/40 mx-auto" />
+        <p className="text-sm text-muted-foreground">No tienes demos privados aún.</p>
+        <p className="text-xs text-muted-foreground">Sube un track y elige <strong>Private Demo</strong> para obtener un link secreto.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-3">
+      {demos.map((demo: any) => (
+        <div key={demo.id} className="p-4 rounded-xl border border-violet-500/20 bg-violet-500/5 flex items-center gap-4">
+          {/* Cover */}
+          <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 bg-zinc-800">
+            {demo.coverImageUrl
+              ? <img src={demo.coverImageUrl} alt={demo.title} className="w-full h-full object-cover" />
+              : <div className="w-full h-full flex items-center justify-center"><Music className="w-5 h-5 text-zinc-600" /></div>
+            }
+          </div>
+          {/* Info */}
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold truncate">{demo.title}</p>
+            <p className="text-xs text-muted-foreground truncate">{demo.artist}</p>
+            <div className="flex items-center gap-3 mt-1">
+              {demo.bpm && <span className="text-xs text-zinc-500">{demo.bpm} BPM</span>}
+              <span className="flex items-center gap-1 text-xs text-zinc-500">
+                <Eye className="w-3 h-3" />{demo.privateViews ?? 0} escuchas
+              </span>
+              {demo.canDownload && <span className="text-xs text-violet-400">↓ descarga activa</span>}
+            </div>
+          </div>
+          {/* Actions */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <button
+              onClick={() => demo.privateToken && copyLink(demo.privateToken, demo.id)}
+              className="p-2 rounded-lg hover:bg-violet-500/20 transition-colors"
+              title="Copiar link"
+            >
+              {copiedId === demo.id ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-violet-400" />}
+            </button>
+            <button
+              onClick={() => regenerateToken.mutate({ id: demo.id })}
+              className="p-2 rounded-lg hover:bg-violet-500/20 transition-colors"
+              title="Nuevo link"
+              disabled={regenerateToken.isPending}
+            >
+              <RefreshCw className={`w-4 h-4 text-violet-400 ${regenerateToken.isPending ? 'animate-spin' : ''}`} />
+            </button>
+            <button
+              onClick={() => { if (confirm('¿Eliminar este demo privado?')) deleteDemo.mutate({ id: demo.id }); }}
+              className="p-2 rounded-lg hover:bg-red-500/20 transition-colors"
+              title="Eliminar demo"
+              disabled={deleteDemo.isPending}
+            >
+              <Trash2 className="w-4 h-4 text-red-400" />
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 // Formats a timestamp as "Activo hace X minutos/horas/días"
 function formatLastSeen(lastSeenAt: string | Date): string {
   const diff = Date.now() - new Date(lastSeenAt).getTime();
@@ -1309,6 +1397,11 @@ export default function DJProfile() {
                 <Headphones className="w-4 h-4" />Mashups
                 {counts && <span className="ml-1 text-xs opacity-60">({counts.mashup})</span>}
               </TabsTrigger>
+              {isOwnProfile && (
+                <TabsTrigger value="demos" className="flex items-center gap-2 text-violet-400 data-[state=active]:text-violet-300">
+                  <Lock className="w-4 h-4" />Private Demos
+                </TabsTrigger>
+              )}
             </TabsList>
 
             <TabsContent value="tracks">
@@ -1323,6 +1416,13 @@ export default function DJProfile() {
             <TabsContent value="mashups">
               <TrackList username={username} type="mashup" isOwner={isOwnProfile} />
             </TabsContent>
+
+            {/* Private Demos tab content — only visible to owner */}
+            {isOwnProfile && (
+              <TabsContent value="demos">
+                <PrivateDemosSection />
+              </TabsContent>
+            )}
           </Tabs>
         </div>
 

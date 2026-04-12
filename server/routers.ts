@@ -45,7 +45,7 @@ import { tiktokRouter } from "./routers/tiktok.router";
 import { messagingRouter } from "./routers/messaging.router";
 import { getDb } from "./db";
 import { tracks, downloads } from "../drizzle/schema";
-import { eq, and, gte, sql } from "drizzle-orm";
+import { eq, and, gte, sql, desc } from "drizzle-orm";
 
 // Middleware to check if user has active membership
 const memberProcedure = protectedProcedure.use(({ ctx, next }) => {
@@ -176,6 +176,8 @@ export const appRouter = router({
         ]).optional(),
         mainstageTags: z.array(z.string()).optional(),
         isPrivate: z.boolean().optional(),
+        isPrivateDemo: z.boolean().optional(),
+        canDownload: z.boolean().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
         // Upload is free for all authenticated users.
@@ -206,7 +208,11 @@ export const appRouter = router({
           tags: input.tags ? JSON.stringify(input.tags) : null,
           mainstageTags: input.mainstageTags ? JSON.stringify(input.mainstageTags) : null,
           isPrivate: input.isPrivate ?? false,
-          privateToken: input.isPrivate ? require('crypto').randomBytes(32).toString('hex') : null,
+          privateToken: (input.isPrivate || input.isPrivateDemo)
+            ? require('crypto').randomBytes(32).toString('hex')
+            : null,
+          isPrivateDemo: input.isPrivateDemo ?? false,
+          canDownload: input.canDownload ?? true,
         });
 
         return { 
@@ -248,7 +254,73 @@ export const appRouter = router({
         if (!track) {
           throw new TRPCError({ code: "NOT_FOUND", message: "Track no encontrado" });
         }
+        // Private demos are NOT accessible from public routes — return 404
+        if ((track as any).isPrivateDemo) {
+          throw new TRPCError({ code: "NOT_FOUND", message: "Track no encontrado" });
+        }
         return track;
+      }),
+
+    // Access a private demo by its unique token (no login required)
+    getByDemoToken: publicProcedure
+      .input(z.object({ token: z.string().min(1) }))
+      .query(async ({ input }) => {
+        const dbInstance = await getDb();
+        if (!dbInstance) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "DB unavailable" });
+        const result = await dbInstance
+          .select()
+          .from(tracks)
+          .where(and(eq(tracks.privateToken, input.token), eq(tracks.isPrivateDemo, true)))
+          .limit(1);
+        if (!result || result.length === 0) {
+          throw new TRPCError({ code: "NOT_FOUND", message: "Demo no disponible" });
+        }
+        // Increment view counter
+        dbInstance.update(tracks)
+          .set({ privateViews: (result[0].privateViews ?? 0) + 1 })
+          .where(eq(tracks.id, result[0].id))
+          .catch(() => {});
+        return result[0];
+      }),
+
+    // List all private demos for the authenticated DJ (owner only)
+    myPrivateDemos: protectedProcedure
+      .query(async ({ ctx }) => {
+        const dbInstance = await getDb();
+        if (!dbInstance) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "DB unavailable" });
+        return await dbInstance
+          .select()
+          .from(tracks)
+          .where(and(eq(tracks.userId, ctx.user.id), eq(tracks.isPrivateDemo, true)))
+          .orderBy(desc(tracks.createdAt));
+      }),
+
+    // Delete a private demo (owner only)
+    deleteDemo: protectedProcedure
+      .input(z.object({ id: z.number().int() }))
+      .mutation(async ({ ctx, input }) => {
+        const dbInstance = await getDb();
+        if (!dbInstance) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "DB unavailable" });
+        const existing = await dbInstance.select().from(tracks).where(eq(tracks.id, input.id)).limit(1);
+        if (!existing || existing.length === 0) throw new TRPCError({ code: "NOT_FOUND", message: "Demo no encontrado" });
+        if (existing[0].userId !== ctx.user.id) throw new TRPCError({ code: "FORBIDDEN", message: "Sin permiso" });
+        if (!existing[0].isPrivateDemo) throw new TRPCError({ code: "BAD_REQUEST", message: "No es un demo privado" });
+        await dbInstance.delete(tracks).where(eq(tracks.id, input.id));
+        return { success: true };
+      }),
+
+    // Regenerate demo token (owner only)
+    regenerateDemoToken: protectedProcedure
+      .input(z.object({ id: z.number().int() }))
+      .mutation(async ({ ctx, input }) => {
+        const dbInstance = await getDb();
+        if (!dbInstance) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "DB unavailable" });
+        const existing = await dbInstance.select().from(tracks).where(eq(tracks.id, input.id)).limit(1);
+        if (!existing || existing.length === 0) throw new TRPCError({ code: "NOT_FOUND", message: "Demo no encontrado" });
+        if (existing[0].userId !== ctx.user.id) throw new TRPCError({ code: "FORBIDDEN", message: "Sin permiso" });
+        const newToken = require('crypto').randomBytes(32).toString('hex');
+        await dbInstance.update(tracks).set({ privateToken: newToken, privateViews: 0 }).where(eq(tracks.id, input.id));
+        return { success: true, privateToken: newToken };
       }),
 
     myTracks: protectedProcedure
