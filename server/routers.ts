@@ -175,6 +175,7 @@ export const appRouter = router({
           "Latin Mainstage", "Reggaeton Mainstage", "Hip-Hop Mainstage"
         ]).optional(),
         mainstageTags: z.array(z.string()).optional(),
+        isPrivate: z.boolean().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
         // Upload is free for all authenticated users.
@@ -204,6 +205,8 @@ export const appRouter = router({
           mood: input.mood || analysisData?.mood,
           tags: input.tags ? JSON.stringify(input.tags) : null,
           mainstageTags: input.mainstageTags ? JSON.stringify(input.mainstageTags) : null,
+          isPrivate: input.isPrivate ?? false,
+          privateToken: input.isPrivate ? require('crypto').randomBytes(32).toString('hex') : null,
         });
 
         return { 
@@ -388,6 +391,57 @@ export const appRouter = router({
     myLikes: protectedProcedure.query(async ({ ctx }) => {
       return await db.getUserLikes(ctx.user.id);
     }),
+
+    // Get a private track by its secret token (no auth required)
+    getByPrivateToken: publicProcedure
+      .input(z.object({ token: z.string() }))
+      .query(async ({ input }) => {
+        const dbInstance = await getDb();
+        if (!dbInstance) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "DB unavailable" });
+        const result = await dbInstance
+          .select()
+          .from(tracks)
+          .where(eq(tracks.privateToken, input.token))
+          .limit(1);
+        if (!result || result.length === 0) {
+          throw new TRPCError({ code: "NOT_FOUND", message: "Link privado no encontrado o expirado" });
+        }
+        return result[0];
+      }),
+
+    // Toggle privacy and regenerate token if making private
+    setPrivacy: protectedProcedure
+      .input(z.object({
+        id: z.number().int(),
+        isPrivate: z.boolean(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const dbInstance = await getDb();
+        if (!dbInstance) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "DB unavailable" });
+        const existing = await dbInstance.select().from(tracks).where(eq(tracks.id, input.id)).limit(1);
+        if (!existing || existing.length === 0) throw new TRPCError({ code: "NOT_FOUND", message: "Track no encontrado" });
+        if (existing[0].userId !== ctx.user.id) throw new TRPCError({ code: "FORBIDDEN", message: "Sin permiso" });
+        const crypto = require('crypto');
+        const newToken = input.isPrivate
+          ? (existing[0].privateToken || crypto.randomBytes(32).toString('hex'))
+          : null;
+        await dbInstance.update(tracks).set({ isPrivate: input.isPrivate, privateToken: newToken }).where(eq(tracks.id, input.id));
+        return { success: true, privateToken: newToken };
+      }),
+
+    // Regenerate the private link token
+    regeneratePrivateToken: protectedProcedure
+      .input(z.object({ id: z.number().int() }))
+      .mutation(async ({ ctx, input }) => {
+        const dbInstance = await getDb();
+        if (!dbInstance) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "DB unavailable" });
+        const existing = await dbInstance.select().from(tracks).where(eq(tracks.id, input.id)).limit(1);
+        if (!existing || existing.length === 0) throw new TRPCError({ code: "NOT_FOUND", message: "Track no encontrado" });
+        if (existing[0].userId !== ctx.user.id) throw new TRPCError({ code: "FORBIDDEN", message: "Sin permiso" });
+        const newToken = require('crypto').randomBytes(32).toString('hex');
+        await dbInstance.update(tracks).set({ privateToken: newToken }).where(eq(tracks.id, input.id));
+        return { success: true, privateToken: newToken };
+      }),
   }),
 
   rankings: router({

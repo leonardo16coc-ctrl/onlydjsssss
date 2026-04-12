@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { ShareProfileModal } from "@/components/ShareProfileModal";
-import { ExternalLink, Grid3X3, ChevronLeft, ChevronRight, Loader2, Copy, Link2, Check, Mail } from "lucide-react";
+import { ExternalLink, Grid3X3, ChevronLeft, ChevronRight, Loader2, Copy, Link2, Check, Mail, Lock, RefreshCw } from "lucide-react";
 
 // ── Threads SVG icon ──────────────────────────────────────────────────────
 function ThreadsIcon({ className }: { className?: string }) {
@@ -486,7 +486,37 @@ function InstagramFeed({ username }: { username: string }) {
   );
 }
 
-function TrackCard({ track, djUsername }: { track: any; djUsername?: string }) {
+function TrackCard({ track, djUsername, isOwner }: { track: any; djUsername?: string; isOwner?: boolean }) {
+  const utils = trpc.useUtils();
+  const [localIsPrivate, setLocalIsPrivate] = useState<boolean>(track.isPrivate ?? false);
+  const [localPrivateToken, setLocalPrivateToken] = useState<string | null>(track.privateToken ?? null);
+  const [privateLinkCopied, setPrivateLinkCopied] = useState(false);
+  const CANONICAL_DOMAIN = "https://www.onlydjss.com";
+
+  const setPrivacy = trpc.tracks.setPrivacy.useMutation({
+    onSuccess: (data: any) => {
+      setLocalIsPrivate(data.isPrivate !== undefined ? data.isPrivate : !localIsPrivate);
+      if (data.privateToken !== undefined) setLocalPrivateToken(data.privateToken);
+      toast.success(localIsPrivate ? "Track ahora es público" : "Track ahora es privado");
+      utils.djProfiles.getTracksByUsername.invalidate();
+    },
+  });
+  const regenerateToken = trpc.tracks.regeneratePrivateToken.useMutation({
+    onSuccess: (data: any) => {
+      setLocalPrivateToken(data.privateToken);
+      toast.success("Nuevo link privado generado");
+    },
+  });
+
+  const copyPrivateLink = async () => {
+    if (!localPrivateToken) return;
+    const url = `${CANONICAL_DOMAIN}/track/private/${localPrivateToken}`;
+    await navigator.clipboard.writeText(url);
+    setPrivateLinkCopied(true);
+    toast.success("Link privado copiado", { description: url, duration: 4000 });
+    setTimeout(() => setPrivateLinkCopied(false), 3000);
+  };
+
   const likeTrack = trpc.djProfiles.likeTrack.useMutation({
     onSuccess: (data: any) => {
       toast(data.liked ? "Track liked!" : "Like removed");
@@ -499,8 +529,6 @@ function TrackCard({ track, djUsername }: { track: any; djUsername?: string }) {
   });
   const [linkCopied, setLinkCopied] = useState(false);
   // Build canonical URL: /dj/:username/track/:id if username is available
-  // Siempre usar el dominio canónico para que el link sea válido en cualquier entorno
-  const CANONICAL_DOMAIN = "https://www.onlydjss.com";
   const trackUrl = djUsername
     ? `${CANONICAL_DOMAIN}/dj/${djUsername}/track/${track.id}`
     : `${CANONICAL_DOMAIN}/track/${track.id}`;
@@ -788,6 +816,69 @@ function TrackCard({ track, djUsername }: { track: any; djUsername?: string }) {
           </div>
         </div>
 
+        {/* Privacy management panel — visible only to owner */}
+        {isOwner && (
+          <div className="mt-3 pt-3 border-t border-border/50">
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              <div className="flex items-center gap-2">
+                {localIsPrivate ? (
+                  <Lock className="w-3.5 h-3.5 text-amber-400" />
+                ) : (
+                  <Globe className="w-3.5 h-3.5 text-green-400" />
+                )}
+                <span className="text-xs text-muted-foreground">
+                  {localIsPrivate ? "Privado — solo con link" : "Público — visible en Explore"}
+                </span>
+              </div>
+              <div className="flex items-center gap-1">
+                {localIsPrivate && localPrivateToken && (
+                  <>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 px-2 text-xs gap-1 hover:text-amber-400"
+                      onClick={copyPrivateLink}
+                      title="Copiar link privado"
+                    >
+                      {privateLinkCopied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                      {privateLinkCopied ? "Copiado" : "Copiar link"}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 px-2 text-xs gap-1 hover:text-amber-400"
+                      onClick={() => regenerateToken.mutate({ id: track.id })}
+                      disabled={regenerateToken.isPending}
+                      title="Generar nuevo link"
+                    >
+                      <RefreshCw className={`w-3 h-3 ${regenerateToken.isPending ? 'animate-spin' : ''}`} />
+                      Nuevo link
+                    </Button>
+                  </>
+                )}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={`h-7 px-2 text-xs gap-1 ${
+                    localIsPrivate ? "hover:text-green-400" : "hover:text-amber-400"
+                  }`}
+                  onClick={() => setPrivacy.mutate({ id: track.id, isPrivate: !localIsPrivate })}
+                  disabled={setPrivacy.isPending}
+                >
+                  {setPrivacy.isPending ? (
+                    <Loader2 className="w-3 h-3 animate-spin" />
+                  ) : localIsPrivate ? (
+                    <Globe className="w-3 h-3" />
+                  ) : (
+                    <Lock className="w-3 h-3" />
+                  )}
+                  {localIsPrivate ? "Hacer público" : "Hacer privado"}
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Hidden audio element */}
         {audioSrc && (
           <audio ref={audioRef} src={audioSrc} preload="none" />
@@ -797,7 +888,7 @@ function TrackCard({ track, djUsername }: { track: any; djUsername?: string }) {
   );
 }
 
-function TrackList({ username, type }: { username: string; type: "all" | "edit" | "remix" | "track" | "mashup" }) {
+function TrackList({ username, type, isOwner }: { username: string; type: "all" | "edit" | "remix" | "track" | "mashup"; isOwner?: boolean }) {
   const { data, isLoading } = trpc.djProfiles.getTracksByUsername.useQuery({ username, type });
   if (isLoading) return (
     <div className="space-y-3">
@@ -813,7 +904,7 @@ function TrackList({ username, type }: { username: string; type: "all" | "edit" 
   );
   return (
     <div className="space-y-3">
-      {tracks.map((track: any) => <TrackCard key={track.id} track={track} djUsername={username} />)}
+      {tracks.map((track: any) => <TrackCard key={track.id} track={track} djUsername={username} isOwner={isOwner} />)}
     </div>
   );
 }
@@ -1205,16 +1296,16 @@ export default function DJProfile() {
             </TabsList>
 
             <TabsContent value="tracks">
-              <TrackList username={username} type="track" />
+              <TrackList username={username} type="track" isOwner={isOwnProfile} />
             </TabsContent>
             <TabsContent value="edits">
-              <TrackList username={username} type="edit" />
+              <TrackList username={username} type="edit" isOwner={isOwnProfile} />
             </TabsContent>
             <TabsContent value="remixes">
-              <TrackList username={username} type="remix" />
+              <TrackList username={username} type="remix" isOwner={isOwnProfile} />
             </TabsContent>
             <TabsContent value="mashups">
-              <TrackList username={username} type="mashup" />
+              <TrackList username={username} type="mashup" isOwner={isOwnProfile} />
             </TabsContent>
           </Tabs>
         </div>

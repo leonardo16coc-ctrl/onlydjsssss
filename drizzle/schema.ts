@@ -119,6 +119,9 @@ export const tracks = mysqlTable("tracks", {
   likeCount: int("likeCount").default(0).notNull(),
   favoritesCount: int("favoritesCount").default(0).notNull(), // New: times added to favorites
   playlistsCount: int("playlistsCount").default(0).notNull(), // New: times added to playlists
+  // Privacy
+  isPrivate: boolean("isPrivate").default(false).notNull(),
+  privateToken: varchar("privateToken", { length: 64 }), // Unique token for private link sharing
   // Status
   status: mysqlEnum("status", ["pending", "approved", "rejected"]).default("approved").notNull(),
   // Timestamps

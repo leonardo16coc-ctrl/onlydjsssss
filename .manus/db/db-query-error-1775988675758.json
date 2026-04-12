@@ -1,0 +1,8 @@
+{
+  "query": "ALTER TABLE tracks ADD COLUMN isPrivate BOOLEAN NOT NULL DEFAULT FALSE, ADD COLUMN privateToken VARCHAR(64) NULL, ADD INDEX private_token_idx (privateToken);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2hZUrayiLZ9GCqk.root --database ZSqS9M2EFeWUjrPvMV6QuC --execute ALTER TABLE tracks ADD COLUMN isPrivate BOOLEAN NOT NULL DEFAULT FALSE, ADD COLUMN privateToken VARCHAR(64) NULL, ADD INDEX private_token_idx (privateToken);",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1072 (42000) at line 1: column does not exist: privateToken"
+  ]
+}

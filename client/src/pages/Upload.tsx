@@ -14,6 +14,10 @@ import {
   X,
   CloudUpload,
   CreditCard,
+  Lock,
+  Globe,
+  Copy,
+  RefreshCw,
 } from "lucide-react";
 import { useState, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
@@ -78,6 +82,7 @@ export default function Upload() {
   const [description, setDescription] = useState("");
 
   // ── File states ─────────────────────────────────────────────────────────────
+  const [isPrivate, setIsPrivate]         = useState(false);
   const [audioFile, setAudioFile]         = useState<File | null>(null);
   const [coverImage, setCoverImage]       = useState<File | null>(null);
   const [coverPreview, setCoverPreview]   = useState<string | null>(null);
@@ -233,6 +238,7 @@ export default function Upload() {
         coverImageUrl: uploadedCover?.fileUrl,
         energy: analysisResult?.energy,
         mood: analysisResult?.mood,
+        isPrivate,
       });
       toast.success("¡Track publicado exitosamente!");
       setTimeout(() => setLocation("/explore"), 1500);
@@ -640,6 +646,49 @@ export default function Upload() {
             </div>
 
           </div>
+        </div>
+
+        {/* Privacy selector */}
+        <div className="mt-6 p-4 rounded-xl border border-border bg-card">
+          <p className="text-sm font-semibold mb-3">Visibilidad del track</p>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setIsPrivate(false)}
+              className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${
+                !isPrivate
+                  ? "border-primary bg-primary/10 text-primary"
+                  : "border-border bg-background text-muted-foreground hover:border-primary/50"
+              }`}
+            >
+              <Globe className="w-5 h-5 flex-shrink-0" />
+              <div className="text-left">
+                <p className="text-sm font-medium">Público</p>
+                <p className="text-xs opacity-70">Visible en Explore</p>
+              </div>
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsPrivate(true)}
+              className={`flex items-center gap-3 p-3 rounded-lg border transition-all ${
+                isPrivate
+                  ? "border-primary bg-primary/10 text-primary"
+                  : "border-border bg-background text-muted-foreground hover:border-primary/50"
+              }`}
+            >
+              <Lock className="w-5 h-5 flex-shrink-0" />
+              <div className="text-left">
+                <p className="text-sm font-medium">Privado</p>
+                <p className="text-xs opacity-70">Solo con link secreto</p>
+              </div>
+            </button>
+          </div>
+          {isPrivate && (
+            <p className="text-xs text-muted-foreground mt-3 flex items-center gap-1.5">
+              <Lock className="w-3 h-3" />
+              Se generará un link único para compartir. El track no aparecerá en Explore ni en tu perfil público.
+            </p>
+          )}
         </div>
 
         {/* Monetization banner for free users */}
