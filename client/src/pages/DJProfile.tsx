@@ -669,9 +669,10 @@ function TrackCard({ track, djUsername, isOwner }: { track: any; djUsername?: st
       isPlaying ? "border-sky-500/50 bg-sky-950/20" : ""
     }`}>
       <CardContent className="p-3 sm:p-4">
-        <div className="flex gap-3 sm:gap-4 items-center">
-          {/* Cover + Play Button */}
-          <div className="relative flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden bg-muted">
+        {/* Main row: cover | info + actions */}
+        <div className="flex gap-3 items-start">
+          {/* Cover */}
+          <div className="flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden bg-muted">
             {track.coverImageUrl ? (
               <img src={track.coverImageUrl} alt={track.title} className="w-full h-full object-cover" />
             ) : (
@@ -679,36 +680,22 @@ function TrackCard({ track, djUsername, isOwner }: { track: any; djUsername?: st
                 <Music className="w-6 h-6 text-muted-foreground" />
               </div>
             )}
-            {/* Play overlay on cover */}
-            {audioSrc && (
-              <button
-                onClick={togglePlay}
-                className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"
-                aria-label={isPlaying ? "Pausar" : "Reproducir"}
-              >
-                {isLoading ? (
-                  <Loader2 className="w-6 h-6 text-white animate-spin" />
-                ) : isPlaying ? (
-                  <Pause className="w-6 h-6 text-white" />
-                ) : (
-                  <Play className="w-6 h-6 text-white fill-white" />
-                )}
-              </button>
-            )}
           </div>
 
+          {/* Info block */}
           <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2">
-              <div className="min-w-0">
-                <p className="font-semibold text-sm truncate">{track.title}</p>
-                <p className="text-xs text-muted-foreground truncate">{track.artist}</p>
+            {/* Title + badge */}
+            <div className="flex items-start gap-2">
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-sm leading-tight truncate">{track.title}</p>
+                <p className="text-xs text-muted-foreground truncate mt-0.5">{track.artist}</p>
               </div>
               {track.trackType && (
-                <Badge variant="secondary" className="text-xs flex-shrink-0">{track.trackType}</Badge>
+                <Badge variant="secondary" className="text-[10px] px-1.5 py-0 flex-shrink-0 mt-0.5">{track.trackType}</Badge>
               )}
             </div>
 
-            {/* Progress bar - visible when playing */}
+            {/* Progress bar */}
             {audioSrc && (
               <div
                 className="mt-2 h-1 bg-muted rounded-full cursor-pointer overflow-hidden"
@@ -722,101 +709,78 @@ function TrackCard({ track, djUsername, isOwner }: { track: any; djUsername?: st
               </div>
             )}
 
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1">
+            {/* Stats row */}
+            <div className="flex items-center gap-3 mt-1.5 text-xs text-muted-foreground">
+              <span className="flex items-center gap-0.5">
                 <Play className="w-3 h-3" />
                 {(localPlayCount !== null ? localPlayCount : (track.playCount || 0)).toLocaleString()}
               </span>
-              <span className="flex items-center gap-1">
+              <span className="flex items-center gap-0.5">
                 <Heart className="w-3 h-3" />{(track.likeCount || 0).toLocaleString()}
               </span>
-              <span className="flex items-center gap-1">
+              <span className="flex items-center gap-0.5">
                 <Download className="w-3 h-3" />{(track.downloadCount || 0).toLocaleString()}
               </span>
-              {track.bpm && <span className="hidden sm:inline">{track.bpm} BPM</span>}
-              {track.musicalKey && <span className="hidden sm:inline">{track.musicalKey}</span>}
               {isPlaying ? (
-                <span className="text-sky-400 font-medium">
+                <span className="text-sky-400 font-medium ml-auto">
                   {formatDuration(currentTime)} / {formatDuration(duration)}
                 </span>
               ) : (
-                <span>{formatDuration(track.durationSeconds)}</span>
+                <span className="ml-auto">{formatDuration(track.durationSeconds)}</span>
               )}
             </div>
-          </div>
 
-          {/* Action buttons */}
-          <div className="flex items-center gap-1">
-            {/* Play/Pause button - always visible */}
-            {audioSrc && (
-              <Button
-                variant="ghost"
-                size="icon"
-                className={`h-8 w-8 ${
-                  isPlaying ? "text-sky-400 hover:text-sky-300" : "sm:opacity-0 sm:group-hover:opacity-100"
-                } transition-opacity`}
-                onClick={togglePlay}
-                aria-label={isPlaying ? "Pausar" : "Reproducir"}
+            {/* Action buttons — always visible */}
+            <div className="flex items-center gap-1.5 mt-2">
+              {audioSrc && (
+                <button
+                  onClick={togglePlay}
+                  className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors flex-shrink-0 ${
+                    isPlaying ? "bg-sky-500/20 text-sky-400" : "bg-muted/60 text-foreground hover:bg-muted"
+                  }`}
+                  aria-label={isPlaying ? "Pausar" : "Reproducir"}
+                >
+                  {isLoading ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  ) : isPlaying ? (
+                    <Pause className="w-3.5 h-3.5" />
+                  ) : (
+                    <Play className="w-3.5 h-3.5 fill-current" />
+                  )}
+                </button>
+              )}
+              {track.audioFileUrl && (
+                <button
+                  onClick={handleDownload}
+                  className="w-8 h-8 rounded-full flex items-center justify-center bg-muted/60 hover:bg-muted hover:text-green-400 transition-colors"
+                  aria-label="Descargar track"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                </button>
+              )}
+              <button
+                onClick={() => likeTrack.mutate({ trackId: track.id })}
+                className="w-8 h-8 rounded-full flex items-center justify-center bg-muted/60 hover:bg-muted hover:text-pink-400 transition-colors"
               >
-                {isLoading ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : isPlaying ? (
-                  <Pause className="w-4 h-4" />
-                ) : (
-                  <Play className="w-4 h-4" />
-                )}
-              </Button>
-            )}
-            {/* Download button - always visible */}
-            {track.audioFileUrl && (
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity hover:text-green-400"
-                onClick={handleDownload}
-                aria-label="Descargar track"
-                title="Descargar"
+                <Heart className="w-3.5 h-3.5" />
+              </button>
+              <button
+                onClick={shareTrack}
+                className={`w-8 h-8 rounded-full flex items-center justify-center bg-muted/60 hover:bg-muted transition-colors ${linkCopied ? "text-green-400" : ""}`}
+                title="Copiar link para sellos"
               >
-                <Download className="w-4 h-4" />
-              </Button>
-            )}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
-              onClick={() => likeTrack.mutate({ trackId: track.id })}
-            >
-              <Heart className="w-4 h-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity"
-              onClick={() => repostTrack.mutate({ trackId: track.id })}
-            >
-              <Repeat2 className="w-4 h-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className={`h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity ${linkCopied ? "text-green-400" : ""}`}
-              onClick={shareTrack}
-              title="Copiar link para sellos"
-            >
-              {linkCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity hover:text-cyan-400"
-              onClick={openTrackPage}
-              title="Abrir página del track"
-            >
-              <ExternalLink className="w-4 h-4" />
-            </Button>
+                {linkCopied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+              </button>
+              <button
+                onClick={openTrackPage}
+                className="w-8 h-8 rounded-full flex items-center justify-center bg-muted/60 hover:bg-muted hover:text-cyan-400 transition-colors"
+                title="Abrir página del track"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
         </div>
-
         {/* Privacy management panel — visible only to owner */}
         {isOwner && (
           <div className="mt-3 pt-3 border-t border-border/50 space-y-2">
