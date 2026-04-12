@@ -1344,26 +1344,31 @@ export default function DJProfile() {
         {/* Tabs - Music first */}
         <div className="py-6">
           <Tabs defaultValue={defaultTab} onValueChange={(val) => navigate(`/${username}/${val}`, { replace: true })}>
-            <TabsList className="mb-6 w-full overflow-x-auto flex flex-nowrap h-auto gap-1 justify-start">
-              <TabsTrigger value="tracks" className="flex items-center gap-2">
-                <Music className="w-4 h-4" />Tracks
-                {counts && <span className="ml-1 text-xs opacity-60">({counts.track})</span>}
+            <TabsList className="mb-6 w-full overflow-x-auto flex flex-nowrap h-auto gap-0.5 justify-start" style={{scrollbarWidth:'none'}}>
+              <TabsTrigger value="tracks" className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs sm:text-sm whitespace-nowrap flex-shrink-0">
+                <Music className="w-3.5 h-3.5 hidden sm:inline" />
+                Tracks
+                {counts && <span className="text-[10px] opacity-50 ml-0.5">({counts.track})</span>}
               </TabsTrigger>
-              <TabsTrigger value="edits" className="flex items-center gap-2">
-                <Mic2 className="w-4 h-4" />Edits
-                {counts && <span className="ml-1 text-xs opacity-60">({counts.edit})</span>}
+              <TabsTrigger value="edits" className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs sm:text-sm whitespace-nowrap flex-shrink-0">
+                <Mic2 className="w-3.5 h-3.5 hidden sm:inline" />
+                Edits
+                {counts && <span className="text-[10px] opacity-50 ml-0.5">({counts.edit})</span>}
               </TabsTrigger>
-              <TabsTrigger value="remixes" className="flex items-center gap-2">
-                <Disc3 className="w-4 h-4" />Remixes
-                {counts && <span className="ml-1 text-xs opacity-60">({counts.remix})</span>}
+              <TabsTrigger value="remixes" className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs sm:text-sm whitespace-nowrap flex-shrink-0">
+                <Disc3 className="w-3.5 h-3.5 hidden sm:inline" />
+                Remixes
+                {counts && <span className="text-[10px] opacity-50 ml-0.5">({counts.remix})</span>}
               </TabsTrigger>
-              <TabsTrigger value="mashups" className="flex items-center gap-2">
-                <Headphones className="w-4 h-4" />Mashups
-                {counts && <span className="ml-1 text-xs opacity-60">({counts.mashup})</span>}
+              <TabsTrigger value="mashups" className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs sm:text-sm whitespace-nowrap flex-shrink-0">
+                <Headphones className="w-3.5 h-3.5 hidden sm:inline" />
+                Mashups
+                {counts && <span className="text-[10px] opacity-50 ml-0.5">({counts.mashup})</span>}
               </TabsTrigger>
               {isOwnProfile && (
-                <TabsTrigger value="demos" className="flex items-center gap-2 text-violet-400 data-[state=active]:text-violet-300">
-                  <Lock className="w-4 h-4" />Private Demos
+                <TabsTrigger value="demos" className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs sm:text-sm whitespace-nowrap flex-shrink-0 text-violet-400 data-[state=active]:text-violet-300">
+                  <Lock className="w-3.5 h-3.5 hidden sm:inline" />
+                  Private Demos
                 </TabsTrigger>
               )}
             </TabsList>
