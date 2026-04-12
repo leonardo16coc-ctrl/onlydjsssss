@@ -29,6 +29,7 @@ export const users = mysqlTable("users", {
   avatarUrl: text("avatarUrl"),
   country: varchar("country", { length: 100 }),
   socialLinks: text("socialLinks"), // JSON string for Instagram, Twitter, etc.
+  contactEmail: varchar("contactEmail", { length: 320 }), // Public contact email for labels/promoters
   // Verification
   isVerified: boolean("isVerified").default(false).notNull(),
   verifiedAt: timestamp("verifiedAt"),

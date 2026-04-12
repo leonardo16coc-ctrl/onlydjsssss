@@ -23,6 +23,7 @@ export default function ProfileEdit() {
   const [instagram, setInstagram] = useState("");
   const [twitter, setTwitter] = useState("");
   const [website, setWebsite] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
   
   // Profile image states
   const [profileImage, setProfileImage] = useState<File | null>(null);
@@ -46,6 +47,7 @@ export default function ProfileEdit() {
       setInstagram(social.instagram || "");
       setTwitter(social.twitter || "");
       setWebsite(social.website || "");
+      setContactEmail((profile as any).contactEmail || "");
     }
   }, [profile]);
 
@@ -140,6 +142,7 @@ export default function ProfileEdit() {
         bio: bio || undefined,
         country: country || undefined,
         socialLinks: Object.keys(socialLinks).length > 0 ? socialLinks : undefined,
+        contactEmail: contactEmail.trim() || null,
       });
 
       toast.success(t("profile.profileUpdated"));
@@ -332,6 +335,25 @@ export default function ProfileEdit() {
                 onChange={(e) => setWebsite(e.target.value)}
                 type="url"
               />
+            </div>
+
+            <Separator />
+
+            <div>
+              <Label className="flex items-center gap-2">
+                Email de Contacto Público
+                <span className="text-xs text-muted-foreground font-normal">(visible para sellos y promotores)</span>
+              </Label>
+              <Input
+                placeholder="booking@tuemail.com"
+                className="bg-background"
+                value={contactEmail}
+                onChange={(e) => setContactEmail(e.target.value)}
+                type="email"
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                Este email será visible en tu perfil público. Déjalo vacío si prefieres no mostrarlo.
+              </p>
             </div>
 
             <Button

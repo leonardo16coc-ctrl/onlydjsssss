@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { ShareProfileModal } from "@/components/ShareProfileModal";
-import { ExternalLink, Grid3X3, ChevronLeft, ChevronRight, Loader2, Copy, Link2, Check } from "lucide-react";
+import { ExternalLink, Grid3X3, ChevronLeft, ChevronRight, Loader2, Copy, Link2, Check, Mail } from "lucide-react";
 
 // ── Threads SVG icon ──────────────────────────────────────────────────────
 function ThreadsIcon({ className }: { className?: string }) {
@@ -1131,6 +1131,19 @@ export default function DJProfile() {
               <p className="text-xs text-muted-foreground">Plays</p>
             </div>
           </div>
+
+          {/* Contact Email */}
+          {p.contactEmail && (
+            <div className="mt-3">
+              <a
+                href={`mailto:${p.contactEmail}`}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20 transition-colors text-sm font-medium"
+              >
+                <Mail className="w-4 h-4" />
+                {p.contactEmail}
+              </a>
+            </div>
+          )}
 
           {/* Social Links */}
           {Object.keys(socialLinks).length > 0 && (

@@ -99,6 +99,7 @@ export const profileRouter = router({
         socialLinks,
         isVerified: djProfile.isVerified,
         membershipStatus: djProfile.membershipStatus,
+        contactEmail: djProfile.contactEmail || null,
         stats: {
           totalDownloads: downloadStats[0]?.totalDownloads || 0,
           totalEarnings: earningsStats[0]?.totalEarnings || 0,
@@ -124,6 +125,7 @@ export const profileRouter = router({
       bio: z.string().max(1000).optional(),
       country: z.string().max(100).optional(),
       socialLinks: z.record(z.string(), z.string()).optional(),
+      contactEmail: z.string().email().max(320).optional().nullable(),
     }))
     .mutation(async ({ ctx, input }) => {
       const db = await getDb();
@@ -151,6 +153,7 @@ export const profileRouter = router({
       if (input.socialLinks !== undefined) {
         updateData.socialLinks = JSON.stringify(input.socialLinks);
       }
+      if (input.contactEmail !== undefined) updateData.contactEmail = input.contactEmail;
 
       if (Object.keys(updateData).length > 0) {
         await db
